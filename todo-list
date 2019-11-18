@@ -1,0 +1,44 @@
+SIMPEL INSPEKTORAT
+
+User Akses
+- Administrator Utama
+- Operator
+- Admin OPD
+
+Master Data
+- Bidang Pengawasan
+- OPD Terkait
+- Kode Temuan
+- Kode Rekomendasi
+
+Status Temuan
+- Belum Tindak Lanjut
+- Dalam Proses
+- Selesai
+
+Proses Alur
+- Operator input data temuan
+- Data temuan di verifikasi Admin Utama (Narasi tambahan)
+- Data temuan di kirim ke Admin OPD
+- Admin OPD memasukan data tindak lanjut temuan (narasi dan upload data)
+- Admin Utama mengubah Status Temuan (Narasi perubahan status)
+- Bisa export laporan temuan + berita acara temuan
+
+Ada yang butuh nilai kerugian:
+- Rekomendasi Bersifat Finansial
+- Rekomendasi Bersifat Dapat Dinilai Dengan Uang.
+
+- Pelaporan bisa by rentang waktu.
+- 60 hari harus selesai setelah LHP di input
+- 7 hari sebelum berakhir, di berikan tanda.
+- Rekap OPD yang belum menindaklanjuti data temuan (abu-abu baru masuk, hijau telah selesai, kuning untuk 7 hari batas akhir tindak lanjut, merah lebih dari 60 hari)
+- Grafik dapat diakses ke publik
+------------------------------------
+[21:37, 11/26/2018] Dudy Fathan Ali: - 60 hari harus selesai setelah LHP di input
+    ini untuk tiap laporan temuan pak, jd pokoknya temuan tersebut harus selesai dalam waktu 60 hari.
+
+[21:38, 11/26/2018] Dudy Fathan Ali: - 7 hari sebelum berakhir, di berikan tanda.
+    ini ada di OPD (untuk temuan yang ditujukan untuk dia), sama di admin (untuk ngecek aja)
+
+[21:41, 11/26/2018] Dudy Fathan Ali: - Rekap OPD yang belum menindaklanjuti data temuan (abu-abu baru masuk, hijau telah selesai, kuning untuk 7 hari batas akhir tindak lanjut, merah lebih dari 60 hari)
+    ini di admin pak untuk rekap. jd ada nama opd beserta jumlah jumlah temuan per statusnya. kalo nama opd di klik, muncul list data temuannya beserta warna warna statusnya

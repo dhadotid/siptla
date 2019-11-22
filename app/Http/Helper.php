@@ -39,4 +39,55 @@ function adddate($tgl,$add)
     $tgl2 = date('Y-m-d', strtotime('+'.$add.' days', strtotime($tgl1)));
     return $tgl2;
 }
+
+function jenis_level()
+{
+    $level=[
+            'administrator'=>'Administrator',
+            'auditor-junior'=>'Auditor Junior',
+            'auditor-senior'=>'Auditor Senior',
+            'kepala-spi'=>'Kepala SPI',
+            'pic-unit'=>'PIC Unit'
+        ];
+    return $level;
+}
+
+function hitunghari($mulai,$akhir,$jenis)
+{
+
+    if($mulai==$akhir)
+        $jlh=$mulai;
+    else
+        $jlh=$akhir-$mulai+1;
+
+    if($jenis=='minggu')
+    {
+        $jumlah=$jlh*7;
+    }
+    else if($jenis=='bulan')
+    {
+        $jumlah=$jlh*30;
+    }
+    else if($jenis=='tahun')
+    {
+        $jumlah=$jlh*365;
+    }
+    else
+        $jumlah=$jlh;
+
+    return $jumlah;
+}
+function tgl_indo($date)
+{
+    $tgl=date('d',strtotime($date));
+    $bln=date('n',strtotime($date));
+    $thn=date('Y',strtotime($date));
+
+    return $tgl.' '.getbulan($bln).' '.$thn;
+}
+function getbulan($bln)
+{
+    $bulan=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+    return $bulan[$bln-1];
+}
 ?>

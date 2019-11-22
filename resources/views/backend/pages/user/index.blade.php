@@ -5,66 +5,72 @@
 @endsection
 @section('modal')
 	<div class="modal fade" id="modaltambah" tabindex="-1" role="dialog">
-		<div class="modal-dialog" style="width:70%">
+		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 class="modal-title">Tambah Data Pengguna</h4>
 				</div>
 				<div class="modal-body">
-					<form action="{{ route('users.store') }}" method="POST">
+					<form action="{{ route('pengguna.store') }}" method="POST">
                         @csrf
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
-                                    <select name="level" class="form-control">
-                                        <option value="">-- Pilih Level --</option>
-                                        <option value="1">Administrator</option>
-                                        <option value="2">Operator</option>
-                                        <option value="3">Admin OPD</option>
+									<label>Jenis Level</label>
+                                    <select name="level" class="form-control select2" onchange="addjenis(this.value)">
+										<option value="">-- Pilih Level --</option>
+                                        @php
+											foreach($jenislevel as $k=>$v)
+											{
+												if($k=='administrator')
+													echo '<option value="0">'.$v.'</option>';	
+												else
+													echo '<option value="'.$k.'">'.$v.'</option>';	
+											}
+										@endphp
+                                    </select>
+                                </div>
+                                <div class="form-group" id="add-name-txt" style="">
+									<label>Nama Pengguna</label>
+                                    <input name="name" type="text" class="form-control" placeholder="Nama Pengguna" id="addname">
+                                </div>
+                                <div class="form-group" id="add-name-pic" style="display:none">
+									<label>PIC Unit</label>
+                                    <select name="name_pic" class="form-control select2">
+                                        <option value="">-- Pilih PIC Unit --</option>
+                                        @php
+											foreach($picunit as $k=>$v)
+											{
+												echo '<option value="'.$v->nama_pic.'">'.$v->nama_pic.'</option>';	
+											}
+										@endphp
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <input name="name" type="text" class="form-control" placeholder="Nama">
-                                </div>
-                                <div class="form-group">
+									<label>Email</label>
                                     <input name="email" type="text" class="form-control" placeholder="Email">
                                 </div>
                                 <div class="form-group">
+									<label>Telepon</label>
+                                    <input name="telepon" type="text" class="form-control" placeholder="Telepon">
+                                </div>
+                                <div class="form-group">
+									<label>Password</label>
                                     <input name="password" type="password" class="form-control" placeholder="Password">
                                 </div>
                                 <div class="form-group">
+									<label>Password Konfirmasi</label>
                                     <input name="password_confirmation" type="password" class="form-control" placeholder="Konfirmasi Password">
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <select name="dinas_id" class="form-control" placeholder="OPD">
-                                        <option value="">-- Pilih OPD --</option>
-                                        @foreach ($dinas as $opd)
-                                            <option value="{{$opd->id}}">{{$opd->nama_dinas}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <input name="nip" type="text" class="form-control" placeholder="NIP">
-                                </div>
-                                <div class="form-group">
-                                    <input name="pangkat" type="text" class="form-control" placeholder="Pangkat">
-                                </div>
-                                <div class="form-group">
-                                    <input name="golongan" type="text" class="form-control" placeholder="Golongan">
-                                </div>
-                                <div class="form-group">
-                                    <input name="jabatan" type="text" class="form-control" placeholder="Jabatan">
-                                </div>
-                                <div class="form-group">
-                                    <select name="flag" class="form-control">
-                                        <option value="">-- Status Flag --</option>
-                                        <option value="1">Aktif</option>
-                                        <option value="0">Tidak Aktif</option>
-                                    </select>
-                                </div>
+								<div class="form-group">
+									<label>Flag Pengguna</label>
+									<select name="flag" class="form-control">
+										<option value="">-- Status Flag --</option>
+										<option value="1">Aktif</option>
+										<option value="0">Tidak Aktif</option>
+									</select>
+								</div>
                             </div>
                         </div>
 						
@@ -79,7 +85,7 @@
 	</div>
 
 	<div class="modal fade" id="modalubah" tabindex="-1" role="dialog">
-		<div class="modal-dialog" style="width:70%">
+		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -90,62 +96,63 @@
 						@csrf
                         @method('PUT')
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
-                                    <select name="level" class="form-control" id="level">
+									<label>Jenis Level</label>
+                                    <select name="level" class="form-control select2" onchange="editjenis(this.value)" id="level">
                                         <option value="">-- Pilih Level --</option>
-                                        <option value="1">Administrator</option>
-                                        <option value="2">Operator</option>
-                                        <option value="3">Admin OPD</option>
+                                        @php
+											foreach($jenislevel as $k=>$v)
+											{
+												if($k=='administrator')
+													echo '<option value="0">'.$v.'</option>';	
+												else
+													echo '<option value="'.$k.'">'.$v.'</option>';	
+											}
+										@endphp
+                                    </select>
+                                </div>
+                                <div class="form-group" id="edit-name-txt" style="">
+									<label>Nama Pengguna</label>
+                                    <input name="name" type="text" class="form-control" placeholder="Nama Pengguna" id="name">
+                                </div>
+                                <div class="form-group" id="edit-name-pic" style="display:none">
+									<label>PIC Unit</label>
+                                    <select name="name_pic" class="form-control select2" id="name_pic">
+                                        <option value="">-- Pilih PIC Unit --</option>
+                                        @php
+											foreach($picunit as $k=>$v)
+											{
+												echo '<option value="'.$v->nama_pic.'">'.$v->nama_pic.'</option>';	
+											}
+										@endphp
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <input id="name" name="name" type="text" class="form-control" placeholder="Nama">
+									<label>Email</label>
+                                    <input name="email" type="text" class="form-control" placeholder="Email" id="email">
+								</div>
+								 <div class="form-group">
+									<label>Telepon</label>
+                                    <input name="telepon" type="text" class="form-control" placeholder="Telepon" id="telepon">
                                 </div>
                                 <div class="form-group">
-                                    <input id="email" name="email" type="text" class="form-control" placeholder="Email">
+									<label>Password</label>
+                                    <input name="password" type="password" class="form-control" placeholder="Password" id="password">
                                 </div>
                                 <div class="form-group">
-                                    <input id="password" name="password" type="password" class="form-control" placeholder="Password">
-                                    <span class="help-block">* Silahkan kosongkan jika tidak mengubah password</span>
+									<label>Password Konfirmasi</label>
+                                    <input name="password_confirmation" type="password" class="form-control" placeholder="Konfirmasi Password" id="password_confirmation">
                                 </div>
-                                <div class="form-group">
-                                    <input id="password_confirmation" name="password_confirmation" type="password" class="form-control" placeholder="Konfirmasi Password">
-                                    <span class="help-block">* Silahkan kosongkan jika tidak mengubah password</span>							
-                                </div>
+								<div class="form-group">
+									<label>Flag Pengguna</label>
+									<select name="flag" class="form-control" id="flag">
+										<option value="">-- Status Flag --</option>
+										<option value="1">Aktif</option>
+										<option value="0">Tidak Aktif</option>
+									</select>
+								</div>
                             </div>
-                            <div class="col-md-6">
-                                
-                                <div class="form-group">
-                                    <select id="dinas_id" name="dinas_id" class="form-control" placeholder="OPD">
-                                        <option value="">-- Pilih OPD --</option>
-                                        @foreach ($dinas as $opd)
-                                            <option value="{{$opd->id}}">{{$opd->nama_dinas}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <input id="nip" name="nip" type="text" class="form-control" placeholder="NIP">
-                                </div>
-                                <div class="form-group">
-                                    <input id="pangkat" name="pangkat" type="text" class="form-control" placeholder="Pangkat">
-                                </div>
-                                <div class="form-group">
-                                    <input id="golongan" name="golongan" type="text" class="form-control" placeholder="Golongan">
-                                </div>
-                                <div class="form-group">
-                                    <input id="jabatan" name="jabatan" type="text" class="form-control" placeholder="Jabatan">
-                                </div>
-                                <div class="form-group">
-                                    <select id="flag" name="flag" class="form-control">
-                                        <option value="">-- Status Flag --</option>
-                                        <option value="1">Aktif</option>
-                                        <option value="0">Tidak Aktif</option>
-                                    </select>
-                                </div>
-                                
-                            </div>
-                            
                         </div>
 				</div>
 				<div class="modal-footer">
@@ -189,16 +196,36 @@
 			</header><!-- .widget-header -->
 			<hr class="widget-separator">
 			<div class="widget-body">
+				@if ($errors->any())
+					<div class="alert alert-danger alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+						<strong>Alert ! </strong>
+						<span>
+							<ul>
+							@foreach ($errors->all() as $item)
+								<li>- {{$item}}</li>
+							@endforeach
+							</ul>
+							
+						</span>
+					</div>	
+				@endif
+				@if (Session::has('success'))
+					<div class="alert alert-success alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+						<strong>Berhasil! </strong>
+						<span>{!!Session::get('success')!!}</span>
+					</div>
+				@endif
 				<div class="table-responsive">
-					<table id="table" data-plugin="DataTable" class="table table-striped" cellspacing="0" width="100%">
+					<table id="table" data-plugin="DataTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
 						<thead>
 							<tr>
 								<th style="width:15px;">#</th>
-								<th>NIP</th>
-								<th>Nama</th>
+								<th>Nama Pengguna</th>
 								<th>Email</th>
-								<th>OPD</th>
-								<th>Hak Akses</th>
+								<th>Telp</th>
+								<th>Jenis Level</th>
 								<th>Flag</th>
 								<th>Aksi</th>
 							</tr>
@@ -207,22 +234,19 @@
 							@foreach ($users as $key => $us)
 								<tr>
 									<td>{{ $key = $key + 1 }}</td>
-									<td>{{ $us->nip }}</td>
 									<td>{{ $us->name }}</td>
 									<td>{{ $us->email }}</td>
-									<td>{{ isset($us->user->dinas_id) ? $us->user->dinas->nama_dinas : '-' }}</td>
+									<td>{{ $us->telepon }}</td>
 									
-									@switch($us->level)
-										@case(1)
-											<td>Administrator</td>
-										@break
-										@case(2)
-											<td>Operator</td>
-										@break
-										@case(3)
-											<td>Admin OPD</td>
-										@break
-									@endswitch
+									@if($us->level=='0')
+										<td>Administrator</td>
+									@else
+										@if (isset($jenislevel[$us->level]))
+											<td>{{$jenislevel[$us->level]}}</td>
+										@else
+											<td>-</td>
+										@endif
+									@endif
                                     <td>
                                         @if ($us->flag==1)
                                             <span class="label label-primary">Aktif</span>
@@ -250,26 +274,38 @@
 
 @section('footscript')
 	<script>
+		setTimeout(function(){
+			$('.alert').fadeOut();
+		},3000);
+		$('.select2').select2();
 		// binding data to modal edit
         $('#table').on('click', '.btn-edit', function(){
             var id = $(this).data('value')
 			
             $.ajax({
-                url: "{{ url('users') }}/"+id+"/edit",
+                url: "{{ url('pengguna') }}/"+id+"/edit",
                 success: function(res) {
-					$('#form-update').attr('action', "{{ url('users') }}/"+id)
-
+					$('#form-update').attr('action', "{{ url('pengguna') }}/"+id)
 					$('#name').val(res.name)
+					$('#name_pic').val(res.name)
 					$('#nip').val(res.nip)
 					$('#email').val(res.email)
+					$('#telepon').val(res.telepon)
 					$('#password').val(res.password)
 					$('#password_confirmation').val(res.password)
 					$('#level').val(res.level)
 					$('#flag').val(res.flag)
-					$('#dinas_id').val(res.user.dinas_id)
-                    $('#pangkat').val(res.pangkat)
-					$('#golongan').val(res.golongan)
-					$('#jabatan').val(res.jabatan)
+					if(res.level=='pic-unit')
+					{
+						$('#edit-name-txt').css('display','none');
+						$('#edit-name-pic').css('display','block');
+					}
+					else
+					{
+						$('#edit-name-txt').css('display','block');
+						$('#edit-name-pic').css('display','none');
+					}
+					$('.select2').select2().trigger('change');
                 }
             })
         })
@@ -277,7 +313,41 @@
 		// delete action
         $('#table').on('click', '.btn-delete', function(){
             var id = $(this).data('value')
-			$('#form-delete').attr('action', "{{ url('users') }}/"+id)			
+			$('#form-delete').attr('action', "{{ url('pengguna') }}/"+id)			
         })
+
+		function addjenis(val)
+		{
+			if(val=='pic-unit')
+			{
+				$('#add-name-txt').css('display','none');
+				$('#add-name-pic').css('display','block');
+				$('#addname').val('');
+			}
+			else
+			{
+				$('#add-name-txt').css('display','block');
+				$('#add-name-pic').css('display','none');
+			}
+		}
+		function editjenis(val)
+		{
+			if(val=='pic-unit')
+			{
+				$('#edit-name-txt').css('display','none');
+				$('#edit-name-pic').css('display','block');
+				$('#name').val('');
+			}
+			else
+			{
+				$('#edit-name-txt').css('display','block');
+				$('#edit-name-pic').css('display','none');
+			}
+		}
 	</script>
+	<style>
+	.select2-container{
+		width:100% !important;
+	}
+	</style>
 @endsection

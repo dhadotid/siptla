@@ -13,7 +13,7 @@
 <!--========== END app navbar -->
 
 <!-- APP ASIDE ==========-->
-@if (Auth::user()->level==1)
+@if (Auth::user()->level==0)
 	@include('backend.includes.sidebar')
 @elseif (Auth::user()->level==2)
 	@include('backend.includes.sidebar-operator')
@@ -116,13 +116,23 @@
 	<script src="{{asset('theme/backend/libs/bower/moment/moment.js')}}"></script>
 	<script src="{{asset('theme/backend/libs/bower/fullcalendar/dist/fullcalendar.min.js')}}"></script>
 	<script src="{{asset('theme/backend/assets/js/fullcalendar.js')}}"></script>
+	<script src="{{asset('theme/backend/libs/bower/select2/dist/js/select2.full.min.js')}}"></script>
 	@yield('footscript')
 </body>
 </html>
 <style>
 table th,table td
 {
-	font-size:11px !important;
+	font-size:12px !important;
 }
 .datepicker { z-index: 10000 !important; }
+.submenu a
+{
+	font-size:11px !important;
+	font-weight: 400 !important;
+}
+.app-menu li
+{
+	font-weight: bold !important;
+}
 </style>

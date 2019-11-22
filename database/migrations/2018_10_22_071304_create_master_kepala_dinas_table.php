@@ -13,7 +13,7 @@ class CreateMasterKepalaDinasTable extends Migration
      */
     public function up()
     {
-        Schema::create('master_kepala_dinas', function (Blueprint $table) {
+        Schema::create('master_pimpinan', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nama')->nullable();
             $table->integer('dinas_id')->nullable()->default(0);
@@ -31,6 +31,6 @@ class CreateMasterKepalaDinasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('master_kepala_dinas');
+        Schema::dropIfExists('master_pimpinan');
     }
 }

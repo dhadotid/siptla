@@ -15,8 +15,7 @@ class CreateMasterTemuansTable extends Migration
     {
         Schema::create('master_temuan', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('code')->nullable();
-            $table->string('temuan')->nullable();
+            $table->string('temuan')->nullable()->unique();
             $table->text('desc')->nullable();
             $table->integer('flag')->nullable()->default(0);
             $table->timestamps();

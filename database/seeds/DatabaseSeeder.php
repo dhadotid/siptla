@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        $this->call(UsersTableSeeder::class);
         // $this->call(KelompokTemuanTableSeeder::class);
         //$this->call(RekomendasiTableSeeder::class);
 
@@ -25,11 +25,5 @@ class DatabaseSeeder extends Seeder
         //     'level' => 1
         // ]);
 
-        $din = MasterDinas::all();
-        foreach($din as $v)
-        {
-            $v->nama_slug=str_slug($v->nama_dinas);
-            $v->save();
-        }
     }
 }

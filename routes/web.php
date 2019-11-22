@@ -15,15 +15,52 @@ Route::get('/', function () {
     return redirect('login');
 });
 
-Route::get('/dashboard', 'DashboardController@index')->middleware('auth');
+Route::group(['middleware'=>'auth'],function(){
+    Route::get('/dashboard', 'DashboardController@index');
+    Route::resource('pic-unit','PICUnitController');
+    Route::resource('level-pic','LevelPicController');
+    Route::resource('data-opd','MasterDinasController');
+    Route::resource('kepala-opd','MasterKepalaDinasController');
+    Route::resource('data-penyebab','MasterSebabController');
+    Route::resource('data-rekomendasi','MasterRekomendasiController');
+    Route::resource('bidang-pengawasan','MasterBidangPengawasanController');
+    Route::resource('pengguna','UsersController');
+    Route::resource('pemeriksa','PemeriksaController');
+    Route::resource('jenis-audit','JenisAuditController');
+    Route::resource('jangka-waktu','JangkaWaktuController');
+    Route::resource('status-rekomendasi','StatusRekomendasiController');
+    Route::resource('data-temuan','MasterTemuanController');
+    Route::resource('jenis-temuan','MasterTemuanController');
+    Route::resource('rekanan','RekananController');
+    Route::resource('level-resiko','LevelResikoController');
+    Route::resource('pejabat-penandatangan','PejabatTandatanganController');
 
-Route::resource('data-opd','MasterDinasController')->middleware('auth');
-Route::resource('kepala-opd','MasterKepalaDinasController')->middleware('auth');
-Route::resource('data-temuan','MasterTemuanController')->middleware('auth');
-Route::resource('data-penyebab','MasterSebabController')->middleware('auth');
-Route::resource('data-rekomendasi','MasterRekomendasiController')->middleware('auth');
-Route::resource('bidang-pengawasan','MasterBidangPengawasanController')->middleware('auth');
-Route::resource('users','UsersController')->middleware('auth');
+    Route::get('data-lhp/{tahun?}','DataTemuanController@index')->name('data-lhp.index');
+    Route::get('data-lhp-data/{tahun?}','DataTemuanController@data_lhp')->name('data-lhp.data');
+    Route::get('data-lhp-cek-kode/{pemeriksa?}','DataTemuanController@data_lhp_cek_kode')->name('data-lhp.cek-kode');
+    Route::get('data-lhp-detail/{id}','DataTemuanController@detail_lhp')->name('data-lhp.detail');
+    Route::post('data-lhp-store','DataTemuanController@store')->name('data-lhp.store');
+
+    Route::get('data-temuan-lhp/{idlhp}','DataTemuanController@data_temuan_lhp');
+    Route::get('data-temuan-data/{idlhp}','DataTemuanController@data_temuan_data');
+    Route::get('data-temuan-lhp-edit/{id}','DataTemuanController@data_temuan_edit');
+    Route::post('data-temuan-lhp-delete/{idlhp}/{id}','DataTemuanController@data_temuan_delete');
+    Route::post('data-temuan-lhp-simpan/{idlhp}','DataTemuanController@data_temuan_lhp_simpan')->name('data-temuan-lhp.simpan');
+    Route::post('data-temuan-lhp-update/{temuan_id}','DataTemuanController@data_temuan_lhp_update')->name('data-temuan-lhp.update');
+
+    Route::get('rekomendasi-edit/{idrekom}','DataRekomendasiController@rekomendasi_edit')->name('rekomendasi.edit');
+    Route::get('rekomendasi-data/{idtemuan}','DataRekomendasiController@rekomendasi_data')->name('rekomendasi.data');
+    Route::post('rekomendasi-simpan','DataRekomendasiController@rekomendasi_simpan')->name('rekomendasi.simpan');
+    Route::post('rekomendasi-update/{id}','DataRekomendasiController@rekomendasi_update')->name('rekomendasi.update');
+    Route::post('rekomendasi-delete/{id}','DataRekomendasiController@rekomendasi_delete')->name('rekomendasi.delete');
+
+    Route::get('data-rekanan','RekananController@data_rekanan')->name('data-rekanan');
+});
+
+
+// DATA LHP
+
+// END DATA LHP
 
 Route::get('tindak-lanjut/{id}', 'TindakLanjutTemuanController@index')->name('tindak-lanjut.index');
 Route::post('tindak-lanjut', 'TindakLanjutTemuanController@store')->name('tindak-lanjut.store');

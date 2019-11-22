@@ -18,13 +18,11 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('nip');
+            $table->string('nip')->nullable();
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('pangkat')->nullable();
-            $table->string('golongan')->nullable();
-            $table->string('jabatan')->nullable();
-            $table->integer('level')->nullable()->default(0);
+            $table->string('telepon')->nullable();
+            $table->string('level')->nullable()->default(0);
             $table->integer('flag')->nullable()->default(0);
             $table->rememberToken();
             $table->timestamps();

@@ -13,8 +13,8 @@
     </button>
 
     <a href="theme/backend/index.html" class="navbar-brand">
-      <span class="brand-icon"><i class="fa fa-gg"></i></span>
-      <span class="brand-name">SIMPEL</span>
+      <span class="brand-icon"><img src="{{asset('logo.png')}}" style="height:30px;"></span>
+      <span class="brand-name">SIPTLA</span>
     </a>
   </div><!-- .navbar-header -->
   

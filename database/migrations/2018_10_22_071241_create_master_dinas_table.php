@@ -13,12 +13,13 @@ class CreateMasterDinasTable extends Migration
      */
     public function up()
     {
-        Schema::create('master_dinas', function (Blueprint $table) {
+        Schema::create('master_fakultas', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nama_dinas')->nullable();
+            $table->string('nama_fakultas')->nullable();
             $table->string('singkatan')->nullable();
             $table->string('alamat')->nullable();
             $table->integer('flag')->nullable()->default(0);
+            $table->string('nama_slug')->nullable();
             $table->timestamps();
             $table->softdeletes();
         });
@@ -31,6 +32,6 @@ class CreateMasterDinasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('master_dinas');
+        Schema::dropIfExists('master_fakultas');
     }
 }

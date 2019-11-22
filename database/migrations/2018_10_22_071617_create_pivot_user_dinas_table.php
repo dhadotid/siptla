@@ -13,10 +13,10 @@ class CreatePivotUserDinasTable extends Migration
      */
     public function up()
     {
-        Schema::create('pivot_user_dinas', function (Blueprint $table) {
+        Schema::create('pivot_user', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->nullable()->default(0);
-            $table->integer('dinas_id')->nullable()->default(0);
+            $table->integer('fakultas_id')->nullable()->default(0);
             $table->integer('flag')->nullable()->default(0);
             $table->timestamps();
             $table->softdeletes();
@@ -30,6 +30,6 @@ class CreatePivotUserDinasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pivot_user_dinas');
+        Schema::dropIfExists('pivot_user');
     }
 }

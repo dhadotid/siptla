@@ -19,7 +19,7 @@ class DashboardController extends Controller
          * 3 : Telah Tindak Lanjut
          * 4 : Selesai
          */
-        
+        $temuan=array();
         $level = Auth::user()->level;
         $mv = $btl = $ttl = $sel = 0;
 

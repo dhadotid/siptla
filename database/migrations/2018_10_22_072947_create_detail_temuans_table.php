@@ -27,6 +27,9 @@ class CreateDetailTemuansTable extends Migration
             $table->date('tgl_pengawasan')->nullable();
             $table->text('uraian_temuan')->nullable();
             $table->text('uraian_rekomendasi')->nullable();
+            $table->text('penyebab')->nullable();
+            $table->integer('flag')->default(0)->nullable();
+            $table->double('kerugian')->nullable()->default(0);
             $table->timestamps();
             $table->softdeletes();
         });

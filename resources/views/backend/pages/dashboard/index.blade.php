@@ -10,7 +10,7 @@
 				<div class="widget stats-widget">
 					<div class="widget-body clearfix">
 						<div class="pull-left">
-							<h3 class="widget-title text-primary"><span class="counter" data-plugin="counterUp">{{ $temuan->count() }}</span></h3>
+							<h3 class="widget-title text-primary"><span class="counter" data-plugin="counterUp">0</span></h3>
 							<small class="text-color">Total Temuan</small>
 						</div>
 						<span class="pull-right big-icon watermark"><i class="fa fa-paperclip"></i></span>

@@ -44,7 +44,7 @@ var LIBS = {
 	datetimepicker: [
 		flagsUrl + "/theme/backend/libs/bower/moment/moment.js",
 		flagsUrl + "/theme/backend/libs/bower/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css",
-		flagsUrl + "/theme/backend/libs/bower/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.js"
+		flagsUrl + "/theme/backend/libs/bower/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"
 	],
 	datepicker: [
 		flagsUrl + "/theme/backend/libs/bower/moment/moment.js",

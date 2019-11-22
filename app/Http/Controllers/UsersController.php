@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\MasterDinas;
 use App\Models\PivotUserDinas;
+use App\Models\PICUnit;
 use App\User;
 use Validator;
 class UsersController extends Controller
@@ -16,10 +17,14 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $user=User::where('level','!=',4)->with('user')->get();
+        $user=User::orderBy('name')->get();
+        $picunit=PICUnit::orderBy('nama_pic')->get();
         // dd($user[1]->user);
-        $dinas=MasterDinas::all();
-        return view('backend.pages.user.index')->with('users',$user)->with('dinas',$dinas);
+        $jenislevel=jenis_level();
+        return view('backend.pages.user.index')
+                ->with('users',$user)
+                ->with('picunit',$picunit)
+                ->with('jenislevel',$jenislevel);
     }
 
     public function store(Request $request)
@@ -28,39 +33,34 @@ class UsersController extends Controller
             'name' => 'required',
             'email' => 'required',
             'level' => 'required',
-            'dinas_id' => 'required',
-            'pangkat' => 'required',
-            'golongan' => 'required',
-            'jabatan' => 'required',
             'password' => 'required|confirmed',
         ])->validate();
 
         $insert = new User;
-        $insert->name = $request->name;
+
+        if($request->input('level')=='pic-unit') 
+        {
+            
+            $insert->name = $request->name_pic;
+        }
+        else
+        {
+            $insert->name = $request->name;
+        }
         $insert->email = $request->email;
         $insert->password = bcrypt($request->password);
         $insert->level = $request->level;
-        $insert->nip = $request->nip;
-        $insert->pangkat = $request->pangkat;
-        $insert->golongan = $request->golongan;
-        $insert->jabatan = $request->jabatan;
+        $insert->telepon = $request->telepon;
         $insert->flag = $request->flag;
         $insert->save();
-        $user_id=$insert->id;
-
-        $u_dinas = new PivotUserDinas;
-        $u_dinas->dinas_id = $request->dinas_id;
-        $u_dinas->user_id = $user_id;
-        $u_dinas->flag = $request->flag;
-        $u_dinas->save();
-
-        return redirect()->route('users.index')
+        
+        return redirect()->route('pengguna.index')
             ->with('success', 'Anda telah memasukkan data baru.');
     }
 
     public function edit($id)
     {
-        return User::where('id',$id)->with('user')->first();
+        return User::where('id',$id)->first();
     }
 
     public function update(Request $request, $id)
@@ -70,29 +70,24 @@ class UsersController extends Controller
                 'name' => 'required',
                 'email' => 'required',
                 'level' => 'required',
-                'dinas_id' => 'required',
-                'pangkat' => 'required',
-                'golongan' => 'required',
-                'jabatan' => 'required',
             ])->validate();
 
             $update = User::find($id);
-            $update->name = $request->name;
+            if($request->input('level')=='pic-unit') 
+            {    
+                $update->name = $request->name_pic;
+            }
+            else
+            {
+                $update->name = $request->name;
+            }
             $update->email = $request->email;
             $update->level = $request->level;
-            $update->nip = $request->nip;
-            $update->pangkat = $request->pangkat;
-            $update->golongan = $request->golongan;
-            $update->jabatan = $request->jabatan;
             $update->flag = $request->flag;
+            $update->telepon = $request->telepon;
             $update->save();
 
-            $u_dinas = PivotUserDinas::where('user_id',$id)->first();
-            $u_dinas->dinas_id = $request->dinas_id;
-            $u_dinas->flag = $request->flag;
-            $u_dinas->save();
-
-            return redirect()->route('users.index')
+            return redirect()->route('pengguna.index')
                 ->with('success', 'Anda telah mengubah data pengguna.');
         }
 
@@ -100,31 +95,27 @@ class UsersController extends Controller
             'name' => 'required',
             'email' => 'required',
             'level' => 'required',
-            'dinas_id' => 'required',
-            'pangkat' => 'required',
-            'golongan' => 'required',
-            'jabatan' => 'required',
             'password' => 'required|confirmed',
         ])->validate();
 
         $update = User::find($id);
-        $update->name = $request->name;
+        if($request->input('level')=='pic-unit') 
+        {
+            
+            $update->name = $request->name_pic;
+        }
+        else
+        {
+            $update->name = $request->name;
+        }
         $update->email = $request->email;
         $update->password = bcrypt($request->password);
         $update->level = $request->level;
-        $update->nip = $request->nip;
-        $update->pangkat = $request->pangkat;
-        $update->golongan = $request->golongan;
-        $update->jabatan = $request->jabatan;
+        $update->telepon = $request->telepon;
         $update->flag = $request->flag;
         $update->save();
 
-        $u_dinas = PivotUserDinas::where('user_id',$id)->first();
-        $u_dinas->dinas_id = $request->dinas_id;
-        $u_dinas->flag = $request->flag;
-        $u_dinas->save();
-
-        return redirect()->route('users.index')
+        return redirect()->route('pengguna.index')
             ->with('success', 'Anda telah mengubah data pengguna.');
     }
 
@@ -133,10 +124,7 @@ class UsersController extends Controller
         $us=User::find($id);
         $us->delete();
 
-        $u_dinas = PivotUserDinas::where('user_id',$id)->first();
-        $u_dinas->delete();
-        
-        return redirect()->route('users.index')
+        return redirect()->route('pengguna.index')
             ->with('success', 'Anda telah menghapus data pengguna.');
     }
 }

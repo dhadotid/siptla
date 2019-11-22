@@ -14,12 +14,21 @@ class CreateDaftarTemuansTable extends Migration
      */
     public function up()
     {
-        Schema::create('daftar_temuan', function (Blueprint $table) {
+        Schema::create('daftar_lhp', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('aparat_id')->nullable()->default(0);
-            $table->integer('dinas_id')->nullable()->default(0);
-            $table->integer('tahun')->nullable()->default(0);
-            $table->integer('flag')->nullable()->default(0);
+            $table->string('no_lhp')->nullable();
+            $table->string('kode_lhp')->nullable();
+            $table->string('judul_lhp')->nullable();
+            $table->integer('pemeriksa_id')->nullable()->nullable();
+            $table->date('tanggal_lhp')->nullable();
+            $table->integer('tahun_pemeriksa')->nullable();
+            $table->integer('jenis_audit_id')->nullable()->default(0);
+            $table->string('status_lhp')->nullable();
+            $table->string('review_lhp')->nullable();
+            $table->integer('create_flag')->nullable()->default(0);
+            $table->integer('review_flag')->nullable()->default(0);
+            $table->integer('publish_flag')->nullable()->default(0);
+            $table->integer('user_input_id')->nullable()->default(0);
             $table->timestamps();
             $table->softdeletes();
         });
@@ -32,6 +41,6 @@ class CreateDaftarTemuansTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('daftar_temuan');
+        Schema::dropIfExists('daftar_lhp');
     }
 }

@@ -11,16 +11,14 @@
 					<h4 class="modal-title">Tambah Data Kode Temuan</h4>
 				</div>
 				<div class="modal-body">
-					<form action="{{ route('data-temuan.store') }}" method="POST">
+					<form action="{{ route('jenis-temuan.store') }}" method="POST">
 						@csrf
+						
 						<div class="form-group">
-							<input name="code" type="text" class="form-control" placeholder="Code">
+							<input name="temuan" type="text" class="form-control" placeholder="Jenis Temuan">
 						</div>
 						<div class="form-group">
-							<input name="temuan" type="text" class="form-control" placeholder="Kode Temuan">
-						</div>
-						<div class="form-group">
-							<textarea name="decs" class="form-control" placeholder="Keterangan"></textarea>
+							<textarea name="desc" class="form-control" placeholder="Keterangan"></textarea>
 						</div>
                         <div class="form-group">
 							<select name="flag" class="form-control">
@@ -51,11 +49,9 @@
 					<form id="form-update" method="POST">
 						@csrf
 						@method('PUT')
+						
 						<div class="form-group">
-							<input id="code" name="code" type="text" class="form-control" placeholder="Code">
-						</div>
-						<div class="form-group">
-							<input id="temuan" name="temuan" type="text" class="form-control" placeholder="Kode Temuan">
+							<input id="temuan" name="temuan" type="text" class="form-control" placeholder="Jenis Temuan">
 						</div>
 						<div class="form-group">
 							<textarea id="desc" name="desc" class="form-control" placeholder="Keterangan"></textarea>
@@ -110,14 +106,36 @@
 			</header><!-- .widget-header -->
 			<hr class="widget-separator">
 			<div class="widget-body">
+				@if ($errors->any())
+					<div class="alert alert-danger alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+						<strong>Alert ! </strong>
+						<span>
+							<ul>
+							@foreach ($errors->all() as $item)
+								<li>- {!!$item!!}</li>
+							@endforeach
+							</ul>
+							
+						</span>
+					</div>	
+				@endif
+				@if (Session::has('success'))
+					<div class="alert alert-success alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+						<strong>Berhasil! </strong>
+						<span>{!!Session::get('success')!!}</span>
+					</div>
+				@endif
 				<div class="table-responsive">
-					<table id="table" data-plugin="DataTable" class="table table-striped" cellspacing="0" width="100%">
+					
+					<table id="table" data-plugin="DataTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
 						<thead>
 							<tr>
 								<th style="width:15px;">#</th>
-								<th>Kode</th>
-								<th>Kode Temuan</th>
+								<th>Jenis Temuan</th>
 								<th>Flag</th>
+								<th>Keterangan</th>
 								<th>Aksi</th>
 							</tr>
 						</thead>
@@ -125,8 +143,8 @@
 							@foreach ($temuan as $key => $item)
 								<tr>
 									<td>{{ $key = $key + 1 }}</td>
-									<td>{{ $item->code }}</td>
 									<td>{{ $item->temuan }}</td>
+									
 									<td>
                                         @if ($item->flag==1)
                                             <span class="label label-primary">Aktif</span>
@@ -134,7 +152,7 @@
                                             <span class="label label-danger">Tidak Aktif</span>
                                         @endif
                                     </td>
-									
+									<td>{!! $item->desc !!}</td>
 									<td>
 										<a class="btn btn-xs btn-warning btn-edit" data-toggle="modal" data-target="#modalubah" data-value="{{ $item->id }}" style="height:24px !important">
 											<i class="fa fa-edit"></i>
@@ -155,16 +173,19 @@
 
 @section('footscript')
 	<script>
+		setTimeout(function(){
+			$('.alert').fadeOut();
+		},3000);
+		$('.select2').select2();
 		// binding data to modal edit
         $('#table').on('click', '.btn-edit', function(){
             var id = $(this).data('value')
 			
             $.ajax({
-                url: "{{ url('data-temuan') }}/"+id+"/edit",
+                url: "{{ url('jenis-temuan') }}/"+id+"/edit",
                 success: function(res) {
-					$('#form-update').attr('action', "{{ url('data-temuan') }}/"+id)
+					$('#form-update').attr('action', "{{ url('jenis-temuan') }}/"+id)
 
-					$('#code').val(res.code)
 					$('#temuan').val(res.temuan)
 					$('#desc').val(res.desc)
 					$('#flag').val(res.flag)
@@ -175,7 +196,7 @@
 		// delete action
         $('#table').on('click', '.btn-delete', function(){
             var id = $(this).data('value')
-			$('#form-delete').attr('action', "{{ url('data-temuan') }}/"+id)			
+			$('#form-delete').attr('action', "{{ url('jenis-temuan') }}/"+id)			
         })
 	</script>
 @endsection

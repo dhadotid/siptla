@@ -15,8 +15,7 @@ class CreateMasterRekomendasisTable extends Migration
     {
         Schema::create('master_rekomendasi', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('code')->nullable();
-            $table->string('rekomendasi')->nullable();
+            $table->string('rekomendasi')->nullable()->unique();
             $table->text('desc')->nullable();
             $table->integer('flag')->nullable()->default(0);
             $table->timestamps();

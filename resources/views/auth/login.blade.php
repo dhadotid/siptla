@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Simpel - Inspektorat Kabupaten Tangerang</title>
+	<title>SIPTLA - SPI Universitas Indonesia</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
 	<meta name="description" content="Admin, Dashboard, Bootstrap" />
-	<link rel="shortcut icon" sizes="196x196" href="../assets/images/logo.png">
+	<link rel="shortcut icon" sizes="196x196" href="{{asset('logo.png')}}">
 	
 	<link rel="stylesheet" href="theme/backend/libs/bower/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="theme/backend/libs/bower/material-design-iconic-font/dist/css/material-design-iconic-font.min.css">
@@ -16,17 +16,20 @@
 	<link rel="stylesheet" href="theme/backend/assets/css/misc-pages.css">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:400,500,600,700,800,900,300">
 </head>
-<body class="simple-page" style="background:#5b69bc;">
+<body class="simple-page myDiv" style="">
+    {{-- background:#eec900; --}}
 	<div class="simple-page-wrap">
-		<div class="simple-page-logo animated swing">
+        
+		<div class="simple-page-logo swing">
 			<a href="{{url('/')}}">
 				{{-- <span><i class="fa fa-gg"></i></span> --}}
-                <span>Simpel By Inspektorat</span><br>
-                <span style="font-size:15px;">Pemerintah Kabupaten Tangerang</span>
+                <span style="">SIPTLA By SPI</span><br>
+                <span  style="font-size:15px;">Universitas Indonesia</span>
 			</a>
 		</div><!-- logo -->
-		<div class="simple-page-form animated flipInY" id="login-form">
-            <h4 class="form-title m-b-xl text-center">Silahkan Lakukan Login</h4>
+		<div class="simple-page-form animated flipInY text-center" id="login-form">
+            <img src="{{asset('logo.png')}}" style="width:100px;margin:0 auto;">
+            <h4 class="form-title m-b-xl text-center"><br>Silahkan Lakukan Login</h4>
                 <form method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}">
                 @csrf
                     <div class="form-group">
@@ -57,7 +60,7 @@
                             <label for="keep_me_logged_in">Keep me signed in</label>
                         </div>
                     </div> --}}
-                <button type="submit" class="btn" style="background:#5b69bc;color:#fff;">
+                <button type="submit" class="btn btn-primary" style="color:#fff;">
                     {{ __('Login') }}
                 </button>
             </form>
@@ -79,3 +82,27 @@
 </html>
                    
                 
+<style>
+.myDiv {
+    position: relative;
+    z-index: 1;
+    padding-bottom:11%;
+}
+
+.myDiv:before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: url('{{asset("bg.jpg")}}') no-repeat;
+    background-position: 50% 100%;
+    background-size:100% 100%;
+    opacity: .4;
+}
+
+</style>

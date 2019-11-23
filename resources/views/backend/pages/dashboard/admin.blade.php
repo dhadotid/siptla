@@ -139,10 +139,35 @@
 		</div><!-- .widget -->
 	</div><!-- END column -->
 
-	<div class="col-md-6">
-		<div class="widget p-lg">
-			&nbsp;
+	<div class="col-md-3 col-sm-6">
+		<div class="widget stats-widget">
+			<div class="widget-body clearfix">
+				<div class="pull-left">
+					<h3 class="widget-title text-success"><span class="counter" data-plugin="counterUp">{{ isset($duser['auditor-senior']) ? count($duser['auditor-senior']): 0 }}</span></h3>
+					<small class="text-color"><a href="{{url('pengguna')}}">Jumlah Auditor Senior</a></small>
+				</div>
+				<span class="pull-right big-icon watermark"><i class="fa fa-users"></i></span>
+			</div>
+			<footer class="widget-footer bg-success">
+				<small>Jumlah</small>
+				<span class="small-chart pull-right" data-plugin="sparkline" data-options="[5,4,3,5,2],{ type: 'bar', barColor: '#ffffff', barWidth: 5, barSpacing: 2 }"><canvas width="33" height="16" style="display: inline-block; width: 33px; height: 16px; vertical-align: top;"></canvas></span>
+			</footer>
 		</div><!-- .widget -->
-	</div><!-- END column -->
+	</div>
+	<div class="col-md-3 col-sm-6">
+		<div class="widget stats-widget">
+			<div class="widget-body clearfix">
+				<div class="pull-left">
+					<h3 class="widget-title text-primary"><span class="counter" data-plugin="counterUp">{{ isset($duser['auditor-junior']) ? count($duser['auditor-junior']): 0 }}</span></h3>
+					<small class="text-color"><a href="{{url('pengguna')}}">Jumlah Auditor Junior</a></small>
+				</div>
+				<span class="pull-right big-icon watermark"><i class="fa fa-users"></i></span>
+			</div>
+			<footer class="widget-footer bg-primary">
+				<small>Jumlah</small>
+				<span class="small-chart pull-right" data-plugin="sparkline" data-options="[5,4,3,5,2],{ type: 'bar', barColor: '#ffffff', barWidth: 5, barSpacing: 2 }"><canvas width="33" height="16" style="display: inline-block; width: 33px; height: 16px; vertical-align: top;"></canvas></span>
+			</footer>
+		</div><!-- .widget -->
+	</div>
 	
 @endsection

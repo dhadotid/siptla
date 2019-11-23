@@ -30,6 +30,20 @@
 		<div class="simple-page-form animated flipInY text-center" id="login-form">
             <img src="{{asset('logo.png')}}" style="width:100px;margin:0 auto;">
             <h4 class="form-title m-b-xl text-center"><br>Silahkan Lakukan Login</h4>
+                @if (Session::has('success'))
+					<div class="alert alert-success alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+						<strong>Berhasil! </strong>
+						<span>{!!Session::get('success')!!}</span>
+					</div>
+				@endif
+                @if (Session::has('error'))
+					<div class="alert alert-danger alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+						<strong>Peringatan! </strong>
+						<span>{!!Session::get('error')!!}</span>
+					</div>
+				@endif
                 <form method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}">
                 @csrf
                     <div class="form-group">
@@ -81,7 +95,11 @@
 </body>
 </html>
                    
-                
+<script>
+    setTimeout(function () {
+        $('.alert').fadeOut();
+    }, 3000);
+</script>          
 <style>
 .myDiv {
     position: relative;

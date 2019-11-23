@@ -36,7 +36,9 @@ Route::group(['middleware'=>'auth'],function(){
     Route::resource('pejabat-penandatangan','PejabatTandatanganController');
 
     Route::get('data-lhp/{tahun?}','DataTemuanController@index')->name('data-lhp.index');
+    Route::get('semua-data-lhp/{tahun?}','DataTemuanController@index_semua')->name('data-lhp.index-semua');
     Route::get('data-lhp-data/{tahun?}','DataTemuanController@data_lhp')->name('data-lhp.data');
+    Route::get('semua-lhp-data/{tahun?}','DataTemuanController@semua_data_lhp')->name('data-lhp.semua-data');
     Route::get('data-lhp-cek-kode/{pemeriksa?}','DataTemuanController@data_lhp_cek_kode')->name('data-lhp.cek-kode');
     Route::get('data-lhp-detail/{id}/{offset}','DataTemuanController@detail_lhp')->name('data-lhp.detail');
     Route::get('data-lhp-review/{id}','DataTemuanController@review_lhp')->name('data-lhp.review');
@@ -95,5 +97,9 @@ Auth::routes();
 Route::get('logout',function(){
     Auth::logout();
     return redirect('login');
+});
+Route::get('force-logout',function(){
+    Auth::logout();
+    return redirect('login')->with('error',Session::get('error'));
 });
 Route::get('/home', 'HomeController@index')->name('home');

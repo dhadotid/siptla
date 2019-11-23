@@ -41,7 +41,7 @@
               $master=['pejabat-penandatangan','data-temuan','level-pic','pic-unit','pemeriksa','jenis-audit','jangka-waktu','status-rekomendasi','jenis-temuan','rekanan','level-resiko','data-lhp','level-pengguna','pengguna'];
           @endphp
           <ul class="submenu" style="{{in_array($url,$master) ? 'display:block' : ''}}">
-            @if (Auth::user()->level=='auditor-junior')
+            @if (Auth::user()->level=='auditor-junior' || Auth::user()->level=='auditor-senior')
               <li class="{{$url=='pic-unit'  ? 'active open' : ''}}"><a href="{{url('pic-unit')}}"><span class="menu-text">PIC Unit</span></a></li>    
               <li class="{{$url=='pemeriksa'  ? 'active open' : ''}}"><a href="{{url('pemeriksa')}}"><span class="menu-text">Pemeriksa</span></a></li>
               <li class="{{$url=='jenis-audit'  ? 'active open' : ''}}"><a href="{{url('jenis-audit')}}"><span class="menu-text">Jenis Audit</span></a></li>
@@ -75,6 +75,19 @@
               <i class="menu-icon fa fa-list"></i>
               <span class="menu-text">Data LHP</span>
             </a>
+          </li>
+        @endif
+        @if (Auth::user()->level=='auditor-senior')
+          <li class="has-submenu {{strpos($url,'data-lhp')!==false ? 'active open' : ''}}">
+            <a href="javascript:void(0)" class="submenu-toggle">
+              <i class="menu-icon fa fa-archive"></i>
+              <span class="menu-text">Master Data LHP</span>
+              <i class="menu-caret zmdi zmdi-hc-sm zmdi-chevron-right"></i>
+            </a>
+            <ul class="submenu" style="{{strpos($url,'data-lhp')!==false || strpos($url,'semua-data-lhp')!==false ? 'display:block' : ''}}">
+              <li class="{{strpos($url,'semua-data-lhp')!==false ? 'active open' : ''}}"><a href="{{url('semua-data-lhp')}}/{{ date('Y') }}"><span class="menu-text">Semua Data LHP</span></a></li>
+              <li class="{{strpos($url,'data-lhp')!==false ? 'active open' : ''}}"><a href="{{url('data-lhp')}}/{{ date('Y') }}"><span class="menu-text">Data LHP</span></a></li>
+            </ul>
           </li>
         @endif
         <li class="has-submenu {{strpos($url,'laporan')!==false ? 'active open' : ''}}">

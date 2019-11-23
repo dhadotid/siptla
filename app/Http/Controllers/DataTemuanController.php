@@ -32,6 +32,21 @@ class DataTemuanController extends Controller
                 ->with('pemeriksa',$pemeriksa)
                 ->with('jenisaudit',$jenisaudit);
     }
+    public function index_semua($tahun=null)
+    {
+        if($tahun==null)
+            $thn=date('Y');
+        else
+            $thn=$tahun;
+
+        $data['pemeriksa']=$pemeriksa=Pemeriksa::orderBy('pemeriksa')->get();
+        $data['jenisaudit']=$jenisaudit=JenisAudit::orderBy('jenis_audit')->get();
+        return view('backend.pages.data-lhp.auditor-junior.index-semua')
+                ->with('tahun',$thn)
+                ->with('data',$data)
+                ->with('pemeriksa',$pemeriksa)
+                ->with('jenisaudit',$jenisaudit);
+    }
     public function lhp_edit($id)
     {
         $lhp=DaftarTemuan::where('id',$id)->with('dpemeriksa')->first();
@@ -55,7 +70,7 @@ class DataTemuanController extends Controller
         else
             $thn=$tahun;
         
-        if(Auth::user()->level=='auditor-junior')
+        if(Auth::user()->level=='auditor-junior' || Auth::user()->level=='auditor-senior')
         {
             $data=DaftarTemuan::selectRaw('*,daftar_lhp.id as lhp_id')
                     ->where('daftar_lhp.tahun_pemeriksa',$thn)
@@ -72,6 +87,23 @@ class DataTemuanController extends Controller
                     ->with('djenisaudit')
                     ->orderBy('tanggal_lhp','desc')->get();
         }
+
+        return view('backend.pages.data-lhp.auditor-junior.data')
+                ->with('data',$data);
+    }
+    public function semua_data_lhp($tahun=null)
+    {
+        if($tahun==null)
+            $thn=date('Y');
+        else
+            $thn=$tahun;
+        
+        
+        $data=DaftarTemuan::selectRaw('*,daftar_lhp.id as lhp_id')
+                ->where('daftar_lhp.tahun_pemeriksa',$thn)
+                ->with('dpemeriksa')
+                ->with('djenisaudit')
+                ->orderBy('tanggal_lhp','desc')->get();
 
         return view('backend.pages.data-lhp.auditor-junior.data')
                 ->with('data',$data);

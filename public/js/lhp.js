@@ -43,15 +43,53 @@ function loaddata(tahun) {
             reviewlhp(id);
         })
         
-        // $('#table').on('click', '.btn-detail', function () {
-        //     var id = $(this).data('value')
-        //     $.ajax({
-        //         url: flagsUrl + '/data-temuan-edit/'+id,
-        //         success : function(res){
+    });
+}
+function loaddatasemua(tahun) {
+    $('#data').load(flagsUrl + '/semua-lhp-data/' + tahun, function () {
+        $('#table').dataTable();
+        $('#table').on('click', '.btn-edit', function () {
+            var id = $(this).data('value')
+            // alert(id);
+            $('#formubah').attr('action', flagsUrl + "/data-lhp-update/" + id)
+            $.ajax({
+                url: flagsUrl + "/data-temuan-edit/" + id,
+                success: function (res) {
+                    
+                    
+                    var pemeriksa = res.pemeriksa_id + '-' + res.dpemeriksa.code + '-' + res.dpemeriksa.pemeriksa
+                    var dt = res.tanggal_lhp.split('-');
 
-        //         }
-        //     });
-        // })
+
+                    $('#edit_nomor_lhp').val(res.no_lhp);
+                    $('#edit_pemeriksa').val(pemeriksa);
+                        $('#edit_pemeriksa').select2().trigger('change');
+                    $('#edit_kode_lhp').val(res.kode_lhp);
+                    $('#edit_judul_lhp').val(res.judul_lhp);
+                    $('#edit_tanggal_lhp').val(dt[2]+'/'+dt[1]+'/'+dt[0]);
+                    $('#edit_tahun_pemeriksaan').val(res.tahun_pemeriksa);
+                        $('#edit_tahun_pemeriksaan').select2().trigger('change');
+                    $('#edit_jenis_audit').val(res.jenis_audit_id);
+                        $('#edit_jenis_audit').select2().trigger('change');
+                    $('#edit_status_lhp').val(res.status_lhp);
+                    $('#edit_flag_status_lhp').val(res.create_flag);
+                }
+            })
+        })
+
+        // delete action
+        $('#table').on('click', '.btn-delete', function () {
+            var id = $(this).data('value')
+            // alert(id)
+            $('#form-delete').attr('action', flagsUrl + "/data-temuan-delete/" + id)
+        })
+        
+        $('#table').on('click', '.btn-review', function () {
+            var id = $(this).data('value')
+            // alert(id)
+            reviewlhp(id);
+        })
+        
     });
 }
 function generatekodelhp(val) {

@@ -1,7 +1,7 @@
 <div class="table-responsive">
 	<table id="table" class="table table-striped table-bordered" cellspacing="0" width="100%">
 		<thead>
-			<tr>
+			<tr class="primary">
 				<th class="text-center" style="width:15px;">#</th>
                 <th class="text-center">Nomor</th>
                 <th class="text-center">Kode LHP </th>
@@ -54,7 +54,7 @@
                                 </li>
                                 {{-- <li><a href="{{url('data-lhp-detail/'.$item->lhp_id)}}" target="_blank"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail LHP</a></li> --}}
                                 <li>
-                                    <a href="#" data-value="{{$item->id}}" data-toggle="modal" data-target="#modaldetail"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail LHP</a>
+                                    <a href="#" onclick="detaillhp({{$item->id}},0)"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail LHP</a>
                                 </li>
                                 <li>
                                     <a href="#" data-toggle="modal" data-target="#modalreview" data-value="{{$item->id}}" class="btn-review"><i class="glyphicon glyphicon-comment"></i> &nbsp;&nbsp;Tanggapan dan Review LHP</a>

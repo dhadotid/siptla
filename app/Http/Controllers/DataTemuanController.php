@@ -105,14 +105,54 @@ class DataTemuanController extends Controller
             return $code.'/001/'.$tahun;
         }
     }
-    public function detail_lhp($id)
+    public function detail_lhp($id,$offset)
     {
         $data=DaftarTemuan::where('id',$id)
                 ->with('dpemeriksa')
                 ->with('djenisaudit')
                 ->first();
 
-        return view('backend.pages.data-lhp.auditor-junior.detail')
+        $temuan=DataTemuan::selectRaw('*,data_temuan.id as temuan_id')->where('id_lhp',$id)->with('jenistemuan')->with('picunit')->with('levelresiko')->get();
+        $dtemuan=$drekomendasi=array();
+        $idx=0;
+        foreach($temuan as $k=>$v)
+        {
+            $dtemuan[$idx]=$v;
+            $idx++;
+
+        }
+        
+        if(isset($dtemuan[$offset])) 
+        {
+            $tm=$dtemuan[$offset];
+            $rekomendasi=DataRekomendasi::selectRaw('*,data_rekomendasi.id as rekom_id')->where('id_temuan',$tm->id)
+                            ->with('jenistemuan')
+                            ->with('picunit1')
+                            ->with('picunit2')
+                            ->with('jangkawaktu')
+                            ->with('statusrekomendasi')
+                            ->with('drekanan')
+                            ->get();
+
+            foreach($rekomendasi as $kk=>$vv)
+            {
+                $drekomendasi[]=$vv;
+            }
+        }
+        else
+        {
+            $tm=(object) array('data'=>0);
+        }
+
+        
+
+        // return $drekomendasi;
+        return view('backend.pages.data-lhp.auditor-junior.detail-lhp')
+                ->with('temuan',$tm)
+                ->with('offset',$offset)
+                ->with('jlhtemuan',$temuan->count())
+                ->with('id',$id)
+                ->with('drekomendasi',$drekomendasi)
                 ->with('data',$data);
         // return $data;
     }

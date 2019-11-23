@@ -194,9 +194,7 @@
                         <h4 class="modal-title">Detail Data LHP </h4>
                     </div>
                     <div class="modal-body">
-                        <div id="detail">
-                            @include('backend.pages.data-lhp.auditor-junior.detail-lhp')
-                        </div>
+                        <div id="detail"></div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" data-dismiss="modal" data-dismiss="modal" class="btn btn-primary">Tutup</button>

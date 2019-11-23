@@ -42,6 +42,16 @@ function loaddata(tahun) {
             // alert(id)
             reviewlhp(id);
         })
+        
+        // $('#table').on('click', '.btn-detail', function () {
+        //     var id = $(this).data('value')
+        //     $.ajax({
+        //         url: flagsUrl + '/data-temuan-edit/'+id,
+        //         success : function(res){
+
+        //         }
+        //     });
+        // })
     });
 }
 function generatekodelhp(val) {
@@ -56,6 +66,13 @@ function getdata(tahun) {
     loaddata(tahun);
 }
 
+function detaillhp(id,offset)
+{
+    $('#detail').load(flagsUrl+'/data-lhp-detail/'+id+'/'+offset,function(){
+        $('#detail-rekomendasi').DataTable();
+    });
+    $('#modaldetail').modal('show');
+}
 function reviewlhp(id)
 {
     $('#review').load(flagsUrl + '/data-lhp-review/'+id,function(){

@@ -19,6 +19,7 @@ class CreateDaftarTemuansTable extends Migration
             $table->string('no_lhp')->nullable();
             $table->string('kode_lhp')->nullable();
             $table->string('judul_lhp')->nullable();
+            $table->longText('review')->nullable();
             $table->integer('pemeriksa_id')->nullable()->nullable();
             $table->date('tanggal_lhp')->nullable();
             $table->integer('tahun_pemeriksa')->nullable();

@@ -4,7 +4,7 @@
 			<tr>
 				<th class="text-center" style="width:15px;">#</th>
                 <th class="text-center">Nomor</th>
-                <th class="text-center">LHP </th>
+                <th class="text-center">Kode LHP </th>
 				<th class="text-center">Tgl Pemeriksaan </th>
 				<th class="text-center">Judul LHP </th>
 				<th class="text-center">Pemeriksa </th>
@@ -18,7 +18,7 @@
             @foreach ($data as $key=>$item)
                 <tr>
                     <td class="text-center">{{ ($key + 1) }}</td>
-                    <td class="">
+                    <td class="text-center">
                         <b>{{$item->no_lhp}}</b>
                         {{-- <small style="font-size:10px;"><em>Nomor LHP :</em></small><br> --}}
                     </td>
@@ -50,10 +50,11 @@
                             </button>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{url('data-temuan-lhp/'.$item->lhp_id)}}"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Data Temuan</a></li>
-                                <li><a href="{{url('data-lhp-detail/'.$item->lhp_id)}}" target="_blank"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail LHP</a></li>
+                                {{-- <li><a href="{{url('data-lhp-detail/'.$item->lhp_id)}}" target="_blank"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail LHP</a></li> --}}
+                                <li><a href="#" data-value="{{$item->id}}" data-toggle="modal" data-target="#modaldetail"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail LHP</a></li>
                                 <li><a href="#"><i class="glyphicon glyphicon-comment"></i> &nbsp;&nbsp;Tanggapan dan Review LHP</a></li>
-                                <li><a href="#"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit LHP</a></li>
-                                <li><a href="#"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus LHP</a></li>
+                                <li><a href="#" class="btn-edit" data-toggle="modal" data-target="#modalubah" data-value="{{$item->id}}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit LHP</a></li>
+                                <li><a href="#" class="btn-delete" data-toggle="modal" data-target="#modalhapus" data-value="{{$item->id}}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus LHP</a></li>
                             </ul>
                         </div>
                     </td>

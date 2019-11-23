@@ -32,7 +32,17 @@ class DataTemuanController extends Controller
                 ->with('pemeriksa',$pemeriksa)
                 ->with('jenisaudit',$jenisaudit);
     }
-
+    public function lhp_edit($id)
+    {
+        $lhp=DaftarTemuan::where('id',$id)->with('dpemeriksa')->first();
+        return $lhp;
+    }
+    public function lhp_delete(Request $request,$id)
+    {
+        DaftarTemuan::destroy($id);
+        return redirect('data-lhp')
+            ->with('success', 'Anda telah menghapus data LHP.');
+    }
     public function data_lhp($tahun=null)
     {
         if($tahun==null)
@@ -59,7 +69,8 @@ class DataTemuanController extends Controller
         {
             if(strpos($data->kode_lhp,$tahun)!==false)
             {
-                $no=(int)$data->kode_lhp + 1;
+                list($aw,$tg,$akh)=explode('/',$data->kode_lhp);
+                $no=(int) $tg+ 1;
                 if($no<10)
                     return $code.'/00'.$no.'/'.$tahun;
                 elseif($no>=10 && $no<100)
@@ -110,7 +121,29 @@ class DataTemuanController extends Controller
         return redirect()->route('data-lhp.index')
             ->with('success', 'Anda telah memasukkan data baru.');
     }
+    public function update(Request $request,$idlhp)
+    {
+        // return $request->all();
+        list($idpem,$code,$pemeriksa)=explode('-',$request->pemeriksa);
+        list($tgl,$bln,$thn)=explode('/',$request->tanggal_lhp);
 
+        $insert=DaftarTemuan::find($idlhp);
+        $insert->no_lhp = $request->nomor_lhp;
+        $insert->kode_lhp = $request->kode_lhp;
+        $insert->judul_lhp = $request->judul_lhp;
+        $insert->pemeriksa_id = $idpem;
+        $insert->tanggal_lhp = $thn.'-'.$bln.'-'.$tgl;
+        $insert->tahun_pemeriksa = $request->tahun_pemeriksaan;
+        $insert->jenis_audit_id = $request->jenis_audit;
+        $insert->status_lhp = $request->status_lhp;
+        $insert->create_flag = $request->flag_status_lhp;
+        $insert->user_input_id = Auth::user()->id;
+        $insert->save();
+
+        return redirect()->route('data-lhp.index')
+            ->with('success', 'Anda telah mengubah data LHP.');
+    }
+    
     public function data_temuan_lhp($idlhp)
     {
         $dt['data']=$data=DaftarTemuan::where('id',$idlhp)->with('dpemeriksa')->with('djenisaudit')->first();
@@ -193,7 +226,7 @@ class DataTemuanController extends Controller
         return redirect('data-temuan-lhp/'.$idlhp)
             ->with('success', 'Anda telah memasukkan data temuan baru.');
     }
-    public function data_temuan_lhp_update(Request $request,$temuan_id)
+    public function data_temuan_lhp_update(Request $request,$idlhp)
     {  
         $rules = [
             'nomor_temuan' => 'required',
@@ -215,6 +248,7 @@ class DataTemuanController extends Controller
 
         Validator::make($request->all(),$rules,$customMessages)->validate();
 
+        $temuan_id=$request->temuan_id;
         $update=DataTemuan::find($temuan_id);
         $update->no_temuan=$request->nomor_temuan;
         // $insert->temuan=str_replace("\n","<br>",$request->temuan);
@@ -224,7 +258,7 @@ class DataTemuanController extends Controller
         $update->level_resiko_id=$request->level_resiko;
         $update->nominal=str_replace('.','',$request->nominal);
         $update->save();
-        $idlhp=$update->id_lhp;
+        // $idlhp=$update->id_lhp;
         // return $request->all();
         return redirect('data-temuan-lhp/'.$idlhp)
             ->with('success', 'Anda telah memperbaharui data temuan baru.');

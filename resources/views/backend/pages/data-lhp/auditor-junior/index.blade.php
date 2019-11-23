@@ -3,29 +3,7 @@
 @section('title')
     <title>Daftar LHP</title>
 @endsection
-@section('modal')
-    <div class="modal fade" id="modaltambah" tabindex="-1" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content">
-                <form action="{{ route('data-lhp.store') }}" method="POST" class="form-horizontal" id="formadd">
-                    @csrf
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Tambah Data LHP </h4>
-                    </div>
-                    <div class="modal-body">
-                        @include('backend.pages.data-lhp.auditor-junior.add-lhp',$data)
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
-                        <input type="button" onclick="validasiadd()" class="btn btn-success" value="Simpan">
-                    </div>
-				</form>
-			</div>
-		</div>
-	</div>  
-    
-@endsection
+
 @section('content')
 
 	<div class="col-md-12">
@@ -35,10 +13,8 @@
                 
                 {{-- @if (!Auth::user()->level==1 || Auth::user()->level==2) --}}
                     <div class="row">
-                        
-                       
                         <div class="col-md-2 text-left">Tahun
-                            <select name="tahun" id="tahun" class="form-control text-left" data-plugin="select2" onchange="getdata()" style="width:50%">
+                            <select name="tahun" id="tahun" class="form-control text-left" data-plugin="select2" onchange="getdata(this.value)" style="width:50%">
                                 @for ($i = (date('Y')-5); $i <= (date('Y')); $i++)
                                     @if ($tahun==$i)
                                         <option value="{{$i}}" selected="selected"}}>{{$i}}</option>
@@ -64,7 +40,27 @@
                     
                     <div class="row" style="margin-top:10px;font-size:20px;">
                         <div class="col-md-12">
-                            
+                            @if ($errors->any())
+                                <div class="alert alert-danger alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                    <strong>Alert ! </strong>
+                                    <span>
+                                        <ul>
+                                        @foreach ($errors->all() as $item)
+                                            <li style="font-size:11px !important;">- {!!$item!!}</li>
+                                        @endforeach
+                                        </ul>
+                                        
+                                    </span>
+                                </div>	
+                            @endif
+                            @if (Session::has('success'))
+                                <div class="alert alert-success alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                    <strong>Berhasil! </strong>
+                                    <span style="font-size:11px !important;">{!!Session::get('success')!!}</span>
+                                </div>
+                            @endif
                             <div id="data">
                                 <div class="text-center"><h4>Silahkan Pilih Tahun Terlebih Dahulu</h4></div>
                             </div>
@@ -78,72 +74,16 @@
 @section('footscript')
     <link rel="stylesheet" href="{{asset('theme/backend/libs/misc/datatables/datatables.min.css')}}"/>
     <link rel="stylesheet" href="{{asset('css/noty.css')}}"/>
+    <link rel="stylesheet" href="{{asset('css/tooltips.css')}}"/>
     <script src="{{asset('theme/backend/libs/misc/datatables/datatables.min.js')}}"></script>
-    <script src="{{asset('theme/backend/libs/misc/flot/jquery.flot.tooltip.min.js')}}"></script>
     <script src="{{asset('js/noty.js')}}"></script>
+    <script src="{{asset('js/lhp.js')}}"></script>
 	<script>
         loaddata('{{$tahun}}');
-        
+        hidealert();
         $('.select').select2();
-        function loaddata(tahun)
-		{
-			$('#data').load(flagsUrl+'/data-lhp-data/'+tahun,function(){
-                $('#table').dataTable();
-            });
-        }
-        function generatekodelhp(val)
-        {
-            $.ajax({
-                url : flagsUrl+'/data-lhp-cek-kode/'+val,
-                success : function(res){
-                    $('#kode_lhp').val(res);
-                }
-            })
-        }
-        function validasiadd()
-        {
-            var nomor_lhp=$('#nomor_lhp');
-            var pemeriksa=$('#pemeriksa');
-            var judul_lhp=$('#judul_lhp');
-            var jenis_audit=$('#jenis_audit');
-
-            if(nomor_lhp.val()=='')
-            {
-                notif('error','Nomor LHP Belum Diisi');
-                nomor_lhp.focus();
-            }
-            else if(pemeriksa.val()=='')
-            {
-                notif('error','Pemeriksa Belum Dipilih');
-                pemeriksa.focus();
-            }
-            else if(judul_lhp.val()=='')
-            {
-                notif('error','Judul LHP Belum Diisi');
-                judul_lhp.focus();
-            }
-            else if(jenis_audit.val()=='')
-            {
-                notif('error','Jenis Audit Belum Dipilih');
-                jenis_audit.focus();
-            }
-            else
-            {
-                $('#formadd').submit()
-            }
-        }
-
-        function notif(tp,txt)
-        {
-            new Noty({
-                layout:'topRight',
-                type : tp,
-                theme : 'mint',
-                text: txt,
-                progressBar:true,
-                timeout:3000,
-            }).show();
-        }
+        
+        
     </script>
     <style>
     /* .form-inline .btn
@@ -171,5 +111,91 @@
     {
         overflow-x: unset !important;
     }
+    
     </style>
+@endsection
+@section('modal')
+{{-- Start Modal CRUD LHP --}}
+    <div class="modal fade" id="modaltambah" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+                <form action="{{ route('data-lhp.store') }}" method="POST" class="form-horizontal" id="formadd">
+                    @csrf
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Tambah Data LHP </h4>
+                    </div>
+                    <div class="modal-body">
+                        @include('backend.pages.data-lhp.auditor-junior.add-lhp',$data)
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
+                        <input type="button" onclick="validasiadd()" class="btn btn-success" value="Simpan">
+                    </div>
+				</form>
+			</div>
+		</div>
+	</div>  
+    <div class="modal fade" id="modalubah" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+                <form method="POST" class="form-horizontal" id="formubah">
+                    @csrf
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Ubah Data LHP </h4>
+                    </div>
+                    <div class="modal-body">
+                        @include('backend.pages.data-lhp.auditor-junior.edit-lhp',$data)
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
+                        <input type="button" onclick="validasiedit()" class="btn btn-success" value="Simpan">
+                    </div>
+				</form>
+			</div>
+		</div>
+	</div>  
+    <div class="modal fade" id="modalhapus" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Konfirmasi Hapus Data LHP</h4>
+				</div>
+				<div class="modal-body">
+					<h5>Apakah anda yakin akan menghapus data LHP ini?</h5>
+				</div>
+				<div class="modal-footer">
+					<button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
+					<a class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('form-delete').submit();" style="cursor:pointer;">Ya, Saya Yakin</a>
+					<form id="form-delete" method="POST" style="display: none;">
+                        @csrf
+					</form>
+				</div>
+			</div>
+		</div>
+    </div>
+{{-- End Modal CRUD LHP --}}
+
+{{-- Start  Modal Detail LHP --}}
+    <div class="modal fade" id="modaldetail" tabindex="-1" role="dialog">
+		<div class="modal-dialog" style="width:95% !important;margin-top:10px !important;">
+			<div class="modal-content" style="">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Detail Data LHP </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="detail">
+                            @include('backend.pages.data-lhp.auditor-junior.detail-lhp')
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" data-dismiss="dismis" class="btn btn-primary">Tutup</button>
+                    </div>
+			</div>
+		</div>
+    </div>  
+{{-- End  Modal Detail LHP --}}
 @endsection

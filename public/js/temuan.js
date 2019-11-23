@@ -120,53 +120,10 @@ $('#datatable-temuan tbody').on('click', 'td.rekomendasi-detail', function () {
 
 
 $('[data-toggle="tooltip"]').tooltip();
+
+
 $('.select').select2();
-$('#table').on('click', '.btn-edit', function () {
-    var id = $(this).data('value')
-    // alert(id);
-    $.ajax({
-        url: "{{ url('data-temuan-lhp-edit') }}/" + id,
-        success: function (res) {
-            $('#temuan_id').val(id);
-            $('#edit_nomor_temuan').val(res.no_temuan);
-            $('#edit_temuan').val(res.temuan);
-            $('#edit_jenis_temuan').val(res.jenis_temuan_id);
-            $('#edit_jenis_temuan').select2().trigger('change');
-            $('#edit_pic_temuan').val(res.pic_temuan_id);
-            $('#edit_pic_temuan').select2().trigger('change');
-            $('#edit_nominal').val(format(res.nominal));
-            $('#edit_level_resiko').val(res.level_resiko_id);
-            $('#edit_level_resiko').select2().trigger('change');
 
-
-        }
-    })
-})
-
-// delete action
-$('#table').on('click', '.btn-delete', function () {
-    var id = $(this).data('value')
-    $('#form-delete').attr('action', "{{ url('data-temuan-lhp-delete') }}/{{$idlhp}}/" + id)
-})
-
-
-$('#table').on('click', '.btn-edit-rekom', function () {
-    var id = $(this).data('value')
-    $('#idtemuan').val(id);
-    // alert(id);
-    $.ajax({
-        url: "{{ url('rekomendasi-edit') }}/" + id,
-        success: function (res) {
-            // $('#edit_level_resiko').select2().trigger('change');
-        }
-    })
-})
-
-// delete action
-$('#table').on('click', '.btn-delete-rekom', function () {
-    var id = $(this).data('value')
-    $('#form-delete').attr('action', "{{ url('rekomendasi-delete') }}/{{$idlhp}}/" + id)
-})
 
 $('#add_nominal').on('keyup', function (e) {
     $(this).val(format($(this).val()));

@@ -44,9 +44,10 @@
                         <div class="col-md-2 text-left">
                              <h3 class="widget-title">Data Temuan</h3>
                         </div>
-                        <div class="col-md-8">&nbsp;</div>
-                         <div class="col-md-2 text-right">
-                            <a href="" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#modaltambah">+ Tambah Data</a>
+                        <div class="col-md-7">&nbsp;</div>
+                         <div class="col-md-3 text-right">
+                             <a href="{{url('data-lhp')}}" class="btn btn-sm btn-primary">< Kembali </a>&nbsp;
+                             <a href="" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#modaltambah">+ Tambah Data</a>
                         </div>
                     </div>
                     
@@ -128,8 +129,8 @@
                                                             </button>
                                                             <ul class="dropdown-menu" role="menu">
                                                                 <li><a href="#"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Temuan & Rekomendasi</a></li>
-                                                                <li style="cursor:pointer"><a class="btn-edit" data-toggle="modal" data-target="#modalubah" data-value="{{ $item->temuan_id }}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit LHP</a></li>
-                                                                <li><a class="btn-delete" data-toggle="modal" data-target="#modalhapus" data-value="{{ $item->id }}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus Temuan</a></li>
+                                                                <li style="cursor:pointer"><a class="btn-edit-temuan" data-toggle="modal" data-target="#modalubah" data-value="{{ $item->temuan_id }}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit LHP</a></li>
+                                                                <li><a class="btn-delete-temuan" data-toggle="modal" data-target="#modalhapus" data-value="{{ $item->id }}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus Temuan</a></li>
                                                             </ul>
                                                         </div>
                                                     </div>
@@ -161,13 +162,59 @@
     <script src="{{asset('js')}}/jquery-ui.js"></script>
 	<script>
         hidealert();
-        
+        $('#datatable-temuan').on('click', '.btn-edit-temuan', function () {
+            var id = $(this).data('value')
+            // alert(id);
+            $.ajax({
+                url: "{{ url('data-temuan-lhp-edit') }}/" + id,
+                success: function (res) {
+                    $('#temuan_id').val(id);
+                    $('#edit_nomor_temuan').val(res.no_temuan);
+                    $('#edit_temuan').val(res.temuan);
+                    $('#edit_jenis_temuan').val(res.jenis_temuan_id);
+                    $('#edit_jenis_temuan').select2().trigger('change');
+                    $('#edit_pic_temuan').val(res.pic_temuan_id);
+                    $('#edit_pic_temuan').select2().trigger('change');
+                    $('#edit_nominal').val(format(res.nominal));
+                    $('#edit_level_resiko').val(res.level_resiko_id);
+                    $('#edit_level_resiko').select2().trigger('change');
+                }
+            })
+        })
+
+        // delete action
+        $('#datatable-temuan').on('click', '.btn-delete-temuan', function () {
+            var id = $(this).data('value')
+            $('#form-delete').attr('action', "{{ url('data-temuan-lhp-delete') }}/{{$idlhp}}/" + id)
+        })
+
+
+        $('#table').on('click', '.btn-edit-rekom', function () {
+            var id = $(this).data('value')
+            $('#idtemuan').val(id);
+            // alert(id);
+            $.ajax({
+                url: "{{ url('rekomendasi-edit') }}/" + id,
+                success: function (res) {
+                    // $('#edit_level_resiko').select2().trigger('change');
+                }
+            })
+        })
+
+        // delete action
+        $('#table').on('click', '.btn-delete-rekom', function () {
+            var id = $(this).data('value')
+            $('#form-delete').attr('action', "{{ url('rekomendasi-delete') }}/{{$idlhp}}/" + id)
+        })
     </script>
     <style>
     /* .form-inline .btn
     {
         height:24px !important;
     } */
+    .modal-dialog{
+        margin-top:10px !important;
+    }
     .select2-container{
 		width:100% !important;
 	}

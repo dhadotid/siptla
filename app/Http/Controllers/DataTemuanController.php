@@ -55,11 +55,23 @@ class DataTemuanController extends Controller
         else
             $thn=$tahun;
         
-        $data=DaftarTemuan::selectRaw('*,daftar_lhp.id as lhp_id')
-                ->where('daftar_lhp.tahun_pemeriksa',$thn)
-                ->with('dpemeriksa')
-                ->with('djenisaudit')
-                ->orderBy('tanggal_lhp','desc')->get();
+        if(Auth::user()->level=='auditor-junior')
+        {
+            $data=DaftarTemuan::selectRaw('*,daftar_lhp.id as lhp_id')
+                    ->where('daftar_lhp.tahun_pemeriksa',$thn)
+                    ->where('daftar_lhp.user_input_id',Auth::user()->id)
+                    ->with('dpemeriksa')
+                    ->with('djenisaudit')
+                    ->orderBy('tanggal_lhp','desc')->get();
+        }
+        else
+        {
+            $data=DaftarTemuan::selectRaw('*,daftar_lhp.id as lhp_id')
+                    ->where('daftar_lhp.tahun_pemeriksa',$thn)
+                    ->with('dpemeriksa')
+                    ->with('djenisaudit')
+                    ->orderBy('tanggal_lhp','desc')->get();
+        }
 
         return view('backend.pages.data-lhp.auditor-junior.data')
                 ->with('data',$data);
@@ -151,7 +163,11 @@ class DataTemuanController extends Controller
     
     public function data_temuan_lhp($idlhp)
     {
-        $dt['data']=$data=DaftarTemuan::where('id',$idlhp)->with('dpemeriksa')->with('djenisaudit')->first();
+        if(Auth::user()->level=='auditor-junior')
+            $dt['data']=$data=DaftarTemuan::where('user_input_id',Auth::user()->id)->where('id',$idlhp)->with('dpemeriksa')->with('djenisaudit')->first();
+        else
+            $dt['data']=$data=DaftarTemuan::where('id',$idlhp)->with('dpemeriksa')->with('djenisaudit')->first();
+
         $dt['jenistemuan']=MasterTemuan::orderBy('temuan')->get();
         $dt['picunit']=PICUnit::with('levelpic')->orderBy('nama_pic')->get();
         $dt['levelresiko']=LevelResiko::orderBy('level_resiko')->get();
@@ -167,14 +183,20 @@ class DataTemuanController extends Controller
             $rekomendasi[$v->id_temuan][]=$v;
         }
         $dt['rekomendasi']=$rekomendasi;
-        return view('backend.pages.data-lhp.auditor-junior.temuan')
-                ->with('dt',$dt)
-                ->with('idlhp',$idlhp)
-                ->with('rekomendasi',$rekomendasi)
-                ->with('temuan',$temuan)
-                ->with('jangkawaktu',$jangkawaktu)
-                ->with('statusrekomendasi',$statusrekomendasi)
-                ->with('data',$data);
+
+        if($data)
+        {
+            return view('backend.pages.data-lhp.auditor-junior.temuan')
+                    ->with('dt',$dt)
+                    ->with('idlhp',$idlhp)
+                    ->with('rekomendasi',$rekomendasi)
+                    ->with('temuan',$temuan)
+                    ->with('jangkawaktu',$jangkawaktu)
+                    ->with('statusrekomendasi',$statusrekomendasi)
+                    ->with('data',$data);
+        }
+        else
+            return redirect('data-lhp')->with('error','Data LHP Yang Anda Cari Tidak Ditemukan');
     }
 
     public function data_temuan_data($idlhp)

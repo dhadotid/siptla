@@ -100,7 +100,9 @@
 		<div class="widget">
 			<header class="widget-header">
 				<span class="widget-title">Data Jenis Audit </span>
-				<a href="" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#modaltambah">+ Tambah Data</a>
+				@if (Auth::user()->level=='0')
+					<a href="" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#modaltambah">+ Tambah Data</a>
+				@endif
 			</header><!-- .widget-header -->
 			<hr class="widget-separator">
 			<div class="widget-body">
@@ -132,8 +134,9 @@
 								<th class="text-center" style="width:15px;">#</th>
 								<th class="text-center">Jenis Audit </th>
 								<th class="text-center">Status </th>
-								<th class="text-center">Aksi</th>
-							
+								@if (Auth::user()->level=='0')
+									<th class="text-center">Aksi</th>
+								@endif
 							</tr>
 						</thead>
 						<tbody>
@@ -147,15 +150,17 @@
                                         @else
                                             <span class="label label-danger">Tidak Aktif</span>
                                         @endif
-                                    </td>
-									<td class="text-center">
-										<a class="btn btn-xs btn-warning btn-edit" data-toggle="modal" data-target="#modalubah" data-value="{{ $opd->id }}" style="height:24px !important;">
-											<i class="fa fa-edit"></i>
-										</a>
-										<a href="#" class="btn btn-xs btn-danger btn-delete" data-toggle="modal" data-target="#modalhapus" data-value="{{ $opd->id }}" style="height:24px !important;">
-											<i class="fa fa-trash"></i>
-										</a>
 									</td>
+									@if (Auth::user()->level=='0')
+										<td class="text-center">
+											<a class="btn btn-xs btn-warning btn-edit" data-toggle="modal" data-target="#modalubah" data-value="{{ $opd->id }}" style="height:24px !important;">
+												<i class="fa fa-edit"></i>
+											</a>
+											<a href="#" class="btn btn-xs btn-danger btn-delete" data-toggle="modal" data-target="#modalhapus" data-value="{{ $opd->id }}" style="height:24px !important;">
+												<i class="fa fa-trash"></i>
+											</a>
+										</td>
+									@endif
 								</tr>
 						@endforeach
 						</tbody>

@@ -140,7 +140,9 @@
 		<div class="widget">
 			<header class="widget-header">
 				<span class="widget-title">Data PIC Unit</span>
-				<a href="" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#modaltambah">+ Tambah Data</a>
+				@if (Auth::user()->level=='0')
+					<a href="" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#modaltambah">+ Tambah Data</a>
+				@endif
 			</header><!-- .widget-header -->
 			<hr class="widget-separator">
 			<div class="widget-body">
@@ -174,8 +176,9 @@
 								<th class="text-center">Bidang</th>
 								<th class="text-center">Fakultas</th>
 								<th class="text-center">Nama PIC Unit</th>
-								<th class="text-center">Aksi</th>
-							
+								@if (Auth::user()->level=='0')
+									<th class="text-center">Aksi</th>
+								@endif
 							</tr>
 						</thead>
 						<tbody>
@@ -186,15 +189,16 @@
 									<td>{{ isset($opd->bid->nama_bidang) ? $opd->bid->nama_bidang : '-' }}</td>
 									<td>{{ isset($opd->fak->nama_fakultas) ? $opd->fak->nama_fakultas : '-' }}</td>
 									<td>{{ $opd->nama_pic }}</td>
-									
-									<td class="text-center">
-										<a class="btn btn-xs btn-warning btn-edit" data-toggle="modal" data-target="#modalubah" data-value="{{ $opd->p_id }}" style="height:24px !important;">
-											<i class="fa fa-edit"></i>
-										</a>
-										<a href="#" class="btn btn-xs btn-danger btn-delete" data-toggle="modal" data-target="#modalhapus" data-value="{{ $opd->p_id }}" style="height:24px !important;">
-											<i class="fa fa-trash"></i>
-										</a>
-									</td>
+									@if (Auth::user()->level=='0')
+										<td class="text-center">
+											<a class="btn btn-xs btn-warning btn-edit" data-toggle="modal" data-target="#modalubah" data-value="{{ $opd->p_id }}" style="height:24px !important;">
+												<i class="fa fa-edit"></i>
+											</a>
+											<a href="#" class="btn btn-xs btn-danger btn-delete" data-toggle="modal" data-target="#modalhapus" data-value="{{ $opd->p_id }}" style="height:24px !important;">
+												<i class="fa fa-trash"></i>
+											</a>
+										</td>
+									@endif
 								</tr>
 						@endforeach
 						</tbody>

@@ -70,7 +70,12 @@
           </ul>
         </li>
         @if (Auth::user()->level=='auditor-junior')
-          <li class="{{$url=='data-lhp' ? 'active' : ''}}"><a href="{{url('data-lhp')}}"><span class="menu-text">Data LHP</span></a></li>
+          <li class="{{$url=='data-lhp' ? 'active' : ''}}">
+            <a href="{{url('data-lhp')}}">
+              <i class="menu-icon fa fa-list"></i>
+              <span class="menu-text">Data LHP</span>
+            </a>
+          </li>
         @endif
         <li class="has-submenu {{strpos($url,'laporan')!==false ? 'active open' : ''}}">
           <a href="javascript:void(0)" class="submenu-toggle">

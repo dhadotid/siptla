@@ -42,37 +42,6 @@ class DaftarTemuanController extends Controller
             ->with('tahun',$tahun)
             ->with('bidang',$bidang);
 
-        // if (Auth::user()->level==2) {
-        //     return view('backend.pages.daftar-temuan.index')
-        //     ->with('dinas',$dinas)
-        //     ->with('tahun',$tahun)
-        //     ->with('bidang',$bidang);
-        // } else {
-
-        //     $din=PivotUserDinas::where('user_id',Auth::user()->id)->first();
-        //     if(Auth::user()->level==1)
-        //         $dinas_id=-1;
-        //     else
-        //         $dinas_id=$din->dinas_id;
-            
-            
-
-        //     if(Auth::user()->level==1)
-        //     {
-        //         return view('backend.pages.daftar-temuan.index')
-        //             ->with('dinas',$dinas)
-        //             ->with('tahun',$tahun)
-        //             ->with('bidang',$bidang);    
-        //     }
-        //     else
-        //     {
-        //         // return $dinas_id;
-        //         return view('backend.pages.list-temuan.index')
-        //             ->with('dinas',$dinas_id)
-        //             ->with('tahun',$tahun)
-        //             ->with('bidang',$bidang);
-        //     }
-        // }
     }
 
     public function data($dinas_id=null,$tahun=null,$bidang_id=null)

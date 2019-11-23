@@ -61,6 +61,13 @@
                                     <span style="font-size:11px !important;">{!!Session::get('success')!!}</span>
                                 </div>
                             @endif
+                            @if (Session::has('error'))
+                                <div class="alert alert-danger alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                    <strong>Peringatan! </strong>
+                                    <span style="font-size:11px !important;">{!!Session::get('error')!!}</span>
+                                </div>
+                            @endif
                             <div id="data">
                                 <div class="text-center"><h4>Silahkan Pilih Tahun Terlebih Dahulu</h4></div>
                             </div>

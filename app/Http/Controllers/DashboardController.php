@@ -7,67 +7,44 @@ use Illuminate\Http\Request;
 use App\Models\DetailTemuan;
 
 use Auth;
-
+use App\Models\PICUnit;
+use App\Models\JenisAudit;
+use App\Models\Pemeriksa;
+use App\Models\StatusRekomendasi;
+use App\Models\MasterTemuan;
+use App\Models\DaftarTemuan;
 class DashboardController extends Controller
 {
     public function index()
     {
-        /**
-         * Status Temuan:
-         * 0 : Menunggu Verifikasi
-         * 2 : Belum Tindak Lanjut
-         * 3 : Telah Tindak Lanjut
-         * 4 : Selesai
-         */
-        $temuan=array();
-        $level = Auth::user()->level;
-        $mv = $btl = $ttl = $sel = 0;
-
-        if ($level == 1 || $level == 2) { // administrator or operator
-            $temuan = DetailTemuan::orderby('created_at', 'desc')->get();
-
-            foreach ($temuan as $value) {
-                if ($value->flag==0) {
-                    $mv++;
-                } else if ($value->flag==2) {
-                    $btl++;
-                } else if ($value->flag==3) {
-                    $ttl++;
-                } else if ($value->flag==4) {
-                    $sel++;
-                }
-            }
-        } else if ($level == 3) { // admin opd
-            $temuan = DetailTemuan::select('*', 'detail_temuan.flag as theflag')
-                ->join('daftar_temuan', 'daftar_temuan.id', '=', 'detail_temuan.daftar_id')
-                ->where('dinas_id', Auth::user()->user->dinas_id)
-                ->where('detail_temuan.flag', '!=',0)
-                ->orderby('detail_temuan.created_at', 'desc')
-                ->limit(5)
-                ->get();
-            // $temuan = DetailTemuan::select('*', 'detail_temuan.flag as theflag')
-            //     ->join('daftar_temuan', 'daftar_temuan.id', '=', 'detail_temuan.daftar_id')
-            //     ->where('dinas_id', Auth::user()->user->dinas_id)
-            //     ->get();
-
-            foreach ($temuan as $value) {
-                if ($value->theflag==0) {
-                    $mv++;
-                } else if ($value->theflag==2) {
-                    $btl++;
-                } else if ($value->theflag==3) {
-                    $ttl++;
-                } else if ($value->theflag==4) {
-                    $sel++;
-                }
-            }
+        // echo Auth::user()->level;
+        if(Auth::user()->level=='0')
+        {
+            $jenistemuan=MasterTemuan::get()->count();
+            $pemeriksa=Pemeriksa::get()->count();
+            $status=StatusRekomendasi::get()->count();
+            $picunit=PICUnit::with('levelpic')->with('fak')->with('bid')->orderByRaw('RAND()')->limit(10)->get();
+            $jenisaudit=JenisAudit::get()->count();
+            return view('backend.pages.dashboard.admin')
+                    ->with('jenistemuan',$jenistemuan)
+                    ->with('pemeriksa',$pemeriksa)
+                    ->with('status',$status)
+                    ->with('picunit',$picunit)
+                    ->with('jenisaudit',$jenisaudit);
         }
-
-        return view('backend.pages.dashboard.index')
-            ->with('mv', $mv)
-            ->with('btl', $btl)
-            ->with('ttl', $ttl)
-            ->with('sel', $sel)
-            ->with('temuan', $temuan);
+        elseif(Auth::user()->level=='auditor-junior')
+        {
+            $lhp=DaftarTemuan::with('dpemeriksa')->with('djenisaudit')->get();
+            $datalhp=array();
+            foreach($lhp as $k=>$v)
+            {
+                $datalhp[str_slug($v->status_lhp)][]=$v;
+            }
+            $status=StatusRekomendasi::get()->count();
+            return view('backend.pages.dashboard.auditor-junior')
+                    ->with('lhp',$lhp)
+                    ->with('status',$status)
+                    ->with('datalhp',$datalhp);
+        }
     }
 }

@@ -198,4 +198,23 @@
 		</div>
     </div>  
 {{-- End  Modal Detail LHP --}}
+
+{{-- Start  Modal Review LHP --}}
+    <div class="modal fade" id="modalreview" tabindex="-1" role="dialog">
+		<div class="modal-dialog" style="margin-top:10px !important;width:50%;">
+			<div class="modal-content" style="">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Review Data LHP </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="review"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" data-dismiss="dismis" class="btn btn-primary">Tutup</button>
+                    </div>
+			</div>
+		</div>
+    </div>  
+{{-- End  Modal Review LHP --}}
 @endsection

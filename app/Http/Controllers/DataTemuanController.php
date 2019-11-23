@@ -43,6 +43,11 @@ class DataTemuanController extends Controller
         return redirect('data-lhp')
             ->with('success', 'Anda telah menghapus data LHP.');
     }
+    public function review_lhp($idlhp)
+    {
+        $dt['data']=$data=DaftarTemuan::where('id',$idlhp)->with('dpemeriksa')->with('djenisaudit')->first();
+        return view('backend.pages.data-lhp.auditor-junior.review-lhp')->with('data',$data);
+    }
     public function data_lhp($tahun=null)
     {
         if($tahun==null)

@@ -39,6 +39,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('data-lhp-data/{tahun?}','DataTemuanController@data_lhp')->name('data-lhp.data');
     Route::get('data-lhp-cek-kode/{pemeriksa?}','DataTemuanController@data_lhp_cek_kode')->name('data-lhp.cek-kode');
     Route::get('data-lhp-detail/{id}','DataTemuanController@detail_lhp')->name('data-lhp.detail');
+    Route::get('data-lhp-review/{id}','DataTemuanController@review_lhp')->name('data-lhp.review');
     Route::post('data-lhp-store','DataTemuanController@store')->name('data-lhp.store');
     Route::post('data-lhp-update/{idlhp}','DataTemuanController@update')->name('data-lhp.update');
 

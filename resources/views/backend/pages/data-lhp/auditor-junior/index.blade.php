@@ -192,7 +192,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" data-dismiss="modal" data-dismiss="dismis" class="btn btn-primary">Tutup</button>
+                        <button type="button" data-dismiss="modal" data-dismiss="modal" class="btn btn-primary">Tutup</button>
                     </div>
 			</div>
 		</div>
@@ -211,7 +211,7 @@
                         <div id="review"></div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" data-dismiss="modal" data-dismiss="dismis" class="btn btn-primary">Tutup</button>
+                        <button type="button" data-dismiss="modal" data-dismiss="modal" class="btn btn-primary">Tutup</button>
                     </div>
 			</div>
 		</div>

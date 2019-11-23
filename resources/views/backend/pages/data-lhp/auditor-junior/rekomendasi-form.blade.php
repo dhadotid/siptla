@@ -1,13 +1,13 @@
 <div class="row" style="padding:0 10px;">
     <div class="col-md-12" style="border:1px solid #bbb;border-radius:5px;padding:5px 20px 0px 20px;background:#eee;">
 
-            <legend style="margin:0px;padding:0px;margin-bottom:10px;">Data Temuan</legend>
+            <h4 style="margin:0px;padding:0px;margin-bottom:10px;">Data Temuan</h4>
             <div class="row" style="margin:0px;padding:0px;margin-bottom:10px;">
                 <div class="col-md-6" style="margin:0px;padding:0px;margin-bottom:10px;">
                      <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
                         <label for="exampleTextInput1" class="col-sm-12 control-label text-left" style="font-size:10px;font-style:italic">Nomor LHP:</label>
                         <div class="col-sm-12">
-                            <input type="text" class="" name="nomor_lhp" placeholder="Nomor LHP" id="nomor_lhp" value="{{$data->no_lhp}}" readonly style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;background:#eee !important;width:100%">
+                            <input type="text" class="d_nomor_lhp" name="nomor_lhp" placeholder="Nomor LHP" id="nomor_lhp" value="{{$data->no_lhp}}" readonly style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;background:#eee !important;width:100%">
                         </div>
                     </div>
                 </div>
@@ -15,9 +15,9 @@
                     <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
                         <label for="exampleTextInput1" class="col-sm-12 control-label text-left" style="font-size:10px;font-style:italic">Nomor Temuan:</label>
                         <div class="col-sm-12">
-                            <input type="text" class="" name="nomor_temuan" placeholder="Nomor Temuan" id="nomor_temuan"readonly style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;background:#eee !important;width:100%">
-                            <input type="hidden" class="" name="id_temuan" id="id_temuan">
-                            <input type="hidden" class="" name="jenis_temuan" id="jenis_temuan">
+                            <input type="text" class="d_nomor_temuan" name="nomor_temuan" placeholder="Nomor Temuan" id="nomor_temuan"readonly style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;background:#eee !important;width:100%">
+                            <input type="hidden" class="d_id_temuan" name="id_temuan" id="id_temuan">
+                            <input type="hidden" class="d_jenis_temuan" name="jenis_temuan" id="jenis_temuan">
                         </div>
                     </div>
                 </div>
@@ -25,7 +25,7 @@
                     <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
                         <label for="exampleTextInput1" class="col-sm-12 control-label text-left" style="font-size:10px;font-style:italic">Temuan:</label>
                         <div class="col-sm-12">
-                            <textarea type="text" class="" name="temuan" placeholder="Temuan" id="temuan" readonly style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;background:#eee !important;width:100%;min-height:100px"></textarea>
+                            <textarea type="text" class="d_temuan" name="temuan" placeholder="Temuan" id="temuan" readonly style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;background:#eee !important;width:100%;min-height:100px"></textarea>
                         </div>
                     </div>
                 </div>

@@ -55,8 +55,8 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('rekomendasi-edit/{idrekom}','DataRekomendasiController@rekomendasi_edit')->name('rekomendasi.edit');
     Route::get('rekomendasi-data/{idtemuan}','DataRekomendasiController@rekomendasi_data')->name('rekomendasi.data');
     Route::post('rekomendasi-simpan','DataRekomendasiController@rekomendasi_simpan')->name('rekomendasi.simpan');
-    Route::post('rekomendasi-update/{id}','DataRekomendasiController@rekomendasi_update')->name('rekomendasi.update');
-    Route::post('rekomendasi-delete/{id}','DataRekomendasiController@rekomendasi_delete')->name('rekomendasi.delete');
+    Route::post('rekomendasi-update/{idrekom}/{idtemuan}','DataRekomendasiController@rekomendasi_update')->name('rekomendasi.update');
+    Route::get('rekomendasi-delete/{idrekom}/{idtemuan}','DataRekomendasiController@rekomendasi_delete')->name('rekomendasi.delete');
 
     Route::get('data-rekanan','RekananController@data_rekanan')->name('data-rekanan');
 });

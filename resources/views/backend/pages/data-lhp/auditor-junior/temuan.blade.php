@@ -108,13 +108,17 @@
                                                 <td class="text-center">{{isset($item->picunit->nama_pic) ? $item->picunit->nama_pic: '-'}}</td>
                                                 <td class="text-right">{{number_format($item->nominal,2,',','.')}}</td>
                                                 <td class="text-center">{{isset($item->levelresiko->level_resiko) ? $item->levelresiko->level_resiko: '-'}}</td>
-                                                <td class="text-center rekomendasi-detail" data-value="{{ $item->id }}">
+                                                <td class="text-center">
                                                     <div style="width:150px;">
                                                         @php
                                                             $jlhrekom=isset($rekomendasi[$item->temuan_id]) ? count($rekomendasi[$item->temuan_id]) : 0;
                                                         @endphp
-                                                        <span style="cursor:pointer" class="label label-{{$jlhrekom==0 ? 'dark' : 'primary'}} fz-sm">{{$jlhrekom}}</span>
-                                                        <span style="cursor:pointer" class="label label-success fz-sm">Rekomendasi</span>
+                                                        <span class="rekomendasi-detail" data-value="{{ $item->id }}">
+                                                            <span id="div-jlh-rekom-{{ $item->id }}">
+                                                                <span style="cursor:pointer" class="label label-{{$jlhrekom==0 ? 'dark' : 'primary'}} fz-sm">{{$jlhrekom}}</span>
+                                                            </span>
+                                                            <span style="cursor:pointer" class="label label-success fz-sm">Rekomendasi</span>
+                                                        </span>
                                                         <span style="cursor:pointer" class="label label-info fz-sm" data-toggle="modal" data-target="#modaltambahrekomendasi">
                                                             <a data-toggle="tooltip" title="Tambah Rekomendasi" style="color:#fff" data-value="{{ $item->temuan_id }}" onclick="rekomadd('{{$item->temuan_id}}')"><i class="fa fa-plus-circle"></i></a>
                                                         </span>
@@ -128,9 +132,15 @@
                                                                 <span class="caret"></span>
                                                             </button>
                                                             <ul class="dropdown-menu" role="menu">
-                                                                <li><a href="#"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Temuan & Rekomendasi</a></li>
-                                                                <li style="cursor:pointer"><a class="btn-edit-temuan" data-toggle="modal" data-target="#modalubah" data-value="{{ $item->temuan_id }}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit LHP</a></li>
-                                                                <li><a class="btn-delete-temuan" data-toggle="modal" data-target="#modalhapus" data-value="{{ $item->id }}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus Temuan</a></li>
+                                                                <li>
+                                                                    <a href="#" class="btn-detail-temuan" data-toggle="modal" data-target="#modaldetail" data-value="{{$item->temuan_id}}"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Temuan</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="#" class="btn-edit-temuan" data-toggle="modal" data-target="#modalubah" data-value="{{ $item->temuan_id }}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit LHP</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="btn-delete-temuan" data-toggle="modal" data-target="#modalhapus" data-value="{{ $item->id }}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus Temuan</a>
+                                                                </li>
                                                             </ul>
                                                         </div>
                                                     </div>
@@ -161,6 +171,11 @@
     <script src="{{asset('js')}}/temuan.js"></script>
     <script src="{{asset('js')}}/jquery-ui.js"></script>
 	<script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
         hidealert();
         $('#datatable-temuan').on('click', '.btn-edit-temuan', function () {
             var id = $(this).data('value')
@@ -187,6 +202,21 @@
             var id = $(this).data('value')
             $('#form-delete').attr('action', "{{ url('data-temuan-lhp-delete') }}/{{$idlhp}}/" + id)
         })
+        
+        $('#datatable-temuan').on('click', '.btn-detail-temuan', function () {
+            var id = $(this).data('value')
+            $.ajax({
+                url: "{{ url('data-temuan-lhp-edit') }}/" + id,
+                success: function (res) {
+                    $('#detail_nomor_temuan').val(res.no_temuan);
+                    $('#detail_temuan').val(res.temuan);
+                    $('#detail_jenistemuan').val(res.jenistemuan.temuan);
+                    $('#detail_pic_temuan').val(res.picunit.nama_pic);
+                    $('#detail_nominal').val(format(res.nominal));
+                    $('#detail_levelresiko').val(res.levelresiko.level_resiko);
+                }
+            })
+        })
 
 
         $('#table').on('click', '.btn-edit-rekom', function () {
@@ -201,11 +231,6 @@
             })
         })
 
-        // delete action
-        $('#table').on('click', '.btn-delete-rekom', function () {
-            var id = $(this).data('value')
-            $('#form-delete').attr('action', "{{ url('rekomendasi-delete') }}/{{$idlhp}}/" + id)
-        })
     </script>
     <style>
     /* .form-inline .btn
@@ -244,6 +269,7 @@
 @endsection
 
 @section('modal')
+{{-- Modal Rekomendasi --}}
     <div class="modal fade" id="modaltambahrekomendasi" tabindex="-1" role="dialog">
 		<div class="modal-dialog" style="width:60% !important">
 			<div class="modal-content">
@@ -282,6 +308,7 @@
                             $dt['act']='edit';
                         @endphp
                         <input type="hidden" name="id_lhp" value="{{$idlhp}}">
+                        <input type="hidden" name="idrekom" id="idrekom">
                         @include('backend.pages.data-lhp.auditor-junior.rekomendasi-form',$dt)
                     </div>
                     <div class="modal-footer">
@@ -292,6 +319,44 @@
 			</div>
 		</div>
     </div>  
+    <div class="modal fade" id="modaldetailrekomendasi" tabindex="-1" role="dialog">
+		<div class="modal-dialog" style="width:60% !important">
+			<div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Detail Data Rekomendasi </h4>
+                    </div>
+                    <div class="modal-body">
+                        @include('backend.pages.data-lhp.auditor-junior.rekomendasi-detail',$dt)
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-primary">Tutup</button>
+                    </div>
+				</form>
+			</div>
+		</div>
+    </div>  
+    
+    <div class="modal fade" id="modalhapusrekomendasi" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Konfirmasi Hapus Data Temuan</h4>
+				</div>
+				<div class="modal-body">
+                    <h4>Apakah anda yakin akan menghapus data Rekomendasi ini?</h4>
+				</div>
+				<div class="modal-footer">
+					<button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
+					<a class="btn btn-danger" id="hapusrekom" style="cursor:pointer;">Ya, Saya Yakin</a>
+				</div>
+			</div>
+		</div>
+    </div>
+{{-- End Modal Rekomendasi --}}
+
+{{-- Modal Temuan --}}
     <div class="modal fade" id="modaltambah" tabindex="-1" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -347,7 +412,7 @@
 					<h4 class="modal-title">Konfirmasi Hapus Data Temuan</h4>
 				</div>
 				<div class="modal-body">
-					<h5>Apakah anda yakin akan menghapus data temuan ini?</h5>
+					<h4>Apakah anda yakin akan menghapus data temuan ini?</h4>
 				</div>
 				<div class="modal-footer">
 					<button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
@@ -358,5 +423,22 @@
 				</div>
 			</div>
 		</div>
+    </div>
+    <div class="modal fade" id="modaldetail" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Ubah Data Temuan </h4>
+                    </div>
+                    <div class="modal-body">
+                        @include('backend.pages.data-lhp.auditor-junior.temuan-detail')
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-primary">Tutup</button>
+                    </div>
+			</div>
+		</div>
 	</div>
+{{-- End Modal Temuan --}}
 @endsection

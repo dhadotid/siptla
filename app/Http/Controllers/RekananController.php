@@ -81,7 +81,8 @@ class RekananController extends Controller
         $rekan=array();
         foreach($rekanan as $item)
         {
-            $rekan[]=$item->nama;
+            if($item->nama!=null)
+                $rekan[]=$item->nama;
         }
         return $rekan;
     }

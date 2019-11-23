@@ -23,18 +23,21 @@ class DataRekomendasiController extends Controller
         $insert->review_auditor=$request->review_auditor;
 
         $rekanan=$request->rekanan;
-        $cekrekanan=DaftarRekanan::where('nama',$rekanan)->first();
-        if($cekrekanan)
+        if($rekanan!='')
         {
-            $insert->rekanan=$cekrekanan->id;
-        }
-        else
-        {
-            $new_rekan=new DaftarRekanan;
-            $new_rekan->nama=$rekanan;
-            $new_rekan->save();
+            $cekrekanan=DaftarRekanan::where('nama',$rekanan)->first();
+            if($cekrekanan)
+            {
+                $insert->rekanan=$cekrekanan->id;
+            }
+            else
+            {
+                $new_rekan=new DaftarRekanan;
+                $new_rekan->nama=$rekanan;
+                $new_rekan->save();
 
-            $insert->rekanan=$new_rekan->id;
+                $insert->rekanan=$new_rekan->id;
+            }
         }
 
         $insert->save();
@@ -45,12 +48,12 @@ class DataRekomendasiController extends Controller
     }
     public function rekomendasi_data($idtemuan)
     {
-        $rekom=DataRekomendasi::where('id_temuan',$idtemuan)
+        $rekom=DataRekomendasi::selectRaw('*,data_rekomendasi.id as rekom_id')->where('id_temuan',$idtemuan)
                 ->with('picunit1')
                 ->with('picunit2')
                 ->with('statusrekomendasi')
                 ->get();
-        $table='<table class="table table-bordered">';
+        $table='<table class="table table-bordered" id="table-rekom">';
         $table.='<thead>
                     <tr>
                         <th class="text-center">Rekomendasi</th>
@@ -77,24 +80,34 @@ class DataRekomendasiController extends Controller
                                         </div></a>
                                 </span>
                             </div>';
-                $table.='<tr>
-                        <td style="background:#fff;">'.str_replace("\n",'<br>',$v->rekomendasi).'</td>
-                        <td style="background:#fff;" class="text-right">'.number_format($v->nominal_rekomendasi,2,',','.').'</td>
-                        <td style="background:#fff;" class="text-center">'.(isset($v->picunit1->nama_pic) ? $v->picunit1->nama_pic : 'n/a').'</td>
-                        <td style="background:#fff;" class="text-center"></td>
-                        <td style="background:#fff;" class="text-center">'.(isset($v->statusrekomendasi->rekomendasi) ? $v->statusrekomendasi->rekomendasi : 'n/a').'</td>
-                        <td style="background:#fff;" class="text-center">'.$tindaklanjut.'</td>
+                $table.='<tr id="data_rekom_'.$v->rekom_id.'">
+                        <td style="background:#fff;" id="rekom_'.$v->id_temuan.'_'.$v->rekom_id.'">
+                            '.str_replace("\n",'<br>',$v->rekomendasi).'
+                        </td>
+                        <td style="background:#fff;" class="text-right" id="nominal_'.$v->id_temuan.'_'.$v->rekom_id.'">
+                            '.number_format($v->nominal_rekomendasi,2,',','.').'
+                        </td>
+                        <td style="background:#fff;" class="text-center" id="pic1_'.$v->id_temuan.'_'.$v->rekom_id.'">
+                            '.(isset($v->picunit1->nama_pic) ? $v->picunit1->nama_pic : 'n/a').'
+                        </td>
+                        <td style="background:#fff;" class="text-center" id="pic2_'.$v->id_temuan.'_'.$v->rekom_id.'"></td>
+                        <td style="background:#fff;" class="text-center" id="status_'.$v->id_temuan.'_'.$v->rekom_id.'">
+                            '.(isset($v->statusrekomendasi->rekomendasi) ? $v->statusrekomendasi->rekomendasi : 'n/a').'
+                        </td>
+                        <td style="background:#fff;" class="text-center" id="tindak_'.$v->id_temuan.'_'.$v->rekom_id.'">
+                            '.$tindaklanjut.'
+                        </td>
                         <td style="background:#fff;" class="text-center">
                             <div style="width:90px;text-align:center;margin:0 auto;">
-                                <a class="btn btn-xs btn-success rounded" data-toggle="tooltip" title="Detail Rekomendasi">
+                                <a class="btn btn-xs btn-success rounded" onclick="detailrekomendasi('.$v->rekom_id.')">
                                     <div class="tooltipcss"><i class="glyphicon glyphicon-list"></i>
                                         <span class="tooltiptext">Detail Rekomendasi</span>
                                     </div></a>
-                                <a class="btn btn-xs btn-primary rounded btn-edit" data-toggle="modal" data-target="#modalubah" data-value="0">
+                                <a class="btn btn-xs btn-primary rounded" onclick="editrekomendasi('.$v->rekom_id.')">
                                     <div class="tooltipcss"><i class="glyphicon glyphicon-edit"></i>
                                         <span class="tooltiptext">Edit Rekomendasi</span>
                                     </div></a>
-                                <a class="btn btn-xs btn-danger rounded btn-delete" data-toggle="modal" data-target="#modalhapus" data-value="0">
+                                <a class="btn btn-xs btn-danger rounded btn-delete-rekomendasi" onclick="hapusrekomendasi('.$v->rekom_id.','.$idtemuan.')">
                                     <div class="tooltipcss"><i class="glyphicon glyphicon-trash"></i>
                                         <span class="tooltiptext">Hapus Rekomendasi</span>
                                     </div></a>
@@ -114,14 +127,63 @@ class DataRekomendasiController extends Controller
     }
     public function rekomendasi_edit($idrekom)
     {
-
+        $rekom=DataRekomendasi::selectRaw('*,data_rekomendasi.id as rekom_id')->where('id',$idrekom)
+                ->with('dtemuan')
+                ->with('jenistemuan')
+                ->with('picunit1')
+                ->with('picunit2')
+                ->with('jangkawaktu')
+                ->with('drekanan')
+                ->with('statusrekomendasi')
+                ->first();
+        return $rekom;
     }
-    public function rekomendasi_update(Request $request,$idtemuan)
+    public function rekomendasi_update(Request $request,$idrekom,$idtemuan)
     {
+        // return $request->all();
+        $update=DataRekomendasi::find($idrekom);
+        $update->no_temuan=$notemuan=$request->nomor_temuan;
+        $update->id_temuan=$request->id_temuan;
+        $update->jenis_temuan=$request->jenis_temuan;
+        $update->nominal_rekomendasi=str_replace('.','',$request->nilai_rekomendasi);
+        $update->rekomendasi=$request->rekomendasi;
+        $update->pic_1_temuan_id=$request->pic_1;
+        $update->pic_2_temuan_id=$request->pic_2;
+        $update->jangka_waktu_id=$request->jangka_waktu;
+        $update->status_rekomendasi_id=$request->status_rekomendasi;
+        $update->review_auditor=$request->review_auditor;
 
+        $rekanan=$request->rekanan;
+        if($rekanan!='')
+        {
+            $cekrekanan=DaftarRekanan::where('nama',$rekanan)->first();
+            if($cekrekanan)
+            {
+                $update->rekanan=$cekrekanan->id;
+            }
+            else
+            {
+                $new_rekan=new DaftarRekanan;
+                $new_rekan->nama=$rekanan;
+                $new_rekan->save();
+
+                $update->rekanan=$new_rekan->id;
+            }
+        }
+
+        $update->save();
+
+        return $this->rekomendasi_edit($idrekom);
     }
-    public function rekomendasi_delete($idrekom)
+    public function rekomendasi_delete($idrekom,$idtemuan)
     {
+        DataRekomendasi::destroy($idrekom);
+        // return $idtemuan;
 
+        $rekom=DataRekomendasi::where('id_temuan',$idtemuan)->get();
+        // $jlhrekom=isset($rekomendasi[$item->temuan_id]) ? count($rekomendasi[$item->temuan_id]) : 0;
+
+        $data['jlh']='<span style="cursor:pointer" class="label label-'.($rekom->count()==0 ? 'dark' : 'primary').' fz-sm">'.$rekom->count().'</span>';
+        return $data;
     }
 }

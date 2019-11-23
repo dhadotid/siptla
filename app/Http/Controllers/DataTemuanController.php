@@ -191,7 +191,10 @@ class DataTemuanController extends Controller
 
     public function data_temuan_edit($id)
     {
-        $temuan=DataTemuan::where('id',$id)->first();
+        $temuan=DataTemuan::with('jenistemuan')
+            ->with('picunit')
+            ->with('levelresiko')
+            ->where('id',$id)->first();
         return $temuan;
     }
     public function data_temuan_lhp_simpan(Request $request,$idlhp)

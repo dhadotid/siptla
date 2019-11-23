@@ -9,7 +9,7 @@ class DataRekomendasi extends Model
     use SoftDeletes;
     protected $table='data_rekomendasi';
 
-    function temuan()
+    function dtemuan()
     {
         return $this->belongsTo('App\Models\DataTemuan','id_temuan');
     }
@@ -34,5 +34,9 @@ class DataRekomendasi extends Model
     function statusrekomendasi()
     {
         return $this->belongsTo('App\Models\StatusRekomendasi','status_rekomendasi_id');
+    }
+    function drekanan()
+    {
+        return $this->belongsTo('App\Models\DaftarRekanan','rekanan');
     }
 }

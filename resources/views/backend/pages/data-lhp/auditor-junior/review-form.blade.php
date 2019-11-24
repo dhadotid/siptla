@@ -2,6 +2,7 @@
     <div class="col-md-12" style="border:1px solid #bbb;border-radius:5px;padding:5px 20px 0px 20px;background:#eee;">
 
             <h4 style="margin:0px;padding:0px;margin-bottom:10px;">Data LHP</h4>
+            
             <div class="row" style="margin:0px;padding:0px;margin-bottom:10px;">
                 <div class="col-md-6" style="margin:0px;padding:0px;margin-bottom:10px;">
                      <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
@@ -29,43 +30,25 @@
                 </div>
             </div>
 
+            <h4 style="margin:0px;padding:0px;margin-bottom:10px;">Status LHP</h4>
+            <div class="row" style="margin:0px;padding:0px;margin-bottom:10px;">
+                <div class="col-sm-12">
+                    <select class="form-control" id="review_status_lhp" data-plugin="select2" name="review_status_lhp">
+                        <option value="Create LHP" {{$data->status_lhp=='Create LHP' ? 'selected="selected"' : ''}}>Create LHP</option>
+                        <option value="Review LHP" {{$data->status_lhp=='Review LHP' ? 'selected="selected"' : ''}}>Review LHP</option>
+                        <option value="Publish LHP" {{$data->status_lhp=='Publish LHP' ? 'selected="selected"' : ''}}>Publish LHP</option>
+                    </select>
+                </div>
+            </div>
+
     </div>
 </div>
 <div class="row">
     <div class="col-md-12" style="margin-top:20px;">
-        <table class="table table-bordered table-striped" id="review-lhp" style="width:100%">
-            <thead>
-                <tr class="primary">
-                    <th class="text-center">No</th>
-                    <th class="text-center">Review</th>
-                    @if (Auth::user()->level=='auditor-senior')
-                        <th class="text-center">Aksi</th>
-                    @endif
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($review as $key=>$item)
-                    <tr>
-                        <td class="text-center">{{$key+1}}</td>
-                        <td class="text-left">{!!$item->review!!}</td>
-                        <td class="text-center">
-                        @if (Auth::user()->level=='auditor-senior')
-                            @if ($data->status_lhp=='Review LHP')
-                                    <a style="height:unset !important;" class="btn btn-xs btn-primary rounded" onclick="editformreviewlhp({{$idlhp}},{{$item->review_id}})">
-                                        <div class="tooltipcss"><i class="glyphicon glyphicon-edit"></i>
-                                            <span class="tooltiptext">Edit</span>
-                                        </div></a>
-                                    <a style="height:unset !important;" class="btn btn-xs btn-danger rounded btn-delete-rekomendasi" onclick="hapusrekomendasi({{$idlhp}},{{$item->review_id}})">
-                                        <div class="tooltipcss"><i class="glyphicon glyphicon-trash"></i>
-                                            <span class="tooltiptext">Hapus</span>
-                                        </div></a>
-                                
-                                @endif
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+        <h3>Tambah Review LHP</h3>
+        <input type="hidden" id="id-review-lhp" value="{{$idlhp}}">
+        <input type="hidden" id="tahun-review-lhp" value="{{$data->tahun_pemeriksa}}">
+        <input type="hidden" id="idreview" value="{{$idreview}}">
+        <div id="summernote-review">{!!$idreview==0 ? '' : $review->review!!}</div>
     </div>
 </div>

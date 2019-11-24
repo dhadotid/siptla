@@ -7,12 +7,9 @@ function loaddata(tahun) {
             $('#formubah').attr('action', flagsUrl + "/data-lhp-update/" + id)
             $.ajax({
                 url: flagsUrl + "/data-temuan-edit/" + id,
-                success: function (res) {
-                    
-                    
+                success: function (res) {                    
                     var pemeriksa = res.pemeriksa_id + '-' + res.dpemeriksa.code + '-' + res.dpemeriksa.pemeriksa
                     var dt = res.tanggal_lhp.split('-');
-
 
                     $('#edit_nomor_lhp').val(res.no_lhp);
                     $('#edit_pemeriksa').val(pemeriksa);
@@ -24,7 +21,8 @@ function loaddata(tahun) {
                         $('#edit_tahun_pemeriksaan').select2().trigger('change');
                     $('#edit_jenis_audit').val(res.jenis_audit_id);
                         $('#edit_jenis_audit').select2().trigger('change');
-                    $('#edit_status_lhp').val(res.status_lhp);
+                    $('.edit_status_lhp').val(res.status_lhp);
+                        $('.edit_status_lhp').select2().trigger('change');
                     $('#edit_flag_status_lhp').val(res.create_flag);
                 }
             })
@@ -41,6 +39,13 @@ function loaddata(tahun) {
             var id = $(this).data('value')
             // alert(id)
             reviewlhp(id);
+        })
+
+        $('#table').on('click', '.btn-add-review', function () {
+            var id = $(this).data('value')
+            // alert(id)
+            $('#id-review-lhp').val(id);
+            formreviewlhp(id);
         })
         
     });
@@ -71,7 +76,9 @@ function loaddatasemua(tahun) {
                         $('#edit_tahun_pemeriksaan').select2().trigger('change');
                     $('#edit_jenis_audit').val(res.jenis_audit_id);
                         $('#edit_jenis_audit').select2().trigger('change');
-                    $('#edit_status_lhp').val(res.status_lhp);
+                    $('.edit_status_lhp').val(res.status_lhp);
+                    $('.edit_status_lhp_select').val(res.status_lhp);
+                        $('.edit_status_lhp_select').select2().trigger('change');
                     $('#edit_flag_status_lhp').val(res.create_flag);
                 }
             })
@@ -89,6 +96,11 @@ function loaddatasemua(tahun) {
             // alert(id)
             reviewlhp(id);
         })
+        $('#table').on('click', '.btn-add-review', function () {
+            var id = $(this).data('value')
+            // alert(id)
+            formreviewlhp(id);
+        })
         
     });
 }
@@ -100,8 +112,10 @@ function generatekodelhp(val) {
         }
     })
 }
+
 function getdata(tahun) {
     loaddata(tahun);
+    loaddatasemua(tahun);
 }
 
 function detaillhp(id,offset)
@@ -111,11 +125,109 @@ function detaillhp(id,offset)
     });
     $('#modaldetail').modal('show');
 }
+
 function reviewlhp(id)
 {
     $('#review').load(flagsUrl + '/data-lhp-review/'+id,function(){
-        $('#review-lhp').DataTable();
+        $('#review-lhp').DataTable({
+            columnDefs: [
+                { width: 40, targets: 0 }
+            ],
+            fixedColumns: true
+        });
     });
+}
+
+function editformreviewlhp(id,idreview)
+{
+    $('#modalreview').modal('hide');
+    formreviewlhp(id, idreview);
+    $('#modaladdreview').modal('show');
+}
+function hapusrekomendasi(id,idreview)
+{
+    swal({
+        title: "Apakah Anda Yakin ?",
+        text: "Ingin Menghapus Data Review ini",
+        icon: "warning",
+        buttons: [
+            'Tidak!',
+            'Ya, Hapus'
+        ],
+        dangerMode: true,
+    }).then(function (isConfirm) {
+        if (isConfirm) {
+            $('#modalreview').modal('hide');
+            $.ajax({
+                url : flagsUrl + '/hapus-lhp-review/'+idreview,
+                success : function(){
+                    swal({
+                        title: 'Berhasil!',
+                        text: 'Hapus Data Review Berhasil',
+                        icon: 'success'
+                    }).then(function () {
+                        reviewlhp(id)
+                        $('#modalreview').modal('show');
+                    });
+                }
+            });
+        } else {
+            
+        }
+    });
+        
+    // $('#modalreview').modal('hide');
+    // formreviewlhp(id, idreview);
+    // $('#modaladdreview').modal('show');
+}
+
+function formreviewlhp(id, idreview=0)
+{
+    // alert(idreview)
+    $('#form-review').load(flagsUrl + '/form-lhp-review/'+id+'/'+idreview,function(){
+        $('#summernote-review').summernote({
+            height:300
+        });
+    });
+}
+
+function validasireview()
+{
+    var id = $('#id-review-lhp').val();
+    var tahun = $('#tahun-review-lhp').val();
+    var id_review = $('#idreview').val();
+    var review_status_lhp = $('#review_status_lhp').val();
+    var messageData = $('#summernote-review');
+    if (messageData.summernote('isEmpty'))
+    {
+        notif('error', 'Data Review Belum Di Isi')
+    }
+    else
+    {
+        var konten = messageData.summernote('code');
+        // alert(konten)
+        $.ajax({
+            url : flagsUrl + '/simpan-lhp-review/'+id,
+            type : 'POST',
+            data: { review: konten, idreview: id_review, status_lhp: review_status_lhp},
+            success : function(res){
+
+                if(res==1)
+                {
+                    $('#modaladdreview').modal('hide');
+                    reviewlhp(id);
+                    $('#modalreview').modal('show');
+                    notif('success','Data Review Berhasil Di Simpan');
+                    getdata(tahun) 
+                    // swal("Berhasil", "Data Review Berhasil Di Simpan", "success");
+                }
+                else
+                    notif('error','Data Review Tidak Berhasil Di Simpan');
+                    // swal("Gagal", "Data Review Tidak Berhasil Di Simpan", "error");
+            }
+        });
+        
+    }
 }
 function validasiadd() {
     var nomor_lhp = $('#nomor_lhp');

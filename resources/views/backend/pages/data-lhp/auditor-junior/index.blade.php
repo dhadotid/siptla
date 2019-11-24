@@ -80,17 +80,22 @@
 @endsection
 @section('footscript')
     <link rel="stylesheet" href="{{asset('theme/backend/libs/misc/datatables/datatables.min.css')}}"/>
+    <link rel="stylesheet" href="{{asset('theme/backend/libs/bower/summernote/dist/summernote.css')}}"/>
     <link rel="stylesheet" href="{{asset('css/noty.css')}}"/>
     <link rel="stylesheet" href="{{asset('css/tooltips.css')}}"/>
     <script src="{{asset('theme/backend/libs/misc/datatables/datatables.min.js')}}"></script>
+    <script src="{{asset('theme/backend/libs/bower/summernote/dist/summernote.min.js')}}"></script>
     <script src="{{asset('js/noty.js')}}"></script>
     <script src="{{asset('js/lhp.js')}}"></script>
 	<script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
         loaddata('{{$tahun}}');
         hidealert();
         $('.select').select2();
-        
-        
     </script>
     <style>
     /* .form-inline .btn
@@ -217,6 +222,23 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" data-dismiss="modal" data-dismiss="modal" class="btn btn-primary">Tutup</button>
+                    </div>
+			</div>
+		</div>
+    </div>  
+    <div class="modal fade" id="modaladdreview" tabindex="-1" role="dialog">
+		<div class="modal-dialog" style="margin-top:10px !important;width:50%;">
+			<div class="modal-content" style="">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Tambah Review LHP </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="form-review"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" data-dismiss="modal" class="btn btn-default">Tutup</button>
+                        <input type="button" onclick="validasireview()" class="btn btn-success" value="Simpan">
                     </div>
 			</div>
 		</div>

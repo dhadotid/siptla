@@ -6,11 +6,15 @@
       </div>
       <div class="media-body">
         <div class="foldable">
-          <h5><a href="javascript:void(0)" class="username">Admin Utama</a></h5>
+          @php
+              $level=jenis_level();
+              $lv=Auth::user()->level;
+          @endphp
+          <h5><a href="javascript:void(0)" class="username">{{Auth::user()->name}}</a></h5>
           <ul>
             <li class="dropdown">
               <a href="javascript:void(0)" class="dropdown-toggle usertitle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <small>Administrator Utama</small>
+                <small>{{isset($level[$lv]) ? $level[$lv] : ''}}</small>
               </a>
               
             </li>

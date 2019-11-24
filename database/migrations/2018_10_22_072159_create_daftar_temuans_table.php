@@ -30,6 +30,7 @@ class CreateDaftarTemuansTable extends Migration
             $table->integer('review_flag')->nullable()->default(0);
             $table->integer('publish_flag')->nullable()->default(0);
             $table->integer('user_input_id')->nullable()->default(0);
+            $table->integer('flag_tindaklanjut_id')->nullable()->default(0);
             $table->timestamps();
             $table->softdeletes();
         });

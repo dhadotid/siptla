@@ -67,12 +67,33 @@
                 </select>
             </div>
         </div>
-        <div class="form-group">
-            <label for="datetimepicker2" class="col-sm-4 control-label text-right">Status LHP</label>
-            <div class="col-sm-8">
-                <input type="text" class="form-control"  name="status_lhp" placeholder="Status LHP" id="status_lhp" value="Create LHP" readonly>
-                <input type="hidden" class="form-control"  name="flag_status_lhp" placeholder="Status LHP" id="flag_status_lhp" value="1">
+        @if (Auth::user()->level=='auditor-junior')            
+            <div class="form-group">
+                <label for="datetimepicker2" class="col-sm-4 control-label text-right">Status LHP</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control"  name="status_lhp" placeholder="Status LHP" id="status_lhp" value="Create LHP" readonly>
+                    <input type="hidden" class="form-control"  name="flag_status_lhp" placeholder="Status LHP" id="flag_status_lhp" value="1">
+                </div>
             </div>
-        </div>
+        @else
+            <div class="form-group">
+                <label for="datetimepicker2" class="col-sm-4 control-label text-right">Status LHP</label>
+                <div class="col-sm-8">
+                    {{-- <input type="text" class="form-control"  name="status_lhp" placeholder="Status LHP" id="status_lhp" value="Create LHP" readonly> --}}
+                    <select class="form-control" id="status_lhp" data-plugin="select2" name="status_lhp">
+                        <option value="Create LHP">Create LHP</option>
+                        <option value="Review LHP">Review LHP</option>
+                        <option value="Publish LHP">Publish LHP</option>
+                    </select>
+                    {{-- <input type="hidden" class="form-control"  name="flag_status_lhp" placeholder="Status LHP" id="flag_status_lhp" value="0"> --}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="datetimepicker2" class="col-sm-4 control-label text-right">Review LHP</label>
+                <div class="col-sm-8">
+                    <textarea class="form-control"  name="review_lhp" placeholder="Review LHP" id="review_lhp"></textarea>
+                </div>
+            </div>
+        @endif
     </div>
 </div>

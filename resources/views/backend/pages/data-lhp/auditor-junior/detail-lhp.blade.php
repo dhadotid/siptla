@@ -93,17 +93,25 @@
                 </div>
             </div>
             <div class="row" style="padding:20px;">
-                <div class="col-md-6 text-left">Data {{($offset+1)}} dari {{$jlhtemuan}} Temuan</div>
-                <div class="col-md-3 text-right">
-                    @if ($offset!=0)
-                        <a href="javascript:detaillhp({{$id}},{{($offset-1)}})" class="btn btn-outline btn-primary"><i class="fa fa-caret-square-o-left"></i> Sebelumnya</a>
+                <div class="col-md-6 text-left">
+                    @if ($jlhtemuan!=0)
+                        Data {{($offset+1)}} dari {{$jlhtemuan}} Temuan
+                    @else
+                        Data <b>0</b> Temuan
                     @endif
                 </div>
-                <div class="col-md-3 text-right">
-                    @if ($jlhtemuan!=($offset+1))    
-                        <a href="javascript:detaillhp({{$id}},{{($offset+1)}})" class="btn btn-outline btn-primary">Selanjutnya <i class="fa    fa-caret-square-o-right"></i></a>
-                    @endif
-                </div>
+                @if ($jlhtemuan!=0)
+                    <div class="col-md-3 text-right">
+                        @if ($offset!=0)
+                            <a href="javascript:detaillhp({{$id}},{{($offset-1)}})" class="btn btn-outline btn-primary"><i class="fa fa-caret-square-o-left"></i> Sebelumnya</a>
+                        @endif
+                    </div>
+                    <div class="col-md-3 text-right">
+                        @if ($jlhtemuan!=($offset+1))    
+                            <a href="javascript:detaillhp({{$id}},{{($offset+1)}})" class="btn btn-outline btn-primary">Selanjutnya <i class="fa    fa-caret-square-o-right"></i></a>
+                        @endif
+                    </div>
+                @endif
             </div>
         </div>
             

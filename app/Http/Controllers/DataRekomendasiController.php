@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\DataRekomendasi;
 use App\Models\DaftarRekanan;
+use App\Models\PICUnit;
 class DataRekomendasiController extends Controller
 {
     public function rekomendasi_simpan(Request $request)
@@ -17,7 +18,13 @@ class DataRekomendasiController extends Controller
         $insert->nominal_rekomendasi=str_replace('.','',$request->nilai_rekomendasi);
         $insert->rekomendasi=$request->rekomendasi;
         $insert->pic_1_temuan_id=$request->pic_1;
-        $insert->pic_2_temuan_id=$request->pic_2;
+
+        $pic2='';
+        foreach($request->pic_2 as $k=>$v)
+        {
+            $pic2.=$v.',';
+        }   
+        $insert->pic_2_temuan_id=substr($pic2,0,-1);
         $insert->jangka_waktu_id=$request->jangka_waktu;
         $insert->status_rekomendasi_id=$request->status_rekomendasi;
         $insert->review_auditor=$request->review_auditor;
@@ -48,6 +55,8 @@ class DataRekomendasiController extends Controller
     }
     public function rekomendasi_data($idtemuan)
     {
+        $picunit=PICUnit::all();
+        $pic_unit=datauserpic($picunit);
         $rekom=DataRekomendasi::selectRaw('*,data_rekomendasi.id as rekom_id')->where('id_temuan',$idtemuan)
                 ->with('picunit1')
                 ->with('picunit2')
@@ -90,7 +99,28 @@ class DataRekomendasiController extends Controller
                         <td style="background:#fff;" class="text-center" id="pic1_'.$v->id_temuan.'_'.$v->rekom_id.'">
                             '.(isset($v->picunit1->nama_pic) ? $v->picunit1->nama_pic : 'n/a').'
                         </td>
-                        <td style="background:#fff;" class="text-center" id="pic2_'.$v->id_temuan.'_'.$v->rekom_id.'"></td>
+                        <td style="background:#fff;" class="text-center" id="pic2_'.$v->id_temuan.'_'.$v->rekom_id.'">';
+                        if(isset($v->picunit2->nama_pic))
+                        {
+                            $table.=$v->picunit1->nama_pic;
+                        }
+                        else
+                        {
+                            $dpic=explode(',',$v->pic_2_temuan_id);
+                            foreach($dpic as $c)
+                            {
+                                if($c!='')
+                                {
+                                    // $table.=$c.'-';
+                                    if(isset($pic_unit[(int)$c]))
+                                    {
+                                        // $table.='ss';
+                                        $table.=$pic_unit[(int)$c]->nama_pic.'<br>';
+                                    }
+                                }
+                            }
+                        }
+                $table.='</td>
                         <td style="background:#fff;" class="text-center" id="status_'.$v->id_temuan.'_'.$v->rekom_id.'">
                             '.(isset($v->statusrekomendasi->rekomendasi) ? $v->statusrekomendasi->rekomendasi : 'n/a').'
                         </td>

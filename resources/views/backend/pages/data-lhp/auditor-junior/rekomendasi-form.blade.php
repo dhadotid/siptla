@@ -71,7 +71,7 @@
                 <br><small style="font-size:9px;color:red;font-style:italic">*wajib diisi</small>
             </label>
             <div class="col-sm-9">
-                <select name="pic_2" class="form-control" id="{{$act}}_pic_2" data-plugin="select2" multiple>
+                <select name="pic_2[]" class="form-control" id="{{$act}}_pic_2" data-plugin="select2" multiple>
                     <option value="">-- Pilih --</option>
                     @foreach ($picunit as $item)
                         @if (isset($item->levelpic->nama_level))

@@ -31,7 +31,16 @@
                     <td class="text-center"><b>{{isset($item->dpemeriksa->pemeriksa) ? $item->dpemeriksa->pemeriksa : '-'}}</b></td>
                     <td class="">{{isset($item->djenisaudit->jenis_audit) ? $item->djenisaudit->jenis_audit : '-'}}</td>
                     <td class="text-center">
-                        @if ($item->create_flag==1)
+                        @if ($item->status_lhp=='Create LHP')
+                            <span class="label label-success menu-label">Create LHP</span>
+                        @elseif ($item->status_lhp=='Review LHP')
+                            <span class="label label-primary menu-label">Review LHP</span>
+                        @elseif ($item->status_lhp=='Publish LHP')
+                            <span class="label label-info menu-label">Publish LHP</span>
+                        @else
+                            <span class="label label-default menu-label">n/a</span>
+                        @endif
+                        {{-- @if ($item->create_flag==1)
                             <span class="label label-success menu-label">Create LHP</span>
                         @elseif ($item->review_flag==1)
                             <span class="label label-primary menu-label">Review LHP</span>
@@ -39,7 +48,7 @@
                             <span class="label label-info menu-label">Publish LHP</span>
                         @else
                             <span class="label label-default menu-label">n/a</span>
-                        @endif
+                        @endif --}}
                         
                     </td>
                     <td class="text-align:center">
@@ -54,16 +63,23 @@
                                 </li>
                                 {{-- <li><a href="{{url('data-lhp-detail/'.$item->lhp_id)}}" target="_blank"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail LHP</a></li> --}}
                                 <li>
-                                    <a href="#" onclick="detaillhp({{$item->id}},0)"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail LHP</a>
+                                    <a href="#" onclick="detaillhp({{$item->lhp_id}},0)"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail LHP</a>
                                 </li>
                                 <li>
-                                    <a href="#" data-toggle="modal" data-target="#modalreview" data-value="{{$item->id}}" class="btn-review"><i class="glyphicon glyphicon-comment"></i> &nbsp;&nbsp;Tanggapan dan Review LHP</a>
+                                    <a href="#" data-toggle="modal" data-target="#modalreview" data-value="{{$item->lhp_id}}" class="btn-review"><i class="glyphicon glyphicon-comment"></i> &nbsp;&nbsp;Tanggapan dan Review LHP</a>
+                                </li>
+                                @if (Auth::user()->level=='auditor-senior')  
+                                    @if ($item->status_lhp!='Publish LHP') 
+                                        <li>
+                                            <a href="#" data-toggle="modal" data-target="#modaladdreview" data-value="{{$item->lhp_id}}" class="btn-add-review"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Tanggapan dan Review LHP</a>
+                                        </li>
+                                    @endif    
+                                @endif
+                                <li>
+                                    <a href="#" class="btn-edit" data-toggle="modal" data-target="#modalubah" data-value="{{$item->lhp_id}}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit LHP</a>
                                 </li>
                                 <li>
-                                    <a href="#" class="btn-edit" data-toggle="modal" data-target="#modalubah" data-value="{{$item->id}}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit LHP</a>
-                                </li>
-                                <li>
-                                    <a href="#" class="btn-delete" data-toggle="modal" data-target="#modalhapus" data-value="{{$item->id}}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus LHP</a>
+                                    <a href="#" class="btn-delete" data-toggle="modal" data-target="#modalhapus" data-value="{{$item->lhp_id}}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus LHP</a>
                                 </li>
                             </ul>
                         </div>

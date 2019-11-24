@@ -19,7 +19,7 @@
 			</div>
 
 			<div class="col-md-6 col-sm-6">
-                <a href="{{url('data-lhp')}}">
+                <a href="{{url('semua-data-lhp')}}">
                     <div class="widget p-md clearfix">
                         <div class="pull-left">
                             <small class="text-color">Jumlah </small>
@@ -38,7 +38,7 @@
 					<div class="widget-body clearfix">
 						<div class="pull-left">
 							<h3 class="widget-title text-primary"><span class="counter" data-plugin="counterUp">{{isset($datalhp['create-lhp']) ? count($datalhp['create-lhp']) : ''}}</span></h3>
-							<small class="text-color"><a href="{{url('data-lhp')}}">Jumlah LHP Status Create</a></small>
+							<small class="text-color"><a href="{{url('semua-data-lhp')}}">Jumlah LHP Status Create</a></small>
 						</div>
 						<span class="pull-right big-icon watermark"><i class="fa fa-list"></i></span>
 					</div>
@@ -54,7 +54,7 @@
 					<div class="widget-body clearfix">
 						<div class="pull-left">
 							<h3 class="widget-title text-danger"><span class="counter" data-plugin="counterUp">{{isset($datalhp['review-lhp']) ? count($datalhp['review-lhp']) : ''}}</span></h3>
-							<small class="text-color"><a href="{{url('data-lhp')}}">Jumlah LHP Status Review</a></small>
+							<small class="text-color"><a href="{{url('semua-data-lhp')}}">Jumlah LHP Status Review</a></small>
 						</div>
 						<span class="pull-right big-icon watermark"><i class="fa fa-list"></i></span>
 					</div>
@@ -70,7 +70,7 @@
 					<div class="widget-body clearfix">
 						<div class="pull-left">
 							<h3 class="widget-title text-success"><span class="counter" data-plugin="counterUp">{{isset($datalhp['publish-lhp']) ? count($datalhp['publish-lhp']) : ''}}</span></h3>
-							<small class="text-color"><a href="{{url('data-lhp')}}">Jumlah LHP Status Publish</a></small>
+							<small class="text-color"><a href="{{url('semua-data-lhp')}}">Jumlah LHP Status Publish</a></small>
 						</div>
 						<span class="pull-right big-icon watermark"><i class="fa fa-list"></i></span>
 					</div>
@@ -157,17 +157,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($lhp as $key=>$item)
-                            <tr>
-                                <td class="text-center">{{$key+1}}</td>
-                                <td class="text-center">{{$item->no_lhp}}</td>
-                                <td class="text-left">{{$item->djenisaudit->jenis_audit}}</td>
-                            </tr>
+						@foreach ($lhp as $key=>$item)
+							@if ($item->flag_tindaklanjut_id==0)
+								<tr>
+									<td class="text-center">{{$key+1}}</td>
+									<td class="text-center">{{$item->no_lhp}}</td>
+									<td class="text-left">{{$item->djenisaudit->jenis_audit}}</td>
+								</tr>
+							@endif
                         @endforeach
                     </tbody>
                 </table>
                 <div style="text-align:center;font-size:12px;margin-top:15px;">
-                    <a href="{{ url('data-lhp') }}">Lihat Selengkapnya</a>
+                    <a href="{{ url('semua-data-lhp') }}">Lihat Selengkapnya</a>
                 </div>
 			</div><!-- .widget-body -->
 		</div><!-- .widget -->

@@ -46,7 +46,7 @@
                         </div>
                         <div class="col-md-7">&nbsp;</div>
                          <div class="col-md-3 text-right">
-                             <a href="{{url('data-lhp')}}" class="btn btn-sm btn-primary">< Kembali </a>&nbsp;
+                             <a href="{{ URL::previous() }}" class="btn btn-sm btn-primary">< Kembali </a>&nbsp;
                              <a href="" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#modaltambah">+ Tambah Data</a>
                         </div>
                     </div>

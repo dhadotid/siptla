@@ -158,11 +158,13 @@
                     </thead>
                     <tbody>
                         @foreach ($lhp as $key=>$item)
-                            <tr>
-                                <td class="text-center">{{$key+1}}</td>
-                                <td class="text-center">{{$item->no_lhp}}</td>
-                                <td class="text-left">{{$item->djenisaudit->jenis_audit}}</td>
-                            </tr>
+                            @if ($item->flag_tindaklanjut_id==0)
+                                <tr>
+                                    <td class="text-center">{{$key+1}}</td>
+                                    <td class="text-center">{{$item->no_lhp}}</td>
+                                    <td class="text-left">{{$item->djenisaudit->jenis_audit}}</td>
+                                </tr>
+                            @endif
                         @endforeach
                     </tbody>
                 </table>

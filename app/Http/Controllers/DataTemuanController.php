@@ -13,6 +13,7 @@ use App\Models\DataTemuan;
 use App\Models\DataRekomendasi;
 use App\Models\JangkaWaktu;
 use App\Models\StatusRekomendasi;
+use App\Models\Review;
 use Auth;
 use Validator;
 class DataTemuanController extends Controller
@@ -49,7 +50,7 @@ class DataTemuanController extends Controller
     }
     public function lhp_edit($id)
     {
-        $lhp=DaftarTemuan::where('id',$id)->with('dpemeriksa')->first();
+        $lhp=DaftarTemuan::selectRaw('*, daftar_lhp.id as id_lhp')->where('id',$id)->with('dpemeriksa')->first();
         return $lhp;
     }
     public function lhp_delete(Request $request,$id)
@@ -58,10 +59,65 @@ class DataTemuanController extends Controller
         return redirect('data-lhp')
             ->with('success', 'Anda telah menghapus data LHP.');
     }
+    public function hapus_lhp_review($idreview)
+    {
+        Review::destroy($idreview);
+    }
     public function review_lhp($idlhp)
     {
         $dt['data']=$data=DaftarTemuan::where('id',$idlhp)->with('dpemeriksa')->with('djenisaudit')->first();
-        return view('backend.pages.data-lhp.auditor-junior.review-lhp')->with('data',$data);
+        $dt['review']=$review=Review::selectRaw('*,review.id as review_id')->where('id_lhp',$idlhp)
+                    ->with('reviewer')->with('tanggapan')->orderBy('id')->get();
+        return view('backend.pages.data-lhp.auditor-junior.review-lhp')
+                ->with('idlhp',$idlhp)
+                ->with('data',$data)
+                ->with('review',$review);
+    }
+    public function form_review_lhp($idlhp,$idreview=0)
+    {
+        $dt['data']=$data=DaftarTemuan::where('id',$idlhp)->with('dpemeriksa')->with('djenisaudit')->first();
+        
+        $review=Review::selectRaw('*,review.id as review_id')->where('id',$idreview)
+                    ->with('reviewer')->with('tanggapan')->first();
+        return view('backend.pages.data-lhp.auditor-junior.review-form')
+                ->with('idlhp',$idlhp)
+                ->with('idreview',$idreview)
+                ->with('review',$review)
+                ->with('data',$data);
+    }
+    public function simpan_lhp_review(Request $request,$id)
+    {
+        // if($request->idreview!=0)
+        // {
+        //     $lhp=DaftarTemuan::find($id);
+        //     $lhp->status_lhp = 'Review LHP';
+        //     $lhp->review_flag=1;
+        //     $lhp->save();
+        // }
+        $lhp=DaftarTemuan::find($id);
+        $lhp->status_lhp = $request->status_lhp;
+        if($request->status_lhp=='Review LHP')
+            $lhp->review_flag=1;
+            
+        if($request->status_lhp=='Publish LHP')
+            $lhp->publish_flag=1;
+
+        $lhp->save();
+
+        if($request->idreview==0)
+            $insert=new Review;
+        else
+            $insert=Review::find($request->idreview);
+        
+        $insert->id_lhp=$id;
+        $insert->review_id=0;
+        $insert->reviewer_id=Auth::user()->id;
+        $insert->review=$request->review;
+        $c=$insert->save();
+        if($c)
+            echo 1;
+        else    
+            echo 0;
     }
     public function data_lhp($tahun=null)
     {
@@ -205,6 +261,12 @@ class DataTemuanController extends Controller
         $insert->status_lhp = $request->status_lhp;
         $insert->create_flag = $request->flag_status_lhp;
         $insert->user_input_id = Auth::user()->id;
+
+        if(Auth::user()->level=='auditor-senior')
+        {
+            $insert->review_lhp=$request->review_lhp;
+        }
+
         $insert->save();
 
         return redirect()->route('data-lhp.index')
@@ -216,18 +278,30 @@ class DataTemuanController extends Controller
         list($idpem,$code,$pemeriksa)=explode('-',$request->pemeriksa);
         list($tgl,$bln,$thn)=explode('/',$request->tanggal_lhp);
 
-        $insert=DaftarTemuan::find($idlhp);
-        $insert->no_lhp = $request->nomor_lhp;
-        $insert->kode_lhp = $request->kode_lhp;
-        $insert->judul_lhp = $request->judul_lhp;
-        $insert->pemeriksa_id = $idpem;
-        $insert->tanggal_lhp = $thn.'-'.$bln.'-'.$tgl;
-        $insert->tahun_pemeriksa = $request->tahun_pemeriksaan;
-        $insert->jenis_audit_id = $request->jenis_audit;
-        $insert->status_lhp = $request->status_lhp;
-        $insert->create_flag = $request->flag_status_lhp;
-        $insert->user_input_id = Auth::user()->id;
-        $insert->save();
+        $update=DaftarTemuan::find($idlhp);
+        $update->no_lhp = $request->nomor_lhp;
+        $update->kode_lhp = $request->kode_lhp;
+        $update->judul_lhp = $request->judul_lhp;
+        $update->pemeriksa_id = $idpem;
+        $update->tanggal_lhp = $thn.'-'.$bln.'-'.$tgl;
+        $update->tahun_pemeriksa = $request->tahun_pemeriksaan;
+        $update->jenis_audit_id = $request->jenis_audit;
+        $update->status_lhp = $request->status_lhp;
+        $update->create_flag = $request->flag_status_lhp;
+        $update->user_input_id = Auth::user()->id;
+        if(Auth::user()->level=='auditor-senior')
+        {
+            $update->review_lhp=$request->review_lhp;
+            if($request->flag_status_lhp=='Review LHP')
+            {
+                $update->review_flag = 1;
+            }
+            if($request->flag_status_lhp=='Publish LHP')
+            {
+                $update->publish_flag = 1;
+            }
+        }
+        $update->save();
 
         return redirect()->route('data-lhp.index')
             ->with('success', 'Anda telah mengubah data LHP.');

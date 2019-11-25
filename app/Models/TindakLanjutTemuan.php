@@ -9,11 +9,26 @@ class TindakLanjutTemuan extends Model
 {
     use SoftDeletes;
     protected $table = 'tindak_lanjut_temuan';
-    protected $fillable = ['detail_id','tindak_lanjut','keterangan','created_at','updated_at','deleted_at'];
 
-    function detail()
+    function rekomendasi()
     {
-        return $this->belongsTo('App\Models\DetailTemuan','detail_id');
+        return $this->belongsTo('App\Models\DataRekomendasi','rekomendasi_id');
+    }
+    function temuan()
+    {
+        return $this->belongsTo('App\Models\DataTemuan','temuan_id');
+    }
+    function lhp()
+    {
+        return $this->belongsTo('App\Models\DaftarTemuan','lhp_id');
+    }
+    function pic1()
+    {
+        return $this->belongsTo('App\Models\PICUnit','pic_1_id');
+    }
+    function pic2()
+    {
+        return $this->belongsTo('App\Models\PICUnit','pic_2_id');
     }
 
     public function dokumen_tindak_lanjut() {

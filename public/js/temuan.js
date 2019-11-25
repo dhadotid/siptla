@@ -149,8 +149,18 @@ function detailrekomendasi(idrekom)
             $('#detail_rekomendasi').val(res.rekomendasi);
             $('#detail_nilai_rekomendasi').val(format(res.nominal_rekomendasi));
             $('#detail_pic_1').val(res.picunit1.nama_pic);
-            $('#detail_pic_2').val(res.picunit2.nama_pic);
-            $('#detail_rekanan').val(res.drekanan.nama);
+
+            // var picunit2 = res.picunit2.nama_pic.split(',');
+            if (res.picunit2)
+                $('#detail_pic_2').val(res.picunit2.nama_pic);
+            else
+                $('#detail_pic_2').val(res.picunit_2);
+
+            // $('#detail_pic_2').val(picunit2);
+            
+            if(res.drekanan)
+                $('#detail_rekanan').val(res.drekanan.nama);
+                
             $('#detail_jangka_waktu').val(res.jangkawaktu.jangka_waktu);
             $('#detail_status_rekomendasi').val(res.statusrekomendasi.rekomendasi);
             $('#detail_review_auditor').val(res.review_auditor);
@@ -169,11 +179,19 @@ function editrekomendasi(idrekom)
             $('#edit_nilai_rekomendasi').val(format(res.nominal_rekomendasi));
             $('#edit_pic_1').val(res.pic_1_temuan_id);
                 $('#edit_pic_1').select2().trigger('change');
+            // var x='8,7';
 
-            $('#edit_pic_2').val(res.pic_2_temuan_id);
+            // var picunit2 = x.split(',');
+            
+            
+            // $('#edit_pic_2').val(res.pic_2_temuan_id);
+            var picunit2 = res.pic_2_temuan_id.split(',');
+            $('#edit_pic_2').val(picunit2);
                 $('#edit_pic_2').select2().trigger('change');
 
-            $('#edit_rekanan').val(res.drekanan.nama);
+            if (res.drekanan)
+                $('#edit_rekanan').val(res.drekanan.nama);
+
             $('#edit_jangka_waktu').val(res.jangka_waktu_id);
                 $('#edit_jangka_waktu').select2().trigger('change');
 

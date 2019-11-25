@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\DataRekomendasi;
 use App\Models\DaftarRekanan;
 use App\Models\PICUnit;
+
 class DataRekomendasiController extends Controller
 {
     public function rekomendasi_simpan(Request $request)
@@ -75,14 +76,17 @@ class DataRekomendasiController extends Controller
                     </tr>
                 </thead>';
         $table.='<tbody>';
+
+        $tl=$this->tindaklanjut();
+        // return $tindaklanjut;
         if($rekom->count()!=0)
         {
             foreach($rekom as $k=>$v)
             {
                 $tindaklanjut='<div style="width:150px;text-align:center;margin:0 auto;">
-                                <span style="cursor:pointer" class="label label-primary fz-sm">0</span>
+                                <span style="cursor:pointer" class="label label-primary fz-sm" id="jlhtindaklanjut">'.(isset($tl[$v->rekom_id]) ? count($tl[$v->rekom_id]) : 0).'</span>
                                 <span style="cursor:pointer" class="label label-success fz-sm">Tindak Lanjut</span>
-                                <span style="cursor:pointer" class="label label-info fz-sm" data-toggle="modal" data-target="#modaltambahrekomendasi"> 
+                                <span style="cursor:pointer" class="label label-info fz-sm" onclick="formtindaklanjut('.$v->rekom_id.',-1)"> 
                                     <a style="color:#fff" data-value="0">
                                         <div class="tooltipcss"><i class="fa fa-plus-circle"></i>
                                             <span class="tooltiptext">Tambah Tindak Lanjut</span>
@@ -102,7 +106,7 @@ class DataRekomendasiController extends Controller
                         <td style="background:#fff;" class="text-center" id="pic2_'.$v->id_temuan.'_'.$v->rekom_id.'">';
                         if(isset($v->picunit2->nama_pic))
                         {
-                            $table.=$v->picunit1->nama_pic;
+                            $table.=$v->picunit2->nama_pic;
                         }
                         else
                         {
@@ -144,6 +148,11 @@ class DataRekomendasiController extends Controller
                             </div>
                         </td>
                     </tr>';
+
+                    if(isset($tl[$v->rekom_id]))
+                    {
+                        $table.='<tr id="tl_rekom_'.$v->rekom_id.'"></tr>';
+                    }
             }
         }
         else
@@ -157,6 +166,7 @@ class DataRekomendasiController extends Controller
     }
     public function rekomendasi_edit($idrekom)
     {
+        $picunit=
         $rekom=DataRekomendasi::selectRaw('*,data_rekomendasi.id as rekom_id')->where('id',$idrekom)
                 ->with('dtemuan')
                 ->with('jenistemuan')
@@ -166,7 +176,30 @@ class DataRekomendasiController extends Controller
                 ->with('drekanan')
                 ->with('statusrekomendasi')
                 ->first();
-        return $rekom;
+        
+        if(isset($rekom->picunit2->nama_pic))
+            return $rekom;
+        else
+        {
+            $picunit=PICUnit::all();
+            $pic_unit=datauserpic($picunit);
+            $rekm=$rekom;
+
+            $idpicunit=explode(',',$rekom->pic_2_temuan_id);
+            $d='';
+            foreach($idpicunit as $k=>$c)
+            {
+                if($c!='')
+                {
+                    if(isset($pic_unit[(int)$c]))
+                    {
+                        $d.=$pic_unit[(int)$c]->nama_pic.', ';
+                    }
+                }
+            }
+            $rekm['picunit_2']=substr($d,0,-2);
+            return $rekm;
+        }
     }
     public function rekomendasi_update(Request $request,$idrekom,$idtemuan)
     {
@@ -178,7 +211,13 @@ class DataRekomendasiController extends Controller
         $update->nominal_rekomendasi=str_replace('.','',$request->nilai_rekomendasi);
         $update->rekomendasi=$request->rekomendasi;
         $update->pic_1_temuan_id=$request->pic_1;
-        $update->pic_2_temuan_id=$request->pic_2;
+        // $update->pic_2_temuan_id=$request->pic_2;
+        $pic2='';
+        foreach($request->pic_2 as $k=>$v)
+        {
+            $pic2.=$v.',';
+        }   
+        $update->pic_2_temuan_id=substr($pic2,0,-1);
         $update->jangka_waktu_id=$request->jangka_waktu;
         $update->status_rekomendasi_id=$request->status_rekomendasi;
         $update->review_auditor=$request->review_auditor;
@@ -216,4 +255,6 @@ class DataRekomendasiController extends Controller
         $data['jlh']='<span style="cursor:pointer" class="label label-'.($rekom->count()==0 ? 'dark' : 'primary').' fz-sm">'.$rekom->count().'</span>';
         return $data;
     }
+
+    
 }

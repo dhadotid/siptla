@@ -20,13 +20,20 @@ class TindakLanjutController extends Controller
         $tindaklanjut=$request->tindaklanjut;
         $nilai_tindaklanjut =str_replace('.','',$request->nilai_tindaklanjut);
 
-        $tindak=new TindakLanjutTemuan;
+        if(isset($request->idtindaklanjut))
+        {
+            $idtindaklanjut=$request->idtindaklanjut;
+            $tindak=TindakLanjutTemuan::find($idtindaklanjut);
+        }
+        else
+            $tindak=new TindakLanjutTemuan;
+        
         $tindak->lhp_id = $idlhp;
         $tindak->temuan_id = $idtemuan;
         $tindak->rekomendasi_id = $idrekom;
         $tindak->pic_1_id = $rekom->pic_1_temuan_id;
         $tindak->pic_2_id = $rekom->pic_2_temuan_id;
-        $tindak->hasil_review_pic_1 = $tindaklanjut;
+        $tindak->tindak_lanjut = $tindaklanjut;
         $tindak->nilai = $nilai_tindaklanjut;
         $c=$tindak->save();
 
@@ -38,8 +45,8 @@ class TindakLanjutController extends Controller
             $filenameWithExt = $request->file('file')->getClientOriginalName();
             $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
             $extension = $request->file('file')->getClientOriginalExtension();
-            // $fileNameToStore = $filename.'_'.time().'.'.$extension;
-            $fileNameToStore = rand() . '.' . $file->getClientOriginalExtension(); 
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            // $fileNameToStore = rand() . '.' . $file->getClientOriginalExtension(); 
             $path = $request->file('file')->storeAs('public/dokumen',$fileNameToStore);
 
             $dokumen=new DokumenTindakLanjut;
@@ -52,5 +59,17 @@ class TindakLanjutController extends Controller
             echo $idtemuan;
         else
             echo 0;
+    }
+    
+    public function edit($id)
+    {
+        $edit=TindakLanjutTemuan::selectRaw('*,tindak_lanjut_temuan.id as tl_id')->where('id',$id)->with('pic1')->with('pic2')->with('dokumen_tindak_lanjut')->first();
+        return $edit;
+    }
+
+    public function destroy($id)
+    {
+        $d=TindakLanjutTemuan::destroy($id);
+        return $d;
     }
 }

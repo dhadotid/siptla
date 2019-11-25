@@ -65,6 +65,8 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('rekomendasi-delete/{idrekom}/{idtemuan}','DataRekomendasiController@rekomendasi_delete')->name('rekomendasi.delete');
 
     Route::post('tindak-lanjut-simpan/{idrekom}','TindakLanjutController@simpan');
+    Route::get('tindak-lanjut-edit/{id}','TindakLanjutController@edit');
+    Route::get('tindak-lanjut-hapus/{id}','TindakLanjutController@destroy');
 
     Route::get('data-rekanan','RekananController@data_rekanan')->name('data-rekanan');
 });

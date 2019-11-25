@@ -268,6 +268,10 @@
     {
         height:unset !important;
     }
+    .kolom-hide
+    {
+        display:none;
+    }
     </style>
 @endsection
 

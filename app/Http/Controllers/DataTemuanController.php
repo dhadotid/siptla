@@ -135,6 +135,15 @@ class DataTemuanController extends Controller
                     ->with('djenisaudit')
                     ->orderBy('tanggal_lhp','desc')->get();
         }
+       elseif(Auth::user()->level=='pic-unit')
+        {
+            $data=DaftarTemuan::selectRaw('*,daftar_lhp.id as lhp_id')
+                    ->where('daftar_lhp.tahun_pemeriksa',$thn)
+                    ->where('daftar_lhp.user_input_id',Auth::user()->id)
+                    ->with('dpemeriksa')
+                    ->with('djenisaudit')
+                    ->orderBy('tanggal_lhp','desc')->get();
+        }
         else
         {
             $data=DaftarTemuan::selectRaw('*,daftar_lhp.id as lhp_id')

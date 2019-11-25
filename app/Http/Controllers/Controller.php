@@ -13,7 +13,7 @@ class Controller extends BaseController
 
     public function tindaklanjut()
     {
-        $tindaklanjut=TindakLanjutTemuan::with('pic1')->with('pic2')->with('dokumen_tindak_lanjut')->get();
+        $tindaklanjut=TindakLanjutTemuan::selectRaw('*,tindak_lanjut_temuan.id as tl_id')->with('pic1')->with('pic2')->with('dokumen_tindak_lanjut')->get();
         $data=array();
         foreach($tindaklanjut as $k=>$v)
         {

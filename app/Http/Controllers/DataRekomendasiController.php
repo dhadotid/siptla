@@ -65,7 +65,7 @@ class DataRekomendasiController extends Controller
                 ->get();
         $table='<table class="table table-bordered" id="table-rekom">';
         $table.='<thead>
-                    <tr>
+                    <tr class="purple">
                         <th class="text-center">Rekomendasi</th>
                         <th class="text-center">Nilai<br>Rekomendasi</th>
                         <th class="text-center">PIC 1</th>
@@ -84,8 +84,8 @@ class DataRekomendasiController extends Controller
             foreach($rekom as $k=>$v)
             {
                 $tindaklanjut='<div style="width:150px;text-align:center;margin:0 auto;">
-                                <span style="cursor:pointer" class="label label-primary fz-sm" id="jlhtindaklanjut">'.(isset($tl[$v->rekom_id]) ? count($tl[$v->rekom_id]) : 0).'</span>
-                                <span style="cursor:pointer" class="label label-success fz-sm">Tindak Lanjut</span>
+                                <span style="cursor:pointer" class="label label-primary fz-sm" id="jlhtindaklanjut" onclick="opentl(\''.$v->rekom_id.'\')">'.(isset($tl[$v->rekom_id]) ? count($tl[$v->rekom_id]) : 0).'</span>
+                                <span style="cursor:pointer" class="label label-success fz-sm" onclick="opentl(\''.$v->rekom_id.'\')">Tindak Lanjut</span>
                                 <span style="cursor:pointer" class="label label-info fz-sm" onclick="formtindaklanjut('.$v->rekom_id.',-1)"> 
                                     <a style="color:#fff" data-value="0">
                                         <div class="tooltipcss"><i class="fa fa-plus-circle"></i>
@@ -151,7 +151,12 @@ class DataRekomendasiController extends Controller
 
                     if(isset($tl[$v->rekom_id]))
                     {
-                        $table.='<tr id="tl_rekom_'.$v->rekom_id.'"></tr>';
+                        $table.='<tr id="tl_rekom_'.$v->rekom_id.'" class="kolom-hide">';
+                            $table.='<td colspan="7">';
+                            $data_tl=$this->tabletindaklanjut($idtemuan,$v->rekom_id,$tl[$v->rekom_id]);
+                            $table.=$data_tl;
+                            $table.='</td>';
+                        $table.='</tr>';
                     }
             }
         }
@@ -256,5 +261,43 @@ class DataRekomendasiController extends Controller
         return $data;
     }
 
-    
+    public function tabletindaklanjut($idtemuan,$idrekom,$data_tl)
+    {
+        $table='<table class="table table-bordered">';
+            $table.='<thead>';
+                $table.='<tr class="inverse">
+                    <th class="text-center">Tindak Lanjut</th>
+                    <th class="text-center">Nilai</th>
+                    <th class="text-center">Dokumen Pendukung</th>
+                    <th class="text-center">Hasil Review PIC 1</th>
+                    <th class="text-center">Status Review PIC 1</th>
+                    <th class="text-center">Aksi</th>
+                </tr>';
+            $table.='</thead><tbody>';
+            foreach($data_tl as $k=>$v)
+            {
+                $table.='<tr style="background:#fff !important;">
+                    <td style="width:300px">'.$v->tindak_lanjut.'</td>
+                    <td class="text-right">'.number_format($v->nilai,0,',','.').'</td>
+                    <td class="text-center"><a href="">'.(isset($v->dokumen_tindak_lanjut->nama_dokumen) ? $v->dokumen_tindak_lanjut->nama_dokumen : '').'</a></td>
+                    <td class="text-left"></td>
+                    <td class="text-left"></td>
+                    <td class="text-center">
+                        <div style="width:80px;">
+                            <a class="btn btn-xs btn-primary rounded" onclick="formtindaklanjut('.$v->rekomendasi_id.','.$v->tl_id.')">
+                                <div class="tooltipcss"><i class="glyphicon glyphicon-edit"></i>
+                                    <span class="tooltiptext">Edit Tindak Lanjut</span>
+                                </div></a>
+                            <a class="btn btn-xs btn-danger rounded btn-delete-rekomendasi" onclick="hapustindaklanjut('.$idtemuan.','.$v->tl_id.')">
+                                <div class="tooltipcss"><i class="glyphicon glyphicon-trash"></i>
+                                    <span class="tooltiptext">Hapus Tindak Lanjut</span>
+                                </div></a>
+                        </div>
+                    </td>
+                </tr>'; 
+            }
+        $table.='</tbody></table>';
+
+        return $table;
+    }
 }

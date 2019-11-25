@@ -71,5 +71,19 @@ class DashboardController extends Controller
                     ->with('status',$status)
                     ->with('datalhp',$datalhp);
         }
+        elseif(Auth::user()->level=='pic-unit')
+        {
+            $lhp=DaftarTemuan::with('dpemeriksa')->with('djenisaudit')->get();
+            $datalhp=array();
+            foreach($lhp as $k=>$v)
+            {
+                $datalhp[str_slug($v->status_lhp)][]=$v;
+            }
+            $status=StatusRekomendasi::get()->count();
+            return view('backend.pages.dashboard.pic-unit')
+                    ->with('lhp',$lhp)
+                    ->with('status',$status)
+                    ->with('datalhp',$datalhp);
+        }
     }
 }

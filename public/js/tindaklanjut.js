@@ -22,7 +22,9 @@ function form(jenis,id)
         url : flagsUrl + '/tindak-lanjut-edit/'+id,
         success : function(res)
         {
-
+            $('.edit-summernote-tindaklanjut').summernote("code",res.tindak_lanjut);
+            $('#edit_nilai_tindaklanjut').val(format(res.nilai));
+            $('#edit_id_tindaklanjut').val(format(id));
         }
     });
 }
@@ -32,11 +34,42 @@ function clearform(idform)
     $('.add-summernote-tindaklanjut').summernote("reset");
     $('.edit-summernote-tindaklanjut').summernote("reset");
 }
+function hapustindaklanjut(idtemuan,id)
+{
+    swal({
+        title: "Apakah Anda Yakin ?",
+        text: "Ingin Menghapus Data Tindak Lanjut ini",
+        icon: "warning",
+        buttons: [
+            'Tidak!',
+            'Ya, Hapus'
+        ],
+        dangerMode: true,
+    }).then(function (isConfirm) {
+        if (isConfirm) {
+            $.ajax({
+                url: flagsUrl + '/tindak-lanjut-hapus/' + id,
+                success: function (res) {
+                    swal({
+                        title: 'Berhasil!',
+                        text: 'Hapus Data Tindak Lanjut Berhasil',
+                        icon: 'success'
+                    }).then(function () {
+                        reloadtable('temuan_' + idtemuan, idtemuan)
+                    });
+                }
+            });
+        } else {
+
+        }
+    });
+}
 function validasitindaklanjut(jns)
 {
     var summernote_tindaklanjut = $('.'+jns+'-summernote-tindaklanjut');
     var nilai_tindaklanjut = $('#'+jns+'_nilai_tindaklanjut');
     var dokumen = $('#'+jns+'-dokumen');
+    
     var idrekom = $('#' + jns +'_rekom_id');
 
     if (summernote_tindaklanjut.summernote('isEmpty'))
@@ -47,17 +80,29 @@ function validasitindaklanjut(jns)
     {
         notif('error', 'Nilai Tindak Lanjut Belum Di Isi')
     }
-    else if (dokumen.get(0).files.length === 0){
-        notif('error', 'File Dokumen Belum Dipilih')
-    }
     else
     {
-        var konten = summernote_tindaklanjut.summernote('code');
-        var file_data=dokumen.prop('files')[0];
-
         var form_data = new FormData();
-        form_data.append('file', file_data);
+
+        if(jns=='add')
+        {
+            if (dokumen.get(0).files.length === 0) {
+                notif('error', 'File Dokumen Belum Dipilih')
+            }
+        }
+        else
+        {
+            idtindaklanjut = $('#edit_id_tindaklanjut').val();
+            form_data.append('idtindaklanjut', idtindaklanjut);
+        }
+              
+        var konten = summernote_tindaklanjut.summernote('code');
+        var file_data = dokumen.prop('files')[0];
+        // if (dokumen.get(0).files.length !== 0) {
+        // }
+        
         form_data.append('tindaklanjut', konten);
+        form_data.append('file', file_data);
         form_data.append('nilai_tindaklanjut', nilai_tindaklanjut.val());
         $.ajax({
             url: flagsUrl + '/tindak-lanjut-simpan/' + idrekom.val(),
@@ -75,10 +120,22 @@ function validasitindaklanjut(jns)
                 reloadtable('temuan_' + res, res)
             }
         });
+
+       
+
+       
     }
         
 }
-
+function opentl(rekomid)
+{
+    var css = $("tr#tl_rekom_" + rekomid).hasClass("kolom-hide");
+    // alert(css);
+    if(css)
+        $("tr#tl_rekom_" + rekomid).removeClass("kolom-hide");
+    else
+        $("tr#tl_rekom_" + rekomid).addClass("kolom-hide");
+}
 $('.add-summernote-tindaklanjut').summernote({
     height:250
 });

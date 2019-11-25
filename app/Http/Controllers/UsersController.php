@@ -67,7 +67,7 @@ class UsersController extends Controller
     {
         if (is_null($request->password) || is_null($request->password_confirmation)) {
             Validator::make($request->all(), [
-                'name' => 'required',
+                // 'name' => 'required',
                 'email' => 'required',
                 'level' => 'required',
             ])->validate();
@@ -92,7 +92,7 @@ class UsersController extends Controller
         }
 
         Validator::make($request->all(), [
-            'name' => 'required',
+            // 'name' => 'required',
             'email' => 'required',
             'level' => 'required',
             'password' => 'required|confirmed',

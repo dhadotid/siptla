@@ -122,4 +122,31 @@ class LaporanController extends Controller
     {
         return view('backend.pages.laporan.rekap-rekomendasi.data');
     }
+    //-------------------------
+    public function rekap_jumlah_resiko_bidang()
+    {
+        return view('backend.pages.laporan.rekap-resiko-per-bidang.index');
+    }
+    public function rekap_jumlah_resiko_bidang_data()
+    {
+        return view('backend.pages.laporan.rekap-resiko-per-bidang.data');
+    }
+    //-------------------------
+    public function rekap_perhitungan_tekn_pertanggal()
+    {
+        return view('backend.pages.laporan.rekap-tekn-per-tanggal.index');
+    }
+    public function rekap_perhitungan_tekn_pertanggal_data()
+    {
+        return view('backend.pages.laporan.rekap-tekn-per-tanggal.data');
+    }
+    //-------------------------
+    public function rekap_perhitungan_tekn_status()
+    {
+        return view('backend.pages.laporan.rekap-tekn-per-status.index');
+    }
+    public function rekap_perhitungan_tekn_status_data()
+    {
+        return view('backend.pages.laporan.rekap-tekn-per-status.data');
+    }
 }

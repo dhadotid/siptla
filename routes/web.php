@@ -111,8 +111,13 @@ Route::group(['prefix'=>'laporan','middleware'=>'auth'],function(){
     Route::get('rekap-rekomendasi-data','LaporanController@rekap_rekomendasi_data');
     
     Route::get('rekap-jumlah-resiko-bidang','LaporanController@rekap_jumlah_resiko_bidang');
+    Route::get('rekap-jumlah-resiko-bidang-data','LaporanController@rekap_jumlah_resiko_bidang_data');
+
     Route::get('rekap-perhitungan-tekn-pertanggal','LaporanController@rekap_perhitungan_tekn_pertanggal');
+    Route::get('rekap-perhitungan-tekn-pertanggal-data','LaporanController@rekap_perhitungan_tekn_pertanggal_data');
+
     Route::get('rekap-perhitungan-tekn-status','LaporanController@rekap_perhitungan_tekn_status');
+    Route::get('rekap-perhitungan-tekn-status-data','LaporanController@rekap_perhitungan_tekn_status_data');
 });
 
 // DATA LHP

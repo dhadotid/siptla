@@ -163,6 +163,15 @@
             <li class="{{strpos($url,'rekap-rekomendasi')!==false ? 'active' : ''}}">
               <a href="{{url('laporan/rekap-rekomendasi')}}"><span class="menu-text">Laporan Rekap Rekomendasi</span></a>
             </li>
+            <li class="{{strpos($url,'rekap-jumlah-resiko-bidang')!==false ? 'active' : ''}}">
+              <a href="{{url('laporan/rekap-jumlah-resiko-bidang')}}"><span class="menu-text">Laporan Rekap Jumlah Resiko Per Bidang</span></a>
+            </li>
+            <li class="{{strpos($url,'rekap-perhitungan-tekn-pertanggal')!==false ? 'active' : ''}}">
+              <a href="{{url('laporan/rekap-perhitungan-tekn-pertanggal')}}"><span class="menu-text">Laporan Rekap Perhitungan TEKN Per Tanggal</span></a>
+            </li>
+            <li class="{{strpos($url,'rekap-perhitungan-tekn-status')!==false ? 'active' : ''}}">
+              <a href="{{url('laporan/rekap-perhitungan-tekn-status')}}"><span class="menu-text">Laporan Rekap Perhitungan TEKN Per Status</span></a>
+            </li>
 
           </ul>
         </li>

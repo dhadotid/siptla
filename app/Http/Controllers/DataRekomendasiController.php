@@ -300,4 +300,11 @@ class DataRekomendasiController extends Controller
 
         return $table;
     }
+
+    public function update_jlh_rekomendasi($idtemuan)
+    {
+        $rekom=DataRekomendasi::where('id_temuan',$idtemuan)->get();
+        $jlhrekom=$rekom->count();
+        echo '<span style="cursor:pointer" class="label label-'.($jlhrekom==0 ? 'dark' : 'primary').' fz-sm">'.$jlhrekom.'</span>';
+    }
 }

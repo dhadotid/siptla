@@ -136,7 +136,7 @@
                                                                     <a href="#" class="btn-detail-temuan" data-toggle="modal" data-target="#modaldetail" data-value="{{$item->temuan_id}}"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Temuan</a>
                                                                 </li>
                                                                 <li>
-                                                                    <a href="#" class="btn-edit-temuan" data-toggle="modal" data-target="#modalubah" data-value="{{ $item->temuan_id }}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit LHP</a>
+                                                                    <a href="#" class="btn-edit-temuan" data-toggle="modal" data-target="#modalubah" data-value="{{ $item->temuan_id }}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit Temuan</a>
                                                                 </li>
                                                                 <li>
                                                                     <a class="btn-delete-temuan" data-toggle="modal" data-target="#modalhapus" data-value="{{ $item->id }}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus Temuan</a>

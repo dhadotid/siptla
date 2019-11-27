@@ -50,8 +50,26 @@ function validasirekom(act) {
     else {
         if(act=='add')
         {
-            $('#form_rekom_' + act).attr('action', flagsUrl +'/rekomendasi-simpan');
-            $('#form_rekom_' + act).submit();
+            var idtemuan = $('#id_temuan').val();
+            // $('#form_rekom_' + act).attr('action', flagsUrl +'/rekomendasi-simpan');
+            // $('#form_rekom_' + act).submit();
+            $.ajax({
+                url: flagsUrl + '/rekomendasi-simpan',
+                data: $('#form_rekom_add').serialize(),
+                type: 'POST',
+                datatype: 'JSON',
+                success: function (res) {
+                    reloadtable('temuan_' + idtemuan, idtemuan)
+                    $('#modaltambahrekomendasi').modal('hide');
+                    // swal("Berhasil", "Data Rekomendasi Berhasil Di Ubah", "success");
+                    resetform(act);
+                    setTimeout(function(){
+                        // reloadtable('temuan_' + idtemuan, idtemuan)
+                        updatejlhrekomendasi(idtemuan);
+                        $('#modaltambahrekomendasi').modal('show');
+                    },1000);
+                }
+            });
         }
         else if(act=='edit')
         {
@@ -75,7 +93,22 @@ function validasirekom(act) {
         
     }
 }
+function resetform(jns)
+{
+    $('#'+jns+'_rekomendasi').val('');
+    $('#'+jns+'_nilai_rekomendasi').val('');
+    $('#'+jns+'_pic_1').val('');
+    $('#'+jns+'_pic_2').val('');
+    $('#'+jns+'_rekanan').val('');
+    $('#'+jns+'_jangka_waktu').val('');
+    $('#'+jns+'_status_rekomendasi').val('');
+    $('#'+jns+'_review_auditor').val('');
 
+    $('#'+jns+'_pic_1').select2().trigger('change');
+    $('#'+jns+'_pic_2').select2().trigger('change');
+    $('#'+jns+'_jangka_waktu').select2().trigger('change');
+    $('#'+jns+'_status_rekomendasi').select2().trigger('change');
+}
 function rekomadd(idtemuan)
 {
     $('#id_temuan').val(idtemuan);
@@ -265,3 +298,8 @@ $("#edit_rekanan").autocomplete({
         });
     }
 });
+
+function updatejlhrekomendasi(idtemuan)
+{
+    $('#div-jlh-rekom-' + idtemuan).load(flagsUrl+'/update-jlh-rekomendasi/'+idtemuan);
+}

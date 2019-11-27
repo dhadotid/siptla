@@ -63,6 +63,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::post('rekomendasi-simpan','DataRekomendasiController@rekomendasi_simpan')->name('rekomendasi.simpan');
     Route::post('rekomendasi-update/{idrekom}/{idtemuan}','DataRekomendasiController@rekomendasi_update')->name('rekomendasi.update');
     Route::get('rekomendasi-delete/{idrekom}/{idtemuan}','DataRekomendasiController@rekomendasi_delete')->name('rekomendasi.delete');
+    Route::get('update-jlh-rekomendasi/{idtemuan}','DataRekomendasiController@update_jlh_rekomendasi');
 
     Route::post('tindak-lanjut-simpan/{idrekom}','TindakLanjutController@simpan');
     Route::get('tindak-lanjut-edit/{id}','TindakLanjutController@edit');

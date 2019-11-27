@@ -70,36 +70,54 @@ Route::group(['middleware'=>'auth'],function(){
 
     Route::get('data-rekanan','RekananController@data_rekanan')->name('data-rekanan');
 });
+Route::group(['prefix'=>'laporan','middleware'=>'auth'],function(){
+    Route::get('temuan-per-bidang','LaporanController@temuan_per_bidang');
+    Route::get('temuan-per-bidang-data','LaporanController@temuan_per_bidang_data');
 
+    Route::get('temuan-per-unitkerja','LaporanController@temuan_per_unitkerja');
+    Route::get('temuan-per-unitkerja-data','LaporanController@temuan_per_unitkerja_data');
+
+    Route::get('temuan-per-lhp','LaporanController@temuan_per_lhp');
+    Route::get('temuan-per-lhp-data','LaporanController@temuan_per_lhp_data');
+
+    Route::get('tindaklanjut-per-lhp','LaporanController@tindaklanjut_per_lhp');
+    Route::get('tindaklanjut-per-lhp-data','LaporanController@tindaklanjut_per_lhp_data');
+
+    Route::get('tindaklanjut-per-bidang','LaporanController@tindaklanjut_per_bidang');
+    Route::get('tindaklanjut-per-bidang-data','LaporanController@tindaklanjut_per_bidang_data');
+
+    Route::get('tindaklanjut-per-unitkerja','LaporanController@tindaklanjut_per_unitkerja');
+    Route::get('tindaklanjut-per-unitkerja-data','LaporanController@tindaklanjut_per_unitkerja_data');
+
+    Route::get('tindak-lanjut','LaporanController@tindak_lanjut');
+    Route::get('tindak-lanjut-data','LaporanController@tindak_lanjut_data');
+
+    Route::get('rekap-lhp','LaporanController@rekap_lhp');
+    Route::get('rekap-lhp-data','LaporanController@rekap_lhp_data');
+
+    Route::get('rekap-status-rekomendasi','LaporanController@rekap_status_rekomendasi');
+    Route::get('rekap-status-rekomendasi-data','LaporanController@rekap_status_rekomendasi_data');
+    
+    Route::get('rekap-status-rekomendasi-bidang','LaporanController@rekap_status_rekomendasi_bidang');
+    Route::get('rekap-status-rekomendasi-bidang-data','LaporanController@rekap_status_rekomendasi_bidang_data');
+
+    Route::get('rekap-status-rekomendasi-unitkerja','LaporanController@rekap_status_rekomendasi_unitkerja');
+    Route::get('rekap-status-rekomendasi-unitkerja-data','LaporanController@rekap_status_rekomendasi_unitkerja_data');
+
+    Route::get('rekap-jumlah-resiko-periode','LaporanController@rekap_jumlah_resiko_periode');
+    Route::get('rekap-jumlah-resiko-periode-data','LaporanController@rekap_jumlah_resiko_periode_data');
+
+    Route::get('rekap-rekomendasi','LaporanController@rekap_rekomendasi');
+    Route::get('rekap-rekomendasi-data','LaporanController@rekap_rekomendasi_data');
+    
+    Route::get('rekap-jumlah-resiko-bidang','LaporanController@rekap_jumlah_resiko_bidang');
+    Route::get('rekap-perhitungan-tekn-pertanggal','LaporanController@rekap_perhitungan_tekn_pertanggal');
+    Route::get('rekap-perhitungan-tekn-status','LaporanController@rekap_perhitungan_tekn_status');
+});
 
 // DATA LHP
 
 // END DATA LHP
-
-Route::get('tindak-lanjut/{id}', 'TindakLanjutTemuanController@index')->name('tindak-lanjut.index');
-Route::post('tindak-lanjut', 'TindakLanjutTemuanController@store')->name('tindak-lanjut.store');
-Route::get('tindak-lanjut/{id}/edit', 'TindakLanjutTemuanController@edit')->name('tindak-lanjut.edit');
-Route::get('tindak-lanjut/download/{filename}', 'TindakLanjutTemuanController@download')->name('tindak-lanjut.download');
-Route::put('tindak-lanjut/{id}/update', 'TindakLanjutTemuanController@update')->name('tindak-lanjut.update');
-Route::get('tindak-lanjut/{id}/show', 'TindakLanjutTemuanController@show')->name('tindak-lanjut.show');
-Route::get('tindak-lanjut/{id}/selesai', 'TindakLanjutTemuanController@selesai')->name('tindak-lanjut.selesai');
-
-Route::get('rekap-temuan','LaporanTemuanController@index')->middleware('auth');
-Route::get('rekap-temuan-detail/{opd}','LaporanTemuanController@rekapdetail')->middleware('auth');
-
-Route::get('rekomendasi-temuan/{tahun}', 'LaporanTemuanController@rekomendasi_temuan')->name('rekomendasi-temuan')->middleware('auth');
-Route::get('print-rekomendasi-temuan/{tahun}', 'LaporanTemuanController@print_rekomendasi_temuan')->name('print-rekomendasi-temuan')->middleware('auth');
-
-Route::get('laporan-kelompok-temuan/{tahun}', 'LaporanTemuanController@kelompok_temuan')->name('laporan-kelompok-temuan')->middleware('auth');
-Route::get('print-kelompok-temuan/{tahun}', 'LaporanTemuanController@print_kelompok_temuan')->name('print-kelompok-temuan')->middleware('auth');
-
-Route::resource('temuan','DaftarTemuanController')->middleware('auth');
-Route::resource('list-temuan','DaftarTemuanController')->middleware('auth');
-Route::get('list-temuan-data/{dinas_id?}/{tahun?}/{bidang_id?}','DaftarTemuanController@data')->middleware('auth');
-Route::get('detail-form/{daftar_id}/{dinas_id?}/{tahun?}/{bidang_id?}','DaftarTemuanController@form_detail')->middleware('auth');
-Route::post('detail-temuan-update/{id}','DaftarTemuanController@update_detail')->middleware('auth');
-Route::post('detail-temuan-delete','DaftarTemuanController@detail_destroy')->middleware('auth');
-Route::post('detail-temuan-verifikasi','DaftarTemuanController@detail_verifikasi')->middleware('auth');
 
 Auth::routes();
 Route::get('logout',function(){

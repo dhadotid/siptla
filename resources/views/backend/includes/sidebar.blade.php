@@ -103,10 +103,67 @@
             <span class="menu-text">Laporan</span>
             <i class="menu-caret zmdi zmdi-hc-sm zmdi-chevron-right"></i>
           </a>
-          <ul class="submenu" style="{{$url=='rekap-temuan' || $url=='rekomendasi-temuan' || $url=='laporan-kelompok-temuan' ? 'display:block' : ''}}">
-            <li class="{{$url=='rekap-temuan' ? 'active' : ''}}"><a href="{{url('rekap-temuan')}}"><span class="menu-text">Rekap Temuan</span></a></li>
-            <li class="{{$url=='rekomendasi-temuan' ? 'active' : ''}}"><a href="{{url('rekomendasi-temuan')}}/{{ date('Y') }}"><span class="menu-text">Per Rekomendasi Temuan</span></a></li>
-            <li class="{{$url=='laporan-kelompok-temuan' ? 'active' : ''}}"><a href="{{url('laporan-kelompok-temuan')}}/{{ date('Y') }}"><span class="menu-text">Per Kelompok Temuan</span></a></li>
+          @php
+              $menulaporan=[
+                'temuan-per-bidang',
+                'temuan-per-unitkerja',
+                'temuan-per-lhp',
+                'tindaklanjut-per-lhp',
+                'tindaklanjut-per-bidang',
+                'tindaklanjut-per-unitkerja',
+                'tindak-lanjut',
+                'rekap-lhp',
+                'rekap-status-rekomendasi',
+                'rekap-status-rekomendasi-bidang',
+                'rekap-status-rekomendasi-unitkerja',
+                'rekap-jumlah-resiko-periode',
+                'rekap-rekomendasi',
+                'rekap-jumlah-resiko-bidang',
+                'rekap-perhitungan-tekn-pertanggal',
+                'rekap-perhitungan-tekn-status'
+              ];
+          @endphp
+          <ul class="submenu" style="{{in_array(str_replace('laporan/','',$url),$menulaporan) ? 'display:block' : ''}}">
+            <li class="{{strpos($url,'temuan-per-bidang')!==false ? 'active' : ''}}">
+              <a href="{{url('laporan/temuan-per-bidang')}}"><span class="menu-text">Laporan Temuan Per Bidang</span></a>
+            </li>
+            <li class="{{strpos($url,'temuan-per-unitkerja')!==false ? 'active' : ''}}">
+              <a href="{{url('laporan/temuan-per-unitkerja')}}"><span class="menu-text">Laporan Temuan Per Unit Kerja</span></a>
+            </li>
+            <li class="{{strpos($url,'temuan-per-lhp')!==false ? 'active' : ''}}">
+              <a href="{{url('laporan/temuan-per-lhp')}}"><span class="menu-text">Laporan Temuan Per LHP</span></a>
+            </li>
+            <li class="{{strpos($url,'tindaklanjut-per-lhp')!==false ? 'active' : ''}}">
+              <a href="{{url('laporan/tindaklanjut-per-lhp')}}"><span class="menu-text">Laporan Tindak Lanjut Per-LHP</span></a>
+            </li>
+            <li class="{{strpos($url,'tindaklanjut-per-bidang')!==false ? 'active' : ''}}">
+              <a href="{{url('laporan/tindaklanjut-per-bidang')}}"><span class="menu-text">Laporan Tindak Lanjut Per-Bidang</span></a>
+            </li>
+            <li class="{{strpos($url,'tindaklanjut-per-unitkerja')!==false ? 'active' : ''}}">
+              <a href="{{url('laporan/tindaklanjut-per-unitkerja')}}"><span class="menu-text">Laporan Tindak Lanjut Per-Unit Kerja</span></a>
+            </li>
+            <li class="{{strpos($url,'tindak-lanjut')!==false ? 'active' : ''}}">
+              <a href="{{url('laporan/tindak-lanjut')}}"><span class="menu-text">Laporan Tindak Lanjut</span></a>
+            </li>
+            <li class="{{strpos($url,'rekap-lhp')!==false ? 'active' : ''}}">
+              <a href="{{url('laporan/rekap-lhp')}}"><span class="menu-text">Laporan Rekap LHP</span></a>
+            </li>
+            <li class="{{strpos($url,'rekap-status-rekomendasi')!==false ? 'active' : ''}}">
+              <a href="{{url('laporan/rekap-status-rekomendasi')}}"><span class="menu-text">Laporan Rekap Status Rekomendasi Semua Pemeriksa</span></a>
+            </li>
+            <li class="{{strpos($url,'rekap-status-rekomendasi-bidang')!==false ? 'active' : ''}}">
+              <a href="{{url('laporan/rekap-status-rekomendasi-bidang')}}"><span class="menu-text">Laporan Rekap Status Rekomendasi Per Bidang</span></a>
+            </li>
+            <li class="{{strpos($url,'rekap-status-rekomendasi-unitkerja')!==false ? 'active' : ''}}">
+              <a href="{{url('laporan/rekap-status-rekomendasi-unitkerja')}}"><span class="menu-text">Laporan Rekap Status Rekomendasi Per Unit Kerja</span></a>
+            </li>
+            <li class="{{strpos($url,'rekap-jumlah-resiko-periode')!==false ? 'active' : ''}}">
+              <a href="{{url('laporan/rekap-jumlah-resiko-periode')}}"><span class="menu-text">Laporan Rekap Jumlah Resiko Per Periode</span></a>
+            </li>
+            <li class="{{strpos($url,'rekap-rekomendasi')!==false ? 'active' : ''}}">
+              <a href="{{url('laporan/rekap-rekomendasi')}}"><span class="menu-text">Laporan Rekap Rekomendasi</span></a>
+            </li>
+
           </ul>
         </li>
         @endif

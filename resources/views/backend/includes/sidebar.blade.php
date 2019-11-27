@@ -125,52 +125,52 @@
           @endphp
           <ul class="submenu" style="{{in_array(str_replace('laporan/','',$url),$menulaporan) ? 'display:block' : ''}}">
             <li class="{{strpos($url,'temuan-per-bidang')!==false ? 'active' : ''}}">
-              <a href="{{url('laporan/temuan-per-bidang')}}"><span class="menu-text">Laporan Temuan Per Bidang</span></a>
+              <a href="{{url('laporan/temuan-per-bidang')}}"><span class="menu-text">Temuan Per Bidang</span></a>
             </li>
             <li class="{{strpos($url,'temuan-per-unitkerja')!==false ? 'active' : ''}}">
-              <a href="{{url('laporan/temuan-per-unitkerja')}}"><span class="menu-text">Laporan Temuan Per Unit Kerja</span></a>
+              <a href="{{url('laporan/temuan-per-unitkerja')}}"><span class="menu-text">Temuan Per Unit Kerja</span></a>
             </li>
             <li class="{{strpos($url,'temuan-per-lhp')!==false ? 'active' : ''}}">
-              <a href="{{url('laporan/temuan-per-lhp')}}"><span class="menu-text">Laporan Temuan Per LHP</span></a>
+              <a href="{{url('laporan/temuan-per-lhp')}}"><span class="menu-text">Temuan Per LHP</span></a>
             </li>
             <li class="{{strpos($url,'tindaklanjut-per-lhp')!==false ? 'active' : ''}}">
-              <a href="{{url('laporan/tindaklanjut-per-lhp')}}"><span class="menu-text">Laporan Tindak Lanjut Per-LHP</span></a>
+              <a href="{{url('laporan/tindaklanjut-per-lhp')}}"><span class="menu-text">Tindak Lanjut Per-LHP</span></a>
             </li>
             <li class="{{strpos($url,'tindaklanjut-per-bidang')!==false ? 'active' : ''}}">
-              <a href="{{url('laporan/tindaklanjut-per-bidang')}}"><span class="menu-text">Laporan Tindak Lanjut Per-Bidang</span></a>
+              <a href="{{url('laporan/tindaklanjut-per-bidang')}}"><span class="menu-text">Tindak Lanjut Per-Bidang</span></a>
             </li>
             <li class="{{strpos($url,'tindaklanjut-per-unitkerja')!==false ? 'active' : ''}}">
-              <a href="{{url('laporan/tindaklanjut-per-unitkerja')}}"><span class="menu-text">Laporan Tindak Lanjut Per-Unit Kerja</span></a>
+              <a href="{{url('laporan/tindaklanjut-per-unitkerja')}}"><span class="menu-text">Tindak Lanjut Per-Unit Kerja</span></a>
             </li>
             <li class="{{strpos($url,'tindak-lanjut')!==false ? 'active' : ''}}">
-              <a href="{{url('laporan/tindak-lanjut')}}"><span class="menu-text">Laporan Tindak Lanjut</span></a>
+              <a href="{{url('laporan/tindak-lanjut')}}"><span class="menu-text">Tindak Lanjut</span></a>
             </li>
             <li class="{{strpos($url,'rekap-lhp')!==false ? 'active' : ''}}">
-              <a href="{{url('laporan/rekap-lhp')}}"><span class="menu-text">Laporan Rekap LHP</span></a>
+              <a href="{{url('laporan/rekap-lhp')}}"><span class="menu-text">Rekap LHP</span></a>
             </li>
             <li class="{{strpos($url,'rekap-status-rekomendasi')!==false ? 'active' : ''}}">
-              <a href="{{url('laporan/rekap-status-rekomendasi')}}"><span class="menu-text">Laporan Rekap Status Rekomendasi Semua Pemeriksa</span></a>
+              <a href="{{url('laporan/rekap-status-rekomendasi')}}"><span class="menu-text">Rekap Status Rekomendasi Semua Pemeriksa</span></a>
             </li>
             <li class="{{strpos($url,'rekap-status-rekomendasi-bidang')!==false ? 'active' : ''}}">
-              <a href="{{url('laporan/rekap-status-rekomendasi-bidang')}}"><span class="menu-text">Laporan Rekap Status Rekomendasi Per Bidang</span></a>
+              <a href="{{url('laporan/rekap-status-rekomendasi-bidang')}}"><span class="menu-text">Rekap Status Rekomendasi Per Bidang</span></a>
             </li>
             <li class="{{strpos($url,'rekap-status-rekomendasi-unitkerja')!==false ? 'active' : ''}}">
-              <a href="{{url('laporan/rekap-status-rekomendasi-unitkerja')}}"><span class="menu-text">Laporan Rekap Status Rekomendasi Per Unit Kerja</span></a>
+              <a href="{{url('laporan/rekap-status-rekomendasi-unitkerja')}}"><span class="menu-text">Rekap Status Rekomendasi Per Unit Kerja</span></a>
             </li>
             <li class="{{strpos($url,'rekap-jumlah-resiko-periode')!==false ? 'active' : ''}}">
-              <a href="{{url('laporan/rekap-jumlah-resiko-periode')}}"><span class="menu-text">Laporan Rekap Jumlah Resiko Per Periode</span></a>
+              <a href="{{url('laporan/rekap-jumlah-resiko-periode')}}"><span class="menu-text">Rekap Jumlah Resiko Per Periode</span></a>
             </li>
             <li class="{{strpos($url,'rekap-rekomendasi')!==false ? 'active' : ''}}">
-              <a href="{{url('laporan/rekap-rekomendasi')}}"><span class="menu-text">Laporan Rekap Rekomendasi</span></a>
+              <a href="{{url('laporan/rekap-rekomendasi')}}"><span class="menu-text">Rekap Rekomendasi</span></a>
             </li>
             <li class="{{strpos($url,'rekap-jumlah-resiko-bidang')!==false ? 'active' : ''}}">
-              <a href="{{url('laporan/rekap-jumlah-resiko-bidang')}}"><span class="menu-text">Laporan Rekap Jumlah Resiko Per Bidang</span></a>
+              <a href="{{url('laporan/rekap-jumlah-resiko-bidang')}}"><span class="menu-text">Rekap Jumlah Resiko Per Bidang</span></a>
             </li>
             <li class="{{strpos($url,'rekap-perhitungan-tekn-pertanggal')!==false ? 'active' : ''}}">
-              <a href="{{url('laporan/rekap-perhitungan-tekn-pertanggal')}}"><span class="menu-text">Laporan Rekap Perhitungan TEKN Per Tanggal</span></a>
+              <a href="{{url('laporan/rekap-perhitungan-tekn-pertanggal')}}"><span class="menu-text">Rekap Perhitungan TEKN Per Tanggal</span></a>
             </li>
             <li class="{{strpos($url,'rekap-perhitungan-tekn-status')!==false ? 'active' : ''}}">
-              <a href="{{url('laporan/rekap-perhitungan-tekn-status')}}"><span class="menu-text">Laporan Rekap Perhitungan TEKN Per Status</span></a>
+              <a href="{{url('laporan/rekap-perhitungan-tekn-status')}}"><span class="menu-text">Rekap Perhitungan TEKN Per Status</span></a>
             </li>
 
           </ul>

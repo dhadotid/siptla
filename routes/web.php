@@ -138,3 +138,4 @@ Route::get('force-logout',function(){
     return redirect('login')->with('error',Session::get('error'));
 });
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');

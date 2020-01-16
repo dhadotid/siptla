@@ -4,8 +4,10 @@
 	<title>Dashboard</title>
 @endsection
 @section('content')
+
 	<div class="col-md-12">
         <div class="row">
+			
 			<div class="col-md-6 col-sm-6">
 				<div class="widget p-md clearfix">
 					<div class="pull-left">
@@ -17,164 +19,188 @@
                     </span>
 				</div><!-- .widget -->
 			</div>
-
 			<div class="col-md-6 col-sm-6">
-                <a href="{{url('data-lhp')}}">
-                    <div class="widget p-md clearfix">
-                        <div class="pull-left">
-                            <small class="text-color">Jumlah </small>
-                            <h3 class="widget-title" style="padding-top:10px";>LHP</h3>
-                        </div>
-                        <span class="pull-right fz-lg fw-500 counter">
-                            <h3 class="counter " data-plugin="counterUp" style="font-size:30px !important;">{{$lhp->count()}}</h3>
-                        </span>
-                    </div><!-- .widget -->
-                </a>
+				<div class="widget p-md clearfix">
+					<span class="pull-right fz-lg fw-500 counter" style="height:68px;padding-top:15px;">
+						Tahun&nbsp;&nbsp;
+						<select class="form-control pull-right" name="tahun" id="tahun" style="width:200px;" onchange="location.href='{{url('dashboard')}}/'+this.value">
+							@for($thn=date('Y');$thn>=(date('Y')-6);$thn--)
+								<option value="{{$thn}}" style="text-align:right">{{$thn}}</option>
+							@endfor
+						</select>
+                    </span>
+				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-md-3 col-sm-6">
-				<div class="widget stats-widget">
-					<div class="widget-body clearfix">
-						<div class="pull-left">
-							<h3 class="widget-title text-primary"><span class="counter" data-plugin="counterUp">{{isset($datalhp['create-lhp']) ? count($datalhp['create-lhp']) : ''}}</span></h3>
-							<small class="text-color"><a href="{{url('data-lhp')}}">Jumlah LHP Status Create</a></small>
-						</div>
-						<span class="pull-right big-icon watermark"><i class="fa fa-list"></i></span>
+		
+	</div>
+	<div class="col-md-12">
+        <div class="row">
+			<div class="col-md-4 col-sm-4">
+				<div class="widget p-md clearfix">
+					<div class="pull-left">
+						<small class="text-color">Statistik Rekomendasi ({{$status->count()}})</small>
 					</div>
-					<footer class="widget-footer bg-primary">
-						<small>Jumlah</small>
-						<span class="small-chart pull-right" data-plugin="sparkline" data-options="[4,3,5,2,1], { type: 'bar', barColor: '#ffffff', barWidth: 5, barSpacing: 2 }"><canvas width="33" height="16" style="display: inline-block; width: 33px; height: 16px; vertical-align: top;"></canvas></span>
-					</footer>
-				</div><!-- .widget -->
+					<canvas id="chart1" style="width:100%" height="400"></canvas>
+					<div class='cell'>
+						<ul>
+							@foreach ($rekom['labels'] as $idx=>$item)
+								@php
+									if(isset($color['colorrekom'][str_slug($item)]))
+										$warna=$color['colorrekom'][str_slug($item)];
+									else
+										$warna='#ffffff';
+								@endphp
+								<li><div class="box" style="background: {{$warna}}"></div> {{$item}} ({{isset($rekom['datasets'][0]['data'][$idx]) ? $rekom['datasets'][0]['data'][$idx] : 0}})</li>
+							@endforeach
+							
+						</ul>
+					</div>
+				</div>
 			</div>
-
-			<div class="col-md-3 col-sm-6">
-				<div class="widget stats-widget">
-					<div class="widget-body clearfix">
-						<div class="pull-left">
-							<h3 class="widget-title text-danger"><span class="counter" data-plugin="counterUp">{{isset($datalhp['review-lhp']) ? count($datalhp['review-lhp']) : ''}}</span></h3>
-							<small class="text-color"><a href="{{url('data-lhp')}}">Jumlah LHP Status Review</a></small>
-						</div>
-						<span class="pull-right big-icon watermark"><i class="fa fa-list"></i></span>
+			<div class="col-md-4 col-sm-4">
+				<div class="widget p-md clearfix">
+					<div class="pull-left">
+						<small class="text-color">Monitoring Review SPI (7)</small>
 					</div>
-					<footer class="widget-footer bg-danger">
-						<small>Jumlah</small>						
-						<span class="small-chart pull-right" data-plugin="sparkline" data-options="[1,2,3,5,4], { type: 'bar', barColor: '#ffffff', barWidth: 5, barSpacing: 2 }"><canvas width="33" height="16" style="display: inline-block; width: 33px; height: 16px; vertical-align: top;"></canvas></span>
-					</footer>
-				</div><!-- .widget -->
+					<canvas id="chart2" style="width:100%" height="400"></canvas>
+					<div class='cell'>
+						<ul>
+							@foreach ($status as $idx=>$item)
+								@php
+									if(isset($colorrekom[$idx]))
+										$warna=$colorrekom[$idx];
+									else
+										$warna='#ffffff';
+								@endphp
+								<li><div class="box" style="background: {{$warna}}"></div> 
+									<a href="{{url('data-lhp')}}">{{$item->rekomendasi}}</a>
+								</li>
+							@endforeach
+							
+						</ul>
+					</div>
+				</div>
 			</div>
-
-			<div class="col-md-3 col-sm-6">
-				<div class="widget stats-widget">
-					<div class="widget-body clearfix">
-						<div class="pull-left">
-							<h3 class="widget-title text-success"><span class="counter" data-plugin="counterUp">{{isset($datalhp['publish-lhp']) ? count($datalhp['publish-lhp']) : ''}}</span></h3>
-							<small class="text-color"><a href="{{url('data-lhp')}}">Jumlah LHP Status Publish</a></small>
-						</div>
-						<span class="pull-right big-icon watermark"><i class="fa fa-list"></i></span>
+			<div class="col-md-4 col-sm-4">
+				<div class="widget p-md clearfix">
+					<div class="pull-left">
+						<small class="text-color">Overdue Review (7)</small>
 					</div>
-					<footer class="widget-footer bg-success">
-						<small>Jumlah</small>
-						<span class="small-chart pull-right" data-plugin="sparkline" data-options="[2,4,3,4,3], { type: 'bar', barColor: '#ffffff', barWidth: 5, barSpacing: 2 }"><canvas width="33" height="16" style="display: inline-block; width: 33px; height: 16px; vertical-align: top;"></canvas></span>
-					</footer>
-				</div><!-- .widget -->
-			</div>
-
-			<div class="col-md-3 col-sm-6">
-				<div class="widget stats-widget">
-					<div class="widget-body clearfix">
-						<div class="pull-left">
-							<h3 class="widget-title text-warning"><span class="counter" data-plugin="counterUp">{{ $status }}</span></h3>
-							<small class="text-color"><a href="{{url('status-rekomendasi')}}">Jumlah Status Rekomendasi</a></small>
-						</div>
-						<span class="pull-right big-icon watermark"><i class="fa fa-list"></i></span>
+					<canvas id="chart3" style="width:100%" height="400"></canvas>
+					<div class='cell'>
+						<ul>
+							
+							
+						</ul>
 					</div>
-					<footer class="widget-footer bg-warning">
-						<small>Jumlah</small>
-						<span class="small-chart pull-right" data-plugin="sparkline" data-options="[5,4,3,5,2],{ type: 'bar', barColor: '#ffffff', barWidth: 5, barSpacing: 2 }"><canvas width="33" height="16" style="display: inline-block; width: 33px; height: 16px; vertical-align: top;"></canvas></span>
-					</footer>
-				</div><!-- .widget -->
+				</div>
 			</div>
 		</div>
 	</div>
-    <div class="col-md-6">
-        <div class="widget">
-                <header class="widget-header">
-                <h4 class="widget-title">Presentase Jumlah Rekomendasi Berdasarkan Status</h4>
-                </header><!-- .widget-header -->
-                <hr class="widget-separator">
-                <div class="widget-body">
-                    <div data-plugin="chart" data-options="{
-                        tooltip : {
-                            trigger: 'item',
-                            formatter: '{a} <br/>{b} : {c} ({d}%)'
-                        },
-                        legend: {
-                            orient: 'horizontal',
-                            x: 'left',
-                            data: ['Sudah Selesai/Sesuai (SS)','Belum Selesai/Sesuai (BS)','Belum Ditindaklanjutin (BTL)','Tidak Dapat Ditindaklanjutin (TDL)']
-                        },
-                        series : [
-                            {
-                                name: 'Jumlah',
-                                type: 'pie',
-                                radius : '45%',
-                                center: ['50%', '70%'],
-                                data:[
-                                    {value:1, name:'Sudah Selesai/Sesuai (SS)'},
-                                    {value:4, name:'Belum Selesai/Sesuai (BS)'},
-                                    {value:3, name:'Belum Ditindaklanjutin (BTL)'},
-                                    {value:2, name:'Tidak Dapat Ditindaklanjutin (TDL)'},
-                                ],
-                                itemStyle: {
-                                    emphasis: {
-                                        shadowBlur: 10,
-                                        shadowOffsetX: 0,
-                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                                    }
-                                }
-                            }
-                        ]
-                    }" style="height: 300px;">
-                    </div>
-			    </div><!-- .widget-body -->
-		</div><!-- .widget -->
-	</div><!-- END column -->
-	<div class="col-md-6">
-		<div class="widget">
-			<header class="widget-header">
-			<h4 class="widget-title">Rekomendasi Yang Belum Di Tindak Lanjutin</h4>
-			</header><!-- .widget-header -->
-			<hr class="widget-separator">
-			<div class="widget-body">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th class="text-center">No</th>
-                            <th class="text-center">No LHP</th>
-                            <th class="text-center">Jenis Audit/Review</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($lhp as $key=>$item)
-                            @if ($item->flag_tindaklanjut_id==0)
-                                <tr>
-                                    <td class="text-center">{{$key+1}}</td>
-                                    <td class="text-center">{{$item->no_lhp}}</td>
-                                    <td class="text-left">{{$item->djenisaudit->jenis_audit}}</td>
-                                </tr>
-                            @endif
-                        @endforeach
-                    </tbody>
-                </table>
-                <div style="text-align:center;font-size:12px;margin-top:15px;">
-                    <a href="{{ url('data-lhp') }}">Lihat Selengkapnya</a>
-                </div>
-			</div><!-- .widget-body -->
-		</div><!-- .widget -->
-	</div><!-- END column -->
-
 	
-	
+@endsection
+@section('footscript')
+	@php
+		$color=["#FF6384","#63FF84","#84FF63","#8463FF","#6384FF"];
+	@endphp
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato"/>
+	<script src="{{asset('js/Chart.min.js')}}"></script>
+	<script>
+		var oilCanvas = document.getElementById("chart1");
+		Chart.defaults.global.defaultFontFamily = "Lato";
+		Chart.defaults.global.defaultFontSize = 18;
+		var oilData = <?php echo json_encode($rekom);?>;
+		var pieChart = new Chart(oilCanvas, {
+			type: 'pie',
+			data: oilData,
+			options: {
+				legend: {
+					display: false,
+					labels: {
+						fontColor: 'rgb(255, 99, 132)'
+					}
+				}
+			}
+		});
+		//--------------
+		var oilCanvas = document.getElementById("chart2");
+		var oilData = {
+			labels: [
+				"Saudi Arabia",
+				"Russia",
+				"Iraq",
+				"United Arab Emirates",
+				"Canada"
+			],
+			datasets: [
+				{
+					data: [133.3, 86.2, 52.2, 51.2, 50.2],
+					backgroundColor: <?php echo json_encode($color);?>
+				}]
+			
+		};
+		var pieChart = new Chart(oilCanvas, {
+			type: 'pie',
+			data: oilData,
+			options: {
+				legend: {
+					display: false,
+					labels: {
+						fontColor: 'rgb(255, 99, 132)'
+					}
+				}
+			}
+		});
+		//---------------
+		var oilCanvas = document.getElementById("chart3");
+		var oilData = {
+			labels: [
+				"Saudi Arabia",
+				"Russia",
+				"Iraq",
+				"United Arab Emirates",
+				"Canada"
+			],
+			datasets: [
+				{
+					data: [133.3, 86.2, 52.2, 51.2, 50.2],
+					backgroundColor: <?php echo json_encode($color);?>
+				}]
+			
+		};
+		var pieChart = new Chart(oilCanvas, {
+			type: 'pie',
+			data: oilData,
+			options: {
+				legend: {
+					display: false,
+					labels: {
+						fontColor: 'rgb(255, 99, 132)'
+					}
+				}
+			}
+		});
+		
+	</script>
+	<style>
+	.box{
+		width:20px;
+		height:20px;
+		float:left;
+		margin-right:10px;
+		border:1px solid #000;
+	}
+	.cell
+	{
+		width:100%;
+		/* float:left; */
+	}
+	.cell li
+	{
+		height:35px;
+		width:100%;
+		float:left;
+	}
+	</style>
 @endsection

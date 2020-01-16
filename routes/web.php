@@ -16,7 +16,8 @@ Route::get('/', function () {
 });
 
 Route::group(['middleware'=>'auth'],function(){
-    Route::get('/dashboard', 'DashboardController@index');
+    Route::get('/dashboard/{tahun?}', 'DashboardController@index');
+
     Route::resource('pic-unit','PICUnitController');
     Route::resource('level-pic','LevelPicController');
     Route::resource('data-opd','MasterDinasController');
@@ -24,6 +25,8 @@ Route::group(['middleware'=>'auth'],function(){
     Route::resource('data-penyebab','MasterSebabController');
     Route::resource('data-rekomendasi','MasterRekomendasiController');
     Route::resource('bidang-pengawasan','MasterBidangPengawasanController');
+
+    Route::get('pengguna/{level?}','UsersController@index');
     Route::resource('pengguna','UsersController');
     Route::resource('pemeriksa','PemeriksaController');
     Route::resource('jenis-audit','JenisAuditController');

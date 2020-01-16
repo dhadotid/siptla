@@ -142,7 +142,7 @@
 								<tr>
 									<td class="text-center">{{ $key = $key + 1 }}</td>
 									<td class="text-center">{{ $opd->nip }}</td>
-									<td><b>{{ $opd->nama }}</b></td>
+									<td>{{ $opd->nama }}</td>
 									<td class="text-center">{{ $opd->jabatan }}</td>
 									
 									<td class="text-center">

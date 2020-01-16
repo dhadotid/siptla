@@ -50,14 +50,13 @@ class PejabatTandatanganController extends Controller
     public function update(Request $request,$id)
     {
         $rules = [
-            'nip' => 'required|unique:pejabat_tandatangan,nip',
+            'nip' => 'required',
             'nama' => 'required',
             'jabatan' => 'required',
         ];
 
         $customMessages = [
             'nip.required' => 'NIP Belum Diisi',
-            'nip.unique' => 'NIP Sudah Pernah Digunakan, Silahkan Gunakan NIP yang lain',
             'nama.required' => 'Nama Belum Diisi',
             'nama.unique' => 'Nama Sudah Pernah Digunakan, Silahkan Gunakan Nama yang lain',
             'jabatan.required' => 'Jabatan Belum Diisi',

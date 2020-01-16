@@ -15,14 +15,18 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($level=null)
     {
-        $user=User::orderBy('name')->get();
+        if($level==null)
+            $user=User::orderBy('name')->get();
+        else
+            $user=User::where('level',$level)->orderBy('name')->get();
         $picunit=PICUnit::orderBy('nama_pic')->get();
         // dd($user[1]->user);
         $jenislevel=jenis_level();
         return view('backend.pages.user.index')
                 ->with('users',$user)
+                ->with('level',$level)
                 ->with('picunit',$picunit)
                 ->with('jenislevel',$jenislevel);
     }

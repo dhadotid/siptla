@@ -43,34 +43,36 @@
               <i class="menu-caret zmdi zmdi-hc-sm zmdi-chevron-right"></i>
             </a>
             @php
+                $g_url=explode('/',$url);
+                // echo $url;
                 $master=['pejabat-penandatangan','data-temuan','level-pic','pic-unit','pemeriksa','jenis-audit','jangka-waktu','status-rekomendasi','jenis-temuan','rekanan','level-resiko','data-lhp','level-pengguna','pengguna'];
             @endphp
-            <ul class="submenu" style="{{in_array($url,$master) ? 'display:block' : ''}}">
+            <ul class="submenu" style="{{in_array($g_url[0],$master) ? 'display:block' : ''}}">
               @if (Auth::user()->level=='auditor-junior' || Auth::user()->level=='auditor-senior')
-                <li class="{{$url=='pic-unit'  ? 'active open' : ''}}"><a href="{{url('pic-unit')}}"><span class="menu-text">PIC Unit</span></a></li>    
-                <li class="{{$url=='pemeriksa'  ? 'active open' : ''}}"><a href="{{url('pemeriksa')}}"><span class="menu-text">Pemeriksa</span></a></li>
-                <li class="{{$url=='jenis-audit'  ? 'active open' : ''}}"><a href="{{url('jenis-audit')}}"><span class="menu-text">Jenis Audit</span></a></li>
-                <li class="{{$url=='jangka-waktu'  ? 'active open' : ''}}"><a href="{{url('jangka-waktu')}}"><span class="menu-text">Jangka Waktu Penyelesaian</span></a></li>
-                <li class="{{$url=='status-rekomendasi'  ? 'active open' : ''}}"><a href="{{url('status-rekomendasi')}}"><span class="menu-text">Status Rekomendasi</span></a></li>
-                <li class="{{$url=='jenis-temuan' || $url=='data-temuan'  ? 'active open' : ''}}"><a href="{{url('jenis-temuan')}}"><span class="menu-text">Jenis Temuan</span></a></li>
-                <li class="{{$url=='rekanan' ? 'active open' : ''}}"><a href="{{url('rekanan')}}"><span class="menu-text">Rekanan</span></a></li>
-                <li class="{{$url=='level-resiko' ? 'active open' : ''}}"><a href="{{url('level-resiko')}}"><span class="menu-text">Level Resiko</span></a></li>
+                <li class="{{strpos($url,'pic-unit')!==false  ? 'active open' : ''}}"><a href="{{url('pic-unit')}}"><span class="menu-text">PIC Unit</span></a></li>    
+                <li class="{{strpos($url,'pemeriksa')!==false  ? 'active open' : ''}}"><a href="{{url('pemeriksa')}}"><span class="menu-text">Pemeriksa</span></a></li>
+                <li class="{{strpos($url,'jenis-audit')!==false  ? 'active open' : ''}}"><a href="{{url('jenis-audit')}}"><span class="menu-text">Jenis Audit</span></a></li>
+                <li class="{{strpos($url,'jangka-waktu')!==false  ? 'active open' : ''}}"><a href="{{url('jangka-waktu')}}"><span class="menu-text">Jangka Waktu Penyelesaian</span></a></li>
+                <li class="{{strpos($url,'status-rekomendasi')!==false  ? 'active open' : ''}}"><a href="{{url('status-rekomendasi')}}"><span class="menu-text">Status Rekomendasi</span></a></li>
+                <li class="{{strpos($url,'jenis-temuan')!==false || $url=='data-temuan'  ? 'active open' : ''}}"><a href="{{url('jenis-temuan')}}"><span class="menu-text">Jenis Temuan</span></a></li>
+                <li class="{{strpos($url,'rekanan')!==false ? 'active open' : ''}}"><a href="{{url('rekanan')}}"><span class="menu-text">Rekanan</span></a></li>
+                <li class="{{strpos($url,'level-resiko')!==false ? 'active open' : ''}}"><a href="{{url('level-resiko')}}"><span class="menu-text">Level Resiko</span></a></li>
               @endif
               @if (Auth::user()->level=='0')
-                  <li class="{{$url=='level-pic'  ? 'active open' : ''}}"><a href="{{url('level-pic')}}"><span class="menu-text">Level PIC Unit</span></a></li>
-                  <li class="{{$url=='pic-unit'  ? 'active open' : ''}}"><a href="{{url('pic-unit')}}"><span class="menu-text">PIC Unit</span></a></li>
-                  <li class="{{$url=='pemeriksa'  ? 'active open' : ''}}"><a href="{{url('pemeriksa')}}"><span class="menu-text">Pemeriksa</span></a></li>
-                  <li class="{{$url=='jenis-audit'  ? 'active open' : ''}}"><a href="{{url('jenis-audit')}}"><span class="menu-text">Jenis Audit</span></a></li>
-                  <li class="{{$url=='jangka-waktu'  ? 'active open' : ''}}"><a href="{{url('jangka-waktu')}}"><span class="menu-text">Jangka Waktu Penyelesaian</span></a></li>
-                  <li class="{{$url=='status-rekomendasi'  ? 'active open' : ''}}"><a href="{{url('status-rekomendasi')}}"><span class="menu-text">Status Rekomendasi</span></a></li>
-                  <li class="{{$url=='jenis-temuan' || $url=='data-temuan'  ? 'active open' : ''}}"><a href="{{url('jenis-temuan')}}"><span class="menu-text">Jenis Temuan</span></a></li>
-                  <li class="{{$url=='rekanan' ? 'active open' : ''}}"><a href="{{url('rekanan')}}"><span class="menu-text">Rekanan</span></a></li>
-                  <li class="{{$url=='level-resiko' ? 'active open' : ''}}"><a href="{{url('level-resiko')}}"><span class="menu-text">Level Resiko</span></a></li>
-                  <li class="{{$url=='pejabat-penandatangan' ? 'active open' : ''}}"><a href="{{url('pejabat-penandatangan')}}"><span class="menu-text">Pejabat Penanda Tangan</span></a></li>
+                  <li class="{{strpos($url,'level-pic')!==false  ? 'active open' : ''}}"><a href="{{url('level-pic')}}"><span class="menu-text">Level PIC Unit</span></a></li>
+                  <li class="{{strpos($url,'pic-unit')!==false  ? 'active open' : ''}}"><a href="{{url('pic-unit')}}"><span class="menu-text">PIC Unit</span></a></li>
+                  <li class="{{strpos($url,'pemeriksa')!==false  ? 'active open' : ''}}"><a href="{{url('pemeriksa')}}"><span class="menu-text">Pemeriksa</span></a></li>
+                  <li class="{{strpos($url,'jenis-audit')!==false  ? 'active open' : ''}}"><a href="{{url('jenis-audit')}}"><span class="menu-text">Jenis Audit</span></a></li>
+                  <li class="{{strpos($url,'jangka-waktu')!==false  ? 'active open' : ''}}"><a href="{{url('jangka-waktu')}}"><span class="menu-text">Jangka Waktu Penyelesaian</span></a></li>
+                  <li class="{{strpos($url,'status-rekomendasi')!==false  ? 'active open' : ''}}"><a href="{{url('status-rekomendasi')}}"><span class="menu-text">Status Rekomendasi</span></a></li>
+                  <li class="{{strpos($url,'jenis-temuan')!==false || $url=='data-temuan'  ? 'active open' : ''}}"><a href="{{url('jenis-temuan')}}"><span class="menu-text">Jenis Temuan</span></a></li>
+                  <li class="{{strpos($url,'rekanan')!==false ? 'active open' : ''}}"><a href="{{url('rekanan')}}"><span class="menu-text">Rekanan</span></a></li>
+                  <li class="{{strpos($url,'level-resiko')!==false ? 'active open' : ''}}"><a href="{{url('level-resiko')}}"><span class="menu-text">Level Resiko</span></a></li>
+                  <li class="{{strpos($url,'pejabat-penandatangan')!==false ? 'active open' : ''}}"><a href="{{url('pejabat-penandatangan')}}"><span class="menu-text">Pejabat Penanda Tangan</span></a></li>
                   
-                  <li class="{{$url=='data-lhp' ? 'active open' : ''}}"><a href="{{url('data-lhp')}}"><span class="menu-text">Data LHP</span></a></li> 
-                  <li class="{{$url=='level-pengguna' ? 'active open' : ''}}"><a href="{{url('level-pengguna')}}"><span class="menu-text">Data Level Pengguna</span></a></li> 
-                  <li class="{{$url=='pengguna' ? 'active open' : ''}}"><a href="{{url('pengguna')}}"><span class="menu-text">Data Pengguna</span></a></li> 
+                  <li class="{{strpos($url,'data-lhp')!==false ? 'active open' : ''}}"><a href="{{url('data-lhp')}}"><span class="menu-text">Data LHP</span></a></li> 
+                  {{-- <li class="{{$url=='level-pengguna' ? 'active open' : ''}}"><a href="{{url('level-pengguna')}}"><span class="menu-text">Data Level Pengguna</span></a></li>  --}}
+                  <li class="{{strpos($url,'pengguna')!==false ? 'active open' : ''}}"><a href="{{url('pengguna')}}"><span class="menu-text">Data Pengguna</span></a></li> 
               @endif
             </ul>
           </li>
@@ -176,14 +178,14 @@
           </ul>
         </li>
         @endif
-        <li class="menu-separator"><hr></li>
+        {{-- <li class="menu-separator"><hr></li>
 
         <li>
           <a href="{{url('logout')}}">
             <i class="menu-icon fa fa-sign-out"></i>
             <span class="menu-text">Logout</span>
           </a>
-        </li>
+        </li> --}}
       </ul><!-- .app-menu -->
     </div><!-- .menubar-scroll-inner -->
   </div><!-- .menubar-scroll -->

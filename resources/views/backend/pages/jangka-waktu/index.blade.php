@@ -151,7 +151,7 @@
 						<span>{!!Session::get('success')!!}</span>
 					</div>
 				@endif
-				<div class="table-responsive">
+				<div class="table-responsive" style="width:50%">
 					<table id="table" data-plugin="DataTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
 						<thead>
 							<tr>
@@ -166,7 +166,7 @@
 							@foreach ($jangkawaktu as $key => $opd)
 								<tr>
 									<td class="text-center">{{ $key = $key + 1 }}</td>
-									<td class="text-center"><b>{{$opd->jangka_waktu}}</b></td>
+									<td class="text-left">{{$opd->jangka_waktu}}</td>
 
 									@if (Auth::user()->level=='0')
 										<td class="text-center">
@@ -246,6 +246,11 @@
 	<style>
 	.select2-container{
 		width:100% !important;
+	}
+	.dataTables_length .form-control,
+	.dataTables_filter .form-control
+	{
+		min-width:unset !important;
 	}
 	</style>
 @endsection

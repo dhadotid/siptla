@@ -13,6 +13,10 @@ class DataTemuan extends Model
     {
         return $this->belongsTo('App\Models\DaftarTemuan','id_lhp');
     }
+    function totemuan()
+    {
+        return $this->belongsTo('App\Models\DaftarTemuan','id_lhp');
+    }
 
     function jenistemuan()
     {

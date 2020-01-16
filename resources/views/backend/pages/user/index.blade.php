@@ -192,10 +192,23 @@
 		<div class="widget">
 			<header class="widget-header">
 				<span class="widget-title">Data Pengguna</span>
-				<a href="" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#modaltambah">+ Tambah Data</a>
+				
+				<a href="" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#modaltambah">+ Tambah Data</a><br><br>
+				@if ($level!=null)
+					<select name="sel-level" class="form-control" style="width:300px;float:right;" onchange="location.href='{{url('pengguna')}}/'+this.value">
+						@foreach ($jenislevel as $item)
+							@if (str_slug($item)==$level)
+								<option value="{{str_slug($item)}}" selected="selected">Level : {{$item}}</option>
+							@else
+								<option value="{{str_slug($item)}}">Level : {{$item}}</option>
+							@endif
+						@endforeach		
+					</select>
+				@endif
 			</header><!-- .widget-header -->
 			<hr class="widget-separator">
 			<div class="widget-body">
+				
 				@if ($errors->any())
 					<div class="alert alert-danger alert-dismissible" role="alert">
 						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>

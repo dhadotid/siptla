@@ -89,10 +89,10 @@
                                             <th class="text-center primary" style="width:15px;">#</th>
                                             <th class="text-center primary">Nomor Temuan</th>
                                             <th class="text-center primary">Temuan</th>
-                                            <th class="text-center primary">Jenis Temuan</th>
+                                            {{-- <th class="text-center primary">Jenis Temuan</th>
                                             <th class="text-center primary">PIC Temuan</th>
                                             <th class="text-center primary">Nilai Temuan </th>
-                                            <th class="text-center primary">Level Resiko</th>
+                                            <th class="text-center primary">Level Resiko</th> --}}
                                             <th class="text-center primary">Rekomendasi</th>
                                             <th class="text-center primary">Aksi</th>
                                         
@@ -102,14 +102,14 @@
                                         @foreach ($temuan as $ky=>$item)
                                             <tr class="info text-dark">
                                                 <td class="text-center">{{$ky+1}}</td>
-                                                <td class="text-center">{{$item->no_temuan}}</td>
+                                                <td class="text-left">{{$item->no_temuan}}</td>
                                                 <td class="text-left">{!!$item->temuan!!}</td>
-                                                <td class="text-center">{{isset($item->jenistemuan->temuan) ? $item->jenistemuan->temuan: '-'}}</td>
+                                                {{-- <td class="text-center">{{isset($item->jenistemuan->temuan) ? $item->jenistemuan->temuan: '-'}}</td>
                                                 <td class="text-center">{{isset($item->picunit->nama_pic) ? $item->picunit->nama_pic: '-'}}</td>
                                                 <td class="text-right">{{number_format($item->nominal,2,',','.')}}</td>
-                                                <td class="text-center">{{isset($item->levelresiko->level_resiko) ? $item->levelresiko->level_resiko: '-'}}</td>
+                                                <td class="text-center">{{isset($item->levelresiko->level_resiko) ? $item->levelresiko->level_resiko: '-'}}</td> --}}
                                                 <td class="text-center">
-                                                    <div style="width:150px;">
+                                                    <div style="text-align:center">
                                                         @php
                                                             $jlhrekom=isset($rekomendasi[$item->temuan_id]) ? count($rekomendasi[$item->temuan_id]) : 0;
                                                         @endphp
@@ -125,7 +125,7 @@
                                                     </div>
                                                 </td>
                                                 <td class="text-align:center">
-                                                    <div style="width:70px;">
+                                                    <div style="text-align:center">
                                                         <div class="btn-group">
                                                             <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-bars"></i></button>
                                                             <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">

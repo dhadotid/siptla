@@ -25,7 +25,11 @@
 						Tahun&nbsp;&nbsp;
 						<select class="form-control pull-right" name="tahun" id="tahun" style="width:200px;" onchange="location.href='{{url('dashboard')}}/'+this.value">
 							@for($thn=date('Y');$thn>=(date('Y')-6);$thn--)
-								<option value="{{$thn}}" style="text-align:right">{{$thn}}</option>
+								@if ($thn==$tahun)
+									<option value="{{$thn}}" selected="selected" style="text-align:right">{{$thn}}</option>
+								@else
+									<option value="{{$thn}}" style="text-align:right">{{$thn}}</option>
+								@endif
 							@endfor
 						</select>
                     </span>
@@ -51,7 +55,9 @@
 									else
 										$warna='#ffffff';
 								@endphp
-								<li><div class="box" style="background: {{$warna}}"></div> {{$item}} ({{isset($rekom['datasets'][0]['data'][$idx]) ? $rekom['datasets'][0]['data'][$idx] : 0}})</li>
+								<li><div class="box" style="background: {{$warna}}"></div> 
+									<a href="#">{{$item}} ({{isset($rekom['datasets'][0]['data'][$idx]) ? $rekom['datasets'][0]['data'][$idx] : 0}})</a>
+								</li>
 							@endforeach
 							
 						</ul>
@@ -66,17 +72,25 @@
 					<canvas id="chart2" style="width:100%" height="400"></canvas>
 					<div class='cell'>
 						<ul>
-							@foreach ($status as $idx=>$item)
-								@php
-									if(isset($colorrekom[$idx]))
-										$warna=$colorrekom[$idx];
-									else
-										$warna='#ffffff';
-								@endphp
-								<li><div class="box" style="background: {{$warna}}"></div> 
-									<a href="{{url('data-lhp')}}">{{$item->rekomendasi}}</a>
-								</li>
-							@endforeach
+							@if (isset($dtl['labels']))
+								@foreach ($dtl['labels'] as $idx=>$item)
+									@php
+										if(isset($color['colorlhp'][str_slug($item)]))
+											$warna=$color['colorlhp'][str_slug($item)];
+										else
+											$warna='#ffffff';
+									@endphp
+									<li><div class="box" style="background: {{$warna}}"></div> 
+										<a href="#">{{$item}} ({{isset($dtl['datasets'][0]['data'][$idx]) ? $dtl['datasets'][0]['data'][$idx] : 0}})</a>
+									</li>
+								@endforeach
+							@else	
+								@foreach (status_lhp() as $item)
+									<li><div class="box" style="background: {{generate_color_one()}}"></div> 
+										<a href="#">{{$item}} (0)</a>
+									</li>
+								@endforeach
+							@endif
 							
 						</ul>
 					</div>
@@ -125,21 +139,7 @@
 		});
 		//--------------
 		var oilCanvas = document.getElementById("chart2");
-		var oilData = {
-			labels: [
-				"Saudi Arabia",
-				"Russia",
-				"Iraq",
-				"United Arab Emirates",
-				"Canada"
-			],
-			datasets: [
-				{
-					data: [133.3, 86.2, 52.2, 51.2, 50.2],
-					backgroundColor: <?php echo json_encode($color);?>
-				}]
-			
-		};
+		var oilData = <?php echo json_encode($dtl);?>;
 		var pieChart = new Chart(oilCanvas, {
 			type: 'pie',
 			data: oilData,

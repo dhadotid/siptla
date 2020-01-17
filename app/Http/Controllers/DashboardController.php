@@ -14,6 +14,7 @@ use App\Models\StatusRekomendasi;
 use App\Models\MasterTemuan;
 use App\Models\DaftarTemuan;
 use App\Models\LevelPIC;
+use App\Models\TindakLanjutTemuan;
 use App\Models\DataRekomendasi;
 use App\User;
 class DashboardController extends Controller
@@ -102,13 +103,38 @@ class DashboardController extends Controller
         elseif(Auth::user()->level=='auditor-junior')
         {
             $lhp=DaftarTemuan::with('dpemeriksa')->with('djenisaudit')->get();
-            $datalhp=array();
-            foreach($lhp as $k=>$v)
-            {
-                $datalhp[str_slug($v->status_lhp)][]=$v;
-            }
-            $status=StatusRekomendasi::get();
+            $tindaklanjut=TindakLanjutTemuan::with('lhp')->get();
 
+            $datatl=$dtl=$dlhp=$colorlhp=array();
+            foreach($tindaklanjut as $k=>$v)
+            {
+                if(isset($v->lhp))
+                {
+                    // return $v->dtemuan->totemuan;
+                    list($th,$bl,$tg)=explode('-',$v->lhp->tanggal_lhp);
+                    if($th==$thn)
+                    {
+                        if($v->status_review_pic_1=='')
+                            $status='Create oleh Unit Kerja';
+                        else
+                            $status=$v->status_review_pic_1;
+
+                        $dlhp[$status][]=$v;
+                    }
+                }
+            }
+            foreach($dlhp as $k=>$v)
+            {
+                $dtl['labels'][]=$k;
+                $dtl['datasets'][0]['data'][]=isset($dlhp[$k]) ? count($dlhp[$k]) : 0;
+                $dtl['datasets'][0]['backgroundColor'][]=$colorlhp[str_slug($k)]=generate_color_one();
+                $datatl[str_slug($k)][]=$v;
+            }
+
+            // return $dtl;
+
+            //Status Rekomendasi
+            $status=StatusRekomendasi::get();
             $data_rekom=DataRekomendasi::with('dtemuan')->get();
             $rekomendasi=$rekom=$colorrekom=array();
             foreach($data_rekom as $k=>$v)
@@ -128,14 +154,16 @@ class DashboardController extends Controller
                 $rekom['datasets'][0]['backgroundColor'][]=$colorrekom[str_slug($v->rekomendasi)]=generate_color_one();
             }
             $color['colorrekom']=$colorrekom;
-            // return $color;
+            $color['colorlhp']=$colorlhp;
+            // return $dlhp;
             return view('backend.pages.dashboard.auditor-junior')
                     ->with('lhp',$lhp)
+                    ->with('dtl',$dtl)
                     ->with('status',$status)
                     ->with('rekom',$rekom)
                     ->with('color',$color)
                     ->with('tahun',$thn)
-                    ->with('datalhp',$datalhp);
+                    ->with('datatl',$datatl);
         }
         elseif(Auth::user()->level=='auditor-senior')
         {

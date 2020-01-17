@@ -100,7 +100,11 @@ function datauserpic($data)
     }
     return $user;
 }
-
+function status_lhp()
+{
+    $status=array('Create oleh Unit Kerja','Belum direview SPI','Sedang direview SPI','Sudah direview SPI','Sudah dipublish oleh SPI');
+    return $status;
+}
 function generate_color_one()
 {
    $col=random_color();

@@ -56,6 +56,7 @@ class DataRekomendasiController extends Controller
     }
     public function rekomendasi_data($idtemuan)
     {
+        $table='<ol style="list-style-type:upper-roman !important;padding-left:20px;">';
         $picunit=PICUnit::all();
         $pic_unit=datauserpic($picunit);
         $rekom=DataRekomendasi::selectRaw('*,data_rekomendasi.id as rekom_id')->where('id_temuan',$idtemuan)
@@ -63,109 +64,127 @@ class DataRekomendasiController extends Controller
                 ->with('picunit2')
                 ->with('statusrekomendasi')
                 ->get();
-        $table='<table class="table table-bordered" id="table-rekom">';
-        $table.='<thead>
-                    <tr class="purple">
-                        <th class="text-center">Rekomendasi</th>
-                        <th class="text-center">Nilai<br>Rekomendasi</th>
-                        <th class="text-center">PIC 1</th>
-                        <th class="text-center">PIC 2</th>
-                        <th class="text-center">Status<br>Rekomendasi</th>
-                        <th class="text-center">Tindak Lanjut</th>
-                        <th class="text-center">Aksi</th>
-                    </tr>
-                </thead>';
-        $table.='<tbody>';
+        // $table='<table class="table table-bordered" id="table-rekom">';
+        // $table.='<thead>
+        //             <tr class="purple">
+        //                 <th class="text-center">Rekomendasi</th>
+        //                 <th class="text-center">Nilai<br>Rekomendasi</th>
+        //                 <th class="text-center">PIC 1</th>
+        //                 <th class="text-center">PIC 2</th>
+        //                 <th class="text-center">Status<br>Rekomendasi</th>
+        //                 <th class="text-center">Tindak Lanjut</th>
+        //                 <th class="text-center">Aksi</th>
+        //             </tr>
+        //         </thead>';
+        // $table.='<tbody>';
 
         $tl=$this->tindaklanjut();
         // return $tindaklanjut;
         if($rekom->count()!=0)
         {
             foreach($rekom as $k=>$v)
-            {
-                $tindaklanjut='<div style="width:150px;text-align:center;margin:0 auto;">
-                                <span style="cursor:pointer" class="label label-primary fz-sm" id="jlhtindaklanjut" onclick="opentl(\''.$v->rekom_id.'\')">'.(isset($tl[$v->rekom_id]) ? count($tl[$v->rekom_id]) : 0).'</span>
-                                <span style="cursor:pointer" class="label label-success fz-sm" onclick="opentl(\''.$v->rekom_id.'\')">Tindak Lanjut</span>
-                                <span style="cursor:pointer" class="label label-info fz-sm" onclick="formtindaklanjut('.$v->rekom_id.',-1)"> 
-                                    <a style="color:#fff" data-value="0">
-                                        <div class="tooltipcss"><i class="fa fa-plus-circle"></i>
-                                            <span class="tooltiptext">Tambah Tindak Lanjut</span>
-                                        </div></a>
-                                </span>
-                            </div>';
-                $table.='<tr id="data_rekom_'.$v->rekom_id.'">
-                        <td style="background:#fff;" id="rekom_'.$v->id_temuan.'_'.$v->rekom_id.'">
-                            '.str_replace("\n",'<br>',$v->rekomendasi).'
-                        </td>
-                        <td style="background:#fff;" class="text-right" id="nominal_'.$v->id_temuan.'_'.$v->rekom_id.'">
-                            '.number_format($v->nominal_rekomendasi,2,',','.').'
-                        </td>
-                        <td style="background:#fff;" class="text-center" id="pic1_'.$v->id_temuan.'_'.$v->rekom_id.'">
-                            '.(isset($v->picunit1->nama_pic) ? $v->picunit1->nama_pic : 'n/a').'
-                        </td>
-                        <td style="background:#fff;" class="text-center" id="pic2_'.$v->id_temuan.'_'.$v->rekom_id.'">';
-                        if(isset($v->picunit2->nama_pic))
-                        {
-                            $table.=$v->picunit2->nama_pic;
-                        }
-                        else
-                        {
-                            $dpic=explode(',',$v->pic_2_temuan_id);
-                            foreach($dpic as $c)
-                            {
-                                if($c!='')
-                                {
-                                    // $table.=$c.'-';
-                                    if(isset($pic_unit[(int)$c]))
-                                    {
-                                        // $table.='ss';
-                                        $table.=$pic_unit[(int)$c]->nama_pic.'<br>';
-                                    }
-                                }
-                            }
-                        }
-                $table.='</td>
-                        <td style="background:#fff;" class="text-center" id="status_'.$v->id_temuan.'_'.$v->rekom_id.'">
-                            '.(isset($v->statusrekomendasi->rekomendasi) ? $v->statusrekomendasi->rekomendasi : 'n/a').'
-                        </td>
-                        <td style="background:#fff;" class="text-center" id="tindak_'.$v->id_temuan.'_'.$v->rekom_id.'">
-                            '.$tindaklanjut.'
-                        </td>
-                        <td style="background:#fff;" class="text-center">
-                            <div style="width:90px;text-align:center;margin:0 auto;">
-                                <a class="btn btn-xs btn-success rounded" onclick="detailrekomendasi('.$v->rekom_id.')">
-                                    <div class="tooltipcss"><i class="glyphicon glyphicon-list"></i>
-                                        <span class="tooltiptext">Detail Rekomendasi</span>
-                                    </div></a>
-                                <a class="btn btn-xs btn-primary rounded" onclick="editrekomendasi('.$v->rekom_id.')">
-                                    <div class="tooltipcss"><i class="glyphicon glyphicon-edit"></i>
-                                        <span class="tooltiptext">Edit Rekomendasi</span>
-                                    </div></a>
-                                <a class="btn btn-xs btn-danger rounded btn-delete-rekomendasi" onclick="hapusrekomendasi('.$v->rekom_id.','.$idtemuan.')">
-                                    <div class="tooltipcss"><i class="glyphicon glyphicon-trash"></i>
-                                        <span class="tooltiptext">Hapus Rekomendasi</span>
-                                    </div></a>
-                            </div>
-                        </td>
-                    </tr>';
+            {   
+                if($v->status_rekomendasi_id==1) 
+                    $status='success';
+                elseif($v->status_rekomendasi_id==2)
+                    $status='info';
+                elseif($v->status_rekomendasi_id==3)
+                    $status='warning';
+                elseif($v->status_rekomendasi_id==4)
+                    $status='danger';
 
-                    if(isset($tl[$v->rekom_id]))
-                    {
-                        $table.='<tr id="tl_rekom_'.$v->rekom_id.'" class="kolom-hide">';
-                            $table.='<td colspan="7">';
-                            $data_tl=$this->tabletindaklanjut($idtemuan,$v->rekom_id,$tl[$v->rekom_id]);
-                            $table.=$data_tl;
-                            $table.='</td>';
-                        $table.='</tr>';
-                    }
+                $table.='<li style="margin-bottom:10px;padding:10px 0;border-bottom:1px solid #bbb;">
+                    <h4>'.$v->rekomendasi.'</h4><br>
+                    <a href="" class="btn btn-sm btn-'.($status).'">'.$v->statusrekomendasi->rekomendasi.'</a>
+                    <br>
+                    <div style="margin-top:10px;">
+                        <span style="cursor:pointer;" class="label label-primary fz-sm" onclick="opentl(\''.$v->rekom_id.'\')">Tindak Lanjut</span> &nbsp;
+                        <a style="color:#fff" class="label label-info fz-sm" data-value="0"><i class="fa fa-plus-circle"></i>&nbsp;Tambah Tindak Lanjut</a>
+                    </div>
+                </li>';
+                // $tindaklanjut='<div style="width:150px;text-align:center;margin:0 auto;">
+                //                 <span style="cursor:pointer" class="label label-primary fz-sm" id="jlhtindaklanjut" onclick="opentl(\''.$v->rekom_id.'\')">'.(isset($tl[$v->rekom_id]) ? count($tl[$v->rekom_id]) : 0).'</span>
+                //                 <span style="cursor:pointer" class="label label-success fz-sm" onclick="opentl(\''.$v->rekom_id.'\')">Tindak Lanjut</span>
+                //                 <span style="cursor:pointer" class="label label-info fz-sm" onclick="formtindaklanjut('.$v->rekom_id.',-1)"> 
+                //                     <a style="color:#fff" data-value="0">
+                //                         <div class="tooltipcss"><i class="fa fa-plus-circle"></i>
+                //                             <span class="tooltiptext">Tambah Tindak Lanjut</span>
+                //                         </div></a>
+                //                 </span>
+                //             </div>';
+                // $table.='<tr id="data_rekom_'.$v->rekom_id.'">
+                //         <td style="background:#fff;" id="rekom_'.$v->id_temuan.'_'.$v->rekom_id.'">
+                //             '.str_replace("\n",'<br>',$v->rekomendasi).'
+                //         </td>
+                //         <td style="background:#fff;" class="text-right" id="nominal_'.$v->id_temuan.'_'.$v->rekom_id.'">
+                //             '.number_format($v->nominal_rekomendasi,2,',','.').'
+                //         </td>
+                //         <td style="background:#fff;" class="text-center" id="pic1_'.$v->id_temuan.'_'.$v->rekom_id.'">
+                //             '.(isset($v->picunit1->nama_pic) ? $v->picunit1->nama_pic : 'n/a').'
+                //         </td>
+                //         <td style="background:#fff;" class="text-center" id="pic2_'.$v->id_temuan.'_'.$v->rekom_id.'">';
+                //         if(isset($v->picunit2->nama_pic))
+                //         {
+                //             $table.=$v->picunit2->nama_pic;
+                //         }
+                //         else
+                //         {
+                //             $dpic=explode(',',$v->pic_2_temuan_id);
+                //             foreach($dpic as $c)
+                //             {
+                //                 if($c!='')
+                //                 {
+                //                     // $table.=$c.'-';
+                //                     if(isset($pic_unit[(int)$c]))
+                //                     {
+                //                         // $table.='ss';
+                //                         $table.=$pic_unit[(int)$c]->nama_pic.'<br>';
+                //                     }
+                //                 }
+                //             }
+                //         }
+                // $table.='</td>
+                //         <td style="background:#fff;" class="text-center" id="status_'.$v->id_temuan.'_'.$v->rekom_id.'">
+                //             '.(isset($v->statusrekomendasi->rekomendasi) ? $v->statusrekomendasi->rekomendasi : 'n/a').'
+                //         </td>
+                //         <td style="background:#fff;" class="text-center" id="tindak_'.$v->id_temuan.'_'.$v->rekom_id.'">
+                //             '.$tindaklanjut.'
+                //         </td>
+                //         <td style="background:#fff;" class="text-center">
+                //             <div style="width:90px;text-align:center;margin:0 auto;">
+                //                 <a class="btn btn-xs btn-success rounded" onclick="detailrekomendasi('.$v->rekom_id.')">
+                //                     <div class="tooltipcss"><i class="glyphicon glyphicon-list"></i>
+                //                         <span class="tooltiptext">Detail Rekomendasi</span>
+                //                     </div></a>
+                //                 <a class="btn btn-xs btn-primary rounded" onclick="editrekomendasi('.$v->rekom_id.')">
+                //                     <div class="tooltipcss"><i class="glyphicon glyphicon-edit"></i>
+                //                         <span class="tooltiptext">Edit Rekomendasi</span>
+                //                     </div></a>
+                //                 <a class="btn btn-xs btn-danger rounded btn-delete-rekomendasi" onclick="hapusrekomendasi('.$v->rekom_id.','.$idtemuan.')">
+                //                     <div class="tooltipcss"><i class="glyphicon glyphicon-trash"></i>
+                //                         <span class="tooltiptext">Hapus Rekomendasi</span>
+                //                     </div></a>
+                //             </div>
+                //         </td>
+                //     </tr>';
+
+                //     if(isset($tl[$v->rekom_id]))
+                //     {
+                //         $table.='<tr id="tl_rekom_'.$v->rekom_id.'" class="kolom-hide">';
+                //             $table.='<td colspan="7">';
+                //             $data_tl=$this->tabletindaklanjut($idtemuan,$v->rekom_id,$tl[$v->rekom_id]);
+                //             $table.=$data_tl;
+                //             $table.='</td>';
+                //         $table.='</tr>';
+                //     }
             }
         }
         else
         {
-            $table.='<tr><td style="background:#fff;font-weight:bold" colspan="7" class="text-center">Rekomendasi Masih Kosong</td></tr>';
+            // $table.='<tr><td style="background:#fff;font-weight:bold" colspan="7" class="text-center">Rekomendasi Masih Kosong</td></tr>';
         }
-        $table.='</tbody>';
-        $table.='</table>';
+        // $table.='</tbody>';
+        $table.='</ol>';
 
         return $table;
     }

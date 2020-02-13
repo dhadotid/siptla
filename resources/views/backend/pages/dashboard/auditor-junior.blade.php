@@ -41,9 +41,9 @@
 	<div class="col-md-12">
         <div class="row">
 			<div class="col-md-4 col-sm-4">
-				<div class="widget p-md clearfix">
+				<div class="widget p-md clearfix"  style="height:650px !important;">
 					<div class="pull-left">
-						<small class="text-color">Statistik Rekomendasi ({{$status->count()}})</small>
+						<small class="text-color">Statistik Rekomendasi ({{isset($rekom['datasets'][0]['data']) ? count($rekom['datasets'][0]['data']) : 0}})</small>
 					</div>
 					<canvas id="chart1" style="width:100%" height="400"></canvas>
 					<div class='cell'>
@@ -56,7 +56,11 @@
 										$warna='#ffffff';
 								@endphp
 								<li><div class="box" style="background: {{$warna}}"></div> 
-									<a href="#">{{$item}} ({{isset($rekom['datasets'][0]['data'][$idx]) ? $rekom['datasets'][0]['data'][$idx] : 0}})</a>
+									@if ($dstatus[str_slug($item)])
+										<a href="{{url('data-lhp/'.$tahun.'/'.$dstatus[str_slug($item)]->id)}}">{{$item}} ({{isset($rekom['datasets'][0]['data'][$idx]) ? $rekom['datasets'][0]['data'][$idx] : 0}})</a>
+									@else
+										<a href="#">{{$item}} ({{isset($rekom['datasets'][0]['data'][$idx]) ? $rekom['datasets'][0]['data'][$idx] : 0}})</a>
+									@endif
 								</li>
 							@endforeach
 							
@@ -65,28 +69,43 @@
 				</div>
 			</div>
 			<div class="col-md-4 col-sm-4">
-				<div class="widget p-md clearfix">
+				<div class="widget p-md clearfix"  style="height:650px !important;">
 					<div class="pull-left">
-						<small class="text-color">Monitoring Review SPI (7)</small>
+						<small class="text-color">Monitoring Review SPI ({{isset($dtl['datasets'][0]['data']) ? count($dtl['datasets'][0]['data']) : 0}})</small>
 					</div>
 					<canvas id="chart2" style="width:100%" height="400"></canvas>
 					<div class='cell'>
 						<ul>
 							@if (isset($dtl['labels']))
+								@php
+									$dstatus=$dst=status_lhp_key();
+								@endphp
 								@foreach ($dtl['labels'] as $idx=>$item)
 									@php
 										if(isset($color['colorlhp'][str_slug($item)]))
 											$warna=$color['colorlhp'][str_slug($item)];
 										else
 											$warna='#ffffff';
+
+										$dst[str_slug($item)]=str_slug($item);
 									@endphp
 									<li><div class="box" style="background: {{$warna}}"></div> 
 										<a href="#">{{$item}} ({{isset($dtl['datasets'][0]['data'][$idx]) ? $dtl['datasets'][0]['data'][$idx] : 0}})</a>
 									</li>
 								@endforeach
+
+								@foreach ($dstatus as $item)
+									@if(!in_array(str_slug($item),$dst))
+										<li>
+											<div class="box" style="background: {{generate_color_one()}}"></div> 
+											<a href="#">{{$item}} (0)</a>
+										</li>
+									@endif
+								@endforeach
 							@else	
 								@foreach (status_lhp() as $item)
-									<li><div class="box" style="background: {{generate_color_one()}}"></div> 
+									<li>
+										<div class="box" style="background: {{generate_color_one()}}"></div> 
 										<a href="#">{{$item}} (0)</a>
 									</li>
 								@endforeach
@@ -97,7 +116,7 @@
 				</div>
 			</div>
 			<div class="col-md-4 col-sm-4">
-				<div class="widget p-md clearfix">
+				<div class="widget p-md clearfix " style="height:650px !important;">
 					<div class="pull-left">
 						<small class="text-color">Overdue Review (7)</small>
 					</div>
@@ -185,8 +204,8 @@
 	</script>
 	<style>
 	.box{
-		width:20px;
-		height:20px;
+		width:15px;
+		height:15px;
 		float:left;
 		margin-right:10px;
 		border:1px solid #000;
@@ -198,7 +217,7 @@
 	}
 	.cell li
 	{
-		height:35px;
+		height:30px;
 		width:100%;
 		float:left;
 	}

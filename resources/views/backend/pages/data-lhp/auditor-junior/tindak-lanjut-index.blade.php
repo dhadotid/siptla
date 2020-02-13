@@ -1,3 +1,4 @@
+
 @extends('backend.layouts.master')
 
 @section('title')
@@ -102,58 +103,16 @@
                                         @php
                                             $no=1;
                                         @endphp
-                                        @foreach ($temuan as $ky=>$item)
-                                            <tr class="info text-dark">
+                                        @foreach ($tindaklanjut as $item)
+                                            <tr>
                                                 <td class="text-center">{{$no}}</td>
-                                                <td class="text-left">{{$item->no_temuan}}</td>
-                                                <td class="text-left">{!!$item->temuan!!}</td>
-                                                {{-- <td class="text-center">{{isset($item->jenistemuan->temuan) ? $item->jenistemuan->temuan: '-'}}</td>
-                                                <td class="text-center">{{isset($item->picunit->nama_pic) ? $item->picunit->nama_pic: '-'}}</td>
-                                                <td class="text-right">{{number_format($item->nominal,2,',','.')}}</td>
-                                                <td class="text-center">{{isset($item->levelresiko->level_resiko) ? $item->levelresiko->level_resiko: '-'}}</td> --}}
-                                                <td class="text-center">
-                                                    <div style="text-align:center">
-                                                        @php
-                                                            $jlhrekom=isset($rekomendasi[$item->temuan_id]) ? count($rekomendasi[$item->temuan_id]) : 0;
-                                                        @endphp
-                                                        <span class="rekomendasi-detail" data-value="{{ $item->id }}">
-                                                            <span id="div-jlh-rekom-{{ $item->id }}">
-                                                                <span style="cursor:pointer" class="label label-{{$jlhrekom==0 ? 'dark' : 'primary'}} fz-sm">{{$jlhrekom}}</span>
-                                                            </span>
-                                                            <span style="cursor:pointer" class="label label-success fz-sm">Rekomendasi</span>
-                                                        </span>
-                                                        <span style="cursor:pointer" class="label label-info fz-sm" data-toggle="modal" data-target="#modaltambahrekomendasi">
-                                                            <a data-toggle="tooltip" title="Tambah Rekomendasi" style="color:#fff" data-value="{{ $item->temuan_id }}" onclick="rekomadd('{{$item->temuan_id}}')"><i class="fa fa-plus-circle"></i></a>
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td class="text-align:center">
-                                                    <div style="text-align:center">
-                                                        <div class="btn-group">
-                                                            <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-bars"></i></button>
-                                                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
-                                                                <span class="caret"></span>
-                                                            </button>
-                                                            <ul class="dropdown-menu" role="menu">
-                                                                <li>
-                                                                    <a href="#" class="btn-detail-temuan" data-toggle="modal" data-target="#modaldetail" data-value="{{$item->temuan_id}}"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Temuan</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="#" class="btn-edit-temuan" data-toggle="modal" data-target="#modalubah" data-value="{{ $item->temuan_id }}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit Temuan</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="btn-delete-temuan" data-toggle="modal" data-target="#modalhapus" data-value="{{ $item->id }}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus Temuan</a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </td>
+                                                <td class="text-center"></td>
                                             </tr>
-                                            @php
-                                                $no++;
-                                            @endphp
+                                        @php
+                                            $no++;
+                                        @endphp
                                         @endforeach
-                                    </tbody>
+                                     </tbody>
                                 </table>
                             </div>
                         </div>
@@ -186,61 +145,8 @@
             }
         });
         hidealert();
-        $('#datatable-temuan').on('click', '.btn-edit-temuan', function () {
-            var id = $(this).data('value')
-            // alert(id);
-            $.ajax({
-                url: "{{ url('data-temuan-lhp-edit') }}/" + id,
-                success: function (res) {
-                    $('#temuan_id').val(id);
-                    $('#edit_nomor_temuan').val(res.no_temuan);
-                    $('#edit_temuan').val(res.temuan);
-                    $('#edit_jenis_temuan').val(res.jenis_temuan_id);
-                    $('#edit_jenis_temuan').select2().trigger('change');
-                    $('#edit_pic_temuan').val(res.pic_temuan_id);
-                    $('#edit_pic_temuan').select2().trigger('change');
-                    $('#edit_nominal').val(format(res.nominal));
-                    $('#edit_level_resiko').val(res.level_resiko_id);
-                    $('#edit_level_resiko').select2().trigger('change');
-                }
-            })
-        })
 
-        // delete action
-        $('#datatable-temuan').on('click', '.btn-delete-temuan', function () {
-            var id = $(this).data('value')
-            $('#form-delete').attr('action', "{{ url('data-temuan-lhp-delete') }}/{{$idlhp}}/" + id)
-        })
-        
-        $('#datatable-temuan').on('click', '.btn-detail-temuan', function () {
-            var id = $(this).data('value')
-            $.ajax({
-                url: "{{ url('data-temuan-lhp-edit') }}/" + id,
-                success: function (res) {
-                    $('#detail_nomor_temuan').val(res.no_temuan);
-                    $('#detail_temuan').val(res.temuan);
-                    $('#detail_jenistemuan').val(res.jenistemuan.temuan);
-                    $('#detail_pic_temuan').val(res.picunit.nama_pic);
-                    $('#detail_nominal').val(format(res.nominal));
-                    $('#detail_levelresiko').val(res.levelresiko.level_resiko);
-                }
-            })
-        })
-
-
-        $('#table').on('click', '.btn-edit-rekom', function () {
-            var id = $(this).data('value')
-            $('#idtemuan').val(id);
-            // alert(id);
-            $.ajax({
-                url: "{{ url('rekomendasi-edit') }}/" + id,
-                success: function (res) {
-                    // $('#edit_level_resiko').select2().trigger('change');
-                }
-            })
-        })
-
-    </script>
+         </script>
     <style>
     /* .form-inline .btn
     {
@@ -282,6 +188,5 @@
 @endsection
 
 @section('modal')
-    @include('backend.pages.data-lhp.auditor-junior.modal')
     @include('backend.pages.data-lhp.tindak-lanjut.modal')
 @endsection

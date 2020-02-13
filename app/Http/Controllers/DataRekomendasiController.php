@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\DataRekomendasi;
 use App\Models\DaftarRekanan;
 use App\Models\PICUnit;
+use App\Models\RincianSewa;
+use App\Models\RincianUangMuka;
+use App\Models\RincianListrik;
+use App\Models\RincianPiutang;
 
 class DataRekomendasiController extends Controller
 {
@@ -30,23 +34,23 @@ class DataRekomendasiController extends Controller
         $insert->status_rekomendasi_id=$request->status_rekomendasi;
         $insert->review_auditor=$request->review_auditor;
 
-        $rekanan=$request->rekanan;
-        if($rekanan!='')
-        {
-            $cekrekanan=DaftarRekanan::where('nama',$rekanan)->first();
-            if($cekrekanan)
-            {
-                $insert->rekanan=$cekrekanan->id;
-            }
-            else
-            {
-                $new_rekan=new DaftarRekanan;
-                $new_rekan->nama=$rekanan;
-                $new_rekan->save();
+        // $rekanan=$request->rekanan;
+        // if($rekanan!='')
+        // {
+        //     $cekrekanan=DaftarRekanan::where('nama',$rekanan)->first();
+        //     if($cekrekanan)
+        //     {
+        //         $insert->rekanan=$cekrekanan->id;
+        //     }
+        //     else
+        //     {
+        //         $new_rekan=new DaftarRekanan;
+        //         $new_rekan->nama=$rekanan;
+        //         $new_rekan->save();
 
-                $insert->rekanan=$new_rekan->id;
-            }
-        }
+        //         $insert->rekanan=$new_rekan->id;
+        //     }
+        // }
 
         $insert->save();
 
@@ -94,12 +98,14 @@ class DataRekomendasiController extends Controller
                     $status='danger';
 
                 $table.='<li style="margin-bottom:10px;padding:10px 0;border-bottom:1px solid #bbb;">
-                    <h4>'.$v->rekomendasi.'</h4><br>
-                    <a href="" class="btn btn-sm btn-'.($status).'">'.$v->statusrekomendasi->rekomendasi.'</a>
+                    <u>Nilai Rekomendasi :</u><br><h5><span class="text-primary">Rp.'.number_format($v->nominal_rekomendasi,2,',','.').'</span></h5>
+                    <br>
+                    <u>Rekomendasi : </u><br><h4>'.$v->rekomendasi.'</h4><br>
+                    <a href="#" class="btn btn-sm btn-'.($status).'">'.$v->statusrekomendasi->rekomendasi.'</a>
                     <br>
                     <div style="margin-top:10px;">
-                        <span style="cursor:pointer;" class="label label-primary fz-sm" onclick="opentl(\''.$v->rekom_id.'\')">Tindak Lanjut</span> &nbsp;
-                        <a style="color:#fff" class="label label-info fz-sm" data-value="0"><i class="fa fa-plus-circle"></i>&nbsp;Tambah Tindak Lanjut</a>
+                        <a class="label label-primary fz-sm" href="'.url('data-tindak-lanjut/'.$v->rekom_id.'/'.$idtemuan.'').'" target="_blank">'.(isset($tl[$v->rekom_id]) ? count($tl[$v->rekom_id]) : 0).'&nbsp;Tindak Lanjut</a> &nbsp;
+                        <a style="color:#fff" href="javascript:formtindaklanjut('.$v->rekom_id.',-1)" class="label label-info fz-sm" data-value="0"><i class="fa fa-plus-circle"></i>&nbsp;Tambah Tindak Lanjut</a>
                     </div>
                 </li>';
                 // $tindaklanjut='<div style="width:150px;text-align:center;margin:0 auto;">
@@ -177,6 +183,57 @@ class DataRekomendasiController extends Controller
                 //             $table.='</td>';
                 //         $table.='</tr>';
                 //     }
+            }
+        }
+        else
+        {
+            // $table.='<tr><td style="background:#fff;font-weight:bold" colspan="7" class="text-center">Rekomendasi Masih Kosong</td></tr>';
+        }
+        // $table.='</tbody>';
+        $table.='</ol>';
+
+        return $table;
+    }
+    public function rekomendasi_data_new($idtemuan,$status_rekom)
+    {
+        $table='<ol style="list-style-type:upper-roman !important;padding-left:20px;">';
+        $picunit=PICUnit::all();
+        $pic_unit=datauserpic($picunit);
+        $rekom=DataRekomendasi::selectRaw('*,data_rekomendasi.id as rekom_id')
+                ->where('id_temuan',$idtemuan)
+                ->where('status_rekomendasi_id',$status_rekom)
+                ->with('picunit1')
+                ->with('picunit2')
+                ->with('statusrekomendasi')
+                ->get();
+        
+
+        $tl=$this->tindaklanjut();
+        // return $tindaklanjut;
+        if($rekom->count()!=0)
+        {
+            foreach($rekom as $k=>$v)
+            {   
+                if($v->status_rekomendasi_id==1) 
+                    $status='success';
+                elseif($v->status_rekomendasi_id==2)
+                    $status='info';
+                elseif($v->status_rekomendasi_id==3)
+                    $status='warning';
+                elseif($v->status_rekomendasi_id==4)
+                    $status='danger';
+
+                $table.='<li style="margin-bottom:10px;padding:10px 0;border-bottom:1px solid #bbb;">
+                    <u>Nilai Rekomendasi :</u><br><h5><span class="text-primary">Rp.'.number_format($v->nominal_rekomendasi,2,',','.').'</span></h5>
+                    <br>
+                    <u>Rekomendasi : </u><br><h4>'.$v->rekomendasi.'</h4><br>
+                    <a href="#" class="btn btn-sm btn-'.($status).'">'.$v->statusrekomendasi->rekomendasi.'</a>
+                    <br>
+                    <div style="margin-top:10px;">
+                        <a class="label label-primary fz-sm" href="'.url('data-tindak-lanjut/'.$v->rekom_id.'/'.$idtemuan.'').'" target="_blank">'.(isset($tl[$v->rekom_id]) ? count($tl[$v->rekom_id]) : 0).'&nbsp;Tindak Lanjut</a> &nbsp;
+                        <a style="color:#fff" href="javascript:formtindaklanjut('.$v->rekom_id.',-1)" class="label label-info fz-sm" data-value="0"><i class="fa fa-plus-circle"></i>&nbsp;Tambah Tindak Lanjut</a>
+                    </div>
+                </li>';
             }
         }
         else
@@ -325,5 +382,166 @@ class DataRekomendasiController extends Controller
         $rekom=DataRekomendasi::where('id_temuan',$idtemuan)->get();
         $jlhrekom=$rekom->count();
         echo '<span style="cursor:pointer" class="label label-'.($jlhrekom==0 ? 'dark' : 'primary').' fz-sm">'.$jlhrekom.'</span>';
+    }
+
+    public function load_tabel_rincian($jenis,$idtemuan=null,$idrekomendasi=null)
+    {
+        $table='';
+        if($jenis=='sewa')
+        {
+            
+            $table='<h3 class="text-center">Rincian Nilai Tindak Lanjut Pembayaran Sewa</h3><table class="table table-bordered">';
+            $table.='<thead>';
+                $table.='<tr class="inverse">
+                    <th class="text-center">No</th>
+                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Mitra</th>
+                    <th class="text-center">No. PKS</th>
+                    <th class="text-center">Tgl. PKS</th>
+                    <th class="text-center">Nilai Pekerjaan</th>
+                    <th class="text-center">Masa Berlaku</th>
+                    <th class="text-center">Aksi</th>
+                </tr>';
+            $table.='</thead><tbody>';
+
+            $rincian=RincianSewa::where('id_temuan',$idtemuan)->get();
+            $no=1;
+            foreach($rincian as $k=>$v)
+            {
+                $table.='<tr>
+                    <td class="text-center">'.$no.'</td>
+                    <td class="text-center">'.$v->unit_kerja.'</td>
+                    <td class="text-center">'.$v->mitra.'</td>
+                    <td class="text-center">'.$v->no_pks.'</td>
+                    <td class="text-center">'.date('d/m/Y',strtotime($v->tgl_pks)).'</td>
+                    <td class="text-center">'.$v->nilai_pekerjaan.'</td>
+                    <td class="text-center">'.date('d/m/Y',strtotime($v->masa_berlaku)).'</td>
+                    <td class="text-center">
+                        <a href="javascript:hapusrincian('.$v->id.',\'sewa\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>';
+                $no++;
+            }
+            $table.='<tr>
+                    <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info"><i class="fa fa-plus-circle"></i> Tambah Tindak Lanjut</a></td>
+                </tr>';
+            $table.='</tbody>';
+            $table.='</table>';
+        }
+        elseif($jenis=='uangmuka')
+        {
+            
+            $table='<h3 class="text-center">Rincian Nilai Tindak Lanjut Uang Muka</h3><table class="table table-bordered">';
+            $table.='<thead>';
+                $table.='<tr class="inverse">
+                    <th class="text-center">No</th>
+                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">No. Invoice</th>
+                    <th class="text-center">Tanggal PUM</th>
+                    <th class="text-center">Jumlah UM</th>
+                    <th class="text-center">Keterangan</th>
+                    <th class="text-center">Aksi</th>
+                </tr>';
+            $table.='</thead><tbody>';
+
+            $rincian=RincianUangMuka::where('id_temuan',$idtemuan)->get();
+            $no=1;
+            foreach($rincian as $k=>$v)
+            {
+                $table.='<tr>
+                    <td class="text-center">'.$no.'</td>
+                    <td class="text-center">'.$v->unit_kerja.'</td>
+                    <td class="text-center">'.$v->no_invoice.'</td>
+                    <td class="text-center">'.date('d/m/Y',strtotime($v->tgl_pum)).'</td>
+                    <td class="text-center">'.number_format($v->jumlah_pum,0,',','.').'</td>
+                    <td class="text-center">'.$v->keterangan.'</td>
+                    <td class="text-center">
+                        <a href="javascript:hapusrincian('.$v->id.',\'uangmuka\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>';
+                $no++;
+            }
+            $table.='<tr>
+                    <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'uangmuka\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info"><i class="fa fa-plus-circle"></i> Tambah Tindak Lanjut</a></td>
+                </tr>';
+            $table.='</tbody>';
+            $table.='</table>';
+        }
+        elseif($jenis=='listrik')
+        {
+            
+            $table='<h3 class="text-center">Rincian Nilai Tindak Lanjut Pembayaran Listrik</h3><table class="table table-bordered">';
+            $table.='<thead>';
+                $table.='<tr class="inverse">
+                    <th class="text-center">No</th>
+                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Lokasi</th>
+                    <th class="text-center">Tanggal Invoice</th>
+                    <th class="text-center">Tagihan</th>
+                    <th class="text-center">Keterangan</th>
+                    <th class="text-center">Aksi</th>
+                </tr>';
+            $table.='</thead><tbody>';
+
+            $rincian=RincianListrik::where('id_temuan',$idtemuan)->get();
+            $no=1;
+            foreach($rincian as $k=>$v)
+            {
+                $table.='<tr>
+                    <td class="text-center">'.$no.'</td>
+                    <td class="text-center">'.$v->unit_kerja.'</td>
+                    <td class="text-center">'.$v->lokasi.'</td>
+                    <td class="text-center">'.date('d/m/Y',strtotime($v->tgl_invoice)).'</td>
+                    <td class="text-center">'.number_format($v->tagihan,0,',','.').'</td>
+                    <td class="text-center">'.$v->keterangan.'</td>
+                    <td class="text-center">
+                        <a href="javascript:hapusrincian('.$v->id.',\'listrik\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>';
+                $no++;
+            }
+            $table.='<tr>
+                    <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'listrik\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info"><i class="fa fa-plus-circle"></i> Tambah Tindak Lanjut</a></td>
+                </tr>';
+            $table.='</tbody>';
+            $table.='</table>';
+        }
+        elseif($jenis=='piutang')
+        {
+            
+            $table='<h3 class="text-center">Rincian Nilai Tindak Lanjut Pembayaran Piutang</h3><table class="table table-bordered">';
+            $table.='<thead>';
+                $table.='<tr class="inverse">
+                    <th class="text-center">No</th>
+                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Pelanggan</th>
+                    <th class="text-center">Jumlah Tagihan</th>
+                    <th class="text-center">Aksi</th>
+                </tr>';
+            $table.='</thead><tbody>';
+
+            $rincian=RincianPiutang::where('id_temuan',$idtemuan)->get();
+            $no=1;
+            foreach($rincian as $k=>$v)
+            {
+                $table.='<tr>
+                    <td class="text-center">'.$no.'</td>
+                    <td class="text-center">'.$v->unit_kerja.'</td>
+                    <td class="text-center">'.$v->pelanggan.'</td>
+                    <td class="text-center">'.number_format($v->tagihan,0,',','.').'</td>
+                    <td class="text-center">
+                        <a href="javascript:hapusrincian('.$v->id.',\'piutang\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>';
+                $no++;
+            }
+            $table.='<tr>
+                    <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'piutang\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info"><i class="fa fa-plus-circle"></i> Tambah Tindak Lanjut</a></td>
+                </tr>';
+            $table.='</tbody>';
+            $table.='</table>';
+        }
+
+        return $table;
     }
 }

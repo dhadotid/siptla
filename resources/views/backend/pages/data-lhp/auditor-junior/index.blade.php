@@ -15,7 +15,7 @@
                     <div class="row">
                         <div class="col-md-2 text-left">Tahun
                             <select name="tahun" id="tahun" class="form-control text-left" data-plugin="select2" onchange="getdata(this.value)" style="width:50%">
-                                @for ($i = (date('Y')-5); $i <= (date('Y')); $i++)
+                                @for ($i = date('Y'); $i >= (date('Y')-5); $i--)
                                     @if ($tahun==$i)
                                         <option value="{{$i}}" selected="selected"}}>{{$i}}</option>
                                     @else
@@ -93,7 +93,8 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        loaddata('{{$tahun}}');
+        loaddata('{{$tahun}}','{{$statusrekom}}');
+        // loaddatasemua('{{$tahun}}');
         hidealert();
         $('.select').select2();
     </script>
@@ -129,7 +130,7 @@
 @section('modal')
 {{-- Start Modal CRUD LHP --}}
     <div class="modal fade" id="modaltambah" tabindex="-1" role="dialog">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
                 <form action="{{ route('data-lhp.store') }}" method="POST" class="form-horizontal" id="formadd">
                     @csrf

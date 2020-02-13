@@ -69,7 +69,20 @@ class DashboardController extends Controller
             $dpengguna['datasets'][0]['backgroundColor'][]=$coloruser[]=generate_color_one();
         }
         $color['coloruser']=$coloruser;
-        // return $dpengguna;
+
+        $pemeriksa=Pemeriksa::orderBy('code')->get();
+        $dpemeriksa=$datapemeriksa=$colorpemeriksa=array();
+        foreach($pemeriksa as $k=>$v)
+        {
+            $datapemeriksa[$v->code][]=$v;
+        }
+        foreach($datapemeriksa as $k=>$v){
+            $dpemeriksa['labels'][]=$k;
+            $dpemeriksa['datasets'][0]['data'][]=count($datapemeriksa[$k]);
+            $dpemeriksa['datasets'][0]['backgroundColor'][]=$colorpemeriksa[]=generate_color_one();
+        }
+        $color['colorpemeriksa']=$colorpemeriksa;
+        // return $dpemeriksa;
         if(Auth::user()->flag==0)
             return redirect('force-logout')->with('error','Anda Tidak Mendapatkan Akses Login');
 
@@ -84,7 +97,6 @@ class DashboardController extends Controller
             }
 
             $jenistemuan=MasterTemuan::get()->count();
-            $pemeriksa=Pemeriksa::orderBy('code')->get();
             $status=StatusRekomendasi::get()->count();
             $picunit=PICUnit::with('levelpic')->with('fak')->with('bid')->orderByRaw('RAND()')->limit(10)->get();
             $jenisaudit=JenisAudit::get()->count();
@@ -92,6 +104,8 @@ class DashboardController extends Controller
                     ->with('jenistemuan',$jenistemuan)
                     ->with('datalevelpic',$datalevelpic)
                     ->with('pemeriksa',$pemeriksa)
+                    ->with('dpemeriksa',$dpemeriksa)
+                    ->with('colorpemeriksa',$colorpemeriksa)
                     ->with('status',$status)
                     ->with('picunit',$picunit)
                     ->with('color',$color)
@@ -102,24 +116,28 @@ class DashboardController extends Controller
         }
         elseif(Auth::user()->level=='auditor-junior')
         {
-            $lhp=DaftarTemuan::with('dpemeriksa')->with('djenisaudit')->get();
+            // $lhp=DaftarTemuan::where('user_input_id',Auth::user()->id)->with('dpemeriksa')->with('djenisaudit')->get();
             $tindaklanjut=TindakLanjutTemuan::with('lhp')->get();
-
-            $datatl=$dtl=$dlhp=$colorlhp=array();
+            // return $lhp; 
+            $datatl=$dtl=$dlhp=$colorlhp=$arraylhp=array();
             foreach($tindaklanjut as $k=>$v)
             {
                 if(isset($v->lhp))
                 {
-                    // return $v->dtemuan->totemuan;
-                    list($th,$bl,$tg)=explode('-',$v->lhp->tanggal_lhp);
-                    if($th==$thn)
+                    if($v->lhp->user_input_id==Auth::user()->id)
                     {
-                        if($v->status_review_pic_1=='')
-                            $status='Create oleh Unit Kerja';
-                        else
-                            $status=$v->status_review_pic_1;
-
-                        $dlhp[$status][]=$v;
+                        // return $v->dtemuan->totemuan;
+                        list($th,$bl,$tg)=explode('-',$v->lhp->tanggal_lhp);
+                        if($th==$thn)
+                        {
+                            if($v->status_review_pic_1=='')
+                                $status='Create oleh Unit Kerja';
+                            else
+                                $status=$v->status_review_pic_1;
+    
+                            $dlhp[$status][]=$v;
+                            $arraylhp[$v->lhp->id]=$v->lhp->id;
+                        }
                     }
                 }
             }
@@ -137,6 +155,8 @@ class DashboardController extends Controller
             $status=StatusRekomendasi::get();
             $data_rekom=DataRekomendasi::with('dtemuan')->get();
             $rekomendasi=$rekom=$colorrekom=array();
+            // return $data_rekom;
+
             foreach($data_rekom as $k=>$v)
             {
                 if(isset($v->dtemuan->temuan))
@@ -144,22 +164,29 @@ class DashboardController extends Controller
                     // return $v->dtemuan->totemuan;
                     list($th,$bl,$tg)=explode('-',$v->dtemuan->totemuan->tanggal_lhp);
                     if($th==$thn)
-                        $rekomendasi[$v->status_rekomendasi_id][]=$v;
+                    {
+                        if(in_array($v->dtemuan->id_lhp,$arraylhp))
+                            $rekomendasi[$v->status_rekomendasi_id][]=$v;
+                    }
                 }
             }
+            $dstatus=array();
+            // return $rekomendasi;
             foreach($status as $k=>$v)
             {
                 $rekom['labels'][]=$v->rekomendasi;
                 $rekom['datasets'][0]['data'][]=isset($rekomendasi[$v->id]) ? count($rekomendasi[$v->id]) : 0;
                 $rekom['datasets'][0]['backgroundColor'][]=$colorrekom[str_slug($v->rekomendasi)]=generate_color_one();
+                $dstatus[str_slug($v->rekomendasi)]=$v;
             }
             $color['colorrekom']=$colorrekom;
             $color['colorlhp']=$colorlhp;
             // return $dlhp;
             return view('backend.pages.dashboard.auditor-junior')
-                    ->with('lhp',$lhp)
+                    // ->with('lhp',$lhp)
                     ->with('dtl',$dtl)
                     ->with('status',$status)
+                    ->with('dstatus',$dstatus)
                     ->with('rekom',$rekom)
                     ->with('color',$color)
                     ->with('tahun',$thn)

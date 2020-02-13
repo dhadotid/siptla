@@ -5,9 +5,22 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\TindakLanjutTemuan;
 use App\Models\DokumenTindakLanjut;
+use App\Models\DaftarTemuan;
 use App\Models\DataRekomendasi;
+use App\Models\DataTemuan;
 class TindakLanjutController extends Controller
 {
+    public function index($id_rekom,$idtemuan)
+    {
+        $temuan=DataTemuan::find($idtemuan);
+        $data=DaftarTemuan::selectRaw('*, daftar_lhp.id as id_lhp')
+                ->where('daftar_lhp.id',$temuan->id_lhp)
+                ->with('dpemeriksa')->first();
+        $tindaklanjut=TindakLanjutTemuan::where('temuan_id',$idtemuan)->where('rekomendasi_id',$id_rekom)->get();
+        return view('backend.pages.data-lhp.auditor-junior.tindak-lanjut-index')
+            ->with('tindaklanjut',$tindaklanjut)
+            ->with('data',$data);
+    }
     public function simpan(Request $request,$idrekom)
     {
         // dd($request);

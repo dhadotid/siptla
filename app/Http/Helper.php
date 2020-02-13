@@ -105,6 +105,16 @@ function status_lhp()
     $status=array('Create oleh Unit Kerja','Belum direview SPI','Sedang direview SPI','Sudah direview SPI','Sudah dipublish oleh SPI');
     return $status;
 }
+function status_lhp_key()
+{
+    $status=array('Create oleh Unit Kerja','Belum direview SPI','Sedang direview SPI','Sudah direview SPI','Sudah dipublish oleh SPI');
+    $dstatus=array();
+    foreach($status as $k=>$v)
+    {
+        $dstatus[str_slug($v)]=$v;
+    }
+    return $dstatus;
+}
 function generate_color_one()
 {
    $col=random_color();
@@ -148,5 +158,15 @@ function toArray($data,$colm)
         $res[$v->{$colm}][]=$v;
     }
     return $res;
+}
+function rinciantindaklanjut()
+{
+    $rincian=['Sewa','Uang Muka','Listrik','Piutang','Piutang Karyawan','Hutang Tititpan','Penutupan Rekening','Umum'];
+    $drinc=array();
+    foreach($rincian as $k=>$v)
+    {
+        $drinc[str_replace('-','',str_slug($v))]=$v;
+    }
+    return $drinc;
 }
 ?>

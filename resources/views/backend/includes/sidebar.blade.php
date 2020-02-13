@@ -10,7 +10,7 @@
               $level=jenis_level();
               $lv=Auth::user()->level;
           @endphp
-          <h5><a href="javascript:void(0)" class="username">{{Auth::user()->name}}</a></h5>
+          <h5><a href="javascript:void(0)" class="username">Hallo, {{Auth::user()->name}}</a></h5>
           <ul>
             <li class="dropdown">
               <a href="javascript:void(0)" class="dropdown-toggle usertitle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -35,7 +35,7 @@
             <span class="menu-text">Dashboard</span>
           </a>
         </li>
-         @if (Auth::user()->level!='pic-unit')
+         @if (Auth::user()->level!='pic-unit' && Auth::user()->level!='auditor-junior')
           <li class="has-submenu {{$url=='data-temuan' || $url=='data-penyebab' || $url=='data-rekomendasi' || $url=='bidang-pengawasan' ? 'active open' : ''}}">
             <a href="javascript:void(0)" class="submenu-toggle">
               <i class="menu-icon fa fa-bars"></i>
@@ -82,6 +82,12 @@
             <a href="{{url('data-lhp')}}">
               <i class="menu-icon fa fa-list"></i>
               <span class="menu-text">Data LHP</span>
+            </a>
+          </li>
+          <li class="{{$url=='data-tindak-lanjut' ? 'active' : ''}}">
+            <a href="{{url('data-lhp')}}">
+              <i class="menu-icon fa fa-list"></i>
+              <span class="menu-text">Data Tindak Lanjut</span>
             </a>
           </li>
         @endif

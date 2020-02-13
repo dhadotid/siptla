@@ -37,7 +37,7 @@
 	<div class="col-md-12">
         <div class="row">
 			<div class="col-md-4 col-sm-4">
-				<div class="widget p-md clearfix">
+				<div class="widget p-md clearfix" style="height:650px !important;">
 					<div class="pull-left">
 						<small class="text-color">Rekapitulasi Jumlah PIC Unit ({{isset($datalevelpic['labels']) ? count($datalevelpic['labels']) : 0}})</small>
 					</div>
@@ -57,7 +57,7 @@
 				</div>
 			</div>
 			<div class="col-md-4 col-sm-4">
-				<div class="widget p-md clearfix">
+				<div class="widget p-md clearfix" style="height:650px !important;">
 					<div class="pull-left">
 						<small class="text-color">Rekapitulasi Pengguna ({{isset($dpengguna['labels']) ? count($dpengguna['labels']) : 0}})</small>
 					</div>
@@ -78,17 +78,20 @@
 				</div>
 			</div>
 			<div class="col-md-4 col-sm-4">
-				<div class="widget p-md clearfix">
-					<div class="pull-left" style="padding-bottom:20px;">
+				<div class="widget p-md clearfix" style="height:650px !important;">
+					<div class="pull-left">
 						<small class="text-color">Rekapitulasi Jumlah Pemeriksa ({{$pemeriksa->count()}})</small>
 					</div>
-					<div class='cell' style="padding-top:20px;">
+					<canvas id="chart3" style="width:100%" height="400"></canvas>
+					<div class='cell'>
 						<ul>
-							@foreach ($pemeriksa as $idx=>$item)
-								@php
-									$warna=generate_color_one();
-								@endphp
-								<li><div class="box" style="background: {{$warna}}"></div> {{$item->code}}</li>
+							@foreach ($dpemeriksa['labels'] as $idx=>$item)
+								<li>
+									<div class="box" style="background: {{isset($color['colorpemeriksa'][$idx]) ? $color['colorpemeriksa'][$idx] : '#ffffff'}}"></div> 
+									<a href="{{url('pengguna/'.str_slug($item))}}">
+										{{$item}} ({{isset($dpemeriksa['datasets'][0]['data'][$idx]) ? $dpemeriksa['datasets'][0]['data'][$idx]: 0}})
+									</a>
+								</li>
 							@endforeach
 							
 						</ul>
@@ -137,13 +140,28 @@
 				}
 			}
 		});
+		//--------------
+		var jlhpemeriksa = document.getElementById("chart3");
+		var datapemeriksa = <?php echo json_encode($dpemeriksa);?>;
+		var pieChart = new Chart(jlhpemeriksa, {
+			type: 'pie',
+			data: datapemeriksa,
+			options: {
+				legend: {
+					display: false,
+					labels: {
+						fontColor: 'rgb(255, 99, 132)'
+					}
+				}
+			}
+		});
 
 		
 	</script>
 	<style>
 	.box{
-		width:20px;
-		height:20px;
+		width:15px;
+		height:15px;
 		float:left;
 		margin-right:10px;
 		border:1px solid #000;
@@ -155,7 +173,7 @@
 	}
 	.cell li
 	{
-		height:35px;
+		height:30px;
 		width:100%;
 		float:left;
 	}

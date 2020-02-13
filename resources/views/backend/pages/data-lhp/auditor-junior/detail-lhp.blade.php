@@ -46,12 +46,12 @@
                         <input type="text" style="font-weight:bold;" class="form-control custom-input" placeholder="Jenis Audit" id="detail_jenis_audit" readonly value="{{$data->djenisaudit->jenis_audit}}">
                     </div>
                 </div>
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Review:</label>
                     <div class="col-sm-8">
                         <textarea style="font-weight:bold;" class="form-control custom-input" placeholder="Review" id="detail_review" readonly>{!!$data->review!!}</textarea>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
             
@@ -103,12 +103,22 @@
                 @if ($jlhtemuan!=0)
                     <div class="col-md-3 text-right">
                         @if ($offset!=0)
-                            <a href="javascript:detaillhp({{$id}},{{($offset-1)}})" class="btn btn-outline btn-primary"><i class="fa fa-caret-square-o-left"></i> Sebelumnya</a>
+                            @if ($statusrekom!=null)
+                                <a href="javascript:detaillhp({{$id}},{{($offset-1)}},{{$statusrekom}})" class="btn btn-outline btn-primary"><i class="fa fa-caret-square-o-left"></i> Sebelumnya</a>
+                            @else
+                                <a href="javascript:detaillhp({{$id}},{{($offset-1)}})" class="btn btn-outline btn-primary"><i class="fa fa-caret-square-o-left"></i> Sebelumnya</a>
+                            @endif
+                            
                         @endif
                     </div>
                     <div class="col-md-3 text-right">
-                        @if ($jlhtemuan!=($offset+1))    
-                            <a href="javascript:detaillhp({{$id}},{{($offset+1)}})" class="btn btn-outline btn-primary">Selanjutnya <i class="fa    fa-caret-square-o-right"></i></a>
+                        @if ($jlhtemuan!=($offset+1)) 
+                            @if ($statusrekom!=null)
+                                <a href="javascript:detaillhp({{$id}},{{($offset+1)}},{{$statusrekom}})" class="btn btn-outline btn-primary">Selanjutnya <i class="fa    fa-caret-square-o-right"></i></a>
+                            @else
+                                <a href="javascript:detaillhp({{$id}},{{($offset+1)}})" class="btn btn-outline btn-primary">Selanjutnya <i class="fa    fa-caret-square-o-right"></i></a>
+                            @endif   
+                            
                         @endif
                     </div>
                 @endif
@@ -129,15 +139,37 @@
                 </tr>
             </thead>
             <tbody>
+                @php
+                    $no=1;
+                @endphp
                 @foreach ($drekomendasi as $key => $item)
-                    <tr>
-                        <td class="text-center">{{$key+1}}</td>
-                        <td class="text-left">{{$item->rekomendasi}}</td>
-                        <td class="text-right">{{number_format($item->nominal_rekomendasi,2,',','.')}}</td>
-                        <td class="text-center">{{$item->picunit1->nama_pic}}</td>
-                        <td class="text-center">{{$item->picunit2->nama_pic}}</td>
-                        <td class="text-center">{{$item->statusrekomendasi->rekomendasi}}</td>
-                    </tr>
+                    @if ($statusrekom!=null)
+                        @if($statusrekom==$item->status_rekomendasi_id)
+                            <tr>
+                                <td class="text-center">{{$no}}</td>
+                                <td class="text-left">{{$item->rekomendasi}}</td>
+                                <td class="text-right">{{number_format($item->nominal_rekomendasi,2,',','.')}}</td>
+                                <td class="text-center">{{$item->picunit1->nama_pic}}</td>
+                                <td class="text-center">{{$item->picunit2->nama_pic}}</td>
+                                <td class="text-center">{{$item->statusrekomendasi->rekomendasi}}</td>
+                            </tr>
+                            @php
+                                $no++;
+                            @endphp
+                        @endif
+                    @else       
+                        <tr>
+                            <td class="text-center">{{$no}}</td>
+                            <td class="text-left">{{$item->rekomendasi}}</td>
+                            <td class="text-right">{{number_format($item->nominal_rekomendasi,2,',','.')}}</td>
+                            <td class="text-center">{{$item->picunit1->nama_pic}}</td>
+                            <td class="text-center">{{$item->picunit2->nama_pic}}</td>
+                            <td class="text-center">{{$item->statusrekomendasi->rekomendasi}}</td>
+                        </tr>
+                        @php
+                            $no++;
+                        @endphp
+                    @endif
                 @endforeach
             </tbody>
         </table>

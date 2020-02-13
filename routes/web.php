@@ -38,12 +38,12 @@ Route::group(['middleware'=>'auth'],function(){
     Route::resource('level-resiko','LevelResikoController');
     Route::resource('pejabat-penandatangan','PejabatTandatanganController');
 
-    Route::get('data-lhp/{tahun?}','DataTemuanController@index')->name('data-lhp.index');
+    Route::get('data-lhp/{tahun?}/{status_rekomendasi?}','DataTemuanController@index')->name('data-lhp.index');
     Route::get('semua-data-lhp/{tahun?}','DataTemuanController@index_semua')->name('data-lhp.index-semua');
-    Route::get('data-lhp-data/{tahun?}','DataTemuanController@data_lhp')->name('data-lhp.data');
+    Route::get('data-lhp-data/{tahun?}/{statusrekom?}','DataTemuanController@data_lhp')->name('data-lhp.data');
     Route::get('semua-lhp-data/{tahun?}','DataTemuanController@semua_data_lhp')->name('data-lhp.semua-data');
     Route::get('data-lhp-cek-kode/{pemeriksa?}','DataTemuanController@data_lhp_cek_kode')->name('data-lhp.cek-kode');
-    Route::get('data-lhp-detail/{id}/{offset}','DataTemuanController@detail_lhp')->name('data-lhp.detail');
+    Route::get('data-lhp-detail/{id}/{offset}/{statusrekom?}','DataTemuanController@detail_lhp')->name('data-lhp.detail');
     Route::get('data-lhp-review/{id}','DataTemuanController@review_lhp')->name('data-lhp.review');
     Route::get('form-lhp-review/{id}/{idreview?}','DataTemuanController@form_review_lhp')->name('data-lhp.form-review');
     Route::get('hapus-lhp-review/{id}/{idreview?}','DataTemuanController@hapus_lhp_review')->name('data-lhp.hapus-lhp-review');
@@ -52,7 +52,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::post('data-lhp-store','DataTemuanController@store')->name('data-lhp.store');
     Route::post('data-lhp-update/{idlhp}','DataTemuanController@update')->name('data-lhp.update');
 
-    Route::get('data-temuan-lhp/{idlhp}','DataTemuanController@data_temuan_lhp');
+    Route::get('data-temuan-lhp/{idlhp}/{status_rekomendasi?}','DataTemuanController@data_temuan_lhp');
     Route::get('data-temuan-edit/{idlhp}','DataTemuanController@lhp_edit');
     Route::post('data-temuan-delete/{idlhp}','DataTemuanController@lhp_delete');
     Route::get('data-temuan-data/{idlhp}','DataTemuanController@data_temuan_data');
@@ -63,16 +63,24 @@ Route::group(['middleware'=>'auth'],function(){
 
     Route::get('rekomendasi-edit/{idrekom}','DataRekomendasiController@rekomendasi_edit')->name('rekomendasi.edit');
     Route::get('rekomendasi-data/{idtemuan}','DataRekomendasiController@rekomendasi_data')->name('rekomendasi.data');
+    Route::get('rekomendasi-data-new/{idtemuan}/{status_rekom}','DataRekomendasiController@rekomendasi_data_new')->name('rekomendasi.data-new');
     Route::post('rekomendasi-simpan','DataRekomendasiController@rekomendasi_simpan')->name('rekomendasi.simpan');
     Route::post('rekomendasi-update/{idrekom}/{idtemuan}','DataRekomendasiController@rekomendasi_update')->name('rekomendasi.update');
     Route::get('rekomendasi-delete/{idrekom}/{idtemuan}','DataRekomendasiController@rekomendasi_delete')->name('rekomendasi.delete');
     Route::get('update-jlh-rekomendasi/{idtemuan}','DataRekomendasiController@update_jlh_rekomendasi');
+    
+    Route::get('load-table-rincian/{jenis}/{idtemuan?}/{idrekomendasi?}','DataRekomendasiController@load_tabel_rincian');
+    Route::get('form-rincian/{jenis}/{idtemuan?}/{idrekomendasi?}/{id?}','RincianSewaController@form_rincian');
+    Route::post('form-rincian-simpan','RincianSewaController@form_rincian_simpan');
+    Route::get('form-rincian-hapus/{id}/{jenis}','RincianSewaController@form_rincian_hapus');
 
     Route::post('tindak-lanjut-simpan/{idrekom}','TindakLanjutController@simpan');
     Route::get('tindak-lanjut-edit/{id}','TindakLanjutController@edit');
     Route::get('tindak-lanjut-hapus/{id}','TindakLanjutController@destroy');
+    Route::get('data-tindak-lanjut/{rekom_id}/{idtemuan}','TindakLanjutController@index');
 
     Route::get('data-rekanan','RekananController@data_rekanan')->name('data-rekanan');
+
 });
 Route::group(['prefix'=>'laporan','middleware'=>'auth'],function(){
     Route::get('temuan-per-bidang','LaporanController@temuan_per_bidang');

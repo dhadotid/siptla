@@ -1,5 +1,5 @@
-function loaddata(tahun) {
-    $('#data').load(flagsUrl + '/data-lhp-data/' + tahun, function () {
+function loaddata(tahun,statusrekom=null) {
+    $('#data').load(flagsUrl + '/data-lhp-data/' + tahun + '/' + statusrekom, function () {
         $('#table').dataTable();
         $('#table').on('click', '.btn-edit', function () {
             var id = $(this).data('value')
@@ -50,8 +50,8 @@ function loaddata(tahun) {
         
     });
 }
-function loaddatasemua(tahun) {
-    $('#data').load(flagsUrl + '/semua-lhp-data/' + tahun, function () {
+function loaddatasemua(tahun, statusrekom=null) {
+    $('#data').load(flagsUrl + '/semua-lhp-data/' + tahun + '/' + statusrekom, function () {
         $('#table').dataTable();
         $('#table').on('click', '.btn-edit', function () {
             var id = $(this).data('value')
@@ -114,13 +114,14 @@ function generatekodelhp(val) {
 }
 
 function getdata(tahun) {
-    loaddata(tahun);
-    loaddatasemua(tahun);
+    // loaddata(tahun);
+    // loaddatasemua(tahun);
+    location.href = flagsUrl+'/data-lhp/'+tahun;
 }
 
-function detaillhp(id,offset)
+function detaillhp(id,offset,statusrekom=null)
 {
-    $('#detail').load(flagsUrl+'/data-lhp-detail/'+id+'/'+offset,function(){
+    $('#detail').load(flagsUrl+'/data-lhp-detail/'+id+'/'+offset+'/'+statusrekom,function(){
         $('#detail-rekomendasi').DataTable();
     });
     $('#modaldetail').modal('show');

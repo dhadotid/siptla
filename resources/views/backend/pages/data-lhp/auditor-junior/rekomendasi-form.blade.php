@@ -25,7 +25,7 @@
                     <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
                         <label for="exampleTextInput1" class="col-sm-12 control-label text-left" style="font-size:10px;font-style:italic">Temuan:</label>
                         <div class="col-sm-12">
-                            <textarea type="text" class="d_temuan" name="temuan" placeholder="Temuan" id="temuan" readonly style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;background:#eee !important;width:100%;min-height:100px"></textarea>
+                            <textarea type="text" class="d_temuan" name="temuan" placeholder="Temuan" id="temuan" readonly style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;background:#eee !important;width:100%;min-height:50px"></textarea>
                         </div>
                     </div>
                 </div>
@@ -49,6 +49,26 @@
             </label>
             <div class="col-sm-9">
                 <input type="text" class="form-control nominal"  class="form-control"  name="nilai_rekomendasi"  placeholder="Nilai Rekomendasi" id="{{$act}}_nilai_rekomendasi">
+            </div>
+        </div>
+        <div class="form-group" style="margin-bottom:10px;">
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Butuh Rincian ? :
+            </label>
+            <div class="col-sm-9" style="padding-top:5px;">
+                <div style="width:100px;float:left"><input type="radio" style="float:left;width:20%" onclick="cekrbutuhrincian()" name="butuh_rincian" id="butuh_rincian" value="1"> Ya</div>
+                <div style="width:100px;float:left"><input type="radio"  style="float:left;width:20%" onclick="cekrbutuhrincian()" name="butuh_rincian" id="butuh_rincian_false" value="0" checked> Tidak</div>
+            </div>
+        </div>
+        <div class="form-group" style="margin-bottom:10px;">
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Rincian Tindak Lanjut :
+            </label>
+            <div class="col-sm-9">
+                <select name="rincian_tl" class="form-control" disabled id="rincian_tl" data-plugin="select2" onchange="pilihrincian(this.value)">
+                    <option value="">-- Pilih --</option>
+                    @foreach (rinciantindaklanjut() as $key=>$item)
+                            <option value="{{$key}}">{{$item}}</option>
+                    @endforeach
+                </select>
             </div>
         </div>
         <div class="form-group" style="margin-bottom:10px;">
@@ -81,14 +101,14 @@
                 </select>
             </div>
         </div>
-        <div class="form-group" style="margin-bottom:10px;display:none" id="div_{{$act}}_rekanan">
+        {{-- <div class="form-group" style="margin-bottom:10px;display:none" id="div_{{$act}}_rekanan">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Rekanan:
             </label>
             <div class="col-sm-9">
                 <input type="text" class="form-control" name="rekanan" class="form-control" id="{{$act}}_rekanan">
             </div>
-        </div>
-        <div class="form-group" style="margin-bottom:10px;">
+        </div> --}}
+        {{-- <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Jangka Waktu Penyelesaian:
                 <br><small style="font-size:9px;color:red;font-style:italic">*wajib diisi</small>
             </label>
@@ -100,7 +120,7 @@
                     @endforeach
                 </select>
             </div>
-        </div>
+        </div> --}}
         
        
         <div class="form-group" style="margin-bottom:10px;">
@@ -109,21 +129,25 @@
                 <br><small style="font-size:9px;color:red;font-style:italic">*wajib diisi</small>
             </label>
             <div class="col-sm-9">
-                <select name="status_rekomendasi" class="form-control" id="{{$act}}_status_rekomendasi" data-plugin="select2">
-                    <option value="">-- Pilih --</option>
+                <select name="status_rekomendasi" class="form-control status_rekom" id="{{$act}}_status_rekomendasi" data-plugin="select2" readonly> 
+                    {{-- <option value="">-- Pilih --</option> --}}
                         @foreach ($statusrekomendasi as $item)
-                        <option value="{{$item->id}}">{{$item->rekomendasi}}</option>
-                    @endforeach
+                            @if ($item->id==2)
+                                <option value="{{$item->id}}" selected="selected">{{$item->rekomendasi}}</option>
+                            @else
+                                <option value="{{$item->id}}">{{$item->rekomendasi}}</option>
+                            @endif
+                        @endforeach
                 </select>
             </div>
         </div>
-       <div class="form-group" style="margin-bottom:10px;">
+       {{-- <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Review Auditor:
                 <br><small style="font-size:9px;color:red;font-style:italic">*wajib diisi</small>
             </label>
             <div class="col-sm-9">
                 <textarea class="form-control"  name="review_auditor" placeholder="Review Auditor" id="{{$act}}_review_auditor"></textarea>
             </div>
-        </div>
+        </div> --}}
     </div>
 </div>

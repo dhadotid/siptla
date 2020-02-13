@@ -112,7 +112,7 @@
 						<span>{!!Session::get('success')!!}</span>
 					</div>
 				@endif
-				<div class="table-responsive" style="width:50%">
+				<div class="table-responsive">
 					<table id="table" data-plugin="DataTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
 						<thead>
 							<tr>

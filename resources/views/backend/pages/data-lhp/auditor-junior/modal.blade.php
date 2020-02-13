@@ -1,6 +1,6 @@
 {{-- Modal Rekomendasi --}}
     <div class="modal fade" id="modaltambahrekomendasi" tabindex="-1" role="dialog">
-		<div class="modal-dialog" style="width:60% !important">
+		<div class="modal-dialog" id="modal-size" style="width:60% !important">
 			<div class="modal-content">
                 <form method="POST" class="form-horizontal" id="form_rekom_add">
                     @csrf
@@ -13,7 +13,12 @@
                             $dt['act']='add';
                         @endphp
                         <input type="hidden" name="id_lhp" value="{{$idlhp}}">
-                        @include('backend.pages.data-lhp.auditor-junior.rekomendasi-form',$dt)
+                        <div class="row">
+                            <div id="left-div" class="col-md-12">
+                                @include('backend.pages.data-lhp.auditor-junior.rekomendasi-form',$dt)
+                            </div>
+                            <div id="right-div" class="col-md-0"></div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
@@ -170,3 +175,92 @@
 		</div>
 	</div>
 {{-- End Modal Temuan --}}
+
+{{-- Modal Rincian Sewa--}}
+ <div class="modal fade" id="modalrinciansewa" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+                <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrinciansewa">
+                    @csrf
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Rincian Tindak Lanjut Pembayaran Sewa </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="form-rincian-sewa"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
+                        <input type="button" onclick="validasiformsewa()" class="btn btn-success" value="Simpan">
+                    </div>
+				</form>
+			</div>
+		</div>
+	</div>  
+{{-- END Modal Rincian Sewa--}}
+{{-- Modal Rincian Sewa--}}
+ <div class="modal fade" id="modalrincianuangmuka" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+                <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrincianuangmuka">
+                    @csrf
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Rincian Tindak Lanjut Uang Muka </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="form-rincian-uangmuka"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
+                        <input type="button" onclick="validasiformuangmuka()" class="btn btn-success" value="Simpan">
+                    </div>
+				</form>
+			</div>
+		</div>
+	</div>  
+{{-- END Modal Rincian Sewa--}}
+{{-- Modal Rincian Sewa--}}
+ <div class="modal fade" id="modalrincianlistrik" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+                <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrincianlistrik">
+                    @csrf
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Rincian Tindak Lanjut Pembayaran Listrik </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="form-rincian-listrik"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
+                        <input type="button" onclick="validasiformlistrik()" class="btn btn-success" value="Simpan">
+                    </div>
+				</form>
+			</div>
+		</div>
+	</div>  
+{{-- END Modal Rincian Sewa--}}
+{{-- Modal Rincian Piutang--}}
+ <div class="modal fade" id="modalrincianpiutang" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+                <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrincianpiutang">
+                    @csrf
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Rincian Tindak Lanjut Pembayaran Piutang </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="form-rincian-piutang"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
+                        <input type="button" onclick="validasiformpiutang()" class="btn btn-success" value="Simpan">
+                    </div>
+				</form>
+			</div>
+		</div>
+	</div>  
+{{-- END Modal Rincian Piutang--}}

@@ -264,3 +264,47 @@
 		</div>
 	</div>  
 {{-- END Modal Rincian Piutang--}}
+{{-- Modal Rincian Piutang Karyawan--}}
+ <div class="modal fade" id="modalrincianpiutangkaryawan" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+                <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrincianpiutangkaryawan">
+                    @csrf
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Rincian Tindak Lanjut Pembayaran Piutang Karyawan</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="form-rincian-piutangkaryawan"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
+                        <input type="button" onclick="validasiformpiutangkaryawan()" class="btn btn-success" value="Simpan">
+                    </div>
+				</form>
+			</div>
+		</div>
+	</div>  
+{{-- END Modal Rincian Piutang Karyawan--}}
+{{-- Modal Rincian Hutang Titipan--}}
+ <div class="modal fade" id="modalrincianhutangtitipan" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+                <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrincianhutangtitipan">
+                    @csrf
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Rincian Tindak Lanjut Hutang Titipan</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="form-rincian-hutangtitipan"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
+                        <input type="button" onclick="validasihutangtitipan()" class="btn btn-success" value="Simpan">
+                    </div>
+				</form>
+			</div>
+		</div>
+	</div>  
+{{-- END Modal Rincian Hutang Titipan--}}

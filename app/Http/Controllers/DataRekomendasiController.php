@@ -10,6 +10,8 @@ use App\Models\RincianSewa;
 use App\Models\RincianUangMuka;
 use App\Models\RincianListrik;
 use App\Models\RincianPiutang;
+use App\Models\RincianPiutangKaryawan;
+use App\Models\RincianHutangTitipan;
 
 class DataRekomendasiController extends Controller
 {
@@ -537,6 +539,80 @@ class DataRekomendasiController extends Controller
             }
             $table.='<tr>
                     <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'piutang\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info"><i class="fa fa-plus-circle"></i> Tambah Tindak Lanjut</a></td>
+                </tr>';
+            $table.='</tbody>';
+            $table.='</table>';
+        }
+        elseif($jenis=='piutangkaryawan')
+        {
+            
+            $table='<h3 class="text-center">Rincian Nilai Tindak Lanjut Pembayaran Piutang Karyawan</h3><table class="table table-bordered">';
+            $table.='<thead>';
+                $table.='<tr class="inverse">
+                    <th class="text-center">No</th>
+                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Karyawan</th>
+                    <th class="text-center">Jumlah Pinjaman</th>
+                    <th class="text-center">Aksi</th>
+                </tr>';
+            $table.='</thead><tbody>';
+
+            $rincian=RincianPiutangKaryawan::where('id_temuan',$idtemuan)->get();
+            $no=1;
+            foreach($rincian as $k=>$v)
+            {
+                $table.='<tr>
+                    <td class="text-center">'.$no.'</td>
+                    <td class="text-center">'.$v->unit_kerja.'</td>
+                    <td class="text-center">'.$v->karyawan.'</td>
+                    <td class="text-center">'.number_format($v->pinjaman,0,',','.').'</td>
+                    <td class="text-center">
+                        <a href="javascript:hapusrincian('.$v->id.',\'piutangkaryawan\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>';
+                $no++;
+            }
+            $table.='<tr>
+                    <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'piutangkaryawan\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info"><i class="fa fa-plus-circle"></i> Tambah Tindak Lanjut</a></td>
+                </tr>';
+            $table.='</tbody>';
+            $table.='</table>';
+        }
+        elseif($jenis=='hutangtitipan')
+        {
+            
+            $table='<h3 class="text-center">Rincian Nilai Tindak Lanjut Hutang Titipan</h3><table class="table table-bordered">';
+            $table.='<thead>';
+                $table.='<tr class="inverse">
+                    <th class="text-center">No</th>
+                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Tanggal</th>
+                    <th class="text-center">Keterangan</th>
+                    <th class="text-center">Saldo Hutang Titipan (Rp)</th>
+                    <th class="text-center">Sisa Yang Harus Disetor (Rp)</th>
+                    <th class="text-center">Aksi</th>
+                </tr>';
+            $table.='</thead><tbody>';
+
+            $rincian=RincianHutangTitipan::where('id_temuan',$idtemuan)->get();
+            $no=1;
+            foreach($rincian as $k=>$v)
+            {
+                $table.='<tr>
+                    <td class="text-center">'.$no.'</td>
+                    <td class="text-center">'.$v->unit_kerja.'</td>
+                    <td class="text-center">'.date('d/m/Y',strtotime($v->tanggal)).'</td>
+                    <td class="text-center">'.$v->keterangan.'</td>
+                    <td class="text-center">'.number_format($v->saldo_hutang,0,',','.').'</td>
+                    <td class="text-center">'.number_format($v->sisa_setor,0,',','.').'</td>
+                    <td class="text-center">
+                        <a href="javascript:hapusrincian('.$v->id.',\'hutangtitipan\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>';
+                $no++;
+            }
+            $table.='<tr>
+                    <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'hutangtitipan\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info"><i class="fa fa-plus-circle"></i> Tambah Tindak Lanjut</a></td>
                 </tr>';
             $table.='</tbody>';
             $table.='</table>';

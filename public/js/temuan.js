@@ -422,6 +422,26 @@ function addtindaklanjut(jenis,idtemuan,idrekom,id)
         });
         $('#modalrincianpiutang').modal('show')
     }
+    else if (jenis =='piutangkaryawan')
+    {
+        $('#form-rincian-piutangkaryawan').load(flagsUrl + '/form-rincian/' + jenis + '/' + idtemuan + '/' + idrekom+'/'+id,function(){
+            $('#unit_kerja').select2()
+            $('.nominal').on('keyup', function (e) {
+                $(this).val(format($(this).val()));
+            });
+        });
+        $('#modalrincianpiutangkaryawan').modal('show')
+    }
+    else if (jenis =='hutangtitipan')
+    {
+        $('#form-rincian-hutangtitipan').load(flagsUrl + '/form-rincian/' + jenis + '/' + idtemuan + '/' + idrekom+'/'+id,function(){
+            $('#unit_kerja').select2()
+            $('.nominal').on('keyup', function (e) {
+                $(this).val(format($(this).val()));
+            });
+        });
+        $('#modalrincianhutangtitipan').modal('show')
+    }
 }
 
 function validasiformsewa()
@@ -580,6 +600,83 @@ function validasiformpiutang() {
                     gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
                     setTimeout(function () {
                         $('#modalrincianpiutang').modal('show');
+                    }, 1500)
+                }
+                else
+                    notif('error', 'Data Rincian Gagal Disimpan');
+            }
+        });
+    }
+}
+function validasiformpiutangkaryawan() {
+    var unit_kerja = $('#unit_kerja');
+    var karyawan = $('#karyawan');
+    var pinjaman = $('#pinjaman');
+
+
+    if (unit_kerja.val() == '')
+        notif('error', 'Unit Kerja Belum Dipilih');
+    else if (karyawan.val() == '')
+        notif('error', 'Nama Karyawan Belum Diisi');
+    else if (pinjaman.val() == '')
+        notif('error', 'Jumlah Pinjaman Belum Diisi');
+    else {
+        //formrinciansewa
+        $.ajax({
+            url: flagsUrl + '/form-rincian-simpan',
+            data: $('#formrincianpiutangkaryawan').serialize(),
+            type: 'POST',
+            datatype: 'JSON',
+            success: function (res) {
+                if (res) {
+                    // $('#formrinciansewa').reset();
+                    $('#formrincianpiutangkaryawan').trigger("reset");
+                    $('#modalrincianpiutangkaryawan').modal('hide');
+                    // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
+                    notif('success', 'Data Rincian Berhasil Di Simpan');
+                    gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                    setTimeout(function () {
+                        $('#modalrincianpiutangkaryawan').modal('show');
+                    }, 1500)
+                }
+                else
+                    notif('error', 'Data Rincian Gagal Disimpan');
+            }
+        });
+    }
+}
+function validasihutangtitipan() {
+    var unit_kerja = $('#unit_kerja');
+    var tanggal = $('#tanggal');
+    var sisa_hutang = $('#sisa_hutang');
+    var sisa_setor = $('#sisa_setor');
+
+
+    if (unit_kerja.val() == '')
+        notif('error', 'Unit Kerja Belum Dipilih');
+    else if (tanggal.val() == '')
+        notif('error', 'Tanggal Belum Dipilih');
+    else if (sisa_hutang.val() == '')
+        notif('error', 'Sisa Hutang Belum Diisi');
+    else if (sisa_setor.val() == '')
+        notif('error', 'Jumlah Sisa Setor Belum Diisi');
+    else {
+        //formrinciansewa
+        $.ajax({
+            url: flagsUrl + '/form-rincian-simpan',
+            data: $('#formrincianhutangtitipan').serialize(),
+            type: 'POST',
+            datatype: 'JSON',
+            success: function (res) {
+                if (res) {
+                    // $('#formrinciansewa').reset();
+                    $('#formrincianhutangtitipan').trigger("reset");
+                    $('#modalrincianhutangtitipan').modal('hide');
+                    // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
+                    notif('success', 'Data Rincian Berhasil Di Simpan');
+                    gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                    setTimeout(function () {
+                        $('#modalrincianhutangtitipan').modal('show');
                     }, 1500)
                 }
                 else

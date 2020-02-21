@@ -77,6 +77,10 @@ function hitunghari($mulai,$akhir,$jenis)
 
     return $jumlah;
 }
+function generateid($str)
+{
+    return abs(crc32(md5(rand().'-'.sha1($str))));
+}
 function tgl_indo($date)
 {
     $tgl=date('d',strtotime($date));

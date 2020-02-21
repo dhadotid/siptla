@@ -50,6 +50,7 @@
             <div class="col-sm-9">
                 <input type="text" class="form-control nominal"  class="form-control"  name="nilai_rekomendasi"  placeholder="Nilai Rekomendasi" id="{{$act}}_nilai_rekomendasi">
             </div>
+            <input type="hidden" name="idform" id="idform">
         </div>
         <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Butuh Rincian ? :

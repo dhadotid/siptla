@@ -308,3 +308,47 @@
 		</div>
 	</div>  
 {{-- END Modal Rincian Hutang Titipan--}}
+{{-- Modal Rincian Penutupan Rekening--}}
+ <div class="modal fade" id="modalrincianpenutupanrekening" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+                <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrincianpenutupanrekening">
+                    @csrf
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Rincian Tindak Lanjut Penutupan Rekening</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="form-rincian-penutupanrekening"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
+                        <input type="button" onclick="validasipenutupanrekening()" class="btn btn-success" value="Simpan">
+                    </div>
+				</form>
+			</div>
+		</div>
+	</div>  
+{{-- END Modal Rincian Penutupan Rekening--}}
+{{-- Modal Rincian Umum--}}
+ <div class="modal fade" id="modalrincianumum" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+                <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrincianumum">
+                    @csrf
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Rincian Tindak Lanjut Penutupan Rekening</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="form-rincian-umum"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
+                        <input type="button" onclick="validasiumum()" class="btn btn-success" value="Simpan">
+                    </div>
+				</form>
+			</div>
+		</div>
+	</div>  
+{{-- END Modal Rincian Umum--}}

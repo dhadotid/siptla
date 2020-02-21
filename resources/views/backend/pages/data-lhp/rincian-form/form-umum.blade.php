@@ -18,31 +18,20 @@
         <input type="hidden" name="idform" value="{{$idform}}">
         <input type="hidden" name="id" value="{{$id}}">
         
-        <div class="form-group">
-           <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Tanggal</small>
+        <div class="form-group" style="margin-bottom:10px;">
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Keterangan
             </label>
-            <div class="col-md-7">
-                <div class='input-group date' id='datetimepicker_tgl_pks'>
-                    <input type='date' class="form-control" name="tanggal" id="tanggal"  value="{{date('d/m/Y')}}"/>
-                    <span class="input-group-addon bg-info text-white">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                </div>
+            <div class="col-sm-9">
+                <textarea class="form-control"  class="form-control"  name="keterangan"  placeholder="Keterangan" id="keterangan"></textarea>
             </div>
         </div>
         <div class="form-group" style="margin-bottom:10px;">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Saldo Hutang Titipan:
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Jumlah Rekomendasi
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control nominal"  class="form-control"  name="saldo_hutang"  placeholder="Saldo Hutang Titipan" id="saldo_hutang">
+                <input type="text" class="form-control"  class="form-control"  name="jumlah_rekomendasi"  placeholder="Jumlah Rekomendasi" id="jumlah_rekomendasi">
             </div>
         </div>
-        <div class="form-group" style="margin-bottom:10px;">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Sisa Setor:
-            </label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control nominal"  class="form-control"  name="sisa_setor"  placeholder="Sisa Setor" id="sisa_setor">
-            </div>
-        </div>
+      
     </div>
 </div>

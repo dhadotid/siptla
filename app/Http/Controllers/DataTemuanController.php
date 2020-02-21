@@ -27,12 +27,23 @@ class DataTemuanController extends Controller
 
         $data['pemeriksa']=$pemeriksa=Pemeriksa::orderBy('pemeriksa')->get();
         $data['jenisaudit']=$jenisaudit=JenisAudit::orderBy('jenis_audit')->get();
-        return view('backend.pages.data-lhp.auditor-junior.index')
-                ->with('tahun',$thn)
-                ->with('data',$data)
-                ->with('statusrekom',$statusrekom)
-                ->with('pemeriksa',$pemeriksa)
-                ->with('jenisaudit',$jenisaudit);
+
+        if(Auth::user()->level=='pic-unit')
+        {
+                return view('backend.pages.data-lhp.pic-unit.index')
+                    ->with('tahun',$thn)
+                    ->with('data',$data)
+                    ->with('statusrekom',$statusrekom)
+                    ->with('pemeriksa',$pemeriksa)
+                    ->with('jenisaudit',$jenisaudit);
+        }
+        else
+            return view('backend.pages.data-lhp.auditor-junior.index')
+                    ->with('tahun',$thn)
+                    ->with('data',$data)
+                    ->with('statusrekom',$statusrekom)
+                    ->with('pemeriksa',$pemeriksa)
+                    ->with('jenisaudit',$jenisaudit);
     }
     public function index_semua($tahun=null)
     {
@@ -103,6 +114,15 @@ class DataTemuanController extends Controller
         if($request->status_lhp=='Publish LHP')
             $lhp->publish_flag=1;
 
+        if(Auth::user()->level=='auditor-junior')
+            $lhp->flag_senior=1;
+        
+        if(Auth::user()->level=='auditor-senior')
+        {
+            $lhp->flag_senior=1;
+            $lhp->flag_unit_kerja=1;
+        }
+        
         $lhp->save();
 
         if($request->idreview==0)
@@ -138,7 +158,7 @@ class DataTemuanController extends Controller
             }
         }
 
-        if(Auth::user()->level=='auditor-junior' || Auth::user()->level=='auditor-senior')
+        if(Auth::user()->level=='auditor-junior')
         {
             $data=DaftarTemuan::selectRaw('*,daftar_lhp.id as lhp_id')
                     ->where('daftar_lhp.tahun_pemeriksa',$thn)
@@ -147,14 +167,29 @@ class DataTemuanController extends Controller
                     ->with('djenisaudit')
                     ->orderBy('tanggal_lhp','desc')->get();
         }
+        elseif(Auth::user()->level=='auditor-senior')
+        {
+            $data=DaftarTemuan::selectRaw('*,daftar_lhp.id as lhp_id')
+                    ->where('daftar_lhp.tahun_pemeriksa',$thn)
+                    // ->where('daftar_lhp.user_input_id',Auth::user()->id)
+                    ->with('dpemeriksa')
+                    ->with('djenisaudit')
+                    ->orderBy('tanggal_lhp','desc')->get();
+        }
        elseif(Auth::user()->level=='pic-unit')
         {
             $data=DaftarTemuan::selectRaw('*,daftar_lhp.id as lhp_id')
                     ->where('daftar_lhp.tahun_pemeriksa',$thn)
-                    ->where('daftar_lhp.user_input_id',Auth::user()->id)
+                    ->where('daftar_lhp.flag_unit_kerja',1)
                     ->with('dpemeriksa')
                     ->with('djenisaudit')
                     ->orderBy('tanggal_lhp','desc')->get();
+            
+            return view('backend.pages.data-lhp.pic-unit.data')
+                ->with('data',$data)
+                ->with('arraylhp',$arraylhp)
+                ->with('statusrekom',$statusrekom)
+                ->with('drekom',$drekom);
         }
         else
         {
@@ -237,7 +272,7 @@ class DataTemuanController extends Controller
         if(isset($dtemuan[$offset])) 
         {
             $tm=$dtemuan[$offset];
-            if($statusrekom!=null)
+            if($statusrekom!=null && $statusrekom!='null')
             {
                 $rekomendasi=DataRekomendasi::selectRaw('*,data_rekomendasi.id as rekom_id')
                             ->where('id_temuan',$tm->id)
@@ -261,8 +296,8 @@ class DataTemuanController extends Controller
                             ->with('statusrekomendasi')
                             ->with('drekanan')
                             ->get();
+                            // return $rekomendasi;
             }
-
             foreach($rekomendasi as $kk=>$vv)
             {
                 $drekomendasi[]=$vv;
@@ -274,16 +309,29 @@ class DataTemuanController extends Controller
         }
 
         
-
-        // return $statusrekom;
-        return view('backend.pages.data-lhp.auditor-junior.detail-lhp')
-                ->with('temuan',$tm)
-                ->with('offset',$offset)
-                ->with('statusrekom',$statusrekom)
-                ->with('jlhtemuan',$jlhtemuan)
-                ->with('id',$id)
-                ->with('drekomendasi',$drekomendasi)
-                ->with('data',$data);
+        if(Auth::user()->level=='pic-unit')
+        {
+            return view('backend.pages.data-lhp.pic-unit.detail-lhp')
+                    ->with('temuan',$tm)
+                    ->with('offset',$offset)
+                    ->with('statusrekom',$statusrekom)
+                    ->with('jlhtemuan',$jlhtemuan)
+                    ->with('id',$id)
+                    ->with('drekomendasi',$drekomendasi)
+                    ->with('data',$data);
+        }
+        else
+        {
+        // return $drekomendasi;
+            return view('backend.pages.data-lhp.auditor-junior.detail-lhp')
+                    ->with('temuan',$tm)
+                    ->with('offset',$offset)
+                    ->with('statusrekom',$statusrekom)
+                    ->with('jlhtemuan',$jlhtemuan)
+                    ->with('id',$id)
+                    ->with('drekomendasi',$drekomendasi)
+                    ->with('data',$data);
+        }
         // return $data;
     }
     public function store(Request $request)
@@ -503,5 +551,11 @@ class DataTemuanController extends Controller
         DataTemuan::destroy($id);
         return redirect('data-temuan-lhp/'.$idlhp)
             ->with('success', 'Anda telah menghapus data temuan.');
+    }
+
+    public function temuan_by_lhp($idlhp)
+    {
+        $temuan=DataTemuan::where('id_lhp',$idlhp)->get();
+        return $temuan;
     }
 }

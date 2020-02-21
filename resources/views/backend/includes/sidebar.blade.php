@@ -35,7 +35,7 @@
             <span class="menu-text">Dashboard</span>
           </a>
         </li>
-         @if (Auth::user()->level!='pic-unit' && Auth::user()->level!='auditor-junior')
+         @if (Auth::user()->level!='pic-unit' && Auth::user()->level!='auditor-junior' && Auth::user()->level!='auditor-senior')
           <li class="has-submenu {{$url=='data-temuan' || $url=='data-penyebab' || $url=='data-rekomendasi' || $url=='bidang-pengawasan' ? 'active open' : ''}}">
             <a href="javascript:void(0)" class="submenu-toggle">
               <i class="menu-icon fa fa-bars"></i>
@@ -85,14 +85,26 @@
             </a>
           </li>
           <li class="{{$url=='data-tindak-lanjut' ? 'active' : ''}}">
-            <a href="{{url('data-lhp')}}">
+            <a href="{{url('data-tindaklanjut')}}">
               <i class="menu-icon fa fa-list"></i>
               <span class="menu-text">Data Tindak Lanjut</span>
             </a>
           </li>
         @endif
         @if (Auth::user()->level=='auditor-senior')
-          <li class="has-submenu {{strpos($url,'data-lhp')!==false ? 'active open' : ''}}">
+         <li class="{{$url=='data-lhp' ? 'active' : ''}}">
+            <a href="{{url('data-lhp')}}">
+              <i class="menu-icon fa fa-list"></i>
+              <span class="menu-text">Data LHP</span>
+            </a>
+          </li>
+          <li class="{{$url=='data-tindak-lanjut' ? 'active' : ''}}">
+            <a href="{{url('data-tindaklanjut')}}">
+              <i class="menu-icon fa fa-list"></i>
+              <span class="menu-text">Data Tindak Lanjut</span>
+            </a>
+          </li>
+          {{-- <li class="has-submenu {{strpos($url,'data-lhp')!==false ? 'active open' : ''}}">
             <a href="javascript:void(0)" class="submenu-toggle">
               <i class="menu-icon fa fa-archive"></i>
               <span class="menu-text">Master Data LHP</span>
@@ -102,7 +114,7 @@
               <li class="{{strpos($url,'semua-data-lhp')!==false ? 'active open' : ''}}"><a href="{{url('semua-data-lhp')}}/{{ date('Y') }}"><span class="menu-text">Semua Data LHP</span></a></li>
               <li class="{{strpos($url,'data-lhp')!==false ? 'active open' : ''}}"><a href="{{url('data-lhp')}}/{{ date('Y') }}"><span class="menu-text">Data LHP</span></a></li>
             </ul>
-          </li>
+          </li> --}}
         @endif
         @if (Auth::user()->level!='pic-unit')
         <li class="has-submenu {{strpos($url,'laporan')!==false ? 'active open' : ''}}">

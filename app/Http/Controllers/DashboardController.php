@@ -194,33 +194,182 @@ class DashboardController extends Controller
         }
         elseif(Auth::user()->level=='auditor-senior')
         {
-            $lhp=DaftarTemuan::with('dpemeriksa')->with('djenisaudit')->get();
-            $datalhp=array();
-            foreach($lhp as $k=>$v)
+            // $lhp=DaftarTemuan::with('dpemeriksa')->with('djenisaudit')->get();
+            // $datalhp=array();
+            // foreach($lhp as $k=>$v)
+            // {
+            //     $datalhp[str_slug($v->status_lhp)][]=$v;
+            // }
+            // $status=StatusRekomendasi::get()->count();
+            // return view('backend.pages.dashboard.auditor-senior')
+            //         ->with('lhp',$lhp)
+            //         ->with('status',$status)
+            //         ->with('color',$color)
+            //         ->with('datalhp',$datalhp);
+            // $lhp=DaftarTemuan::where('user_input_id',Auth::user()->id)->with('dpemeriksa')->with('djenisaudit')->get();
+            $tindaklanjut=TindakLanjutTemuan::with('lhp')->get();
+            // return $lhp; 
+            $datatl=$dtl=$dlhp=$colorlhp=$arraylhp=array();
+            foreach($tindaklanjut as $k=>$v)
             {
-                $datalhp[str_slug($v->status_lhp)][]=$v;
+                if(isset($v->lhp))
+                {
+                    // if($v->lhp->user_input_id==Auth::user()->id)
+                    // {
+                        // return $v->dtemuan->totemuan;
+                        list($th,$bl,$tg)=explode('-',$v->lhp->tanggal_lhp);
+                        if($th==$thn)
+                        {
+                            if($v->status_review_pic_1=='')
+                                $status='Create oleh Unit Kerja';
+                            else
+                                $status=$v->status_review_pic_1;
+    
+                            $dlhp[$status][]=$v;
+                            $arraylhp[$v->lhp->id]=$v->lhp->id;
+                        }
+                    // }
+                }
             }
-            $status=StatusRekomendasi::get()->count();
+            foreach($dlhp as $k=>$v)
+            {
+                $dtl['labels'][]=$k;
+                $dtl['datasets'][0]['data'][]=isset($dlhp[$k]) ? count($dlhp[$k]) : 0;
+                $dtl['datasets'][0]['backgroundColor'][]=$colorlhp[str_slug($k)]=generate_color_one();
+                $datatl[str_slug($k)][]=$v;
+            }
+
+            // return $dtl;
+
+            //Status Rekomendasi
+            $status=StatusRekomendasi::get();
+            $data_rekom=DataRekomendasi::with('dtemuan')->get();
+            $rekomendasi=$rekom=$colorrekom=array();
+            // return $data_rekom;
+
+            foreach($data_rekom as $k=>$v)
+            {
+                if(isset($v->dtemuan->temuan))
+                {
+                    // return $v->dtemuan->totemuan;
+                    list($th,$bl,$tg)=explode('-',$v->dtemuan->totemuan->tanggal_lhp);
+                    if($th==$thn)
+                    {
+                        if(in_array($v->dtemuan->id_lhp,$arraylhp))
+                            $rekomendasi[$v->status_rekomendasi_id][]=$v;
+                    }
+                }
+            }
+            $dstatus=array();
+            // return $rekomendasi;
+            foreach($status as $k=>$v)
+            {
+                $rekom['labels'][]=$v->rekomendasi;
+                $rekom['datasets'][0]['data'][]=isset($rekomendasi[$v->id]) ? count($rekomendasi[$v->id]) : 0;
+                $rekom['datasets'][0]['backgroundColor'][]=$colorrekom[str_slug($v->rekomendasi)]=generate_color_one();
+                $dstatus[str_slug($v->rekomendasi)]=$v;
+            }
+            $color['colorrekom']=$colorrekom;
+            $color['colorlhp']=$colorlhp;
+            // return $dlhp;
             return view('backend.pages.dashboard.auditor-senior')
-                    ->with('lhp',$lhp)
+                    // ->with('lhp',$lhp)
+                    ->with('dtl',$dtl)
                     ->with('status',$status)
+                    ->with('dstatus',$dstatus)
+                    ->with('rekom',$rekom)
                     ->with('color',$color)
-                    ->with('datalhp',$datalhp);
+                    ->with('tahun',$thn)
+                    ->with('datatl',$datatl);
         }
         elseif(Auth::user()->level=='pic-unit')
         {
-            $lhp=DaftarTemuan::with('dpemeriksa')->with('djenisaudit')->get();
-            $datalhp=array();
-            foreach($lhp as $k=>$v)
+            // $lhp=DaftarTemuan::with('dpemeriksa')->with('djenisaudit')->get();
+            // $datalhp=array();
+            // foreach($lhp as $k=>$v)
+            // {
+            //     $datalhp[str_slug($v->status_lhp)][]=$v;
+            // }
+            // $status=StatusRekomendasi::get()->count();
+            // return view('backend.pages.dashboard.pic-unit')
+            //         ->with('lhp',$lhp)
+            //         ->with('status',$status)
+            //         ->with('color',$color)
+            //         ->with('datalhp',$datalhp);
+             $tindaklanjut=TindakLanjutTemuan::with('lhp')->get();
+            // return $lhp; 
+            $datatl=$dtl=$dlhp=$colorlhp=$arraylhp=array();
+            foreach($tindaklanjut as $k=>$v)
             {
-                $datalhp[str_slug($v->status_lhp)][]=$v;
+                if(isset($v->lhp))
+                {
+                    if($v->lhp->user_input_id==Auth::user()->id)
+                    {
+                        // return $v->dtemuan->totemuan;
+                        list($th,$bl,$tg)=explode('-',$v->lhp->tanggal_lhp);
+                        if($th==$thn)
+                        {
+                            if($v->status_review_pic_1=='')
+                                $status='Create oleh Unit Kerja';
+                            else
+                                $status=$v->status_review_pic_1;
+    
+                            $dlhp[$status][]=$v;
+                            $arraylhp[$v->lhp->id]=$v->lhp->id;
+                        }
+                    }
+                }
             }
-            $status=StatusRekomendasi::get()->count();
+            foreach($dlhp as $k=>$v)
+            {
+                $dtl['labels'][]=$k;
+                $dtl['datasets'][0]['data'][]=isset($dlhp[$k]) ? count($dlhp[$k]) : 0;
+                $dtl['datasets'][0]['backgroundColor'][]=$colorlhp[str_slug($k)]=generate_color_one();
+                $datatl[str_slug($k)][]=$v;
+            }
+
+            // return $dtl;
+
+            //Status Rekomendasi
+            $status=StatusRekomendasi::get();
+            $data_rekom=DataRekomendasi::with('dtemuan')->get();
+            $rekomendasi=$rekom=$colorrekom=array();
+            // return $data_rekom;
+
+            foreach($data_rekom as $k=>$v)
+            {
+                if(isset($v->dtemuan->temuan))
+                {
+                    // return $v->dtemuan->totemuan;
+                    list($th,$bl,$tg)=explode('-',$v->dtemuan->totemuan->tanggal_lhp);
+                    if($th==$thn)
+                    {
+                        if(in_array($v->dtemuan->id_lhp,$arraylhp))
+                            $rekomendasi[$v->status_rekomendasi_id][]=$v;
+                    }
+                }
+            }
+            $dstatus=array();
+            // return $rekomendasi;
+            foreach($status as $k=>$v)
+            {
+                $rekom['labels'][]=$v->rekomendasi;
+                $rekom['datasets'][0]['data'][]=isset($rekomendasi[$v->id]) ? count($rekomendasi[$v->id]) : 0;
+                $rekom['datasets'][0]['backgroundColor'][]=$colorrekom[str_slug($v->rekomendasi)]=generate_color_one();
+                $dstatus[str_slug($v->rekomendasi)]=$v;
+            }
+            $color['colorrekom']=$colorrekom;
+            $color['colorlhp']=$colorlhp;
+            // return $dlhp;
             return view('backend.pages.dashboard.pic-unit')
-                    ->with('lhp',$lhp)
+                    // ->with('lhp',$lhp)
+                    ->with('dtl',$dtl)
                     ->with('status',$status)
+                    ->with('dstatus',$dstatus)
+                    ->with('rekom',$rekom)
                     ->with('color',$color)
-                    ->with('datalhp',$datalhp);
+                    ->with('tahun',$thn)
+                    ->with('datatl',$datatl);
         }
     }
 }

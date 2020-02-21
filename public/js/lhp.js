@@ -282,3 +282,11 @@ function validasiedit() {
         $('#formubah').submit()
     }
 }
+
+function detailrekom(id)
+{
+    $('#detail-rekom').load(flagsUrl +'/rincian-nilai-rekom/'+id,function(){
+        $('#table').dataTable();
+    });
+    $('#modal-detail-rekom').modal('show');
+}

@@ -42,6 +42,16 @@
 							</select>
 						</div>
 						
+						<div class="form-group" id="" style="">
+							<label>Pivot User</label>
+							<select name="" class="form-control select2">
+								<option value="">-- Pilih --</option>
+								@foreach ($user as $index=>$item)
+									<option value="{{$item->id}}">{{$item->name}}</option>
+								@endforeach
+							</select>
+						</div>
+						
 						<div class="form-group">
 							<label>Nama PIC</label>
 							<input type="text" name="nama_pic" class="form-control" placeholder="Nama PIC"/>
@@ -97,7 +107,15 @@
 								@endforeach
 							</select>
 						</div>
-                       
+                       <div class="form-group" id="" style="">
+							<label>Pivot User</label>
+							<select name="id_user" class="form-control select2">
+								<option value="">-- Pilih --</option>
+								@foreach ($user as $index=>$item)
+									<option value="{{$item->id}}">{{$item->name}}</option>
+								@endforeach
+							</select>
+						</div>
 						<div class="form-group">
 							<label>Nama PIC</label>
 							<input type="text" name="nama_pic" class="form-control" placeholder="Nama PIC" id="nama_pic"/>
@@ -211,7 +229,7 @@
 
 @section('footscript')
 	<script>
-		hidelaert();
+		// hidelaert();
 		$('.select2').select2();
 		// binding data to modal edit
         $('#table').on('click', '.btn-edit', function(){
@@ -224,6 +242,9 @@
 
 					$('#level_pic').val(res.level_pic)
 					$('#level_pic').select2().trigger('change');
+					
+					$('#id_user').val(res.id_user)
+					$('#id_user').select2().trigger('change');
 
 					if(res.bidang==null)
 						$('#edit_bidang').css('display','none');

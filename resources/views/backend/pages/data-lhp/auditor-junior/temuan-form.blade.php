@@ -71,9 +71,9 @@
                     <option value="">-- Pilih --</option>
                     @foreach ($picunit as $item)
                         @if (isset($item->levelpic->nama_level))
-                            @if ($item->levelpic->nama_level!='UKK')
+                            {{-- @if ($item->levelpic->nama_level!='UKK') --}}
                                 <option value="{{$item->id}}">{{$item->nama_pic}}</option>
-                            @endif
+                            {{-- @endif --}}
                         @endif
                     @endforeach
                 </select>

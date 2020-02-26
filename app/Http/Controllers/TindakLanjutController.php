@@ -9,6 +9,7 @@ use App\Models\DaftarTemuan;
 use App\Models\DataRekomendasi;
 use App\Models\DataTemuan;
 use App\Models\Pemeriksa;
+use App\Models\PICUnit;
 use Auth;
 class TindakLanjutController extends Controller
 {
@@ -100,7 +101,7 @@ class TindakLanjutController extends Controller
 
         $temuan=$rekomendasi=$idtemuanarray=array();
         $datalhp=DaftarTemuan::where('user_input_id',Auth::user()->id)->where('status_lhp','Publish LHP')->orderBy('id','desc')->get();
-        
+
         $idlhparray=array();
         foreach($datalhp as $k=>$v)
         {
@@ -140,19 +141,7 @@ class TindakLanjutController extends Controller
         $rekomid=($rekomid==null ? -1 : $rekomid);
         $temuanid=($temuanid==null ? -1 : $temuanid);
 
-        // $temuan=($temuanid) ? DataTemuan::find($temuanid) : array();
-        
-        // if($temuan && $rekomid)
-        //     $tindaklanjut=TindakLanjutTemuan::where('temuan_id',$temuanid)->where('rekomendasi_id',$rekomid)->get();
-        // elseif($temuan)
-        // $tindaklanjut=TindakLanjutTemuan::with('lhp')->where('temuan_id',$temuanid)->get();
-        // $data=array();
-        // if($temuan)
-        // {
-        //     $data=DaftarTemuan::selectRaw('*, daftar_lhp.id as id_lhp')
-        //             ->where('daftar_lhp.id',$temuan->id_lhp)
-        //             ->with('dpemeriksa')->first();
-        // }
+       
         $pemeriksa=Pemeriksa::orderBy('code')->get();
         $datalhp=DaftarTemuan::where('user_input_id',Auth::user()->id)->where('status_lhp','Publish LHP')->orderBy('id','desc')->get();
         $idlhparray=array();
@@ -187,5 +176,116 @@ class TindakLanjutController extends Controller
                 ->with('rekomendasi',$rekomendasi)
                 ->with('temuan',$temuan)
                 ->with('temuanid',$temuanid);
+    }
+    
+    public function unitkerja_index($tahun=null,$rekomid=null,$temuanid=null)
+    {
+        $tahun=($tahun==null ? date('Y') : $tahun);
+        $rekomid=($rekomid==null ? -1 : $rekomid);
+        $temuanid=($temuanid==null ? -1 : $temuanid);
+
+        $user_pic=PICUnit::where('id_user',Auth::user()->id)->first();
+
+        $pemeriksa=Pemeriksa::orderBy('code')->get();
+        // $datalhp=DaftarTemuan::where('user_input_id',Auth::user()->id)->where('status_lhp','Publish LHP')->orderBy('id','desc')->get();
+        $datalhp=DaftarTemuan::where('status_lhp','Publish LHP')->orderBy('id','desc')->get();
+        $idlhparray=array();
+        foreach($datalhp as $k=>$v)
+        {
+            $idlhparray[$v->id]=$v->id;
+        }
+        $temuan=$rekomendasi=$idtemuanarray=array();
+        if(count($idlhparray)!=0)
+        {
+            $temuan=DataTemuan::whereIn('id_lhp',$idlhparray)->where('pic_temuan_id',$user_pic->id)->get();
+            foreach($temuan as $kk=>$vv)
+            {
+                if($vv->pic_temuan_id==$user_pic->id)
+                    $idtemuanarray[]=$vv->id;
+            }
+        }
+
+        // return $idtemuanarray;
+        if(count($idtemuanarray)!=0)
+        {
+            $rekom=DataRekomendasi::whereIn('id_temuan',$idtemuanarray)->where('pic_1_temuan_id',$user_pic->id)->get();
+            foreach($rekom as $k=>$v)
+            {
+                // if($v->pic_1_temuan_id!=null)
+                // {
+                //     if()
+                //     $rekomendasi[$v->id_temuan][]=$v;
+                // }
+                // else
+                    $rekomendasi[$v->id_temuan][]=$v;
+            }
+        }
+        return view('backend.pages.data-lhp.pic-unit.tindaklanjut')
+                ->with('tahun',$tahun)
+                ->with('rekomid',$rekomid)
+                ->with('idlhparray',$idlhparray)
+                ->with('datalhp',$datalhp)
+                ->with('pemeriksa',$pemeriksa)
+                ->with('rekomendasi',$rekomendasi)
+                ->with('temuan',$temuan)
+                ->with('temuanid',$temuanid);
+    }
+
+    public function unitkerja_list(Request $request)
+    {
+        $tgl_awal = $request->tgl_awal;
+        $tgl_akhir = $request->tgl_akhir;
+        $tahun=($request->tahun ? $request->tahun : date('Y'));
+        $rekomid=($request->rekomid ? $request->rekomid : -1);
+        $temuanid=($request->temuanid ? $request->temuanid : -1);
+        $statusrekom=($request->statusrekom ? $request->statusrekom : -1);
+
+        $temuan=$rekomendasi=$idtemuanarray=array();
+        $user_pic=PICUnit::where('id_user',Auth::user()->id)->first();
+        // $datalhp=DaftarTemuan::where('user_input_id',Auth::user()->id)->where('status_lhp','Publish LHP')->orderBy('id','desc')->get();
+        $datalhp=DaftarTemuan::where('status_lhp','Publish LHP')->orderBy('id','desc')->get();
+
+        $idlhparray=array();
+        foreach($datalhp as $k=>$v)
+        {
+            $idlhparray[$v->id]=$v->id;
+        }
+
+        if(count($idlhparray)!=0)
+        {
+            $temuan=DataTemuan::whereIn('id_lhp',$idlhparray)->where('pic_temuan_id',$user_pic->id)->get();
+            foreach($temuan as $kk=>$vv)
+            {
+                if($vv->pic_temuan_id==$user_pic->id)
+                    $idtemuanarray[]=$vv->id;
+            }
+        }
+
+        if(count($idtemuanarray)!=0)
+        {
+            if($statusrekom==null)
+                $rekom=DataRekomendasi::whereIn('id_temuan',$idtemuanarray)->where('pic_1_temuan_id',$user_pic->id)->get();
+            else
+                $rekom=DataRekomendasi::whereIn('id_temuan',$idtemuanarray)->where('pic_1_temuan_id',$user_pic->id)->where('status_rekomendasi_id',$statusrekom)->get();
+
+            foreach($rekom as $k=>$v)
+            {
+                $rekomendasi[$v->id_temuan][]=$v;
+            }
+        }
+        return view('backend.pages.data-lhp.pic-unit.tindaklanjut-data')
+                        ->with('rekomendasi',$rekomendasi)
+                        ->with('idtemuanarray',$idtemuanarray)
+                        ->with('temuan',$temuan);
+    }
+
+    public function set_tgl_penyelesaian($temuanid,$rekomid,$tgl,$bln,$thn)
+    {
+        $date=$thn.'-'.$bln.'-'.$tgl;
+        $rekom=DataRekomendasi::find($rekomid);
+        $rekom->tanggal_penyelesaian=$date;
+        $c=$rekom->save();
+        if($c)
+            echo tgl_indo($date);
     }
 }

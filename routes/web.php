@@ -84,9 +84,13 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('data-tindak-lanjut/{rekom_id}/{idtemuan}','TindakLanjutController@index');
     
     Route::get('data-tindaklanjut/{tahun?}/{rekom_id?}/{temuan_id?}','TindakLanjutController@junior_index');
+    Route::get('data-tindaklanjut-unitkerja/{tahun?}/{rekom_id?}/{temuan_id?}','TindakLanjutController@unitkerja_index');
     Route::post('data-tindaklanjut-list','TindakLanjutController@junior_list');
+    Route::post('data-tindaklanjut-unitkerja-list','TindakLanjutController@unitkerja_list');
 
     Route::get('data-rekanan','RekananController@data_rekanan')->name('data-rekanan');
+    
+    Route::get('set-tgl-penyelesaian/{temuan_id}/{rekom_id}/{tgl}/{bln}/{thn}','TindakLanjutController@set_tgl_penyelesaian');
 
 });
 

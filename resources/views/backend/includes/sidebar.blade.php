@@ -85,10 +85,17 @@
             </a>
           </li>
           <li class="{{$url=='data-tindak-lanjut' ? 'active' : ''}}">
-            <a href="{{url('data-tindaklanjut')}}">
-              <i class="menu-icon fa fa-list"></i>
-              <span class="menu-text">Data Tindak Lanjut</span>
-            </a>
+            @if (Auth::user()->level=='pic-unit')
+              <a href="{{url('data-tindaklanjut-unitkerja')}}">
+                <i class="menu-icon fa fa-list"></i>
+                <span class="menu-text">Data Tindak Lanjut</span>
+              </a>
+            @else
+              <a href="{{url('data-tindaklanjut')}}">
+                <i class="menu-icon fa fa-list"></i>
+                <span class="menu-text">Data Tindak Lanjut</span>
+              </a>
+            @endif
           </li>
         @endif
         @if (Auth::user()->level=='auditor-senior')

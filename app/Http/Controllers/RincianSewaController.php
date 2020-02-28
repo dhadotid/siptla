@@ -19,7 +19,7 @@ class RincianSewaController extends Controller
 {
     public function form_rincian($jenis,$idtemuan,$idrekomendasi,$id=-1)
     {
-        if($id==-1)
+        if($id!=-1)
             $pic=PICUnit::where('id_user',Auth::user()->id)->get();
         else
             $pic=PICUnit::orderBy('nama_pic')->get();

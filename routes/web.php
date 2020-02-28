@@ -87,6 +87,8 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('data-tindaklanjut-unitkerja/{tahun?}/{rekom_id?}/{temuan_id?}','TindakLanjutController@unitkerja_index');
     Route::post('data-tindaklanjut-list','TindakLanjutController@junior_list');
     Route::post('data-tindaklanjut-unitkerja-list','TindakLanjutController@unitkerja_list');
+    Route::get('tindak-lanjut-unitkerja-form-add/{idlhp}/{temuan_id_index}/{rekom_id_index}','TindakLanjutController@unitkerja_add_form');
+    Route::post('tindaklanjut-unitkerja-simpan','TindakLanjutController@unitkerja_tindak_lanjut_simpan');
 
     Route::get('data-rekanan','RekananController@data_rekanan')->name('data-rekanan');
     

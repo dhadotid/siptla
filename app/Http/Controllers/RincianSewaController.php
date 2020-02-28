@@ -13,13 +13,15 @@ use App\Models\RincianHutangTitipan;
 use App\Models\PICUnit;
 use App\Models\RincianPenutupanRekening;
 use App\Models\RincianUmum;
+use App\Models\TindakLanjutTemuan;
+use Auth;
 class RincianSewaController extends Controller
 {
     public function form_rincian($jenis,$idtemuan,$idrekomendasi,$id=-1)
     {
+        $pic=PICUnit::where('id_user',Auth::user()->id)->get();
         if($jenis=='sewa')
         {
-            $pic=PICUnit::all();
             return view('backend.pages.data-lhp.rincian-form.form-sewa')
                 ->with('jenis',$jenis)
                 ->with('idtemuan',$idtemuan)
@@ -31,7 +33,6 @@ class RincianSewaController extends Controller
         }
         elseif($jenis=='uangmuka')
         {
-            $pic=PICUnit::all();
             return view('backend.pages.data-lhp.rincian-form.form-uangmuka')
                 ->with('jenis',$jenis)
                 ->with('idtemuan',$idtemuan)
@@ -43,7 +44,6 @@ class RincianSewaController extends Controller
         }
         elseif($jenis=='listrik')
         {
-            $pic=PICUnit::all();
             return view('backend.pages.data-lhp.rincian-form.form-listrik')
                 ->with('jenis',$jenis)
                 ->with('idtemuan',$idtemuan)
@@ -55,7 +55,6 @@ class RincianSewaController extends Controller
         }
         elseif($jenis=='piutang')
         {
-            $pic=PICUnit::all();
             return view('backend.pages.data-lhp.rincian-form.form-piutang')
                 ->with('jenis',$jenis)
                 ->with('idtemuan',$idtemuan)
@@ -67,7 +66,6 @@ class RincianSewaController extends Controller
         }
         elseif($jenis=='piutangkaryawan')
         {
-            $pic=PICUnit::all();
             return view('backend.pages.data-lhp.rincian-form.form-piutangkaryawan')
                 ->with('jenis',$jenis)
                 ->with('idtemuan',$idtemuan)
@@ -79,7 +77,6 @@ class RincianSewaController extends Controller
         }
         elseif($jenis=='hutangtitipan')
         {
-            $pic=PICUnit::all();
             return view('backend.pages.data-lhp.rincian-form.form-hutangtitipan')
                 ->with('jenis',$jenis)
                 ->with('idtemuan',$idtemuan)
@@ -91,7 +88,6 @@ class RincianSewaController extends Controller
         }
         elseif($jenis=='penutupanrekening')
         {
-            $pic=PICUnit::all();
             return view('backend.pages.data-lhp.rincian-form.form-penutupanrekening')
                 ->with('jenis',$jenis)
                 ->with('idtemuan',$idtemuan)
@@ -103,7 +99,6 @@ class RincianSewaController extends Controller
         }
         elseif($jenis=='umum')
         {
-            $pic=PICUnit::all();
             return view('backend.pages.data-lhp.rincian-form.form-umum')
                 ->with('jenis',$jenis)
                 ->with('idtemuan',$idtemuan)
@@ -119,12 +114,27 @@ class RincianSewaController extends Controller
     {
         // return $request->all();
         $id=$request->id;
+        $idtindaklanjut=0;
+        if(isset($request->tindak_lanjut))
+        {
+            $tindaklanjut=new TindakLanjutTemuan;
+            $tindaklanjut->lhp_id = 
+            $tindaklanjut->temuan_id = $request->idtemuan;
+            $tindaklanjut->rekomendasi_id = $request->idrekomendasi;
+            $tindaklanjut->rangkuman = $request->tindak_lanjut;
+            $tindaklanjut->rincian = $request->jenis;
+            $tindaklanjut->save();
+            
+            $idtindaklanjut=$tindaklanjut->id;
+        }
+
         if($id==-1)
         {
             if($request->jenis=='sewa')
             {
                 list($idunitkerja,$namaunitkerja)=explode('__',$request->unit_kerja);
                 $simpan=new RincianSewa;
+                $simpan->id_tindak_lanjut=$idtindaklanjut;
                 $simpan->id_temuan=$request->idtemuan;
                 $simpan->id_rekomendasi=$request->idform;
                 $simpan->unit_kerja_id=$idunitkerja;
@@ -146,6 +156,7 @@ class RincianSewaController extends Controller
             {
                 list($idunitkerja,$namaunitkerja)=explode('__',$request->unit_kerja);
                 $simpan=new RincianUangMuka;
+                $simpan->id_tindak_lanjut=$idtindaklanjut;
                 $simpan->id_temuan=$request->idtemuan;
                 $simpan->id_rekomendasi=$request->idform;
                 $simpan->unit_kerja_id=$idunitkerja;
@@ -166,6 +177,7 @@ class RincianSewaController extends Controller
             {
                 list($idunitkerja,$namaunitkerja)=explode('__',$request->unit_kerja);
                 $simpan=new RincianListrik;
+                $simpan->id_tindak_lanjut=$idtindaklanjut;
                 $simpan->id_temuan=$request->idtemuan;
                 $simpan->id_rekomendasi=$request->idform;
                 $simpan->unit_kerja_id=$idunitkerja;
@@ -186,6 +198,7 @@ class RincianSewaController extends Controller
             {
                 list($idunitkerja,$namaunitkerja)=explode('__',$request->unit_kerja);
                 $simpan=new RincianPiutang;
+                $simpan->id_tindak_lanjut=$idtindaklanjut;
                 $simpan->id_temuan=$request->idtemuan;
                 $simpan->id_rekomendasi=$request->idform;
                 $simpan->unit_kerja_id=$idunitkerja;
@@ -204,6 +217,7 @@ class RincianSewaController extends Controller
             {
                 list($idunitkerja,$namaunitkerja)=explode('__',$request->unit_kerja);
                 $simpan=new RincianPiutangKaryawan;
+                $simpan->id_tindak_lanjut=$idtindaklanjut;
                 $simpan->id_temuan=$request->idtemuan;
                 $simpan->id_rekomendasi=$request->idform;
                 $simpan->unit_kerja_id=$idunitkerja;
@@ -222,6 +236,7 @@ class RincianSewaController extends Controller
             {
                 list($idunitkerja,$namaunitkerja)=explode('__',$request->unit_kerja);
                 $simpan=new RincianHutangTitipan;
+                $simpan->id_tindak_lanjut=$idtindaklanjut;
                 $simpan->id_temuan=$request->idtemuan;
                 $simpan->id_rekomendasi=$request->idform;
                 $simpan->unit_kerja_id=$idunitkerja;
@@ -236,6 +251,7 @@ class RincianSewaController extends Controller
             {
                 list($idunitkerja,$namaunitkerja)=explode('__',$request->unit_kerja);
                 $simpan=new RincianPenutupanRekening;
+                $simpan->id_tindak_lanjut=$idtindaklanjut;
                 $simpan->id_temuan=$request->idtemuan;
                 $simpan->id_rekomendasi=$request->idform;
                 $simpan->unit_kerja_id=$idunitkerja;
@@ -257,6 +273,7 @@ class RincianSewaController extends Controller
             {
                 list($idunitkerja,$namaunitkerja)=explode('__',$request->unit_kerja);
                 $simpan=new RincianUmum;
+                $simpan->id_tindak_lanjut=$idtindaklanjut;
                 $simpan->id_temuan=$request->idtemuan;
                 $simpan->id_rekomendasi=$request->idform;
                 $simpan->unit_kerja_id=$idunitkerja;

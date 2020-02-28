@@ -38,7 +38,7 @@
 					<div class="panel panel-default">
 						<div class="panel-heading" role="tab" id="heading-1">
 							<a class="accordion-toggle collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-1" aria-expanded="false" aria-controls="collapse-1">
-								<h4 class="panel-title ">Filter Pencairan</h4>
+								<h4 class="panel-title ">Filter PENCARIAN</h4>
 								<i class="fa acc-switch"></i>
 							</a>
 						</div>
@@ -135,7 +135,7 @@
                                     <th class="text-center">Temuan</th>
                                     <th class="text-center">No. Rekomendasi</th>
                                     <th class="text-center">Rekomendasi</th>
-                                    <th class="text-center">Tanggal Penyelesaian</th>
+                                    <th class="text-center">Tanggal<br>Penyelesaian</th>
                                     <th class="text-center">PIC 2</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
@@ -146,13 +146,18 @@
                                 @endphp
                                 @foreach ($temuan as $item)
                                     @php
-                                        $rekom=$norekom=$tglselesai=$aksi='';
+                                        $rekom=$norekom=$tglselesai=$aksi=$pic2='';
                                         if(isset($rekomendasi[$item->id]))
                                         {
                                             foreach($rekomendasi[$item->id] as $key=>$val)
                                             {
                                                 $norekom.=$val->nomor_rekomendasi.'<br>';
                                                 $rekom.='<li style="height:32px;">- '.(strlen($val->rekomendasi) > 30 ? substr($val->rekomendasi,0,30).' ...' : $val->rekomendasi ).'</li>';
+
+                                                if(isset($val->picunit2->nama_pic))
+                                                    $pic2.='<li style="height:32px;">'.$val->picunit2->nama_pic.'</li>';
+                                                else
+                                                    $pic2.='<li style="height:32px;">-</li>';
 
                                                 $tglselesai.='<div id="tgl_penyelesaian_'.$item->id.'_'.$val->id.'">';
                                                     if($val->tanggal_penyelesaian!='')
@@ -177,7 +182,7 @@
                                                     </button>
                                                     <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">
                                                         <li>
-                                                            <a href="#" class="btn-edit" data-toggle="modal" data-target="#modaltambahtindaklanjut" data-value="'.$item->id.'" style="font-size:11px;"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Tindak Lanjut</a>
+                                                            <a href="#" class="btn-add" data-toggle="modal" data-target="#modaltambahtindaklanjut" data-value="'.$item->id_lhp.'__'.$item->id.'_0__'.$val->id.'_0'.'" style="font-size:11px;"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Tindak Lanjut</a>
                                                         </li>
                                                         <li><a href="#" target="_blank" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>
                                                     </ul>
@@ -188,11 +193,11 @@
                                     <tr>
                                         <td class="text-center">{{$no}}</td>
                                         <td class="text-center">{{$item->no_temuan}}</td>
-                                        <td class="text-center">{{$item->temuan}}</td>
+                                        <td class="text-left">{{(strlen($item->temuan) > 30 ? substr($item->temuan,0,30).' ...' : $item->temuan )}}</td>
                                         <td class="text-center">{!!$norekom!!}</td>
                                         <td class="text-left"><ul>{!!$rekom!!}</ul></td>
                                         <td class="text-center"><ul>{!!$tglselesai!!}</ul></td>
-                                        <td class="text-center"></td>
+                                        <td class="text-left"><ul>{!!$pic2!!}</ul></td>
                                         <td class="text-center"><ul>{!!$aksi!!}</ul></td>
                                     </tr>
                                     @php
@@ -211,6 +216,9 @@
 @section('footscript')
     <link rel="stylesheet" href="{{asset('theme/backend/libs/misc/datatables/datatables.min.css')}}"/>
     <script src="{{asset('theme/backend/libs/misc/datatables/datatables.min.js')}}"></script>
+    <link rel="stylesheet" href="{{asset('css/noty.css')}}"/>
+    <script src="{{asset('js/noty.js')}}"></script>
+    <script src="{{asset('js/tindak-lanjut.js')}}"></script>
 	<script>
         $.ajaxSetup({
             headers: {
@@ -223,68 +231,20 @@
 		$('.select2').select2();
         // loaddata();
         $('#table').DataTable();
-        function loaddata()
-        {
-            var tanggal_awal=$('#tanggal_awal').val();
-            var tanggal_akhir=$('#tanggal_akhir').val();
-            var pemeriksa=$('#pemeriksa').val();
-            var no_lhp=$('#no_lhp').val();
-            var no_temuan=$('#no_temuan').val();
-            var no_rekomendasi=$('#no_rekomendasi').val();
-            var status_rekomendasi=$('#status_rekomendasi').val();
-            
-            $.ajax({
-                url : '{{url("/")}}/data-tindaklanjut-unitkerja-list',
-                data : { tahun : '{{$tahun}}', tgl_awal : tanggal_awal, tgl_akhir : tanggal_akhir, rekomid : no_rekomendasi, temuan_id : no_temuan, statusrekom : status_rekomendasi},
-                type : 'POST',
-                dataType : 'JSON',
-                success : function(res){
-                    $('#data').html(res,function(){
-                        $('#table-data').DataTable();
-                    });
-                }
-            });
-            // $('#data').load(flagsUrl+'/data-tindaklanjut-list/{{$tahun}}',function(){
-            //     $('#table').DataTable();
-            // });
-        }
-
-        function getdata(tahun)
-        {
-            location.href=flagsUrl+'/data-tindaklanjut-unitkerja/'+tahun;
-        }
-        function settglpenyelesaian(temuan_id,rekom_id)
-        {
-            swal({
-                title: "Apakah Anda Yakin ?",
-                text: "Ingin Menentukan Tanggal Penyelesaian.\nKarena Tidak Akan dapat dirubah Kembali Jika Telah Di SET.",
-                icon: "warning",
-                buttons: [
-                    'Tidak!',
-                    'Ya'
-                ],
-                dangerMode: true,
-            }).then(function (isConfirm) {
-                if (isConfirm) {
-                    var tgl=$('#tanggal_penyelesaian_'+temuan_id+'_'+rekom_id).val();
-                    $.ajax({
-                        url : flagsUrl + '/set-tgl-penyelesaian/'+temuan_id+'/'+rekom_id+'/'+tgl,
-                        success : function(res){
-                            if(res)
-                            {
-                                $('#tgl_penyelesaian_'+temuan_id+'_'+rekom_id).text(res);
-                            }
-                        }
-                    });
-                } else {
-                    
-                }
-            });
-        }
+        
+        var pesan='{{Session::get("success")}}';
+        var error='{{Session::get("error")}}';
+        if(pesan!='')
+            swal("Berhasil", pesan, "success");
+        if(error!='')
+            swal("Gagal", error, "error");
 	</script>
 	<style>
 	.select2-container{
 		width:100% !important;
 	}
 	</style>
+@endsection
+@section('modal')
+    @include('backend.pages.data-lhp.pic-unit.modal')
 @endsection

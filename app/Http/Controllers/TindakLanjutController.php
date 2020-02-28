@@ -208,7 +208,7 @@ class TindakLanjutController extends Controller
         // return $idtemuanarray;
         if(count($idtemuanarray)!=0)
         {
-            $rekom=DataRekomendasi::whereIn('id_temuan',$idtemuanarray)->where('pic_1_temuan_id',$user_pic->id)->get();
+            $rekom=DataRekomendasi::whereIn('id_temuan',$idtemuanarray)->where('pic_1_temuan_id',$user_pic->id)->with('picunit2')->get();
             foreach($rekom as $k=>$v)
             {
                 // if($v->pic_1_temuan_id!=null)
@@ -287,5 +287,98 @@ class TindakLanjutController extends Controller
         $c=$rekom->save();
         if($c)
             echo tgl_indo($date);
+    }
+
+    public function unitkerja_add_form($idlhp,$temuan_id_index,$rekom_id_index)
+    {
+        list($temuan_id,$temuan_idx)=explode('_',$temuan_id_index);
+        list($rekom_id,$rekom_idx)=explode('_',$rekom_id_index);
+        $data=DaftarTemuan::find($idlhp);
+
+        $user_pic=PICUnit::where('id_user',Auth::user()->id)->first();
+
+        // $temuan=DataTemuan::where('id_lhp',$idlhp)->where('pic_temuan_id',$user_pic->id)->get();
+        $temuan=DataTemuan::where('pic_temuan_id',$user_pic->id)->get();
+        $arrayidtemuan=$dtemuan=array();
+        foreach($temuan as $k=>$v)
+        {
+            // if($idlhp==$v->id_lhp)
+            $arrayidtemuan[$v->id]=$v->id;   
+            $dtemuan[$k]=$v;
+        }
+
+        $rekomendasi=DataRekomendasi::where('id_temuan',$temuan_id)->where('pic_1_temuan_id',$user_pic->id)->with('dtemuan')->get();
+        if($temuan_idx!=0)
+        {
+            $dtem=$dtemuan[$temuan_idx];
+            $rekomendasi=DataRekomendasi::where('id_temuan',$dtem->id)->where('pic_1_temuan_id',$user_pic->id)->with('dtemuan')->get();
+        }
+
+        // return $arrayidtemuan;
+        // $rekomendasi=DataRekomendasi::whereIn('id_temuan',$arrayidtemuan)->get();
+        
+        
+        $drekomendasi=array();
+        foreach($rekomendasi as $k=>$v)
+        {
+            // if($v->dtemuan->id_lhp==$idlhp)
+                $drekomendasi[$k]=$v;
+        }
+
+        // return $drekomendasi;
+        return view('backend.pages.data-lhp.pic-unit.tindaklanjut-form')
+                        ->with('rekomendasi',isset($drekomendasi[$rekom_idx]) ? $drekomendasi[$rekom_idx] : array())
+                        ->with('temuan_id',$temuan_id)
+                        ->with('data',$data)
+                        ->with('rekom_id',$rekom_id)
+                        ->with('temuan_idx',$temuan_idx)
+                        ->with('rekom_idx',$rekom_idx)
+                        ->with('dtemuan',$dtemuan)
+                        ->with('idlhp',$idlhp)
+                        ->with('drekomendasi',$drekomendasi)
+                        ->with('temuan',isset($dtemuan[$temuan_idx]) ? $dtemuan[$temuan_idx] : array());
+    }
+
+    public function unitkerja_tindak_lanjut_simpan(Request $request)
+    {
+        // return $request->all();
+        $tindaklanjut=new TindakLanjutTemuan;
+        $tindaklanjut->lhp_id = $request->idlhp;
+        $tindaklanjut->temuan_id = $request->temuan_id;
+        $tindaklanjut->rekomendasi_id = $request->rekomendasi_id;
+        $tindaklanjut->rangkuman = $request->tindak_lanjut;
+        $tindaklanjut->rincian = $request->jenis;
+        $tindaklanjut->tgl_tindaklanjut = $request->tgl_tindak_lanjut;
+        $sv=$tindaklanjut->save();
+
+        $idtindaklanjut=$tindaklanjut->id;
+
+        if($request->hasFile('dokumen_pendukung')){
+            $file = $request->file('dokumen_pendukung');
+            $filenameWithExt = $request->file('dokumen_pendukung')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('dokumen_pendukung')->getClientOriginalExtension();
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $path = $request->file('dokumen_pendukung')->storeAs('public/dokumen',$fileNameToStore);
+
+            $dokumen=new DokumenTindakLanjut;
+            $dokumen->id_tindak_lanjut_temuan=$idtindaklanjut;
+            $dokumen->nama_dokumen=$fileNameToStore;
+            $dokumen->path=$path;
+            $dokumen->save();
+        }
+
+        $lhp=DaftarTemuan::find($request->idlhp);
+        $tahun=$lhp->tahun_pemeriksa;
+        if($sv)
+        {
+            return redirect('data-tindaklanjut-unitkerja/'.$tahun)
+                ->with('success', 'Anda telah Berhasil Menambah data Tindak Lanjut Untuk Nomor Rekomendasi '.$request->nomor_rekomendasi.'.');
+        }
+        else
+        {
+            return redirect('data-tindaklanjut-unitkerja/'.$tahun)
+                ->with('error', 'Menambah data Tindak Lanjut Untuk Nomor Rekomendasi '.$request->nomor_rekomendasi.' Gagal');
+        }
     }
 }

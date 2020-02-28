@@ -15,7 +15,7 @@
 					<div class="panel panel-default">
 						<div class="panel-heading" role="tab" id="heading-1">
 							<a class="accordion-toggle collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-1" aria-expanded="false" aria-controls="collapse-1">
-								<h4 class="panel-title ">Filter Pencairan</h4>
+								<h4 class="panel-title ">Filter PENCARIAN</h4>
 								<i class="fa acc-switch"></i>
 							</a>
 						</div>

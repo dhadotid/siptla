@@ -1,4 +1,5 @@
 function loaddata() {
+    var thn = $('#tahun').val();
     var tanggal_awal = $('#tanggal_awal').val();
     var tanggal_akhir = $('#tanggal_akhir').val();
     var pemeriksa = $('#pemeriksa').val();
@@ -9,13 +10,10 @@ function loaddata() {
 
     $.ajax({
         url: flagsUrl+'/data-tindaklanjut-unitkerja-list',
-        data: { tahun: '{{$tahun}}', tgl_awal: tanggal_awal, tgl_akhir: tanggal_akhir, rekomid: no_rekomendasi, temuan_id: no_temuan, statusrekom: status_rekomendasi },
+        data: { pemeriksa: pemeriksa, no_lhp:no_lhp,tahun: thn, tgl_awal: tanggal_awal, tgl_akhir: tanggal_akhir, rekomid: no_rekomendasi, temuan_id: no_temuan, statusrekom: status_rekomendasi },
         type: 'POST',
-        dataType: 'JSON',
         success: function (res) {
-            $('#data').html(res, function () {
-                $('#table-data').DataTable();
-            });
+            $('#data').html(res);
         }
     });
     // $('#data').load(flagsUrl+'/data-tindaklanjut-list/{{$tahun}}',function(){

@@ -25,6 +25,7 @@ function validasiadd(act) {
 }
 
 function validasirekom(act) {
+    var norekomendasi = $('#'+act+'_no_rekomendasi');
     var rekomendasi = $('#'+act+'_rekomendasi');
     var nominal = $('#' + act +'_nilai_rekomendasi');
     var pic_1 = $('#'+act+'_pic_1');
@@ -33,7 +34,9 @@ function validasirekom(act) {
     var status_rekomendasi = $('#'+act+'_status_rekomendasi');
     // var review_auditor = $('#'+act+'_review_auditor');
 
-    if (rekomendasi.val() == '')
+    if (norekomendasi.val() == '')
+        notif('error', 'Nomor Rekomendasi Belum Diisi');
+    else if (rekomendasi.val() == '')
         notif('error', 'Rekomendasi Belum Diisi');
     else if (nominal.val() == '')
         notif('error', 'Jumlah Nilai Rekomendasi Belum Diisi');

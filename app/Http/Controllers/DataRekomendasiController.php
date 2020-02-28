@@ -22,6 +22,7 @@ class DataRekomendasiController extends Controller
     {
         // return $request->all();
         $insert=new DataRekomendasi;
+        $insert->nomor_rekomendasi=$notemuan=$request->no_rekomendasi;
         $insert->no_temuan=$notemuan=$request->nomor_temuan;
         $insert->id_temuan=$request->id_temuan;
         $insert->jenis_temuan=$request->jenis_temuan;

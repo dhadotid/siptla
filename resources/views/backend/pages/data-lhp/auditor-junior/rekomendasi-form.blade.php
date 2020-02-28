@@ -36,6 +36,14 @@
 <div class="row">
     <div class="col-md-12" style="margin-top:10px;">
         <div class="form-group" style="margin-bottom:10px;">
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nomor Rekomendasi:
+                <br><small style="font-size:9px;color:red;font-style:italic">*wajib diisi</small>
+            </label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control"  name="no_rekomendasi" placeholder="Nomor Rekomendasi" id="{{$act}}_no_rekomendasi"/>
+            </div>
+        </div>
+        <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Rekomendasi:
                 <br><small style="font-size:9px;color:red;font-style:italic">*wajib diisi</small>
             </label>

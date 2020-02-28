@@ -433,7 +433,7 @@ class DataRekomendasiController extends Controller
         if($jenis=='sewa')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Tindak Lanjut Pembayaran Sewa</h3><table class="table table-bordered">';
+            $table='<h3 class="text-center">Rincian Nilai Pembayaran Sewa</h3><table class="table table-bordered">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -478,7 +478,7 @@ class DataRekomendasiController extends Controller
         elseif($jenis=='uangmuka')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Tindak Lanjut Uang Muka</h3><table class="table table-bordered">';
+            $table='<h3 class="text-center">Rincian Nilai Uang Muka</h3><table class="table table-bordered">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -521,7 +521,7 @@ class DataRekomendasiController extends Controller
         elseif($jenis=='listrik')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Tindak Lanjut Pembayaran Listrik</h3><table class="table table-bordered">';
+            $table='<h3 class="text-center">Rincian Nilai Pembayaran Listrik</h3><table class="table table-bordered">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -563,7 +563,7 @@ class DataRekomendasiController extends Controller
         elseif($jenis=='piutang')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Tindak Lanjut Pembayaran Piutang</h3><table class="table table-bordered">';
+            $table='<h3 class="text-center">Rincian Nilai Pembayaran Piutang</h3><table class="table table-bordered">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -601,7 +601,7 @@ class DataRekomendasiController extends Controller
         elseif($jenis=='piutangkaryawan')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Tindak Lanjut Pembayaran Piutang Karyawan</h3><table class="table table-bordered">';
+            $table='<h3 class="text-center">Rincian Nilai Pembayaran Piutang Karyawan</h3><table class="table table-bordered">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -639,7 +639,7 @@ class DataRekomendasiController extends Controller
         elseif($jenis=='hutangtitipan')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Tindak Lanjut Hutang Titipan</h3><table class="table table-bordered">';
+            $table='<h3 class="text-center">Rincian Nilai Hutang Titipan</h3><table class="table table-bordered">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -681,7 +681,7 @@ class DataRekomendasiController extends Controller
         elseif($jenis=='penutupanrekening')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Tindak Lanjut Penutupan Rekening</h3><table class="table table-bordered">';
+            $table='<h3 class="text-center">Rincian Nilai Penutupan Rekening</h3><table class="table table-bordered">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -725,7 +725,7 @@ class DataRekomendasiController extends Controller
         elseif($jenis=='umum')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Tindak Lanjut Umum</h3><table class="table table-bordered">';
+            $table='<h3 class="text-center">Rincian Nilai Umum</h3><table class="table table-bordered">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -782,7 +782,7 @@ class DataRekomendasiController extends Controller
         if($jenis=='sewa')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Tindak Lanjut Pembayaran Sewa</h3><table class="table table-bordered">';
+            $table='<h3 class="text-center">Rincian Nilai Pembayaran Sewa</h3><table class="table table-bordered">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -816,7 +816,7 @@ class DataRekomendasiController extends Controller
         elseif($jenis=='uangmuka')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Tindak Lanjut Uang Muka</h3><table class="table table-bordered">';
+            $table='<h3 class="text-center">Rincian Nilai Uang Muka</h3><table class="table table-bordered">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -848,7 +848,7 @@ class DataRekomendasiController extends Controller
         elseif($jenis=='listrik')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Tindak Lanjut Pembayaran Listrik</h3><table class="table table-bordered">';
+            $table='<h3 class="text-center">Rincian Nilai Pembayaran Listrik</h3><table class="table table-bordered">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -881,7 +881,7 @@ class DataRekomendasiController extends Controller
         elseif($jenis=='piutang')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Tindak Lanjut Pembayaran Piutang</h3><table class="table table-bordered">';
+            $table='<h3 class="text-center">Rincian Nilai Pembayaran Piutang</h3><table class="table table-bordered">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -909,7 +909,7 @@ class DataRekomendasiController extends Controller
         elseif($jenis=='piutangkaryawan')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Tindak Lanjut Pembayaran Piutang Karyawan</h3><table class="table table-bordered">';
+            $table='<h3 class="text-center">Rincian Nilai Pembayaran Piutang Karyawan</h3><table class="table table-bordered">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -937,7 +937,7 @@ class DataRekomendasiController extends Controller
         elseif($jenis=='hutangtitipan')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Tindak Lanjut Hutang Titipan</h3><table class="table table-bordered">';
+            $table='<h3 class="text-center">Rincian Nilai Hutang Titipan</h3><table class="table table-bordered">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -970,7 +970,7 @@ class DataRekomendasiController extends Controller
         elseif($jenis=='penutupanrekening')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Tindak Lanjut Penutupan Rekening</h3><table class="table table-bordered">';
+            $table='<h3 class="text-center">Rincian Nilai Penutupan Rekening</h3><table class="table table-bordered">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -1005,7 +1005,7 @@ class DataRekomendasiController extends Controller
         elseif($jenis=='umum')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Tindak Lanjut Umum</h3><table class="table table-bordered">';
+            $table='<h3 class="text-center">Rincian Nilai Umum</h3><table class="table table-bordered">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>

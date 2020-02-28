@@ -18,6 +18,7 @@ class CreateRincianUmumsTable extends Migration
             $table->integer('id_temuan')->nullable()->default(0);
             $table->integer('id_rekomendasi')->nullable()->default(0);
             $table->integer('unit_kerja_id')->nullable()->default(0);
+            $table->integer('id_tindak_lanjut')->nullable()->default(0);
             $table->string('unit_kerja')->nullable();
             $table->text('keterangan')->nullable();
             $table->double('jumlah_rekomendasi')->nullable()->default(0);

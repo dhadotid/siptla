@@ -5,7 +5,7 @@
             </label>
             <div class="col-sm-9">
                 <select name="unit_kerja" class="form-control" id="unit_kerja" data-plugin="select2">
-                    <option value="">-- Pilih --</option>
+                    {{-- <option value="">-- Pilih --</option> --}}
                     @foreach ($pic as $key=>$item)
                             <option value="{{$item->id}}__{{$item->nama_pic}}">{{$item->nama_pic}}</option>
                     @endforeach
@@ -17,6 +17,13 @@
         <input type="hidden" name="idrekomendasi" value="{{$idrekomendasi}}">
         <input type="hidden" name="idform" value="{{$idform}}">
         <input type="hidden" name="id" value="{{$id}}">
+        {{-- <div class="form-group" style="margin-bottom:10px;">
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Tindak Lanjut</small>
+            </label>
+            <div class="col-sm-7">
+                <textarea class="form-control"  name="tindak_lanjut" placeholder="Tindak Lanjut" id="tindak_lanjuttxt"></textarea>
+            </div>
+        </div>    --}}
         <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Mitra:
             </label>

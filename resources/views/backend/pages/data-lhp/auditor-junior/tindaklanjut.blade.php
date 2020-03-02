@@ -131,11 +131,12 @@
                             <thead>
                                 <tr class="primary">
                                     <th class="text-center" style="width:15px;">#</th>
-                                    <th class="text-center">No Temuan</th>
+                                    {{-- <th class="text-center">No.<br>Temuan</th> --}}
                                     <th class="text-center">Temuan</th>
-                                    <th class="text-center">No. Rekomendasi</th>
+                                    <th class="text-center">No.<br>Rekomendasi</th>
                                     <th class="text-center">Rekomendasi</th>
-                                    <th class="text-center">Tanggal Penyelesaian</th>
+                                    <th class="text-center">Tanggal<br>Penyelesaian</th>
+                                    <th class="text-center">Rincian<br>Tindak Lanjut</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
@@ -145,34 +146,67 @@
                                 @endphp
                                 @foreach ($temuan as $item)
                                     @php
-                                        $rekom=$norekom=$tglselesai=$aksi='';
+                                        $rekom=$norekom=$tglselesai=$aksi=$rincian='';
                                         if(isset($rekomendasi[$item->id]))
                                         {
                                             foreach($rekomendasi[$item->id] as $key=>$val)
                                             {
-                                                $norekom.=$val->nomor_rekomendasi.'<br>';
-                                                $rekom.=$val->rekomendasi.'<br>';
-                                                $tglselesai.=tgl_indo($val->tanggal_penyelesaian).'<br>';
-                                                $aksi='<ul class="dropdown-menu" role="menu">
-                                                <li><a href="#" target="_blank"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>
-                                                <li>
-                                                    <a href="#" class="btn-edit" data-toggle="modal" data-target="#modalubah" data-value="'.$item->id.'"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit Tindak Lanjut</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="btn-delete" data-toggle="modal" data-target="#modalhapus" data-value="'.$item->id.'"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus Tindak Lanjut</a>
-                                                </li>
-                                            </ul>';
+                                                $norekom.='<li style="height:32px;">'.$val->nomor_rekomendasi.'</li>';
+                                                
+                                                $rekom.='<li style="height:32px;">- '.(strlen($val->rekomendasi) > 30 ? '<a href="#" data-toggle="tooltip" data-title="'.$val->rekomendasi.'" title="'.$val->rekomendasi.'">'.substr($val->rekomendasi,0,30).' ...</a>' : $val->rekomendasi ).'</li>';
+
+                                                    
+                                                    $tglselesai.='<div id="tgl_penyelesaian_'.$item->id.'_'.$val->id.'">';
+                                                        if($val->tanggal_penyelesaian!='')
+                                                        {
+                                                            $tglselesai.='<li style="height:32px;">'.tgl_indo($val->tanggal_penyelesaian).'</li>';
+                                                        }
+                                                        else
+                                                        {
+                                                            $tglselesai.='<li style="height:32px;">-</li>';
+                                                            // $tglselesai.='<li style="height:32px;">
+                                                            //     <div class="input-group date" id="datetimepicker2" >
+                                                            //         <input type="text" data-plugin="datepicker" data-date-format="dd/mm/yyyy" class="form-control" name="tanggal_penyelesaian" id="tanggal_penyelesaian_'.$item->id.'_'.$val->id.'" value="'.date('d/m/Y').'" style="height:30px !important;width:120px !important;min-width:120px !important; "/>
+                                                            //         <span class="input-group-addon bg-info text-white" style="cursor:pointer" onclick="settglpenyelesaian('.$item->id.','.$val->id.')"><i class="glyphicon glyphicon-ok-sign"></i> Set</span>
+                                                            //     </div>    
+                                                            // </li>';
+                                                        }
+                                                    $tglselesai.='</div>';
+                                                    $aksi.='<li style="margin-bottom:1px;height:32px;">
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
+                                                        <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                        <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">
+                                                            <li>
+                                                                <a href="#" class="btn-add" data-toggle="modal" data-target="#modaltambahtindaklanjut" data-value="'.$item->id_lhp.'__'.$item->id.'_0__'.$val->id.'_0'.'" style="font-size:11px;"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Tindak Lanjut</a>
+                                                            </li>
+                                                            <li><a href="#" target="_blank" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>
+                                                        </ul>
+                                                    </div></li>';
+
+                                                if($val->rincian!='')
+                                                    {
+                                                       $rincian.='<li style="margin-bottom:1px;height:32px;">
+                                                            <a href="javascript:rincian(\''.$val->rincian.'\',\''.$val->id.'__'.$item->id.'__'.$item->id_lhp.'\')" class="btn btn-xs btn-danger" style="height:28px;"><i class="fa fa-flag"></i></a>
+                                                        </li>'; 
+                                                    }
+                                                    else
+                                                        $rincian.='<li style="margin-bottom:1px;height:32px;">-</li>';
                                             }
                                         }
                                     @endphp
                                     <tr>
                                         <td class="text-center">{{$no}}</td>
-                                        <td class="text-center">{{$item->no_temuan}}</td>
-                                        <td class="text-center">{{$item->temuan}}</td>
-                                        <td class="text-center">{{$norekom}}</td>
-                                        <td class="text-center">{{$rekom}}</td>
-                                        <td class="text-center">{{$tglselesai}}</td>
-                                        <td class="text-center">{!!$aksi!!}</td>
+                                        {{-- <td class="text-center"></td> --}}
+                                        <td class="text-left">
+                                            No. {{$item->no_temuan}} <br>{!!(strlen($item->temuan) > 30 ? '<a href="#" data-toggle="tooltip" data-title="'.$item->temuan.'" title="'.$item->temuan.'">'.substr($item->temuan,0,30).' ...</a>' : $item->temuan )!!}</td>
+                                        <td class="text-center"><ul>{!!$norekom!!}</ul></td>
+                                        <td class="text-left"><ul>{!!$rekom!!}</ul></td>
+                                        <td class="text-center"><ul>{!!$tglselesai!!}</ul></td>
+                                        <td class="text-center"><ul>{!!$rincian!!}</ul></td>
+                                        <td class="text-center"><ul>{!!$aksi!!}</ul></td>
                                     </tr>
                                     @php
                                         $no++;
@@ -232,10 +266,23 @@
         {
             location.href=flagsUrl+'/data-tindaklanjut/'+tahun;
         }
+        function rincian(rincian,id)
+        {
+            //load-table-rincian/{jenis}/{idtemuan?}/{statusrekomendasi?}/{view?}
+            var d=id.split('__');
+            var id_temuan=d[1];
+            var id_rekom=d[0];
+            var id_lhp=d[2];
+            $('#table-rincian').load(flagsUrl + '/load-table-rincian/'+rincian+'/'+id_temuan+'/'+id_rekom+'/1');
+            $('#modalrincian').modal('show');
+        }
 	</script>
 	<style>
 	.select2-container{
 		width:100% !important;
 	}
 	</style>
+@endsection
+@section('modal')
+    @include('backend.pages.data-lhp.pic-unit.modal')
 @endsection

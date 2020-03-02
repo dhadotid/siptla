@@ -16,10 +16,13 @@ class TindakLanjutController extends Controller
     public function index($id_rekom,$idtemuan)
     {
         $temuan=DataTemuan::find($idtemuan);
+
         $data=DaftarTemuan::selectRaw('*, daftar_lhp.id as id_lhp')
                 ->where('daftar_lhp.id',$temuan->id_lhp)
                 ->with('dpemeriksa')->first();
         $tindaklanjut=TindakLanjutTemuan::where('temuan_id',$idtemuan)->where('rekomendasi_id',$id_rekom)->get();
+
+        
         return view('backend.pages.data-lhp.auditor-junior.tindak-lanjut-index')
             ->with('tindaklanjut',$tindaklanjut)
             ->with('data',$data);
@@ -143,7 +146,8 @@ class TindakLanjutController extends Controller
 
        
         $pemeriksa=Pemeriksa::orderBy('code')->get();
-        $datalhp=DaftarTemuan::where('user_input_id',Auth::user()->id)->where('status_lhp','Publish LHP')->orderBy('id','desc')->get();
+        $datalhp=DaftarTemuan::where('user_input_id',Auth::user()->id)->where('status_lhp','Publish LHP')->where('tahun_pemeriksa',$tahun)->orderBy('id','desc')->get();
+        // return $datalhp;
         $idlhparray=array();
         foreach($datalhp as $k=>$v)
         {
@@ -185,10 +189,11 @@ class TindakLanjutController extends Controller
         $temuanid=($temuanid==null ? -1 : $temuanid);
 
         $user_pic=PICUnit::where('id_user',Auth::user()->id)->first();
-
+        
         $pemeriksa=Pemeriksa::orderBy('code')->get();
         // $datalhp=DaftarTemuan::where('user_input_id',Auth::user()->id)->where('status_lhp','Publish LHP')->orderBy('id','desc')->get();
         $datalhp=DaftarTemuan::where('status_lhp','Publish LHP')->where('tahun_pemeriksa',$tahun)->orderBy('id','desc')->get();
+        // return $datalhp;
         $idlhparray=$dlhp=array();
         $lhp=array();
         foreach($datalhp as $k=>$v)
@@ -199,17 +204,18 @@ class TindakLanjutController extends Controller
         $temuan=$rekomendasi=$idtemuanarray=array();
         if(count($idlhparray)!=0)
         {
-            $temuan=DataTemuan::whereIn('id_lhp',$idlhparray)->where('pic_temuan_id',$user_pic->id)->with('totemuan')->get();
+            // $temuan=DataTemuan::whereIn('id_lhp',$idlhparray)->where('pic_temuan_id',$user_pic->id)->with('totemuan')->get();
+            $temuan=DataTemuan::whereIn('id_lhp',$idlhparray)->with('totemuan')->get();
             foreach($temuan as $kk=>$vv)
             {
                 if($vv->totemuan->tahun_pemeriksa==$tahun)
                 {
-                    if($vv->pic_temuan_id==$user_pic->id)
-                    {
+                    // if($vv->pic_temuan_id==$user_pic->id)
+                    // {
                         $idtemuanarray[]=$vv->id;
                         if(isset($lhp[$vv->id_lhp]))
                             $dlhp[]=$lhp[$vv->id_lhp];
-                    }
+                    // }
                 }
             }
         }
@@ -286,7 +292,8 @@ class TindakLanjutController extends Controller
         // $temuan=$rekomendasi=$idtemuanarray=array();
         if(count($idlhparray)!=0)
         {
-            $temuan=DataTemuan::whereIn('id_lhp',$idlhparray)->where('pic_temuan_id',$user_pic->id)->with('totemuan')->get();
+            // $temuan=DataTemuan::whereIn('id_lhp',$idlhparray)->where('pic_temuan_id',$user_pic->id)->with('totemuan')->get();
+            $temuan=DataTemuan::whereIn('id_lhp',$idlhparray)->with('totemuan')->get();
             foreach($temuan as $kk=>$vv)
             {
                 if($vv->totemuan->tahun_pemeriksa==$tahun)
@@ -348,7 +355,8 @@ class TindakLanjutController extends Controller
         $user_pic=PICUnit::where('id_user',Auth::user()->id)->first();
 
         // $temuan=DataTemuan::where('id_lhp',$idlhp)->where('pic_temuan_id',$user_pic->id)->get();
-        $temuan=DataTemuan::where('pic_temuan_id',$user_pic->id)->get();
+        // $temuan=DataTemuan::where('pic_temuan_id',$user_pic->id)->get();
+        $temuan=DataTemuan::all();
         $arrayidtemuan=$dtemuan=array();
         foreach($temuan as $k=>$v)
         {

@@ -114,10 +114,13 @@
                 <input type="file" class="form-control"  id="add-dokumen"  name="dokumen_pendukung"  placeholder="Dokumen Pendukung" accept=".doc,.docx,.pdf,.xls,.xlsx">
             </div>
         </div>    
-        <div class="form-group">
-            <div class="col-sm-12">
-                <a href="#" onclick="updaterincian('{{isset($rekomendasi->id) ? $rekomendasi->rincian : 0}}',{{isset($rekomendasi->id) ? $rekomendasi->id_temuan.','.$rekomendasi->id : '0,0'}})"><u>Update Rincian Tindak Lanjut</u></a>
-            </div>
-        </div>    
+        @if ($rekomendasi->rincian!='')
+            
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <a href="#" onclick="updaterincian('{{isset($rekomendasi->id) ? $rekomendasi->rincian : 0}}',{{isset($rekomendasi->id) ? $rekomendasi->id_temuan.','.$rekomendasi->id : '0,0'}})"><u>Update Rincian Tindak Lanjut</u></a>
+                </div>
+            </div>    
+        @endif
     </div>
 </div>

@@ -131,7 +131,7 @@
                             <thead>
                                 <tr class="primary">
                                     <th class="text-center" style="width:15px;">#</th>
-                                    <th class="text-center">No Temuan</th>
+                                    {{-- <th class="text-center">No Temuan</th> --}}
                                     <th class="text-center">Temuan</th>
                                     <th class="text-center">No. Rekomendasi</th>
                                     <th class="text-center">Rekomendasi</th>
@@ -148,7 +148,7 @@
                                     @if($item->totemuan->tahun_pemeriksa==$tahun)
                                         @php
                                         
-                                            $rekom=$norekom=$tglselesai=$aksi=$pic2='';
+                                            $rekom=$norekom=$tglselesai=$aksi=$rincian=$pic2='';
                                             if(isset($rekomendasi[$item->id]))
                                             {
                                                 foreach($rekomendasi[$item->id] as $key=>$val)
@@ -189,13 +189,17 @@
                                                             <li><a href="#" target="_blank" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>
                                                         </ul>
                                                     </div></li>';
+
+                                                    
                                                 }
                                             }
                                         @endphp
                                         <tr>
                                             <td class="text-center">{{$no}}</td>
-                                            <td class="text-center">{{$item->no_temuan}}</td>
-                                            <td class="text-left">{{(strlen($item->temuan) > 30 ? substr($item->temuan,0,30).' ...' : $item->temuan )}}</td>
+                                            {{-- <td class="text-center">{{$item->no_temuan}}</td> --}}
+                                            {{-- <td class="text-left">{{(strlen($item->temuan) > 30 ? substr($item->temuan,0,30).' ...' : $item->temuan )}}</td> --}}
+                                            <td class="text-left">
+                                            No. {{$item->no_temuan}} <br>{!!(strlen($item->temuan) > 30 ? '<a href="#" data-toggle="tooltips" data-title="'.$item->temuan.'">'.substr($item->temuan,0,30).' ...</a>' : $item->temuan )!!}</td>
                                             <td class="text-center">{!!$norekom!!}</td>
                                             <td class="text-left"><ul>{!!$rekom!!}</ul></td>
                                             <td class="text-center"><ul>{!!$tglselesai!!}</ul></td>

@@ -73,7 +73,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('rekomendasi-by-temuan/{idtemuan}/{status?}','DataRekomendasiController@rekomendasi_by_temuan')->name('rekomendasi.by-temuan');
     Route::get('rincian-nilai-rekom/{idrekom}','DataRekomendasiController@rincian_nilai');
     
-    Route::get('load-table-rincian/{jenis}/{idtemuan?}/{statusrekomendasi?}','DataRekomendasiController@load_tabel_rincian');
+    Route::get('load-table-rincian/{jenis}/{idtemuan?}/{statusrekomendasi?}/{view?}','DataRekomendasiController@load_tabel_rincian');
     Route::get('form-rincian/{jenis}/{idtemuan?}/{idrekomendasi?}/{id?}','RincianSewaController@form_rincian');
     Route::post('form-rincian-simpan','RincianSewaController@form_rincian_simpan');
     Route::get('form-rincian-hapus/{id}/{jenis}','RincianSewaController@form_rincian_hapus');

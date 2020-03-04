@@ -56,7 +56,7 @@
                 <br><small style="font-size:9px;color:red;font-style:italic">*wajib diisi</small>
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control nominal"  class="form-control"  name="nilai_rekomendasi"  placeholder="Nilai Rekomendasi" id="{{$act}}_nilai_rekomendasi">
+                <input type="text" class="form-control nominal nilai_rekomendasi"  name="nilai_rekomendasi"  placeholder="Nilai Rekomendasi" id="{{$act}}_nilai_rekomendasi">
             </div>
             <input type="hidden" name="idform" id="idform">
         </div>
@@ -85,7 +85,7 @@
                 <br><small style="font-size:9px;color:red;font-style:italic">*wajib diisi</small>
             </label>
             <div class="col-sm-9">
-                <select name="pic_1" class="form-control" id="{{$act}}_pic_1" data-plugin="select2">
+                <select name="pic_1" class="form-control pic1" id="{{$act}}_pic_1" data-plugin="select2" onchange="aktifinrincian(this.value)">
                     <option value="">-- Pilih --</option>
                     @foreach ($picunit as $item)
                         @if (isset($item->levelpic->nama_level))
@@ -100,7 +100,7 @@
                 <br><small style="font-size:9px;color:red;font-style:italic">*wajib diisi</small>
             </label>
             <div class="col-sm-9">
-                <select name="pic_2[]" class="form-control" id="{{$act}}_pic_2" data-plugin="select2" multiple>
+                <select name="pic_2[]" class="form-control pic2" id="{{$act}}_pic_2" data-plugin="select2" multiple>
                     <option value="">-- Pilih --</option>
                     @foreach ($picunit as $item)
                         @if (isset($item->levelpic->nama_level))
@@ -140,13 +140,21 @@
             <div class="col-sm-9">
                 <select name="status_rekomendasi" class="form-control status_rekom" id="{{$act}}_status_rekomendasi" data-plugin="select2" readonly> 
                     {{-- <option value="">-- Pilih --</option> --}}
-                        @foreach ($statusrekomendasi as $item)
-                            @if ($item->id==2)
-                                <option value="{{$item->id}}" selected="selected">{{$item->rekomendasi}}</option>
-                            @else
-                                <option value="{{$item->id}}">{{$item->rekomendasi}}</option>
-                            @endif
-                        @endforeach
+                        @if ($act=='add')
+                             @foreach ($statusrekomendasi as $item)
+                                    @if ($item->id==3)
+                                        <option value="{{$item->id}}" selected="selected">{{$item->rekomendasi}}</option>
+                                    @endif
+                            @endforeach
+                        @else
+                            @foreach ($statusrekomendasi as $item)
+                                    @if ($item->id==2)
+                                        <option value="{{$item->id}}" selected="selected">{{$item->rekomendasi}}</option>
+                                    @else
+                                        <option value="{{$item->id}}">{{$item->rekomendasi}}</option>
+                                    @endif
+                            @endforeach
+                        @endif
                 </select>
             </div>
         </div>
@@ -160,3 +168,9 @@
         </div> --}}
     </div>
 </div>
+<style>
+    .select2-selection--multiple{
+        overflow: hidden !important;
+        height: auto !important;
+    }
+</style>

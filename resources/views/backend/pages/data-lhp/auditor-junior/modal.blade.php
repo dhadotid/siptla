@@ -1,5 +1,5 @@
 {{-- Modal Rekomendasi --}}
-    <div class="modal fade" id="modaltambahrekomendasi" tabindex="-1" role="dialog">
+    <div class="modal fade" id="modaltambahrekomendasi"  role="dialog">
 		<div class="modal-dialog" id="modal-size" style="width:60% !important">
 			<div class="modal-content">
                 <form method="POST" class="form-horizontal" id="form_rekom_add">
@@ -28,7 +28,7 @@
 			</div>
 		</div>
     </div>  
-    <div class="modal fade" id="modalubahrekomendasi" tabindex="-1" role="dialog">
+    <div class="modal fade" id="modalubahrekomendasi"  role="dialog">
 		<div class="modal-dialog" style="width:60% !important">
 			<div class="modal-content">
                 <form method="POST" class="form-horizontal" id="form_rekom_edit">
@@ -53,7 +53,7 @@
 			</div>
 		</div>
     </div>  
-    <div class="modal fade" id="modaldetailrekomendasi" tabindex="-1" role="dialog">
+    <div class="modal fade" id="modaldetailrekomendasi"  role="dialog">
 		<div class="modal-dialog" style="width:60% !important">
 			<div class="modal-content">
                     <div class="modal-header">
@@ -71,7 +71,7 @@
 		</div>
     </div>  
     
-    <div class="modal fade" id="modalhapusrekomendasi" tabindex="-1" role="dialog">
+    <div class="modal fade" id="modalhapusrekomendasi"  role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -91,7 +91,7 @@
 {{-- End Modal Rekomendasi --}}
 
 {{-- Modal Temuan --}}
-    <div class="modal fade" id="modaltambah" tabindex="-1" role="dialog">
+    <div class="modal fade" id="modaltambah"  role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <form action="{{ url('data-temuan-lhp-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formadd">
@@ -114,7 +114,7 @@
 			</div>
 		</div>
 	</div>  
-    <div class="modal fade" id="modalubah" tabindex="-1" role="dialog">
+    <div class="modal fade" id="modalubah"  role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <form action="{{ url('data-temuan-lhp-update/'.$idlhp) }}" method="POST" class="form-horizontal" id="formedit">
@@ -138,7 +138,7 @@
 			</div>
 		</div>
 	</div>  
-    <div class="modal fade" id="modalhapus" tabindex="-1" role="dialog">
+    <div class="modal fade" id="modalhapus"  role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -158,7 +158,7 @@
 			</div>
 		</div>
     </div>
-    <div class="modal fade" id="modaldetail" tabindex="-1" role="dialog">
+    <div class="modal fade" id="modaldetail"  role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
                     <div class="modal-header">
@@ -177,7 +177,7 @@
 {{-- End Modal Temuan --}}
 
 {{-- Modal Rincian Sewa--}}
- <div class="modal fade" id="modalrinciansewa" tabindex="-1" role="dialog">
+ <div class="modal fade" id="modalrinciansewa"  role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrinciansewa">
@@ -199,7 +199,7 @@
 	</div>  
 {{-- END Modal Rincian Sewa--}}
 {{-- Modal Rincian Sewa--}}
- <div class="modal fade" id="modalrincianuangmuka" tabindex="-1" role="dialog">
+ <div class="modal fade" id="modalrincianuangmuka"  role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrincianuangmuka">
@@ -221,7 +221,7 @@
 	</div>  
 {{-- END Modal Rincian Sewa--}}
 {{-- Modal Rincian Sewa--}}
- <div class="modal fade" id="modalrincianlistrik" tabindex="-1" role="dialog">
+ <div class="modal fade" id="modalrincianlistrik"  role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrincianlistrik">
@@ -243,7 +243,7 @@
 	</div>  
 {{-- END Modal Rincian Sewa--}}
 {{-- Modal Rincian Piutang--}}
- <div class="modal fade" id="modalrincianpiutang" tabindex="-1" role="dialog">
+ <div class="modal fade" id="modalrincianpiutang"  role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrincianpiutang">
@@ -265,7 +265,7 @@
 	</div>  
 {{-- END Modal Rincian Piutang--}}
 {{-- Modal Rincian Piutang Karyawan--}}
- <div class="modal fade" id="modalrincianpiutangkaryawan" tabindex="-1" role="dialog">
+ <div class="modal fade" id="modalrincianpiutangkaryawan"  role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrincianpiutangkaryawan">
@@ -287,7 +287,7 @@
 	</div>  
 {{-- END Modal Rincian Piutang Karyawan--}}
 {{-- Modal Rincian Hutang Titipan--}}
- <div class="modal fade" id="modalrincianhutangtitipan" tabindex="-1" role="dialog">
+ <div class="modal fade" id="modalrincianhutangtitipan"  role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrincianhutangtitipan">
@@ -309,7 +309,7 @@
 	</div>  
 {{-- END Modal Rincian Hutang Titipan--}}
 {{-- Modal Rincian Penutupan Rekening--}}
- <div class="modal fade" id="modalrincianpenutupanrekening" tabindex="-1" role="dialog">
+ <div class="modal fade" id="modalrincianpenutupanrekening"  role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrincianpenutupanrekening">
@@ -331,7 +331,7 @@
 	</div>  
 {{-- END Modal Rincian Penutupan Rekening--}}
 {{-- Modal Rincian Umum--}}
- <div class="modal fade" id="modalrincianumum" tabindex="-1" role="dialog">
+ <div class="modal fade" id="modalrincianumum"  role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrincianumum">

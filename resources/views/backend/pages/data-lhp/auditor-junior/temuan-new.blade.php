@@ -121,7 +121,7 @@
                                                                         {{count($drekom[$item->temuan_id][$vst->id])}}
                                                                     </span>
                                                                 @else
-                                                                    <a class="label label-rounded label-success" style="font-size:13px !important;text-decoration:underline">
+                                                                    <a class="label label-rounded label-success" style="font-size:13px !important;text-decoration:underline" id="count_temuan_{{$item->temuan_id}}_{{$vst->id}}">
                                                                         {{count($drekom[$item->temuan_id][$vst->id])}}
                                                                     </a>
                                                                 @endif

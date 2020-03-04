@@ -1,0 +1,41 @@
+<h3 class="text-center">Rincian Nilai Pembayaran Sewa</h3><table class="table table-bordered">
+    <thead>
+        <tr class="inverse">
+            <th class="text-center">No</th>
+            <th class="text-center">Unit Kerja</th>
+            <th class="text-center">Mitra</th>
+            <th class="text-center">No. PKS</th>
+            <th class="text-center">Tgl. PKS</th>
+            <th class="text-center">Nilai Pekerjaan</th>
+            <th class="text-center">Masa Berlaku</th>
+            <th class="text-center">Aksi</th>
+        </tr>
+    </thead><tbody>
+    @php
+        $no=1;
+        $totalnilai=0;
+    @endphp
+    @foreach($rincian as $k=>$v)
+        <tr>
+            <td class="text-center">{{$no}}</td>
+            <td class="text-center">{{$v->unit_kerja}}</td>
+            <td class="text-center">{{$v->mitra}}</td>
+            <td class="text-center">{{$v->no_pks}}</td>
+            <td class="text-center">{{date('d/m/Y',strtotime($v->tgl_pks))}}</td>
+            <td class="text-center">{{rupiah($v->nilai_pekerjaan)}}</td>
+            <td class="text-center">{{date('d/m/Y',strtotime($v->masa_berlaku))}}</td>
+            <td class="text-center">
+                <a href="javascript:addtindaklanjutrincian({{$v->id}},'sewa')" class="btn-delete btn btn-xs btn-info"><i class="glyphicon glyphicon-plus"></i></a>&nbsp;
+                <a href="javascript:listtindaklanjutrincian({{$v->id}},'sewa')" class="btn-edit btn btn-xs btn-success"><i class="glyphicon glyphicon-list"></i></a>
+            </td>
+        </tr>
+        @php
+            $no++;
+            $totalnilai+=$v->nilai_pekerjaan;
+        @endphp
+    @endforeach   
+    
+        <input type="hidden" id="total_nilai" value="{{$totalnilai}}">
+      
+    </tbody>
+ </table>

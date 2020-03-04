@@ -180,7 +180,7 @@ class DataTemuanController extends Controller
         {
             $data=DaftarTemuan::selectRaw('*,daftar_lhp.id as lhp_id')
                     ->where('daftar_lhp.tahun_pemeriksa',$thn)
-                    ->where('daftar_lhp.flag_unit_kerja',1)
+                    // ->where('daftar_lhp.flag_unit_kerja',1)
                     ->with('dpemeriksa')
                     ->with('djenisaudit')
                     ->orderBy('tanggal_lhp','desc')->get();
@@ -311,8 +311,10 @@ class DataTemuanController extends Controller
         
         if(Auth::user()->level=='pic-unit')
         {
+            $picunit=PICUnit::where('id_user',Auth::user()->id)->first();
             return view('backend.pages.data-lhp.pic-unit.detail-lhp')
                     ->with('temuan',$tm)
+                    ->with('picunit_id',$picunit->id)
                     ->with('offset',$offset)
                     ->with('statusrekom',$statusrekom)
                     ->with('jlhtemuan',$jlhtemuan)

@@ -59,7 +59,9 @@ $('.btn-add').on('click',function(){
     var rekom_id=d[2];
     var lhp_id=d[0];
     closerightdiv();
-    $('#konten-add-form').load(flagsUrl + '/tindak-lanjut-unitkerja-form-add/' + lhp_id+'/'+temuan_id+'/'+rekom_id);
+    $('#konten-add-form').load(flagsUrl + '/tindak-lanjut-unitkerja-form-add/' + lhp_id+'/'+temuan_id+'/'+rekom_id,function(){
+        CKEDITOR.replace('action_plan');
+    });
 });
 
 function othertemuan(id)
@@ -69,7 +71,21 @@ function othertemuan(id)
     var temuan_id = d[1];
     var rekom_id = d[2];
     var lhp_id = d[0];
-    $('#konten-add-form').load(flagsUrl + '/tindak-lanjut-unitkerja-form-add/' + lhp_id + '/' + temuan_id + '/' + rekom_id);
+    $('#konten-add-form').load(flagsUrl + '/tindak-lanjut-unitkerja-form-add/' + lhp_id + '/' + temuan_id + '/' + rekom_id,function(){
+        CKEDITOR.replace('action_plan');
+    });
+}
+
+function othertemuan_unitkerja(id)
+{
+    closerightdiv()
+    var d = id.split('__')
+    var temuan_id = d[1];
+    var rekom_id = d[2];
+    var lhp_id = d[0];
+    $('#konten-add-form').load(flagsUrl + '/tindak-lanjut-unitkerja-form-add/' + lhp_id + '/' + temuan_id + '/' + rekom_id,function(){
+        CKEDITOR.replace('action_plan');
+    });
 }
 
 function updaterincian(jenis,idtemuan,rekom_id)
@@ -93,6 +109,18 @@ function closerightdiv()
     $('#modal-size').attr({ 'style': 'unset' });
 }
 
+function updaterincian_unitkerja(jenis, idtemuan, rekom_id) {
+    gettablerincian_unitkerja(jenis, idtemuan, rekom_id)
+    $('#close-btn').attr('style', 'display:inline');
+    $('#left-div').removeClass('col-md-12');
+    $('#left-div').addClass('col-md-6');
+    $('#right-div').removeClass('col-md-0');
+    $('#right-div').addClass('col-md-6');
+    $('#modal-size').attr({ 'style': 'width:90% !important' });
+}
+function gettablerincian_unitkerja(jenis, idtemuan, idrekom) {
+    $('#right-div').load(flagsUrl + '/load-table-rincian-unitkerja/' + jenis + '/' + idtemuan + '/' + idrekom);
+}
 function gettablerincian(jenis, idtemuan, idrekom) {
     $('#right-div').load(flagsUrl + '/load-table-rincian/' + jenis + '/' + idtemuan + '/' + idrekom);
 }
@@ -570,4 +598,50 @@ function hapusrincian(id, jenis) {
             })
         }
     })
+}
+
+
+//---------------
+function addtindaklanjutrincian(idrincian,jenis){
+    $('#form-tindaklanjut-rincian').load(flagsUrl +'/form-tindaklanjut-rincian/'+idrincian+'/'+jenis,function(){
+        $('.nominal').on('keyup', function (e) {
+            $(this).val(format($(this).val()));
+        });
+    });
+    $('#addtindaklanjutrincian').modal('show');
+}
+function hapustindaklanjutrincian(idrincian, jenis, idtemuan,rekom_id){
+    swal({
+        title: "Apakah Anda Yakin ?",
+        text: "Ingin Menghapus Data ini",
+        icon: "warning",
+        buttons: [
+            'Tidak!',
+            'Ya, Hapus'
+        ],
+        dangerMode: true,
+    }).then(function (isConfirm) {
+        if (isConfirm) {
+            $('#modalreview').modal('hide');
+            $.ajax({
+                url: flagsUrl + '/hapus-rincian/' + idrincian + '/' + jenis,
+                success: function (res) {
+                    swal({
+                        title: 'Berhasil!',
+                        text: 'Hapus Data Rincian Berhasil',
+                        icon: 'success'
+                    }).then(function () {
+                        gettablerincian_unitkerja(jenis, res.idtemuan, res.rekom_id) 
+                    });
+                }
+            });
+        } else {
+
+        }
+    });
+}
+
+function simpanrincianunitkerja()
+{
+
 }

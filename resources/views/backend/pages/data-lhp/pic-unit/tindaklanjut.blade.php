@@ -133,7 +133,7 @@
                                     <th class="text-center" style="width:15px;">#</th>
                                     {{-- <th class="text-center">No Temuan</th> --}}
                                     <th class="text-center">Temuan</th>
-                                    <th class="text-center">No. Rekomendasi</th>
+                                    <th class="text-center">No. <br>Rekomendasi</th>
                                     <th class="text-center">Rekomendasi</th>
                                     <th class="text-center">Tanggal<br>Penyelesaian</th>
                                     <th class="text-center">PIC 2</th>
@@ -154,7 +154,7 @@
                                                 foreach($rekomendasi[$item->id] as $key=>$val)
                                                 {
                                                     $norekom.=$val->nomor_rekomendasi.'<br>';
-                                                    $rekom.='<li style="height:32px;">- '.(strlen($val->rekomendasi) > 30 ? substr($val->rekomendasi,0,30).' ...' : $val->rekomendasi ).'</li>';
+                                                    $rekom.='<li style="height:32px;">- '.(strlen($val->rekomendasi) > 30 ? '<a href="#" data-toggle="tooltip" title="'.$val->rekomendasi.'">'.substr($val->rekomendasi,0,30).' ...</a>' : $val->rekomendasi ).'</li>';
 
                                                     if(isset($val->picunit2->nama_pic))
                                                         $pic2.='<li style="height:32px;">'.$val->picunit2->nama_pic.'</li>';
@@ -186,7 +186,7 @@
                                                             <li>
                                                                 <a href="#" class="btn-add" data-toggle="modal" data-target="#modaltambahtindaklanjut" data-value="'.$item->id_lhp.'__'.$item->id.'_0__'.$val->id.'_0'.'" style="font-size:11px;"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Tindak Lanjut</a>
                                                             </li>
-                                                            <li><a href="#" target="_blank" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>
+                                                            <li><a href="#" data-toggle="modal" data-target="#lihattindaklanjut" data-value="'.$val->id.'" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>
                                                         </ul>
                                                     </div></li>';
 
@@ -199,7 +199,7 @@
                                             {{-- <td class="text-center">{{$item->no_temuan}}</td> --}}
                                             {{-- <td class="text-left">{{(strlen($item->temuan) > 30 ? substr($item->temuan,0,30).' ...' : $item->temuan )}}</td> --}}
                                             <td class="text-left">
-                                            No. {{$item->no_temuan}} <br>{!!(strlen($item->temuan) > 30 ? '<a href="#" data-toggle="tooltips" data-title="'.$item->temuan.'">'.substr($item->temuan,0,30).' ...</a>' : $item->temuan )!!}</td>
+                                            No. {{$item->no_temuan}} <br>{!!(strlen($item->temuan) > 30 ? '<a href="#" data-toggle="tooltip" data-title="'.$item->temuan.'">'.substr($item->temuan,0,30).' ...</a>' : $item->temuan )!!}</td>
                                             <td class="text-center">{!!$norekom!!}</td>
                                             <td class="text-left"><ul>{!!$rekom!!}</ul></td>
                                             <td class="text-center"><ul>{!!$tglselesai!!}</ul></td>
@@ -226,7 +226,9 @@
     <link rel="stylesheet" href="{{asset('css/noty.css')}}"/>
     <script src="{{asset('js/noty.js')}}"></script>
     <script src="{{asset('js/tindak-lanjut.js')}}"></script>
-	<script>
+    <script src="{{ asset('vendor/unisharp/laravel-ckeditor/ckeditor.js') }}"></script>
+    <script>
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

@@ -66,9 +66,9 @@ function validasirekom(act) {
                     $('#modaltambahrekomendasi').modal('hide');
                     // swal("Berhasil", "Data Rekomendasi Berhasil Di Ubah", "success");
                     resetform(act);
+                    updatejlhrekomendasi(idtemuan, res.status_rekomendasi_id);
                     setTimeout(function(){
                         // reloadtable('temuan_' + idtemuan, idtemuan)
-                        updatejlhrekomendasi(idtemuan);
                         $('#modaltambahrekomendasi').modal('show');
                     },1000);
                 }
@@ -131,6 +131,7 @@ function rekomadd(idtemuan)
             $('#nomor_temuan').val(res.no_temuan);
             $('#temuan').val(res.temuan);
             $('#jenis_temuan').val(res.jenis_temuan_id);
+            
             
             if (res.jenis_temuan_id==2)
             {
@@ -331,9 +332,10 @@ $("#edit_rekanan").autocomplete({
     }
 });
 
-function updatejlhrekomendasi(idtemuan)
+function updatejlhrekomendasi(idtemuan,st_rekom)
 {
-    $('#div-jlh-rekom-' + idtemuan).load(flagsUrl+'/update-jlh-rekomendasi/'+idtemuan);
+    // $('#div-jlh-rekom-' + idtemuan).load(flagsUrl+'/update-jlh-rekomendasi/'+idtemuan);
+    $('#count_temuan_' + idtemuan + '_' + st_rekom).load(flagsUrl + '/update-jlh-rekomendasi/' + idtemuan+'/'+st_rekom);
 }
 
 function cekrbutuhrincian()
@@ -388,20 +390,25 @@ function rekomaddnew(idtemuan) {
 function addtindaklanjut(jenis,idtemuan,idrekom,id)
 {
     var idform=$('#idform').val();
+    var pic1 = $('select.pic1').val();
+    var pic2 = $('select.pic2').val();
+    // alert(pic2)
+    // $("#unit_kerja").append('<option value="'+pic1+'">option5</option>');
     idrekom = idform;
     if(jenis=='sewa')
     {
-        $('#form-rincian-sewa').load(flagsUrl + '/form-rincian/' + jenis + '/' + idtemuan + '/' + idrekom+'/'+id,function(){
+        $('#form-rincian-sewa').load(flagsUrl + '/form-rincian/' + jenis + '/' + idtemuan + '/' + idrekom+'/'+id+'/'+pic1+'/'+pic2,function(){
             $('#unit_kerja').select2()
             $('.nominal').on('keyup', function (e) {
                 $(this).val(format($(this).val()));
+                
             });
         });
         $('#modalrinciansewa').modal('show')
     }
     else if(jenis=='uangmuka')
     {
-        $('#form-rincian-uangmuka').load(flagsUrl + '/form-rincian/' + jenis + '/' + idtemuan + '/' + idrekom+'/'+id,function(){
+        $('#form-rincian-uangmuka').load(flagsUrl + '/form-rincian/' + jenis + '/' + idtemuan + '/' + idrekom+'/'+id+'/'+pic1+'/'+pic2,function(){
             $('#unit_kerja').select2()
             $('.nominal').on('keyup', function (e) {
                 $(this).val(format($(this).val()));
@@ -411,7 +418,7 @@ function addtindaklanjut(jenis,idtemuan,idrekom,id)
     }
     else if(jenis=='listrik')
     {
-        $('#form-rincian-listrik').load(flagsUrl + '/form-rincian/' + jenis + '/' + idtemuan + '/' + idrekom+'/'+id,function(){
+        $('#form-rincian-listrik').load(flagsUrl + '/form-rincian/' + jenis + '/' + idtemuan + '/' + idrekom+'/'+id+'/'+pic1+'/'+pic2,function(){
             $('#unit_kerja').select2()
             $('.nominal').on('keyup', function (e) {
                 $(this).val(format($(this).val()));
@@ -421,7 +428,7 @@ function addtindaklanjut(jenis,idtemuan,idrekom,id)
     }
     else if(jenis=='piutang')
     {
-        $('#form-rincian-piutang').load(flagsUrl + '/form-rincian/' + jenis + '/' + idtemuan + '/' + idrekom+'/'+id,function(){
+        $('#form-rincian-piutang').load(flagsUrl + '/form-rincian/' + jenis + '/' + idtemuan + '/' + idrekom+'/'+id+'/'+pic1+'/'+pic2,function(){
             $('#unit_kerja').select2()
             $('.nominal').on('keyup', function (e) {
                 $(this).val(format($(this).val()));
@@ -431,7 +438,7 @@ function addtindaklanjut(jenis,idtemuan,idrekom,id)
     }
     else if (jenis =='piutangkaryawan')
     {
-        $('#form-rincian-piutangkaryawan').load(flagsUrl + '/form-rincian/' + jenis + '/' + idtemuan + '/' + idrekom+'/'+id,function(){
+        $('#form-rincian-piutangkaryawan').load(flagsUrl + '/form-rincian/' + jenis + '/' + idtemuan + '/' + idrekom+'/'+id+'/'+pic1+'/'+pic2,function(){
             $('#unit_kerja').select2()
             $('.nominal').on('keyup', function (e) {
                 $(this).val(format($(this).val()));
@@ -441,7 +448,7 @@ function addtindaklanjut(jenis,idtemuan,idrekom,id)
     }
     else if (jenis =='hutangtitipan')
     {
-        $('#form-rincian-hutangtitipan').load(flagsUrl + '/form-rincian/' + jenis + '/' + idtemuan + '/' + idrekom+'/'+id,function(){
+        $('#form-rincian-hutangtitipan').load(flagsUrl + '/form-rincian/' + jenis + '/' + idtemuan + '/' + idrekom+'/'+id+'/'+pic1+'/'+pic2,function(){
             $('#unit_kerja').select2()
             $('.nominal').on('keyup', function (e) {
                 $(this).val(format($(this).val()));
@@ -451,7 +458,7 @@ function addtindaklanjut(jenis,idtemuan,idrekom,id)
     }
     else if (jenis =='penutupanrekening')
     {
-        $('#form-rincian-penutupanrekening').load(flagsUrl + '/form-rincian/' + jenis + '/' + idtemuan + '/' + idrekom+'/'+id,function(){
+        $('#form-rincian-penutupanrekening').load(flagsUrl + '/form-rincian/' + jenis + '/' + idtemuan + '/' + idrekom+'/'+id+'/'+pic1+'/'+pic2,function(){
             $('#unit_kerja').select2()
             $('.nominal').on('keyup', function (e) {
                 $(this).val(format($(this).val()));
@@ -461,7 +468,7 @@ function addtindaklanjut(jenis,idtemuan,idrekom,id)
     }
     else if (jenis =='umum')
     {
-        $('#form-rincian-umum').load(flagsUrl + '/form-rincian/' + jenis + '/' + idtemuan + '/' + idrekom+'/'+id,function(){
+        $('#form-rincian-umum').load(flagsUrl + '/form-rincian/' + jenis + '/' + idtemuan + '/' + idrekom+'/'+id+'/'+pic1+'/'+pic2,function(){
             $('#unit_kerja').select2()
             $('.nominal').on('keyup', function (e) {
                 $(this).val(format($(this).val()));
@@ -479,6 +486,12 @@ function validasiformsewa()
     var tgl_pks = $('#tgl_pks');
     var nilai_perjanjian = $('#nilai_perjanjian');
     var masa_berlaku = $('#masa_berlaku');
+    
+    // $('#nilai_perjanjian').on('blur',function(){
+    // alert(totalnilai+'-'+nilairekom)
+    // alert(nilai_perjanjian.val() + '..' + totalnilai + '--' + nilairekom);
+    
+
 
     if (unit_kerja.val() == '')
         notif('error', 'Unit Kerja Belum Dipilih');
@@ -494,28 +507,70 @@ function validasiformsewa()
         notif('error', 'Masa Berlaku Belum Dipilih');
     else {
         //formrinciansewa
-        $.ajax({
-            url: flagsUrl + '/form-rincian-simpan',
-            data: $('#formrinciansewa').serialize(),
-            type: 'POST',
-            datatype:'JSON',
-            success: function (res) {
-                if(res)
-                {
-                    // $('#formrinciansewa').reset();
-                    $('#formrinciansewa').trigger("reset");
-                    $('#modalrinciansewa').modal('hide');
-                    // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
-                    notif('success', 'Data Rincian Berhasil Di Simpan');
-                    gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
-                    setTimeout(function () { 
-                        $('#modalrinciansewa').modal('show');
-                     },1500)
-                }
-                else
-                    notif('error', 'Data Rincian Gagal Disimpan');
+        var totalnilai = parseFloat($('#total_nilai').val())
+        var nilairekom = $('input.nilai_rekomendasi').val()
+        nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
+        var nil = parseFloat(nilai_perjanjian.val().replace(/\./g, ""));
+        if (totalnilai != 0) {
+            // alert((totalnilai + nil) +'--'+nilairekom)
+            if ((totalnilai + nil) > nilairekom) {
+                notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
+                
             }
-        });
+            else
+            {
+                $.ajax({
+                    url: flagsUrl + '/form-rincian-simpan',
+                    data: $('#formrinciansewa').serialize(),
+                    type: 'POST',
+                    datatype: 'JSON',
+                    success: function (res) {
+                        if (res) {
+                            // $('#formrinciansewa').reset();
+                            $('#formrinciansewa').trigger("reset");
+                            $('#modalrinciansewa').modal('hide');
+                            // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
+                            notif('success', 'Data Rincian Berhasil Di Simpan');
+                            gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                            $('#tombol-add-rincian').attr('style', 'display:inline !important');
+                            setTimeout(function () {
+                                $('#modalrinciansewa').modal('show');
+                            }, 1500)
+                        }
+                        else
+                            notif('error', 'Data Rincian Gagal Disimpan');
+                    }
+                });
+            }
+        }
+        else if (nil > nilairekom) {
+            notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
+        }
+        else
+        {
+            $.ajax({
+                url: flagsUrl + '/form-rincian-simpan',
+                data: $('#formrinciansewa').serialize(),
+                type: 'POST',
+                datatype:'JSON',
+                success: function (res) {
+                    if(res)
+                    {
+                        // $('#formrinciansewa').reset();
+                        $('#formrinciansewa').trigger("reset");
+                        $('#modalrinciansewa').modal('hide');
+                        // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
+                        notif('success', 'Data Rincian Berhasil Di Simpan');
+                        gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                        setTimeout(function () { 
+                            $('#modalrinciansewa').modal('show');
+                        },1500)
+                    }
+                    else
+                        notif('error', 'Data Rincian Gagal Disimpan');
+                }
+            });
+        }
     }
 }
 function validasiformuangmuka() {
@@ -523,7 +578,8 @@ function validasiformuangmuka() {
     var no_invoice = $('#no_invoice');
     var tgl_pum = $('#tgl_pum');
     var jumlah_um = $('#jumlah_um');
-
+    // var totalnilai = parseFloat(($('#total_nilai').val()).replace(/./g,''));
+    // var nilairekom = parseFloat(($('input.nilai_rekomendasi').val()).replace(/./g,''));
 
     if (unit_kerja.val() == '')
         notif('error', 'Unit Kerja Belum Dipilih');
@@ -535,27 +591,66 @@ function validasiformuangmuka() {
         notif('error', 'Jumlah UM Belum Diisi');
     else {
         //formrinciansewa
-        $.ajax({
-            url: flagsUrl + '/form-rincian-simpan',
-            data: $('#formrincianuangmuka').serialize(),
-            type: 'POST',
-            datatype: 'JSON',
-            success: function (res) {
-                if (res) {
-                    // $('#formrinciansewa').reset();
-                    $('#formrincianuangmuka').trigger("reset");
-                    $('#modalrincianuangmuka').modal('hide');
-                    // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
-                    notif('success', 'Data Rincian Berhasil Di Simpan');
-                    gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
-                    setTimeout(function () {
-                        $('#modalrincianuangmuka').modal('show');
-                    }, 1500)
-                }
-                else
-                    notif('error', 'Data Rincian Gagal Disimpan');
+        var totalnilai = parseFloat($('#total_nilai').val())
+        var nilairekom = $('input.nilai_rekomendasi').val()
+        nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
+        var nil = parseFloat(jumlah_um.val().replace(/\./g, ""));
+        if (totalnilai != 0) {
+            // alert((totalnilai + nil) +'--'+nilairekom)
+            if ((totalnilai + nil) > nilairekom) {
+                notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
+
             }
-        });
+            else {
+                $.ajax({
+                    url: flagsUrl + '/form-rincian-simpan',
+                    data: $('#formrincianuangmuka').serialize(),
+                    type: 'POST',
+                    datatype: 'JSON',
+                    success: function (res) {
+                        if (res) {
+                            // $('#formrinciansewa').reset();
+                            $('#formrincianuangmuka').trigger("reset");
+                            $('#modalrincianuangmuka').modal('hide');
+                            // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
+                            notif('success', 'Data Rincian Berhasil Di Simpan');
+                            gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                            setTimeout(function () {
+                                $('#modalrincianuangmuka').modal('show');
+                            }, 1500)
+                        }
+                        else
+                            notif('error', 'Data Rincian Gagal Disimpan');
+                    }
+                });
+            }
+    }
+        else if (nil > nilairekom) {
+            notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
+        }
+        else {
+            $.ajax({
+                url: flagsUrl + '/form-rincian-simpan',
+                data: $('#formrincianuangmuka').serialize(),
+                type: 'POST',
+                datatype: 'JSON',
+                success: function (res) {
+                    if (res) {
+                        // $('#formrinciansewa').reset();
+                        $('#formrincianuangmuka').trigger("reset");
+                        $('#modalrincianuangmuka').modal('hide');
+                        // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
+                        notif('success', 'Data Rincian Berhasil Di Simpan');
+                        gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                        setTimeout(function () {
+                            $('#modalrincianuangmuka').modal('show');
+                        }, 1500)
+                    }
+                    else
+                        notif('error', 'Data Rincian Gagal Disimpan');
+                }
+            });
+        }
     }
 }
 function validasiformlistrik() {
@@ -563,7 +658,8 @@ function validasiformlistrik() {
     var lokasi = $('#lokasi');
     var tgl_invoice = $('#tgl_invoice');
     var tagihan = $('#tagihan');
-
+    // var totalnilai = parseFloat(($('#total_nilai').val()).replace(/./g,''));
+    // var nilairekom = parseFloat(($('input.nilai_rekomendasi').val()).replace(/./g,''));
 
     if (unit_kerja.val() == '')
         notif('error', 'Unit Kerja Belum Dipilih');
@@ -574,35 +670,75 @@ function validasiformlistrik() {
     else if (tagihan.val() == '')
         notif('error', 'Jumlah Tagihan Belum Diisi');
     else {
-        //formrinciansewa
-        $.ajax({
-            url: flagsUrl + '/form-rincian-simpan',
-            data: $('#formrincianlistrik').serialize(),
-            type: 'POST',
-            datatype: 'JSON',
-            success: function (res) {
-                if (res) {
-                    // $('#formrinciansewa').reset();
-                    $('#formrincianlistrik').trigger("reset");
-                    $('#modalrincianlistrik').modal('hide');
-                    // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
-                    notif('success', 'Data Rincian Berhasil Di Simpan');
-                    gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
-                    setTimeout(function () {
-                        $('#modalrincianlistrik').modal('show');
-                    }, 1500)
-                }
-                else
-                    notif('error', 'Data Rincian Gagal Disimpan');
+        var totalnilai = parseFloat($('#total_nilai').val())
+        var nilairekom = $('input.nilai_rekomendasi').val()
+        nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
+        var nil = parseFloat(tagihan.val().replace(/\./g, ""));
+        if (totalnilai != 0) {
+            // alert((totalnilai + nil) +'--'+nilairekom)
+            if ((totalnilai + nil) > nilairekom) {
+                notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
+
             }
-        });
+            else {
+        //formrinciansewa
+                $.ajax({
+                    url: flagsUrl + '/form-rincian-simpan',
+                    data: $('#formrincianlistrik').serialize(),
+                    type: 'POST',
+                    datatype: 'JSON',
+                    success: function (res) {
+                        if (res) {
+                            // $('#formrinciansewa').reset();
+                            $('#formrincianlistrik').trigger("reset");
+                            $('#modalrincianlistrik').modal('hide');
+                            // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
+                            notif('success', 'Data Rincian Berhasil Di Simpan');
+                            gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                            setTimeout(function () {
+                                $('#modalrincianlistrik').modal('show');
+                            }, 1500)
+                        }
+                        else
+                            notif('error', 'Data Rincian Gagal Disimpan');
+                    }
+                });
+            }
+    }
+        else if (nil > nilairekom) {
+            notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
+        }
+        else {
+            $.ajax({
+                url: flagsUrl + '/form-rincian-simpan',
+                data: $('#formrincianuangmuka').serialize(),
+                type: 'POST',
+                datatype: 'JSON',
+                success: function (res) {
+                    if (res) {
+                        // $('#formrinciansewa').reset();
+                        $('#formrincianuangmuka').trigger("reset");
+                        $('#modalrincianuangmuka').modal('hide');
+                        // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
+                        notif('success', 'Data Rincian Berhasil Di Simpan');
+                        gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                        setTimeout(function () {
+                            $('#modalrincianuangmuka').modal('show');
+                        }, 1500)
+                    }
+                    else
+                        notif('error', 'Data Rincian Gagal Disimpan');
+                }
+            });
+        }
     }
 }
 function validasiformpiutang() {
     var unit_kerja = $('#unit_kerja');
     var pelanggan = $('#pelanggan');
     var tagihan = $('#tagihan');
-
+    // var totalnilai = parseFloat(($('#total_nilai').val()).replace(/./g,''));
+    // var nilairekom = parseFloat(($('input.nilai_rekomendasi').val()).replace(/./g,''));
 
     if (unit_kerja.val() == '')
         notif('error', 'Unit Kerja Belum Dipilih');
@@ -611,35 +747,75 @@ function validasiformpiutang() {
     else if (tagihan.val() == '')
         notif('error', 'Jumlah Tagihan Belum Diisi');
     else {
-        //formrinciansewa
-        $.ajax({
-            url: flagsUrl + '/form-rincian-simpan',
-            data: $('#formrincianpiutang').serialize(),
-            type: 'POST',
-            datatype: 'JSON',
-            success: function (res) {
-                if (res) {
-                    // $('#formrinciansewa').reset();
-                    $('#formrincianpiutang').trigger("reset");
-                    $('#modalrincianpiutang').modal('hide');
-                    // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
-                    notif('success', 'Data Rincian Berhasil Di Simpan');
-                    gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
-                    setTimeout(function () {
-                        $('#modalrincianpiutang').modal('show');
-                    }, 1500)
-                }
-                else
-                    notif('error', 'Data Rincian Gagal Disimpan');
+        var totalnilai = parseFloat($('#total_nilai').val())
+        var nilairekom = $('input.nilai_rekomendasi').val()
+        nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
+        var nil = parseFloat(tagihan.val().replace(/\./g, ""));
+        if (totalnilai != 0) {
+            // alert((totalnilai + nil) +'--'+nilairekom)
+            if ((totalnilai + nil) > nilairekom) {
+                notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
+
             }
-        });
+            else {
+        //formrinciansewa
+                $.ajax({
+                    url: flagsUrl + '/form-rincian-simpan',
+                    data: $('#formrincianpiutang').serialize(),
+                    type: 'POST',
+                    datatype: 'JSON',
+                    success: function (res) {
+                        if (res) {
+                            // $('#formrinciansewa').reset();
+                            $('#formrincianpiutang').trigger("reset");
+                            $('#modalrincianpiutang').modal('hide');
+                            // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
+                            notif('success', 'Data Rincian Berhasil Di Simpan');
+                            gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                            setTimeout(function () {
+                                $('#modalrincianpiutang').modal('show');
+                            }, 1500)
+                        }
+                        else
+                            notif('error', 'Data Rincian Gagal Disimpan');
+                    }
+                });
+            }
+    }
+        else if (nil > nilairekom) {
+            notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
+        }
+        else {
+            $.ajax({
+                url: flagsUrl + '/form-rincian-simpan',
+                data: $('#formrincianuangmuka').serialize(),
+                type: 'POST',
+                datatype: 'JSON',
+                success: function (res) {
+                    if (res) {
+                        // $('#formrinciansewa').reset();
+                        $('#formrincianuangmuka').trigger("reset");
+                        $('#modalrincianuangmuka').modal('hide');
+                        // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
+                        notif('success', 'Data Rincian Berhasil Di Simpan');
+                        gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                        setTimeout(function () {
+                            $('#modalrincianuangmuka').modal('show');
+                        }, 1500)
+                    }
+                    else
+                        notif('error', 'Data Rincian Gagal Disimpan');
+                }
+            });
+        }
     }
 }
 function validasiformpiutangkaryawan() {
     var unit_kerja = $('#unit_kerja');
     var karyawan = $('#karyawan');
     var pinjaman = $('#pinjaman');
-
+    // var totalnilai = parseFloat(($('#total_nilai').val()).replace(/./g,''));
+    // var nilairekom = parseFloat(($('input.nilai_rekomendasi').val()).replace(/./g,''));
 
     if (unit_kerja.val() == '')
         notif('error', 'Unit Kerja Belum Dipilih');
@@ -649,27 +825,66 @@ function validasiformpiutangkaryawan() {
         notif('error', 'Jumlah Pinjaman Belum Diisi');
     else {
         //formrinciansewa
-        $.ajax({
-            url: flagsUrl + '/form-rincian-simpan',
-            data: $('#formrincianpiutangkaryawan').serialize(),
-            type: 'POST',
-            datatype: 'JSON',
-            success: function (res) {
-                if (res) {
-                    // $('#formrinciansewa').reset();
-                    $('#formrincianpiutangkaryawan').trigger("reset");
-                    $('#modalrincianpiutangkaryawan').modal('hide');
-                    // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
-                    notif('success', 'Data Rincian Berhasil Di Simpan');
-                    gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
-                    setTimeout(function () {
-                        $('#modalrincianpiutangkaryawan').modal('show');
-                    }, 1500)
-                }
-                else
-                    notif('error', 'Data Rincian Gagal Disimpan');
+        var totalnilai = parseFloat($('#total_nilai').val())
+        var nilairekom = $('input.nilai_rekomendasi').val()
+        nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
+        var nil = parseFloat(pinjaman.val().replace(/\./g, ""));
+        if (totalnilai != 0) {
+            // alert((totalnilai + nil) +'--'+nilairekom)
+            if ((totalnilai + nil) > nilairekom) {
+                notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
+
             }
-        });
+            else {
+                $.ajax({
+                    url: flagsUrl + '/form-rincian-simpan',
+                    data: $('#formrincianpiutangkaryawan').serialize(),
+                    type: 'POST',
+                    datatype: 'JSON',
+                    success: function (res) {
+                        if (res) {
+                            // $('#formrinciansewa').reset();
+                            $('#formrincianpiutangkaryawan').trigger("reset");
+                            $('#modalrincianpiutangkaryawan').modal('hide');
+                            // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
+                            notif('success', 'Data Rincian Berhasil Di Simpan');
+                            gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                            setTimeout(function () {
+                                $('#modalrincianpiutangkaryawan').modal('show');
+                            }, 1500)
+                        }
+                        else
+                            notif('error', 'Data Rincian Gagal Disimpan');
+                    }
+                });
+            }
+    }
+        else if (nil > nilairekom) {
+            notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
+        }
+        else {
+            $.ajax({
+                url: flagsUrl + '/form-rincian-simpan',
+                data: $('#formrincianuangmuka').serialize(),
+                type: 'POST',
+                datatype: 'JSON',
+                success: function (res) {
+                    if (res) {
+                        // $('#formrinciansewa').reset();
+                        $('#formrincianuangmuka').trigger("reset");
+                        $('#modalrincianuangmuka').modal('hide');
+                        // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
+                        notif('success', 'Data Rincian Berhasil Di Simpan');
+                        gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                        setTimeout(function () {
+                            $('#modalrincianuangmuka').modal('show');
+                        }, 1500)
+                    }
+                    else
+                        notif('error', 'Data Rincian Gagal Disimpan');
+                }
+            });
+        }
     }
 }
 function validasihutangtitipan() {
@@ -677,7 +892,8 @@ function validasihutangtitipan() {
     var tanggal = $('#tanggal');
     var sisa_hutang = $('#sisa_hutang');
     var sisa_setor = $('#sisa_setor');
-
+    // var totalnilai = parseFloat(($('#total_nilai').val()).replace(/./g,''));
+    // var nilairekom = parseFloat(($('input.nilai_rekomendasi').val()).replace(/./g,''));
 
     if (unit_kerja.val() == '')
         notif('error', 'Unit Kerja Belum Dipilih');
@@ -689,27 +905,66 @@ function validasihutangtitipan() {
         notif('error', 'Jumlah Sisa Setor Belum Diisi');
     else {
         //formrinciansewa
-        $.ajax({
-            url: flagsUrl + '/form-rincian-simpan',
-            data: $('#formrincianhutangtitipan').serialize(),
-            type: 'POST',
-            datatype: 'JSON',
-            success: function (res) {
-                if (res) {
-                    // $('#formrinciansewa').reset();
-                    $('#formrincianhutangtitipan').trigger("reset");
-                    $('#modalrincianhutangtitipan').modal('hide');
-                    // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
-                    notif('success', 'Data Rincian Berhasil Di Simpan');
-                    gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
-                    setTimeout(function () {
-                        $('#modalrincianhutangtitipan').modal('show');
-                    }, 1500)
-                }
-                else
-                    notif('error', 'Data Rincian Gagal Disimpan');
+        var totalnilai = parseFloat($('#total_nilai').val())
+        var nilairekom = $('input.nilai_rekomendasi').val()
+        nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
+        var nil = parseFloat(sisa_setor.val().replace(/\./g, ""));
+        if (totalnilai != 0) {
+            // alert((totalnilai + nil) +'--'+nilairekom)
+            if ((totalnilai + nil) > nilairekom) {
+                notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
+
             }
-        });
+            else {
+                $.ajax({
+                    url: flagsUrl + '/form-rincian-simpan',
+                    data: $('#formrincianhutangtitipan').serialize(),
+                    type: 'POST',
+                    datatype: 'JSON',
+                    success: function (res) {
+                        if (res) {
+                            // $('#formrinciansewa').reset();
+                            $('#formrincianhutangtitipan').trigger("reset");
+                            $('#modalrincianhutangtitipan').modal('hide');
+                            // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
+                            notif('success', 'Data Rincian Berhasil Di Simpan');
+                            gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                            setTimeout(function () {
+                                $('#modalrincianhutangtitipan').modal('show');
+                            }, 1500)
+                        }
+                        else
+                            notif('error', 'Data Rincian Gagal Disimpan');
+                    }
+                });
+            }
+    }
+        else if (nil > nilairekom) {
+            notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
+        }
+        else {
+            $.ajax({
+                url: flagsUrl + '/form-rincian-simpan',
+                data: $('#formrincianuangmuka').serialize(),
+                type: 'POST',
+                datatype: 'JSON',
+                success: function (res) {
+                    if (res) {
+                        // $('#formrinciansewa').reset();
+                        $('#formrincianuangmuka').trigger("reset");
+                        $('#modalrincianuangmuka').modal('hide');
+                        // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
+                        notif('success', 'Data Rincian Berhasil Di Simpan');
+                        gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                        setTimeout(function () {
+                            $('#modalrincianuangmuka').modal('show');
+                        }, 1500)
+                    }
+                    else
+                        notif('error', 'Data Rincian Gagal Disimpan');
+                }
+            });
+        }
     }
 }
 function validasipenutupanrekening() {
@@ -718,7 +973,8 @@ function validasipenutupanrekening() {
     var nomor_rekening = $('#nomor_rekening');
     var jenis_rekening = $('#jenis_rekening');
     var saldo_akhir = $('#saldo_akhir');
-
+    // var totalnilai = parseFloat(($('#total_nilai').val()).replace(/./g,''));
+    // var nilairekom = parseFloat(($('input.nilai_rekomendasi').val()).replace(/./g,''));
 
     if (unit_kerja.val() == '')
         notif('error', 'Unit Kerja Belum Dipilih');
@@ -732,34 +988,74 @@ function validasipenutupanrekening() {
         notif('error', 'Saldo Akhir Belum Diisi');
     else {
         //formrinciansewa
-        $.ajax({
-            url: flagsUrl + '/form-rincian-simpan',
-            data: $('#formrincianpenutupanrekening').serialize(),
-            type: 'POST',
-            datatype: 'JSON',
-            success: function (res) {
-                if (res) {
-                    // $('#formrinciansewa').reset();
-                    $('#formrincianpenutupanrekening').trigger("reset");
-                    $('#modalrincianpenutupanrekening').modal('hide');
-                    // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
-                    notif('success', 'Data Rincian Berhasil Di Simpan');
-                    gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
-                    setTimeout(function () {
-                        $('#modalrincianpenutupanrekening').modal('show');
-                    }, 1500)
-                }
-                else
-                    notif('error', 'Data Rincian Gagal Disimpan');
+        var totalnilai = parseFloat($('#total_nilai').val())
+        var nilairekom = $('input.nilai_rekomendasi').val()
+        nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
+        var nil = parseFloat(saldo_akhir.val().replace(/\./g, ""));
+        if (totalnilai != 0) {
+            // alert((totalnilai + nil) +'--'+nilairekom)
+            if ((totalnilai + nil) > nilairekom) {
+                notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
+
             }
-        });
+            else {
+                $.ajax({
+                    url: flagsUrl + '/form-rincian-simpan',
+                    data: $('#formrincianpenutupanrekening').serialize(),
+                    type: 'POST',
+                    datatype: 'JSON',
+                    success: function (res) {
+                        if (res) {
+                            // $('#formrinciansewa').reset();
+                            $('#formrincianpenutupanrekening').trigger("reset");
+                            $('#modalrincianpenutupanrekening').modal('hide');
+                            // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
+                            notif('success', 'Data Rincian Berhasil Di Simpan');
+                            gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                            setTimeout(function () {
+                                $('#modalrincianpenutupanrekening').modal('show');
+                            }, 1500)
+                        }
+                        else
+                            notif('error', 'Data Rincian Gagal Disimpan');
+                    }
+                });
+            }
+        }
+        else if (nil > nilairekom) {
+            notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
+        }
+        else {
+            $.ajax({
+                url: flagsUrl + '/form-rincian-simpan',
+                data: $('#formrincianuangmuka').serialize(),
+                type: 'POST',
+                datatype: 'JSON',
+                success: function (res) {
+                    if (res) {
+                        // $('#formrinciansewa').reset();
+                        $('#formrincianuangmuka').trigger("reset");
+                        $('#modalrincianuangmuka').modal('hide');
+                        // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
+                        notif('success', 'Data Rincian Berhasil Di Simpan');
+                        gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                        setTimeout(function () {
+                            $('#modalrincianuangmuka').modal('show');
+                        }, 1500)
+                    }
+                    else
+                        notif('error', 'Data Rincian Gagal Disimpan');
+                }
+            });
+        }
     }
 }
 function validasiumum() {
     var unit_kerja = $('#unit_kerja');
     var keterangan = $('#keterangan');
     var jumlah_rekomendasi = $('#jumlah_rekomendasi');
-
+    // var totalnilai = parseFloat(($('#total_nilai').val()).replace(/./g,''));
+    // var nilairekom = parseFloat(($('input.nilai_rekomendasi').val()).replace(/./g,''));
 
     if (unit_kerja.val() == '')
         notif('error', 'Unit Kerja Belum Dipilih');
@@ -768,28 +1064,67 @@ function validasiumum() {
     else if (jumlah_rekomendasi.val() == '')
         notif('error', 'Jumlah Rekomendasi Belum Diisi');
     else {
-        //formrinciansewa
-        $.ajax({
-            url: flagsUrl + '/form-rincian-simpan',
-            data: $('#formrincianumum').serialize(),
-            type: 'POST',
-            datatype: 'JSON',
-            success: function (res) {
-                if (res) {
-                    // $('#formrinciansewa').reset();
-                    $('#formrincianumum').trigger("reset");
-                    $('#modalrincianumum').modal('hide');
-                    // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
-                    notif('success', 'Data Rincian Berhasil Di Simpan');
-                    gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
-                    setTimeout(function () {
-                        $('#modalrincianumum').modal('show');
-                    }, 1500)
-                }
-                else
-                    notif('error', 'Data Rincian Gagal Disimpan');
+        var totalnilai = parseFloat($('#total_nilai').val())
+        var nilairekom = $('input.nilai_rekomendasi').val()
+        nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
+        var nil = parseFloat(jumlah_rekomendasi.val().replace(/\./g, ""));
+        if (totalnilai != 0) {
+            // alert((totalnilai + nil) +'--'+nilairekom)
+            if ((totalnilai + nil) > nilairekom) {
+                notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
+
             }
-        });
+            else {
+        //formrinciansewa
+                $.ajax({
+                    url: flagsUrl + '/form-rincian-simpan',
+                    data: $('#formrincianumum').serialize(),
+                    type: 'POST',
+                    datatype: 'JSON',
+                    success: function (res) {
+                        if (res) {
+                            // $('#formrinciansewa').reset();
+                            $('#formrincianumum').trigger("reset");
+                            $('#modalrincianumum').modal('hide');
+                            // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
+                            notif('success', 'Data Rincian Berhasil Di Simpan');
+                            gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                            setTimeout(function () {
+                                $('#modalrincianumum').modal('show');
+                            }, 1500)
+                        }
+                        else
+                            notif('error', 'Data Rincian Gagal Disimpan');
+                    }
+                });
+            }
+        }
+        else if (nil > nilairekom) {
+            notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
+        }
+        else {
+            $.ajax({
+                url: flagsUrl + '/form-rincian-simpan',
+                data: $('#formrincianuangmuka').serialize(),
+                type: 'POST',
+                datatype: 'JSON',
+                success: function (res) {
+                    if (res) {
+                        // $('#formrinciansewa').reset();
+                        $('#formrincianuangmuka').trigger("reset");
+                        $('#modalrincianuangmuka').modal('hide');
+                        // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
+                        notif('success', 'Data Rincian Berhasil Di Simpan');
+                        gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                        setTimeout(function () {
+                            $('#modalrincianuangmuka').modal('show');
+                        }, 1500)
+                    }
+                    else
+                        notif('error', 'Data Rincian Gagal Disimpan');
+                }
+            });
+        }
     }
 }
 function hapusrincian(id,jenis)
@@ -815,4 +1150,17 @@ function hapusrincian(id,jenis)
             })
         } 
     })
+}
+
+function aktifinrincian(val)
+{
+    // alert(val)
+    if(val!='')
+    {
+        $('#tombol-add-rincian').attr('style','display:inline');
+    }
+    else
+    {
+        $('#tombol-add-rincian').attr('style','display:none');
+    }
 }

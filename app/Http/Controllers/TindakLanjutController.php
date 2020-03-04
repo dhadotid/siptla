@@ -10,6 +10,14 @@ use App\Models\DataRekomendasi;
 use App\Models\DataTemuan;
 use App\Models\Pemeriksa;
 use App\Models\PICUnit;
+use App\Models\RincianSewa;
+use App\Models\RincianUangMuka;
+use App\Models\RincianListrik;
+use App\Models\RincianPiutang;
+use App\Models\RincianPiutangKaryawan;
+use App\Models\RincianHutangTitipan;
+use App\Models\RincianPenutupanRekening;
+use App\Models\RincianUmum;
 use Auth;
 class TindakLanjutController extends Controller
 {
@@ -354,9 +362,9 @@ class TindakLanjutController extends Controller
 
         $user_pic=PICUnit::where('id_user',Auth::user()->id)->first();
 
-        // $temuan=DataTemuan::where('id_lhp',$idlhp)->where('pic_temuan_id',$user_pic->id)->get();
+        $temuan=DataTemuan::where('id_lhp',$idlhp)->get();
         // $temuan=DataTemuan::where('pic_temuan_id',$user_pic->id)->get();
-        $temuan=DataTemuan::all();
+        // $temuan=DataTemuan::all();
         $arrayidtemuan=$dtemuan=array();
         foreach($temuan as $k=>$v)
         {
@@ -365,11 +373,22 @@ class TindakLanjutController extends Controller
             $dtemuan[$k]=$v;
         }
 
-        $rekomendasi=DataRekomendasi::where('id_temuan',$temuan_id)->where('pic_1_temuan_id',$user_pic->id)->with('dtemuan')->get();
+        $rekomendasi=DataRekomendasi::where('id_temuan',$temuan_id)
+            ->where(function($query) use ($user_pic){
+                 $query->where('pic_1_temuan_id', $user_pic->id);
+                 $query->orWhere('pic_2_temuan_id', $user_pic->id);
+             })
+             ->with('dtemuan')->get();
+        // ->where('pic_1_temuan_id',$user_pic->id)
         if($temuan_idx!=0)
         {
             $dtem=$dtemuan[$temuan_idx];
-            $rekomendasi=DataRekomendasi::where('id_temuan',$dtem->id)->where('pic_1_temuan_id',$user_pic->id)->with('dtemuan')->get();
+            $rekomendasi=DataRekomendasi::where('id_temuan',$dtem->id)
+                ->where(function($query) use ($user_pic){
+                    $query->where('pic_1_temuan_id', $user_pic->id);
+                    $query->orWhere('pic_2_temuan_id', $user_pic->id);
+                })->with('dtemuan')->get();
+            // ->where('pic_1_temuan_id',$user_pic->id)
         }
 
         // return $arrayidtemuan;
@@ -404,8 +423,9 @@ class TindakLanjutController extends Controller
         $tindaklanjut->lhp_id = $request->idlhp;
         $tindaklanjut->temuan_id = $request->temuan_id;
         $tindaklanjut->rekomendasi_id = $request->rekomendasi_id;
-        $tindaklanjut->rangkuman = $request->tindak_lanjut;
+        $tindaklanjut->tindak_lanjut = $request->tindak_lanjut;
         $tindaklanjut->rincian = $request->jenis;
+        $tindaklanjut->action_plan = $request->action_plan;
         $tindaklanjut->tgl_tindaklanjut = $request->tgl_tindak_lanjut;
         $sv=$tindaklanjut->save();
 
@@ -438,5 +458,114 @@ class TindakLanjutController extends Controller
             return redirect('data-tindaklanjut-unitkerja/'.$tahun)
                 ->with('error', 'Menambah data Tindak Lanjut Untuk Nomor Rekomendasi '.$request->nomor_rekomendasi.' Gagal');
         }
+    }
+
+    public function form_tindaklanjut_rincian($idrincian,$jenis)
+    {
+        if($jenis=='sewa')
+        {
+            $idform=abs(crc32(sha1(md5(rand()))));
+            return view('backend.pages.data-lhp.rincian-form.pic-unit.form-sewa')
+                    ->with('idrincian',$idrincian)
+                    ->with('idform',$idform)
+                    ->with('jenis',$jenis);
+        }
+        elseif($jenis=='uangmuka')
+        {
+            $idform=abs(crc32(sha1(md5(rand()))));
+            return view('backend.pages.data-lhp.rincian-form.pic-unit.form-uangmuka')
+                    ->with('idrincian',$idrincian)
+                    ->with('idform',$idform)
+                    ->with('jenis',$jenis);
+        }
+        elseif($jenis=='listrik')
+        {
+            $idform=abs(crc32(sha1(md5(rand()))));
+            return view('backend.pages.data-lhp.rincian-form.pic-unit.form-listrik')
+                    ->with('idrincian',$idrincian)
+                    ->with('idform',$idform)
+                    ->with('jenis',$jenis);
+        }
+        elseif($jenis=='piutang')
+        {
+            $idform=abs(crc32(sha1(md5(rand()))));
+            return view('backend.pages.data-lhp.rincian-form.pic-unit.form-piutang')
+                    ->with('idrincian',$idrincian)
+                    ->with('idform',$idform)
+                    ->with('jenis',$jenis);
+        }
+        elseif($jenis=='piutangkaryawan')
+        {
+            $idform=abs(crc32(sha1(md5(rand()))));
+            return view('backend.pages.data-lhp.rincian-form.pic-unit.form-piutangkaryawan')
+                    ->with('idrincian',$idrincian)
+                    ->with('idform',$idform)
+                    ->with('jenis',$jenis);
+        }
+        elseif($jenis=='hutangtitipan')
+        {
+            $idform=abs(crc32(sha1(md5(rand()))));
+            return view('backend.pages.data-lhp.rincian-form.pic-unit.form-hutangtitipan')
+                    ->with('idrincian',$idrincian)
+                    ->with('idform',$idform)
+                    ->with('jenis',$jenis);
+        }
+        elseif($jenis=='penutupanrekening')
+        {
+            $idform=abs(crc32(sha1(md5(rand()))));
+            return view('backend.pages.data-lhp.rincian-form.pic-unit.form-penutupanrekening')
+                    ->with('idrincian',$idrincian)
+                    ->with('idform',$idform)
+                    ->with('jenis',$jenis);
+        }
+        elseif($jenis=='umum')
+        {
+            $idform=abs(crc32(sha1(md5(rand()))));
+            return view('backend.pages.data-lhp.rincian-form.pic-unit.form-umum')
+                    ->with('idrincian',$idrincian)
+                    ->with('idform',$idform)
+                    ->with('jenis',$jenis);
+        }
+    }
+
+    public function hapus_rincian_jenis($idrincian,$jenis)
+    {
+        if($jenis=='sewa')
+        {
+            $rincian=RincianSewa::find($idrincian);
+        }
+        elseif($jenis=='uangmuka')
+        {
+            $rincian=RincianUangMuka::find($idrincian);
+        }
+        elseif($jenis=='listrik')
+        {
+            $rincian=RincianListrik::find($idrincian);
+        }
+        elseif($jenis=='piutang')
+        {
+            $rincian=RincianPiutang::find($idrincian);
+        }
+        elseif($jenis=='piutangkaryawan')
+        {
+            $rincian=RincianPiutangKaryawan::find($idrincian);
+        }
+        elseif($jenis=='hutangtitipan')
+        {
+            $rincian=RincianHutangTitipan::find($idrincian);
+        }
+        elseif($jenis=='penutupanrekening')
+        {
+            $rincian=RincianPenutupanRekening::find($idrincian);
+        }
+        elseif($jenis=='umum')
+        {
+            $rincian=RincianUmum::find($idrincian);
+        }
+
+        $data['idtemuan']=$rincian->id_temuan;
+        $data['rekom_id']=$rincian->id_rekomendasi;
+        $rincian->delete();
+        return $data;
     }
 }

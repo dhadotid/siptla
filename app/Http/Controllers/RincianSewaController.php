@@ -17,13 +17,31 @@ use App\Models\TindakLanjutTemuan;
 use Auth;
 class RincianSewaController extends Controller
 {
-    public function form_rincian($jenis,$idtemuan,$idrekomendasi,$id=-1)
+    public function form_rincian($jenis,$idtemuan,$idrekomendasi,$id=-1,$pic1=null,$pic2=null)
     {
-        if($id!=-1)
-            $pic=PICUnit::where('id_user',Auth::user()->id)->get();
-        else
-            $pic=PICUnit::orderBy('nama_pic')->get();
+
+        $dpic=$array_pic=array();
+        if($pic1!=null)
+            $dpic[]=$pic1;
+
         
+        if($pic2!=null)
+        {
+            $array_pic=explode(',',$pic2);
+            foreach($array_pic as $k=>$v)
+            {
+                $dpic[]=$v;
+            }
+        }
+
+        $pic=PICUnit::whereIn('id',$dpic)->orderBy('nama_pic')->get();
+        // return $pic;
+        // if($id!=-1)
+        //     $pic=PICUnit::where('id_user',Auth::user()->id)->get();
+        // else
+        //     $pic=PICUnit::orderBy('nama_pic')->get();
+
+        // $pic=array();
         if($jenis=='sewa')
         {
             return view('backend.pages.data-lhp.rincian-form.form-sewa')

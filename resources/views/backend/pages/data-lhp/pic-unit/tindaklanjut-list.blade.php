@@ -11,9 +11,9 @@
                             <thead>
                                 <tr class="primary">
                                     <th class="text-center" style="width:15px;">#</th>
-                                    <th class="text-center">No Temuan</th>
+                                    <th class="text-center">No <br>Temuan</th>
                                     <th class="text-center">Temuan</th>
-                                    <th class="text-center">No. Rekomendasi</th>
+                                    <th class="text-center">No. <br>Rekomendasi</th>
                                     <th class="text-center">Rekomendasi</th>
                                     <th class="text-center">Tanggal<br>Penyelesaian</th>
                                     <th class="text-center">PIC 2</th>

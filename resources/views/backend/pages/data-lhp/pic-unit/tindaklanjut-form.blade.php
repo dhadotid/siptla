@@ -26,12 +26,12 @@
                     @if (count($dtemuan)!=0)
                         <div class="col-md-3 text-right">
                             @if ($temuan_idx!=0)
-                                <a href="javascript:othertemuan('{{$idlhp.'__'.$temuan_id.'_'.($temuan_idx-1).'__'.$rekom_id.'_0'}}')" class="btn btn-outline btn-primary btn-xs"><i class="fa fa-caret-square-o-left"></i> Sebelumnya</a>
+                                <a href="javascript:othertemuan_unitkerja('{{$idlhp.'__'.$temuan_id.'_'.($temuan_idx-1).'__'.$rekom_id.'_0'}}')" class="btn btn-outline btn-primary btn-xs"><i class="fa fa-caret-square-o-left"></i> Sebelumnya</a>
                             @endif
                         </div>
                         <div class="col-md-3 text-right">
                             @if (count($dtemuan)!=($temuan_idx+1)) 
-                                    <a href="javascript:othertemuan('{{$idlhp.'__'.$temuan_id.'_'.($temuan_idx+1).'__'.$rekom_id.'_0'}}')" class="btn btn-outline btn-primary btn-xs">Selanjutnya <i class="fa    fa-caret-square-o-right"></i></a>
+                                    <a href="javascript:othertemuan_unitkerja('{{$idlhp.'__'.$temuan_id.'_'.($temuan_idx+1).'__'.$rekom_id.'_0'}}')" class="btn btn-outline btn-primary btn-xs">Selanjutnya <i class="fa    fa-caret-square-o-right"></i></a>
                             @endif
                         </div>
                     @endif
@@ -108,6 +108,13 @@
                 <textarea class="form-control"  name="tindak_lanjut" placeholder="Tindak Lanjut" id="tindak_lanjut"></textarea>
             </div>
         </div>
+       <div class="form-group" style="margin-top:-20px;">
+            <label for="exampleTextInput1" class="col-sm-12 control-label text-left">Rencana Tindak Lanjut:
+            </label>
+            <div class="col-sm-12">
+                <textarea class="form-control"  name="action_plan" placeholder="Rencana Tindak Lanjut" id="action_plan"></textarea>
+            </div>
+        </div>
         <div class="form-group" style="margin-top:-20px;">
             <label for="exampleTextInput1" class="col-sm-12 control-label text-left">Dokumen Pendukung:</label>
             <div class="col-sm-12">
@@ -118,7 +125,7 @@
             
             <div class="form-group">
                 <div class="col-sm-12">
-                    <a href="#" onclick="updaterincian('{{isset($rekomendasi->id) ? $rekomendasi->rincian : 0}}',{{isset($rekomendasi->id) ? $rekomendasi->id_temuan.','.$rekomendasi->id : '0,0'}})"><u>Update Rincian Tindak Lanjut</u></a>
+                    <a href="javascript:updaterincian_unitkerja('{{isset($rekomendasi->id) ? $rekomendasi->rincian : 0}}',{{isset($rekomendasi->id) ? $rekomendasi->id_temuan.','.$rekomendasi->id : '0,0'}})" onclick=""><u>Update Rincian Tindak Lanjut</u></a>
                 </div>
             </div>    
         @endif

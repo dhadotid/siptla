@@ -137,32 +137,37 @@
                     $no=1;
                 @endphp
                 @foreach ($drekomendasi as $key => $item)
-                    @if ($statusrekom!=null && $statusrekom!='null')
-                        @if($statusrekom==$item->status_rekomendasi_id)
+                    @php
+                        $pic2=explode(',',$item->pic_2_temuan_id);
+                    @endphp
+                    @if (($item->pic_1_temuan_id==$picunit_id) || (in_array($picunit_id,$pic2)))
+                        @if ($statusrekom!=null && $statusrekom!='null')
+                            @if($statusrekom==$item->status_rekomendasi_id)
+                                <tr>
+                                    <td class="text-center">{{$no}}</td>
+                                    <td class="text-left">{{$item->rekomendasi}}</td>
+                                    <td class="text-center"><a href="javascript:detailrekom({{$item->id}})" class="btn btn-xs btn-success" style="height:unset !important;">Rp. {{number_format($item->nominal_rekomendasi,0,',','.')}} <i class="fa fa-list"></i></a></td>
+                                    <td class="text-center">{{isset($item->picunit1->nama_pic) ? $item->picunit1->nama_pic : '' }}</td>
+                                    <td class="text-center">{{isset($item->picunit2->nama_pic) ? $item->picunit2->nama_pic : '' }}</td>
+                                    <td class="text-center">{{$item->statusrekomendasi->rekomendasi}}</td>
+                                </tr>
+                                @php
+                                    $no++;
+                                @endphp
+                            @endif
+                        @else       
                             <tr>
                                 <td class="text-center">{{$no}}</td>
                                 <td class="text-left">{{$item->rekomendasi}}</td>
-                                <td class="text-center"><a href="javascript:detailrekom({{$item->id}})" class="btn btn-xs btn-success" style="height:unset !important;">Rp. {{number_format($item->nominal_rekomendasi,0,',','.')}}</a></td>
-                                <td class="text-center">{{isset($item->picunit1->nama_pic) ? $item->picunit1->nama_pic : '' }}</td>
-                                <td class="text-center">{{isset($item->picunit2->nama_pic) ? $item->picunit2->nama_pic : '' }}</td>
+                                <td class="text-center"><a href="javascript:detailrekom({{$item->id}})" class="btn btn-xs btn-success" style="height:unset !important;">Rp. {{number_format($item->nominal_rekomendasi,0,',','.')}} <i class="fa fa-list"></i></a></td>
+                                <td class="text-center">{{isset($item->picunit1->nama_pic) ? $item->picunit1->nama_pic : ''}}</td>
+                                <td class="text-center">{{isset($item->picunit2->nama_pic) ? $item->picunit2->nama_pic : ''}}</td>
                                 <td class="text-center">{{$item->statusrekomendasi->rekomendasi}}</td>
                             </tr>
                             @php
                                 $no++;
                             @endphp
                         @endif
-                    @else       
-                        <tr>
-                            <td class="text-center">{{$no}}</td>
-                            <td class="text-left">{{$item->rekomendasi}}</td>
-                            <td class="text-center"><a href="javascript:detailrekom({{$item->id}})" class="btn btn-xs btn-success" style="height:unset !important;">Rp. {{number_format($item->nominal_rekomendasi,0,',','.')}}</a></td>
-                            <td class="text-center">{{isset($item->picunit1->nama_pic) ? $item->picunit1->nama_pic : ''}}</td>
-                            <td class="text-center">{{isset($item->picunit2->nama_pic) ? $item->picunit2->nama_pic : ''}}</td>
-                            <td class="text-center">{{$item->statusrekomendasi->rekomendasi}}</td>
-                        </tr>
-                        @php
-                            $no++;
-                        @endphp
                     @endif
                 @endforeach
             </tbody>

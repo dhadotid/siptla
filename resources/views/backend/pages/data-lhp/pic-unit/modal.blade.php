@@ -203,7 +203,7 @@
 		</div>
 	</div>  
 {{-- END Modal Rincian Umum--}}
-{{-- Modal Rincian Umum--}}
+{{-- Modal Rincian--}}
  <div class="modal fade" id="modalrincian" tabindex="-1" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -220,4 +220,45 @@
 			</div>
 		</div>
 	</div>  
-{{-- END Modal Rincian Umum--}}
+{{-- END Modal Rincian--}}
+{{-- Modal TIndal Lanjut--}}
+ <div class="modal fade" id="lihattindaklanjut" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Data Tindak Lanjut</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="table-data-rincian"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-success">Tutup</button>
+                </div>
+			</div>
+		</div>
+	</div>  
+{{-- END Modal Rincian--}}
+
+{{-- Modal TIndal Lanjut--}}
+ <div class="modal fade" id="addtindaklanjutrincian" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Rincian Tindak Lanjut</h4>
+                </div>
+                <form method="POST" class="form-horizontal" id="form_tindaklanjut_rincian" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div id="form-tindaklanjut-rincian"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-success">Tutup</button>
+                        <input type="button" onclick="simpanrincianunitkerja()" class="btn btn-success" value="Simpan">
+                    </div>
+                </form>
+			</div>
+		</div>
+	</div>  
+{{-- END Modal Rincian--}}
+

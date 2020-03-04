@@ -69,12 +69,13 @@ Route::group(['middleware'=>'auth'],function(){
     Route::post('rekomendasi-simpan','DataRekomendasiController@rekomendasi_simpan')->name('rekomendasi.simpan');
     Route::post('rekomendasi-update/{idrekom}/{idtemuan}','DataRekomendasiController@rekomendasi_update')->name('rekomendasi.update');
     Route::get('rekomendasi-delete/{idrekom}/{idtemuan}','DataRekomendasiController@rekomendasi_delete')->name('rekomendasi.delete');
-    Route::get('update-jlh-rekomendasi/{idtemuan}','DataRekomendasiController@update_jlh_rekomendasi');
+    Route::get('update-jlh-rekomendasi/{idtemuan}/{st_rekom?}','DataRekomendasiController@update_jlh_rekomendasi');
     Route::get('rekomendasi-by-temuan/{idtemuan}/{status?}','DataRekomendasiController@rekomendasi_by_temuan')->name('rekomendasi.by-temuan');
     Route::get('rincian-nilai-rekom/{idrekom}','DataRekomendasiController@rincian_nilai');
     
     Route::get('load-table-rincian/{jenis}/{idtemuan?}/{statusrekomendasi?}/{view?}','DataRekomendasiController@load_tabel_rincian');
-    Route::get('form-rincian/{jenis}/{idtemuan?}/{idrekomendasi?}/{id?}','RincianSewaController@form_rincian');
+    Route::get('load-table-rincian-unitkerja/{jenis}/{idtemuan?}/{statusrekomendasi?}/{view?}','DataRekomendasiController@load_tabel_rincian_unitkerja');
+    Route::get('form-rincian/{jenis}/{idtemuan?}/{idrekomendasi?}/{id?}/{pic1?}/{pic2?}','RincianSewaController@form_rincian');
     Route::post('form-rincian-simpan','RincianSewaController@form_rincian_simpan');
     Route::get('form-rincian-hapus/{id}/{jenis}','RincianSewaController@form_rincian_hapus');
 
@@ -89,6 +90,9 @@ Route::group(['middleware'=>'auth'],function(){
     Route::post('data-tindaklanjut-unitkerja-list','TindakLanjutController@unitkerja_list');
     Route::get('tindak-lanjut-unitkerja-form-add/{idlhp}/{temuan_id_index}/{rekom_id_index}','TindakLanjutController@unitkerja_add_form');
     Route::post('tindaklanjut-unitkerja-simpan','TindakLanjutController@unitkerja_tindak_lanjut_simpan');
+
+    Route::get('form-tindaklanjut-rincian/{idrincian}/{jenis}','TindakLanjutController@form_tindaklanjut_rincian');
+    Route::get('hapus-rincian/{idrincian}/{jenis}','TindakLanjutController@hapus_rincian_jenis');
 
     Route::get('data-rekanan','RekananController@data_rekanan')->name('data-rekanan');
     

@@ -77,6 +77,10 @@ function hitunghari($mulai,$akhir,$jenis)
 
     return $jumlah;
 }
+function rupiah($nominal)
+{
+    return number_format($nominal,0,',','.');
+}
 function generateid($str)
 {
     return abs(crc32(md5(rand().'-'.sha1($str))));

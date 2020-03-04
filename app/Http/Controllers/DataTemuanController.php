@@ -325,7 +325,7 @@ class DataTemuanController extends Controller
         }
         else
         {
-        // return $drekomendasi;
+        return $drekomendasi;
             return view('backend.pages.data-lhp.auditor-junior.detail-lhp')
                     ->with('temuan',$tm)
                     ->with('offset',$offset)

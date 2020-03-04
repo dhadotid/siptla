@@ -63,6 +63,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('temuan-by-lhp/{idlhp}','DataTemuanController@temuan_by_lhp')->name('temuan.by-lhp');
 
     
+    Route::get('rekomendasi-edit-data/{idrekom}','DataRekomendasiController@rekomendasi_edit_data')->name('rekomendasi.edit-data');
     Route::get('rekomendasi-edit/{idrekom}','DataRekomendasiController@rekomendasi_edit')->name('rekomendasi.edit');
     Route::get('rekomendasi-data/{idtemuan}','DataRekomendasiController@rekomendasi_data')->name('rekomendasi.data');
     Route::get('rekomendasi-data-new/{idtemuan}/{status_rekom}','DataRekomendasiController@rekomendasi_data_new')->name('rekomendasi.data-new');

@@ -21,7 +21,12 @@ class DataRekomendasiController extends Controller
     public function rekomendasi_simpan(Request $request)
     {
         // return $request->all();
-        $insert=new DataRekomendasi;
+
+        if(isset($request->idrekom))
+            $insert=DataRekomendasi::find($request->idrekom);
+        else
+            $insert=new DataRekomendasi;
+
         $insert->nomor_rekomendasi=$notemuan=$request->no_rekomendasi;
         $insert->no_temuan=$notemuan=$request->nomor_temuan;
         $insert->id_temuan=$request->id_temuan;
@@ -144,6 +149,9 @@ class DataRekomendasiController extends Controller
                     $status='danger';
 
                 $table.='<li style="margin-bottom:10px;padding:10px 0;border-bottom:1px solid #bbb;">
+                    <a href="javascript:hapusrekomendasi(\''.$v->id_temuan.'\',\''.$v->id.'\')" class="btn btn-danger btn-xs pull-right"><i class="fa fa-trash"></i> Hapus Rekomendasi</a>
+                    <a href="javascript:rekomedit(\''.$v->id_temuan.'\',\''.$v->id.'\')" class="btn btn-info btn-xs pull-right"><i class="fa fa-edit"></i> Edit Rekomendasi</a>
+                    
                     <u>Nilai Rekomendasi :</u><br><h5><span class="text-primary">Rp.'.number_format($v->nominal_rekomendasi,2,',','.').'</span></h5>
                     <br>
                     <u>Rekomendasi : </u><br><h4>'.$v->rekomendasi.'</h4><br>
@@ -269,6 +277,7 @@ class DataRekomendasiController extends Controller
                     $status='danger';
 
                 $table.='<li style="margin-bottom:10px;padding:10px 0;border-bottom:1px solid #bbb;">
+                    <a href="javascript:hapusrekomendasi(\''.$v->id_temuan.'\',\''.$v->id.'\')" class="btn btn-danger btn-xs pull-right"><i class="fa fa-trash"></i> Hapus Rekomendasi</a>
                     <a href="javascript:rekomedit(\''.$v->id_temuan.'\',\''.$v->id.'\')" class="btn btn-info btn-xs pull-right"><i class="fa fa-edit"></i> Edit Rekomendasi</a>
                     <u>Nilai Rekomendasi :</u><br><h5><span class="text-primary">Rp.'.number_format($v->nominal_rekomendasi,2,',','.').'</span></h5>
                     <br>
@@ -291,9 +300,23 @@ class DataRekomendasiController extends Controller
 
         return $table;
     }
+    public function rekomendasi_edit_data($idrekom)
+    {
+        $rekom=DataRekomendasi::selectRaw('*,data_rekomendasi.id as rekom_id')->where('id',$idrekom)
+                ->with('dtemuan')
+                ->with('jenistemuan')
+                ->with('picunit1')
+                ->with('picunit2')
+                ->with('jangkawaktu')
+                ->with('drekanan')
+                ->with('statusrekomendasi')
+                ->first();
+
+        return $rekom;
+    }
     public function rekomendasi_edit($idrekom)
     {
-        $picunit=
+        // $picunit=
         $rekom=DataRekomendasi::selectRaw('*,data_rekomendasi.id as rekom_id')->where('id',$idrekom)
                 ->with('dtemuan')
                 ->with('jenistemuan')
@@ -373,14 +396,17 @@ class DataRekomendasiController extends Controller
     }
     public function rekomendasi_delete($idrekom,$idtemuan)
     {
-        DataRekomendasi::destroy($idrekom);
         // return $idtemuan;
-
-        $rekom=DataRekomendasi::where('id_temuan',$idtemuan)->get();
+        $rekom=DataRekomendasi::find($idrekom);
+        $data=$rekom;
+        $rekom->delete();
+        // DataRekomendasi::destroy($idrekom);
+        // $rekom=DataRekomendasi::where('id_temuan',$idtemuan)->get();
         // $jlhrekom=isset($rekomendasi[$item->temuan_id]) ? count($rekomendasi[$item->temuan_id]) : 0;
 
-        $data['jlh']='<span style="cursor:pointer" class="label label-'.($rekom->count()==0 ? 'dark' : 'primary').' fz-sm">'.$rekom->count().'</span>';
-        return $data;
+        // $data['jlh']='<span style="cursor:pointer" class="label label-'.($rekom->count()==0 ? 'dark' : 'primary').' fz-sm">'.$rekom->count().'</span>';
+        // return $data;
+        return redirect('data-temuan-lhp/'.$data->dtemuan->id_lhp)->with('');
     }
 
     public function tabletindaklanjut($idtemuan,$idrekom,$data_tl)

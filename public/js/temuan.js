@@ -158,13 +158,21 @@ function rekomedit(idtemuan,idrekom)
     // var idform = $('#idform').val();
     $('#id_temuan').val(idtemuan);
     $.ajax({
-        url: flagsUrl + '/data-temuan-lhp-edit/'+idtemuan,
+        url: flagsUrl + '/rekomendasi-edit-data/' + idrekom,
         success : function(res){
             $('#idform').val(res.id_lhp+''+idtemuan);
             $('#nomor_temuan').val(res.no_temuan);
-            $('#temuan').val(res.temuan);
-            $('#jenis_temuan').val(res.jenis_temuan_id);
-            
+            $('#temuan').val(res.dtemuan.temuan);
+            $('#jenis_temuan').val(res.jenis_temuan);
+            $('#add_no_rekomendasi').val(res.nomor_rekomendasi);
+            $('#add_rekomendasi').val(res.rekomendasi);
+            $('#add_senior_auditor').val(res.senior_user_id).trigger('change');
+            $('#add_nilai_rekomendasi').val(format(res.nominal_rekomendasi));
+            $('#add_pic_1').val(res.pic_1_temuan_id).trigger('change');
+            $('#add_pic_2').val(res.pic_2_temuan_id).trigger('change');
+            $('#add_status_rekomendasi').val(res.status_rekomendasi_id).trigger('change');
+
+            $('#form_rekom_add').append('<input type="hidden" name="idrekom" value="' + res.rekom_id+'" />');
             
             if (res.jenis_temuan_id==2)
             {
@@ -315,18 +323,30 @@ function hapusrekomendasi(idrekom,idtemuan)
 {
     $('#modalhapusrekomendasi').modal('show');
     $('#hapusrekom').one('click',function(){
-        $.ajax({
-            url: flagsUrl + '/rekomendasi-delete/' + idrekom + '/' + idtemuan,
-            success:function(res){
-                $('#data_rekom_' + idrekom).remove();
-                $('#div-jlh-rekom-'+idtemuan).html(res.jlh);
-                $('#modalhapusrekomendasi').modal('hide');
+        // $.ajax({
+        //     url: flagsUrl + '/rekomendasi-delete/' + idtemuan + '/' + idrekom,
+        //     success:function(res){
+        //         // $('#data_rekom_' + idrekom).remove();
+        //         // $('#div-jlh-rekom-'+idtemuan).html(res.jlh);
+        //         // updatejlhrekomendasi(res.id_temuan, res.status_rekomendasi_id);
+        //         $('#modalhapusrekomendasi').modal('hide');
 
-                swal("Berhasil", "Data Rekomendasi Berhasil Di Hapus", "success");
+        //         swal("Berhasil", "Data Rekomendasi Berhasil Di Hapus", "success");
+                
+        //         // $('.alert').fadeOut();
+        //     }
+        // });
+        // swal("Berhasil", "Data Rekomendasi Berhasil Di Hapus", "success");
+        $('#modalhapusrekomendasi').modal('hide');
 
-                // $('.alert').fadeOut();
-            }
+        swal({
+            title: 'Berhasil!',
+            text: 'Hapus Data Rekomendasi Berhasil',
+            icon: 'success'
+        }).then(function () {
+            location.href = flagsUrl + '/rekomendasi-delete/' + idtemuan + '/' + idrekom;
         });
+        
     });
 }
 

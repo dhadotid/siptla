@@ -4,7 +4,7 @@
     <title>Data User</title>
 @endsection
 @section('modal')
-	<div class="modal fade" id="modaltambah" tabindex="-1" role="dialog">
+	<div class="modal fade" id="modaltambah"  role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -42,7 +42,7 @@
                                         @php
 											foreach($picunit as $k=>$v)
 											{
-												echo '<option value="'.$v->nama_pic.'">'.$v->nama_pic.'</option>';	
+												echo '<option value="'.$v->id.'__'.$v->nama_pic.'">'.$v->nama_pic.'</option>';	
 											}
 										@endphp
                                     </select>
@@ -84,7 +84,7 @@
 		</div>
 	</div>
 
-	<div class="modal fade" id="modalubah" tabindex="-1" role="dialog">
+	<div class="modal fade" id="modalubah"  role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -123,7 +123,7 @@
                                         @php
 											foreach($picunit as $k=>$v)
 											{
-												echo '<option value="'.$v->nama_pic.'">'.$v->nama_pic.'</option>';	
+												echo '<option value="'.$v->id.'__'.$v->nama_pic.'">'.$v->nama_pic.'</option>';	
 											}
 										@endphp
                                     </select>
@@ -164,7 +164,7 @@
 		</div>
 	</div>
 
-	<div class="modal fade" id="modalhapus" tabindex="-1" role="dialog">
+	<div class="modal fade" id="modalhapus"  role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">

@@ -13,6 +13,7 @@ use App\Models\DataTemuan;
 use App\Models\DataRekomendasi;
 use App\Models\JangkaWaktu;
 use App\Models\StatusRekomendasi;
+use App\User;
 use App\Models\Review;
 use Auth;
 use Validator;
@@ -432,6 +433,8 @@ class DataTemuanController extends Controller
         }
         $dt['rekomendasi']=$rekomendasi;
         $dt['temuan']=$dtem;
+
+        $senior=User::where('level','auditor-senior')->get();
         // return $dtem;
         if($data)
         {
@@ -440,6 +443,7 @@ class DataTemuanController extends Controller
                     ->with('idlhp',$idlhp)
                     ->with('drekom',$drekom)
                     ->with('rekomendasi',$rekomendasi)
+                    ->with('senior',$senior)
                     ->with('temuan',$temuan)
                     ->with('jangkawaktu',$jangkawaktu)
                     ->with('statusrekomendasi',$statusrekomendasi)

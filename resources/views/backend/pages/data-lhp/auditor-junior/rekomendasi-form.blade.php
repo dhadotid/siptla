@@ -52,6 +52,18 @@
             </div>
         </div>
         <div class="form-group" style="margin-bottom:10px;">
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Tunjuk Senior Auditor :
+            </label>
+            <div class="col-sm-9">
+                <select name="senior_auditor" class="form-control" id="{{$act}}_senior_auditor" data-plugin="select2">
+                    <option value="">-- Pilih --</option>
+                    @foreach ($senior as $key=>$item)
+                            <option value="{{$item->id}}">{{$item->name}}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nilai Rekomendasi:
                 <br><small style="font-size:9px;color:red;font-style:italic">*wajib diisi</small>
             </label>
@@ -97,7 +109,7 @@
         </div>
         <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">PIC 2:
-                <br><small style="font-size:9px;color:red;font-style:italic">*wajib diisi</small>
+
             </label>
             <div class="col-sm-9">
                 <select name="pic_2[]" class="form-control pic2" id="{{$act}}_pic_2" data-plugin="select2" multiple>

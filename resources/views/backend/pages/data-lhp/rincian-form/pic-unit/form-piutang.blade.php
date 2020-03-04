@@ -59,7 +59,7 @@
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Jenis Rekening:
             </label>
             <div class="col-sm-9">
-                <select name="jenis_setoran" class="form-control" id="jenis_setoran" data-plugin="select2">
+                <select name="jenis_rekening" class="form-control" id="jenis_rekening" data-plugin="select2">
                     <option value="NTPN">NTPN</option>
                     <option value="Rekening Bank">Rekening Bank</option>
                 </select>

@@ -83,6 +83,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('tindak-lanjut-edit/{id}','TindakLanjutController@edit');
     Route::get('tindak-lanjut-hapus/{id}','TindakLanjutController@destroy');
     Route::get('data-tindak-lanjut/{rekom_id}/{idtemuan}','TindakLanjutController@index');
+    Route::get('data-tindak-lanjut-unitkerja/{rekom_id}/{idtemuan}','TindakLanjutController@index_unitkerja');
     
     Route::get('data-tindaklanjut/{tahun?}/{rekom_id?}/{temuan_id?}','TindakLanjutController@junior_index');
     Route::get('data-tindaklanjut-unitkerja/{tahun?}/{rekom_id?}/{temuan_id?}','TindakLanjutController@unitkerja_index');

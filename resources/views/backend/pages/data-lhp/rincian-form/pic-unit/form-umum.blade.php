@@ -13,7 +13,7 @@
             </div>
         </div>
         <input type="hidden" name="jenis" value="{{$jenis}}">
-        <input type="hidden" name="idform" value="{{$idform}}">
+        <input type="hidden" name="idform" id="idform">
         <input type="hidden" name="idrincian" value="{{$idrincian}}">
        
         <div class="form-group" style="margin-bottom:10px;">

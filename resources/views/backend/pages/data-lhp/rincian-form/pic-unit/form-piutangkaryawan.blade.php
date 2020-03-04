@@ -2,8 +2,8 @@
     <div class="col-md-12" style="margin-top:10px;">
         
         <input type="hidden" name="jenis" value="{{$jenis}}">
-        <input type="hidden" name="idform" value="{{$idform}}">
-        <input type="hidden" name="id" value="{{$idrincian}}">
+        <input type="hidden" name="idform" id="idform">
+        <input type="hidden" name="idrincian" value="{{$idrincian}}">
         <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Tindak Lanjut</small>
             </label>

@@ -3,6 +3,7 @@
             <input type="hidden" name="idlhp" id="idlhp" value="{{$data->id}}">
             <input type="hidden" name="temuan_id" id="temuan_id" value="{{$temuan->id}}">
             <input type="hidden" name="rekomendasi_id" id="rekomendasi_id" value="{{$rekomendasi->id}}">
+            <input type="hidden" name="idformtindaklanjut" id="idformtindaklanjut" value="{{time()}}">
             <input type="hidden" name="jenis" id="jenis" value="{{$rekomendasi->rincian}}">
             <h4 style="margin:0px;padding:0px;margin-bottom:10px;">Data Temuan</h4>
             <div class="row" style="margin:0px;padding:0px;margin-bottom:10px;">

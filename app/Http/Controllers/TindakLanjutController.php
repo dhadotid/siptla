@@ -263,7 +263,7 @@ class TindakLanjutController extends Controller
                     $rekomendasi[$v->id_temuan][]=$v;
             }
         }
-        
+        // return $idtemuanarray;
         // return $rekomendasi;
         
         

@@ -18,6 +18,7 @@ use App\Models\RincianPiutangKaryawan;
 use App\Models\RincianHutangTitipan;
 use App\Models\RincianPenutupanRekening;
 use App\Models\RincianUmum;
+use App\Models\TindakLanjutRincian;
 use Auth;
 class TindakLanjutController extends Controller
 {
@@ -527,6 +528,61 @@ class TindakLanjutController extends Controller
                     ->with('jenis',$jenis);
         }
     }
+    public function list_tindaklanjut_rincian($idrincian,$jenis)
+    {
+        if($jenis=='sewa')
+        {
+            $rincian=RincianSewa::find($idrincian);
+        }
+        elseif($jenis=='uangmuka')
+        {
+            $rincian=RincianUangMuka::find($idrincian);
+        }
+        elseif($jenis=='listrik')
+        {
+            $rincian=RincianListrik::find($idrincian);
+        }
+        elseif($jenis=='piutang')
+        {
+            $rincian=RincianPiutang::find($idrincian);
+        }
+        elseif($jenis=='piutangkaryawan')
+        {
+            $rincian=RincianPiutangKaryawan::find($idrincian);
+        }
+        elseif($jenis=='hutangtitipan')
+        {
+            $rincian=RincianHutangTitipan::find($idrincian);
+        }
+        elseif($jenis=='penutupanrekening')
+        {
+            $rincian=RincianPenutupanRekening::find($idrincian);
+        }
+        elseif($jenis=='umum')
+        {
+            $rincian=RincianUmum::find($idrincian);
+        }
+
+        $unitkerja=$rinciantindaklanjut=array();
+        if($rincian)
+        {
+            $unitkerja=PICUnit::find($rincian->unit_kerja_id);
+            $rinciantindaklanjut=TindakLanjutRincian::where('id_temuan',$rincian->id_temuan)
+                    ->where('id_rekomendasi',$rincian->id_rekomendasi)
+                    ->where('unit_kerja_id',($rincian ? $rincian->unit_kerja_id : 0))
+                    ->get();
+
+        }
+
+
+
+        return view('backend.pages.data-lhp.rincian-table.table-rincian')
+                    ->with('idrincian',$idrincian)
+                    ->with('unitkerja',$unitkerja)
+                    ->with('rinciantindaklanjut',$rinciantindaklanjut)
+                    ->with('rincian',$rincian)
+                    ->with('jenis',$jenis);
+    }
 
     public function hapus_rincian_jenis($idrincian,$jenis)
     {
@@ -566,6 +622,92 @@ class TindakLanjutController extends Controller
         $data['idtemuan']=$rincian->id_temuan;
         $data['rekom_id']=$rincian->id_rekomendasi;
         $rincian->delete();
+        return $data;
+    }
+
+    public function simpan_tindaklanjut_rincian(Request $request)
+    {
+        // return $request->all();
+        $idrincian=$request->idrincian;
+        $jenis=$request->jenis;
+        if($jenis=='sewa')
+            $rincian=RincianSewa::find($idrincian);
+        elseif($jenis=='uangmuka')
+            $rincian=RincianUangMuka::find($idrincian);
+        elseif($jenis=='listrik')
+            $rincian=RincianListrik::find($idrincian);
+        elseif($jenis=='piutang')
+            $rincian=RincianPiutang::find($idrincian);
+        elseif($jenis=='piutangkaryawan')
+            $rincian=RincianPiutangKaryawan::find($idrincian);
+        elseif($jenis=='hutangtitipan')
+            $rincian=RincianHutangTitipan::find($idrincian);
+        elseif($jenis=='penutupanrekening')
+            $rincian=RincianPenutupanRekening::find($idrincian);
+        elseif($jenis=='umum')
+            $rincian=RincianUmum::find($idrincian);
+
+
+        $path='-';
+        if($request->hasFile('file_pendukung')){
+            $file = $request->file('file_pendukung');
+            // $new_name = rand() . '.' . $file->getClientOriginalExtension(); 
+            $filenameWithExt = $request->file('file_pendukung')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('file_pendukung')->getClientOriginalExtension();
+            $fileNameToStore = time().'.'.$extension;
+            // $fileNameToStore = rand() . '.' . $file->getClientOriginalExtension(); 
+            $path = $request->file('file_pendukung')->storeAs('public/dokumen',$fileNameToStore);
+
+            // $dokumen=new DokumenTindakLanjut;
+            // $dokumen->id_tindak_lanjut_temuan=$tindak_id;
+            // $dokumen->nama_dokumen=$fileNameToStore;
+            // $dokumen->path=$path;
+            // $dokumen->save();
+        }
+
+        $insert=new TindakLanjutRincian;
+        $insert->id_temuan = $rincian->id_temuan;
+        $insert->id_rekomendasi = $rincian->id_rekomendasi;
+        $insert->unit_kerja_id = $rincian->unit_kerja_id;
+        $insert->id_tindak_lanjut = $request->idform;
+        $insert->dokumen_pendukung = $path;
+
+        if($jenis=='kontribusi' || $jenis=='sewa' || $jenis=='listrik' || $jenis=='piutang' || $jenis=='piutangkaryawan' || $jenis=='hutangtitipan')
+        {
+            $insert->jenis = $request->jenis;
+            $insert->tindak_lanjut_rincian = $request->tindak_lanjut;
+            $insert->nilai = str_replace('.','',$request->nilai);
+            $insert->tanggal = $request->tanggal;
+            $insert->jenis_setoran = $request->jenis_setoran;
+            $insert->bank_tujuan = $request->bank_tujuan;
+            $insert->no_referensi = $request->no_ref;
+            $insert->jenis_rekening = $request->jenis_rekening;
+        }
+
+        if($jenis=='penutupanrekening')
+        {
+
+            $insert->nama_bank = $request->nama_bank;
+            $insert->nomor_rekening = $request->nomor_rekening;
+            $insert->nama_rekening = $request->nama_rekening;
+            $insert->jenis_rekening = $request->jenis_rekening;
+            $insert->saldo_akhir = str_replace('.','',$request->saldo_akhir);
+            
+        }
+
+        if($jenis=='umum')
+        {
+            $insert->jumlah_rekomendasi = str_replace('.','',$request->jumlah_rekomendasi);
+            $insert->dokumen_pendukung = $request->dokumen_pendukung;
+            $insert->keterangan = $request->keterangan;
+        }
+        $insert->save();
+
+        $data['jenis']=$insert->jenis;
+        $data['temuan_id']=$insert->id_temuan;
+        $data['rekomendasi_id']=$insert->id_rekomendasi;
+
         return $data;
     }
 }

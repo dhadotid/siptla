@@ -252,6 +252,9 @@
 	.select2-container{
 		width:100% !important;
 	}
+    .modal {
+    overflow-y:auto;
+    }
 	</style>
 @endsection
 @section('modal')

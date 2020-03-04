@@ -254,9 +254,27 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" data-dismiss="modal" class="btn btn-success">Tutup</button>
-                        <input type="button" onclick="simpanrincianunitkerja()" class="btn btn-success" value="Simpan">
+                        <button type="submit" class="btn btn-info"><i class="fa fa-save"></i> Simpan</button>
                     </div>
                 </form>
+			</div>
+		</div>
+	</div>  
+{{-- END Modal Rincian--}}
+{{-- Modal TIndal Lanjut--}}
+ <div class="modal fade" id="listtindaklanjutrincian" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Detail Data Rincian Nilai</h4>
+                </div>
+                    <div class="modal-body">
+                        <div id="list-tindaklanjut-rincian"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-success">Tutup</button>
+                    </div>
 			</div>
 		</div>
 	</div>  

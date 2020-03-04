@@ -602,11 +602,20 @@ function hapusrincian(id, jenis) {
 
 
 //---------------
+function listtindaklanjutrincian(idrincian,jenis){
+    $('#list-tindaklanjut-rincian').load(flagsUrl + '/list-tindaklanjut-rincian/' + idrincian + '/' + jenis, function () {
+        // $('#table').DataTable();
+    });
+    $('#listtindaklanjutrincian').modal('show');
+}
 function addtindaklanjutrincian(idrincian,jenis){
+    var idform = $('#idformtindaklanjut').val();
+    // alert(idform)
     $('#form-tindaklanjut-rincian').load(flagsUrl +'/form-tindaklanjut-rincian/'+idrincian+'/'+jenis,function(){
         $('.nominal').on('keyup', function (e) {
             $(this).val(format($(this).val()));
         });
+        $('#idform').val(idform);
     });
     $('#addtindaklanjutrincian').modal('show');
 }
@@ -643,5 +652,41 @@ function hapustindaklanjutrincian(idrincian, jenis, idtemuan,rekom_id){
 
 function simpanrincianunitkerja()
 {
-
+    
+    // $.ajax({
+    //     data: new FormData($('#form_tindaklanjut_rincian')),
+    //     url : flagsUrl + '/simpan-tindaklanjut-rincian',
+    //     method : 'POST',
+    //     dataType : 'JSON',
+    //     contentType: false,
+    //     cache: false,
+    //     processData: false,
+    //     success : function(res){
+    //         // gettablerincian_unitkerja(jenis, res.temuan_id, res.rekomendasi_id) 
+    //     }
+    // });
 }
+
+$('#form_tindaklanjut_rincian').on('submit', function (event) {
+    event.preventDefault();
+    $.ajax({
+        url: flagsUrl + '/simpan-tindaklanjut-rincian',
+        method: "POST",
+        data: new FormData(this),
+        dataType: 'JSON',
+        contentType: false,
+        cache: false,
+        processData: false,
+        success: function (res) {
+            swal({
+                title: 'Berhasil!',
+                text: 'Update Data Rincian Tindak Lanjut Berhasil Di Tambah',
+                icon: 'success'
+            }).then(function () {
+                $('#addtindaklanjutrincian').modal('hide');
+                // gettablerincian_unitkerja(res.jenis, res.temuan_id, res.rekomendasi_id) 
+            });
+            
+        }
+    })
+});

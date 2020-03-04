@@ -90,13 +90,16 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('data-tindaklanjut-unitkerja/{tahun?}/{rekom_id?}/{temuan_id?}','TindakLanjutController@unitkerja_index');
     Route::post('data-tindaklanjut-list','TindakLanjutController@junior_list');
     Route::post('data-tindaklanjut-unitkerja-list','TindakLanjutController@unitkerja_list');
-    Route::get('tindak-lanjut-unitkerja-form-add/{idlhp}/{temuan_id_index}/{rekom_id_index}','TindakLanjutController@unitkerja_add_form');
     Route::post('tindaklanjut-unitkerja-simpan','TindakLanjutController@unitkerja_tindak_lanjut_simpan');
+    Route::get('tindak-lanjut-unitkerja-form-add/{idlhp}/{temuan_id_index}/{rekom_id_index}','TindakLanjutController@unitkerja_add_form');
+    Route::get('tindak-lanjut-unitkerja-form-edit/{idlhp}/{temuan_id}/{rekom_id}/{idtl}','TindakLanjutController@unitkerja_edit_form');
     
     Route::get('form-tindaklanjut-rincian/{idrincian}/{jenis}','TindakLanjutController@form_tindaklanjut_rincian');
     Route::get('list-tindaklanjut-rincian/{idrincian}/{jenis}','TindakLanjutController@list_tindaklanjut_rincian');
     Route::get('hapus-rincian/{idrincian}/{jenis}','TindakLanjutController@hapus_rincian_jenis');
     Route::post('simpan-tindaklanjut-rincian','TindakLanjutController@simpan_tindaklanjut_rincian');
+
+    Route::get('table-data-tindaklanjut/{idrekomendasi}','TindakLanjutController@table_data_tindaklanjut');
 
     Route::get('data-rekanan','RekananController@data_rekanan')->name('data-rekanan');
     

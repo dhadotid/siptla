@@ -374,6 +374,11 @@ class TindakLanjutController extends Controller
             echo tgl_indo($date);
     }
 
+    public function unitkerja_edit_form($idlhp,$temuan_id,$rekom_id,$id_tl)
+    {
+        $tl=TindakLanjutTemuan::find($id_tl);
+        return $tl;
+    }
     public function unitkerja_add_form($idlhp,$temuan_id_index,$rekom_id_index)
     {
         list($temuan_id,$temuan_idx)=explode('_',$temuan_id_index);
@@ -728,5 +733,20 @@ class TindakLanjutController extends Controller
         $data['rekomendasi_id']=$insert->id_rekomendasi;
 
         return $data;
+    }
+
+    public function table_data_tindaklanjut($idrekomendasi)
+    {
+        $dokumen=DokumenTindakLanjut::all();
+        $dok=array();
+        foreach($dokumen as $k=>$v)
+        {
+            $dok[$v->id_tindak_lanjut_temuan]=$v;
+        }
+        $tl=TindakLanjutTemuan::where('rekomendasi_id',$idrekomendasi)->get();
+        return view('backend.pages.data-lhp.pic-unit.tindaklanjut-table')
+                ->with('tindaklanjut',$tl)
+                ->with('dok',$dok)
+                ->with('idrekomendasi',$idrekomendasi);
     }
 }

@@ -405,7 +405,8 @@ class DataRekomendasiController extends Controller
         // $jlhrekom=isset($rekomendasi[$item->temuan_id]) ? count($rekomendasi[$item->temuan_id]) : 0;
 
         // $data['jlh']='<span style="cursor:pointer" class="label label-'.($rekom->count()==0 ? 'dark' : 'primary').' fz-sm">'.$rekom->count().'</span>';
-        return $data;
+        // return $data;
+        return redirect('data-temuan-lhp/'.$data->dtemuan->id_lhp)->with('');
     }
 
     public function tabletindaklanjut($idtemuan,$idrekom,$data_tl)

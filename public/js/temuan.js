@@ -323,19 +323,30 @@ function hapusrekomendasi(idrekom,idtemuan)
 {
     $('#modalhapusrekomendasi').modal('show');
     $('#hapusrekom').one('click',function(){
-        $.ajax({
-            url: flagsUrl + '/rekomendasi-delete/' + idtemuan + '/' + idrekom,
-            success:function(res){
-                // $('#data_rekom_' + idrekom).remove();
-                // $('#div-jlh-rekom-'+idtemuan).html(res.jlh);
-                updatejlhrekomendasi(res.id_temuan, res.status_rekomendasi_id);
-                $('#modalhapusrekomendasi').modal('hide');
+        // $.ajax({
+        //     url: flagsUrl + '/rekomendasi-delete/' + idtemuan + '/' + idrekom,
+        //     success:function(res){
+        //         // $('#data_rekom_' + idrekom).remove();
+        //         // $('#div-jlh-rekom-'+idtemuan).html(res.jlh);
+        //         // updatejlhrekomendasi(res.id_temuan, res.status_rekomendasi_id);
+        //         $('#modalhapusrekomendasi').modal('hide');
 
-                swal("Berhasil", "Data Rekomendasi Berhasil Di Hapus", "success");
+        //         swal("Berhasil", "Data Rekomendasi Berhasil Di Hapus", "success");
+                
+        //         // $('.alert').fadeOut();
+        //     }
+        // });
+        // swal("Berhasil", "Data Rekomendasi Berhasil Di Hapus", "success");
+        $('#modalhapusrekomendasi').modal('hide');
 
-                // $('.alert').fadeOut();
-            }
+        swal({
+            title: 'Berhasil!',
+            text: 'Hapus Data Rekomendasi Berhasil',
+            icon: 'success'
+        }).then(function () {
+            location.href = flagsUrl + '/rekomendasi-delete/' + idtemuan + '/' + idrekom;
         });
+        
     });
 }
 

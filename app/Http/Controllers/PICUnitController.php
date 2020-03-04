@@ -33,13 +33,13 @@ class PICUnitController extends Controller
        
         $rules = [
             'level_pic' => 'required',
-            'nama_pic' => 'unique:pic_unit,nama_pic|required',
+            'nama_pic' => 'equired',
         ];
 
         $customMessages = [
             'level_pic.required' => 'Level PIC Belum Dipilih',
             'nama_pic.required' => 'Nama PIC Belum Di Isi',
-            'nama_pic.unique' => 'Nama PIC Sudah Pernah Digunakan, Silahkan Gunakan Nama PIC yang lain'
+            
         ];
 
         Validator::make($request->all(),$rules,$customMessages)->validate();

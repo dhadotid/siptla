@@ -26,8 +26,10 @@
                     <td class="text-center">{{rupiah($v->saldo_hutang)}}</td>
                     <td class="text-center">{{rupiah($v->sisa_setor)}}</td>
                     <td class="text-center">
-                        <a href="javascript:addtindaklanjutrincian({{$v->id}},'hutangtitipan')" class="btn-delete btn btn-xs btn-info"><i class="glyphicon glyphicon-plus"></i></a>&nbsp;
-                        <a href="javascript:listtindaklanjutrincian({{$v->id}},'hutangtitipan')" class="btn-edit btn btn-xs btn-success"><i class="glyphicon glyphicon-list"></i></a>
+                        <div style="width:80px;">
+                            <a href="javascript:addtindaklanjutrincian({{$v->id}},'hutangtitipan')" class="btn-delete btn btn-xs btn-info"><i class="glyphicon glyphicon-plus"></i></a>&nbsp;
+                            <a href="javascript:listtindaklanjutrincian({{$v->id}},'hutangtitipan')" class="btn-edit btn btn-xs btn-success"><i class="glyphicon glyphicon-list"></i></a>
+                        </div>
                     </td>
                 </tr>
                 @php

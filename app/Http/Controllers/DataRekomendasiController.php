@@ -28,6 +28,8 @@ class DataRekomendasiController extends Controller
         $insert->jenis_temuan=$request->jenis_temuan;
         $insert->nominal_rekomendasi=str_replace('.','',$request->nilai_rekomendasi);
         $insert->rekomendasi=$request->rekomendasi;
+        $insert->senior_user_id=$request->senior_auditor;
+        $insert->senior_publish=0;
         $insert->pic_1_temuan_id=$request->pic_1;
 
         if(isset($request->rincian_tl))
@@ -267,6 +269,7 @@ class DataRekomendasiController extends Controller
                     $status='danger';
 
                 $table.='<li style="margin-bottom:10px;padding:10px 0;border-bottom:1px solid #bbb;">
+                    <a href="javascript:rekomedit(\''.$v->id_temuan.'\',\''.$v->id.'\')" class="btn btn-info btn-xs pull-right"><i class="fa fa-edit"></i> Edit Rekomendasi</a>
                     <u>Nilai Rekomendasi :</u><br><h5><span class="text-primary">Rp.'.number_format($v->nominal_rekomendasi,2,',','.').'</span></h5>
                     <br>
                     <u>Rekomendasi : </u><br><h4>'.$v->rekomendasi.'</h4><br>

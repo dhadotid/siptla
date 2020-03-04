@@ -34,7 +34,6 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         Validator::make($request->all(), [
-            'name' => 'required',
             'email' => 'required',
             'level' => 'required',
             'password' => 'required|confirmed',
@@ -44,8 +43,9 @@ class UsersController extends Controller
 
         if($request->input('level')=='pic-unit') 
         {
-            
-            $insert->name = $request->name_pic;
+            list($picunit_id,$picunit_name)=explode('__',$request->name_pic);
+            $insert->name = $picunit_name;
+            $insert->pic_unit_id = $picunit_id;
         }
         else
         {
@@ -58,6 +58,13 @@ class UsersController extends Controller
         $insert->flag = $request->flag;
         $insert->save();
         
+        if($request->input('level')=='pic-unit') 
+        {
+            $picunit=PICUnit::find($picunit_id);
+            $picunit->id_user=$insert->id;
+            $picunit->save();
+        }
+
         return redirect()->route('pengguna.index')
             ->with('success', 'Anda telah memasukkan data baru.');
     }
@@ -79,7 +86,13 @@ class UsersController extends Controller
             $update = User::find($id);
             if($request->input('level')=='pic-unit') 
             {    
-                $update->name = $request->name_pic;
+                list($picunit_id,$picunit_name)=explode('__',$request->name_pic);
+                $update->name = $picunit_name;
+                $update->pic_unit_id = $picunit_id;
+                
+                $picunit=PICUnit::find($picunit_id);
+                $picunit->id_user=$id;
+                $picunit->save();
             }
             else
             {
@@ -106,7 +119,13 @@ class UsersController extends Controller
         if($request->input('level')=='pic-unit') 
         {
             
-            $update->name = $request->name_pic;
+            list($picunit_id,$picunit_name)=explode('__',$request->name_pic);
+            $update->name = $picunit_name;
+            $update->pic_unit_id = $picunit_id;
+
+            $piunit=PICUnit::find($picunit_id);
+            $picunit->id_user=$id;
+            $picunit->save();
         }
         else
         {

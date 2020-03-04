@@ -36,6 +36,20 @@ class TindakLanjutController extends Controller
             ->with('tindaklanjut',$tindaklanjut)
             ->with('data',$data);
     }
+    public function index_unitkerja($id_rekom,$idtemuan)
+    {
+        $temuan=DataTemuan::find($idtemuan);
+
+        $data=DaftarTemuan::selectRaw('*, daftar_lhp.id as id_lhp')
+                ->where('daftar_lhp.id',$temuan->id_lhp)
+                ->with('dpemeriksa')->first();
+        $tindaklanjut=TindakLanjutTemuan::where('temuan_id',$idtemuan)->where('rekomendasi_id',$id_rekom)->get();
+
+        
+        return view('backend.pages.data-lhp.pic-unit.tindak-lanjut-index')
+            ->with('tindaklanjut',$tindaklanjut)
+            ->with('data',$data);
+    }
     public function simpan(Request $request,$idrekom)
     {
         // dd($request);
@@ -232,7 +246,12 @@ class TindakLanjutController extends Controller
         // return $idtemuanarray;
         if(count($idtemuanarray)!=0)
         {
-            $rekom=DataRekomendasi::whereIn('id_temuan',$idtemuanarray)->where('pic_1_temuan_id',$user_pic->id)->with('picunit2')->get();
+            $rekom=DataRekomendasi::whereIn('id_temuan',$idtemuanarray)
+                        ->where(function($query) use ($user_pic){
+                            $query->where('pic_1_temuan_id', $user_pic->id);
+                            $query->orWhere('pic_2_temuan_id', $user_pic->id);
+                        })->with('picunit2')->get();
+
             foreach($rekom as $k=>$v)
             {
                 // if($v->pic_1_temuan_id!=null)
@@ -245,7 +264,7 @@ class TindakLanjutController extends Controller
             }
         }
         
-        
+        // return $rekomendasi;
         
         
         return view('backend.pages.data-lhp.pic-unit.tindaklanjut')

@@ -12,7 +12,7 @@
                 {{-- @if (!Auth::user()->level==1 || Auth::user()->level==2) --}}
                     <div class="row">
                         <div class="col-md-9">
-                            <span class="widget-title">Data LHP</span>
+                            <span class="widget-title">Data Tindak Lanjut</span>
                         </div>
                         <div class="col-md-1 text-right" style="padding-top:10px;">Tahun</div>
                         <div class="col-md-2 text-left">

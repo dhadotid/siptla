@@ -29,9 +29,10 @@ function validasirekom(act) {
     var rekomendasi = $('#'+act+'_rekomendasi');
     var nominal = $('#' + act +'_nilai_rekomendasi');
     var pic_1 = $('#'+act+'_pic_1');
-    var pic_2 = $('#'+act+'_pic_2');
+
     // var jangka_waktu = $('#'+act+'_jangka_waktu');
     var status_rekomendasi = $('#'+act+'_status_rekomendasi');
+    var senior_auditor = $('#' + act +'_senior_auditor');
     // var review_auditor = $('#'+act+'_review_auditor');
 
     if (norekomendasi.val() == '')
@@ -40,10 +41,11 @@ function validasirekom(act) {
         notif('error', 'Rekomendasi Belum Diisi');
     else if (nominal.val() == '')
         notif('error', 'Jumlah Nilai Rekomendasi Belum Diisi');
+    else if (senior_auditor.val() == '')
+        notif('error', 'Senior Auditor Belum Dipilih');
     else if (pic_1.val() == '')
         notif('error', 'PIC 1 Belum Dipilih');
-    else if (pic_2.val() == '')
-        notif('error', 'PIC 2 Belum Dipilih');
+
     // else if (jangka_waktu.val() == '')
     //     notif('error', 'Jangka Waktu Penyelesaian Belum Dipilih');
     else if (status_rekomendasi.val() == '')
@@ -98,6 +100,7 @@ function validasirekom(act) {
 }
 function resetform(jns)
 {
+    $('#' + jns +'_no_rekomendasi').val('');
     $('#'+jns+'_rekomendasi').val('');
     $('#'+jns+'_nilai_rekomendasi').val('');
     $('#'+jns+'_pic_1').val('');
@@ -145,6 +148,38 @@ function rekomadd(idtemuan)
             }
         }
     });
+}
+function rekomedit(idtemuan,idrekom)
+{
+    $('input[name="butuh_rincian"]').prop('checked', true);
+    $('#rincian_tl').val('');
+    cekrbutuhrincian();
+    $('#right-div').html('');
+    // var idform = $('#idform').val();
+    $('#id_temuan').val(idtemuan);
+    $.ajax({
+        url: flagsUrl + '/data-temuan-lhp-edit/'+idtemuan,
+        success : function(res){
+            $('#idform').val(res.id_lhp+''+idtemuan);
+            $('#nomor_temuan').val(res.no_temuan);
+            $('#temuan').val(res.temuan);
+            $('#jenis_temuan').val(res.jenis_temuan_id);
+            
+            
+            if (res.jenis_temuan_id==2)
+            {
+                $('#div_add_rekanan').css('display','block');
+                $('#div_edit_rekanan').css('display','block');
+            }
+            else
+            {
+                $('#div_add_rekanan').css('display', 'none');
+                $('#div_edit_rekanan').css('display', 'none');
+            }
+        }
+    });
+
+    $('#modaltambahrekomendasi').modal('show')
 }
 
 //------------------------
@@ -1164,3 +1199,4 @@ function aktifinrincian(val)
         $('#tombol-add-rincian').attr('style','display:none');
     }
 }
+

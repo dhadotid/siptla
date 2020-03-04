@@ -690,3 +690,7 @@ $('#form_tindaklanjut_rincian').on('submit', function (event) {
         }
     })
 });
+
+function detailtindaklanjut(idrekomendasi) {
+    $('#lihattindaklanjut').modal('show');
+}

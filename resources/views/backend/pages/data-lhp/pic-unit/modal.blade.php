@@ -1,4 +1,4 @@
-<div class="modal fade" id="modaltambahtindaklanjut" tabindex="-1" role="dialog">
+<div class="modal fade" id="modaltambahtindaklanjut" role="dialog">
 		<div class="modal-dialog" id="modal-size">
 			<div class="modal-content">
                 <form method="POST" class="form-horizontal" id="form_tindaklanjut_add" action="{{url('tindaklanjut-unitkerja-simpan')}}" enctype="multipart/form-data">
@@ -28,7 +28,7 @@
 
 
 {{-- Modal Rincian Sewa--}}
- <div class="modal fade" id="modalrinciansewa" tabindex="-1" role="dialog">
+ <div class="modal fade" id="modalrinciansewa" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <form action="" method="POST" class="form-horizontal" id="formrinciansewa">
@@ -50,7 +50,7 @@
 	</div>  
 {{-- END Modal Rincian Sewa--}}
 {{-- Modal Rincian Sewa--}}
- <div class="modal fade" id="modalrincianuangmuka" tabindex="-1" role="dialog">
+ <div class="modal fade" id="modalrincianuangmuka" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <form action="" method="POST" class="form-horizontal" id="formrincianuangmuka">
@@ -72,7 +72,7 @@
 	</div>  
 {{-- END Modal Rincian Sewa--}}
 {{-- Modal Rincian Sewa--}}
- <div class="modal fade" id="modalrincianlistrik" tabindex="-1" role="dialog">
+ <div class="modal fade" id="modalrincianlistrik" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <form action="" method="POST" class="form-horizontal" id="formrincianlistrik">
@@ -94,7 +94,7 @@
 	</div>  
 {{-- END Modal Rincian Sewa--}}
 {{-- Modal Rincian Piutang--}}
- <div class="modal fade" id="modalrincianpiutang" tabindex="-1" role="dialog">
+ <div class="modal fade" id="modalrincianpiutang" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <form action="" method="POST" class="form-horizontal" id="formrincianpiutang">
@@ -116,7 +116,7 @@
 	</div>  
 {{-- END Modal Rincian Piutang--}}
 {{-- Modal Rincian Piutang Karyawan--}}
- <div class="modal fade" id="modalrincianpiutangkaryawan" tabindex="-1" role="dialog">
+ <div class="modal fade" id="modalrincianpiutangkaryawan" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <form action="" method="POST" class="form-horizontal" id="formrincianpiutangkaryawan">
@@ -138,7 +138,7 @@
 	</div>  
 {{-- END Modal Rincian Piutang Karyawan--}}
 {{-- Modal Rincian Hutang Titipan--}}
- <div class="modal fade" id="modalrincianhutangtitipan" tabindex="-1" role="dialog">
+ <div class="modal fade" id="modalrincianhutangtitipan" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <form action="" method="POST" class="form-horizontal" id="formrincianhutangtitipan">
@@ -160,7 +160,7 @@
 	</div>  
 {{-- END Modal Rincian Hutang Titipan--}}
 {{-- Modal Rincian Penutupan Rekening--}}
- <div class="modal fade" id="modalrincianpenutupanrekening" tabindex="-1" role="dialog">
+ <div class="modal fade" id="modalrincianpenutupanrekening" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <form action="" method="POST" class="form-horizontal" id="formrincianpenutupanrekening">
@@ -182,7 +182,7 @@
 	</div>  
 {{-- END Modal Rincian Penutupan Rekening--}}
 {{-- Modal Rincian Umum--}}
- <div class="modal fade" id="modalrincianumum" tabindex="-1" role="dialog">
+ <div class="modal fade" id="modalrincianumum" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <form action="" method="POST" class="form-horizontal" id="formrincianumum">
@@ -204,7 +204,7 @@
 	</div>  
 {{-- END Modal Rincian Umum--}}
 {{-- Modal Rincian--}}
- <div class="modal fade" id="modalrincian" tabindex="-1" role="dialog">
+ <div class="modal fade" id="modalrincian" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <div class="modal-header">
@@ -222,15 +222,15 @@
 	</div>  
 {{-- END Modal Rincian--}}
 {{-- Modal TIndal Lanjut--}}
- <div class="modal fade" id="lihattindaklanjut" tabindex="-1" role="dialog">
-		<div class="modal-dialog">
+ <div class="modal fade" id="lihattindaklanjut" role="dialog">
+		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Data Tindak Lanjut</h4>
                 </div>
                 <div class="modal-body">
-                    <div id="table-data-rincian"></div>
+                    <div id="table-data-tindaklanjut"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-success">Tutup</button>
@@ -241,7 +241,7 @@
 {{-- END Modal Rincian--}}
 
 {{-- Modal TIndal Lanjut--}}
- <div class="modal fade" id="addtindaklanjutrincian" tabindex="-1" role="dialog">
+ <div class="modal fade" id="addtindaklanjutrincian" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <div class="modal-header">
@@ -262,7 +262,7 @@
 	</div>  
 {{-- END Modal Rincian--}}
 {{-- Modal TIndal Lanjut--}}
- <div class="modal fade" id="listtindaklanjutrincian" tabindex="-1" role="dialog">
+ <div class="modal fade" id="listtindaklanjutrincian" role="dialog">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
                 <div class="modal-header">

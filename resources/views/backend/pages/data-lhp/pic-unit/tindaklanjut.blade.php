@@ -12,7 +12,7 @@
                 {{-- @if (!Auth::user()->level==1 || Auth::user()->level==2) --}}
                     <div class="row">
                         <div class="col-md-9">
-                            <span class="widget-title">Data LHP</span>
+                            <span class="widget-title">Data Tindak Lanjut</span>
                         </div>
                         <div class="col-md-1 text-right" style="padding-top:10px;">Tahun</div>
                         <div class="col-md-2 text-left">
@@ -186,11 +186,12 @@
                                                             <li>
                                                                 <a href="#" class="btn-add" data-toggle="modal" data-target="#modaltambahtindaklanjut" data-value="'.$item->id_lhp.'__'.$item->id.'_0__'.$val->id.'_0'.'" style="font-size:11px;"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Tindak Lanjut</a>
                                                             </li>
-                                                            <li><a href="#" data-toggle="modal" data-target="#lihattindaklanjut" data-value="'.$val->id.'" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>
+                                                            <li><a href="javascript:detailtindaklanjut('.$val->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>
                                                         </ul>
                                                     </div></li>';
 
-                                                    
+                                                    // <li><a target="_blank" href="'.url('data-tindak-lanjut-unitkerja/'.$val->id.'/'.$item->id).'" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>
+                                                    //<li><a href="#" data-toggle="modal" data-target="#lihattindaklanjut" data-value="'.$val->id.'" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>
                                                 }
                                             }
                                         @endphp

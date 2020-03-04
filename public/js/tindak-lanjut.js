@@ -692,5 +692,17 @@ $('#form_tindaklanjut_rincian').on('submit', function (event) {
 });
 
 function detailtindaklanjut(idrekomendasi) {
+
+    $('#table-data-tindaklanjut').load(flagsUrl + '/table-data-tindaklanjut/'+idrekomendasi,function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
     $('#lihattindaklanjut').modal('show');
+}
+
+function edittl(tl_id,rekomendasi_id,temuan_id,lhp_id)
+{
+
+    $('#konten-add-form').load(flagsUrl + '/tindak-lanjut-unitkerja-form-edit/' + lhp_id + '/' + temuan_id + '/' + rekomendasi_id + '/' + tl_id, function () {
+        CKEDITOR.replace('action_plan');
+    });
 }

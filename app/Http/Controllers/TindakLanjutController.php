@@ -628,7 +628,7 @@ class TindakLanjutController extends Controller
                     ->with('jenis',$jenis);
         }
     }
-    public function list_tindaklanjut_rincian($idrincian,$jenis)
+    public function list_tindaklanjut_rincian($idrincian,$jenis,$idtl=null)
     {
         if($jenis=='sewa')
         {
@@ -747,6 +747,8 @@ class TindakLanjutController extends Controller
         elseif($jenis=='umum')
             $rincian=RincianUmum::find($idrincian);
 
+        $rincian->id_tindak_lanjut=$request->idform;
+        $rincian->save();
 
         $path='-';
         if($request->hasFile('file_pendukung')){
@@ -808,6 +810,7 @@ class TindakLanjutController extends Controller
         $data['temuan_id']=$insert->id_temuan;
         $data['rekomendasi_id']=$insert->id_rekomendasi;
 
+        
         return $data;
     }
 
@@ -830,6 +833,7 @@ class TindakLanjutController extends Controller
         $user_pic=PICUnit::where('id_user',Auth::user()->id)->first();
         $where=['unit_kerja_id'=>$user_pic->id,'id_rekomendasi'=>$idrekomendasi];
 
+        $rincian=array();
         if($jenis=='sewa')
             $rincian=RincianSewa::where($where)->get();
         elseif($jenis=='uangmuka')

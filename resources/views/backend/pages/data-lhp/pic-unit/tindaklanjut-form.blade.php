@@ -94,7 +94,7 @@
             <label for="datetimepicker2" class="col-sm-12 control-label text-left">Tanggal Tindak Lanjut</label>
             <div class="col-sm-12">
                 <div class='input-group date' id='datetimepicker2' data-plugin="datepicker" data-date-format="dd/mm/yyyy">
-                    <input type='date' class="form-control" name="tgl_tindak_lanjut" id="tgl_tindak_lanjut" value="{{date('d/m/Y')}}"/>
+                    <input type='date' class="form-control" name="tgl_tindak_lanjut" id="tgl_tindak_lanjut" value="{{date('Y-m-d')}}"/>
                     <span class="input-group-addon bg-info text-white">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>

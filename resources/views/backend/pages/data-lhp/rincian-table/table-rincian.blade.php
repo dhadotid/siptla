@@ -24,7 +24,7 @@
                         <td class="text-right">{{ rupiah(($v->{$key})) }}</td>
                     @elseif ($key=='dokumen_pendukung')
                         <td class="text-center">
-                            <a href="" class="btn btn-xs btn-info"><i class="fa fa-search"></i></a>
+                            <a href="{{url('read-pdf/'.$v->dokumen_pendukung)}}" target="_blank" class="btn btn-xs btn-info"><i class="fa fa-search"></i></a>
                         </td>
                     @elseif ($key=='tanggal')
                         <td class="text-center">

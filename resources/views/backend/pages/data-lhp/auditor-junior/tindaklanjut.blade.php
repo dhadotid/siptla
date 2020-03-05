@@ -50,7 +50,28 @@
                                     <div class="form-group">
                                         <label for="my-input" class="col-md-12"><h5>Masukan Parameter Cetak Laporan di bawah ini :</h5></label>
                                     </div>
-                                   
+                                    <div class="form-group" style="margin-bottom:5px;">
+                                        <label for="my-input" class="col-md-3">Tanggal Awal</label>
+                                        <div class="col-md-3">
+                                            <div class='input-group date' id='datetimepicker' data-plugin="datepicker" data-date-format="dd/mm/yyyy">
+                                                <input type='text' class="form-control" name="tanggal_awal" id="tanggal_awal" readonly value="01/{{date('m/'.$tahun)}}"/>
+                                                <span class="input-group-addon bg-info text-white">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom:5px;">
+                                        <label for="my-input" class="col-md-3">Tanggal Akhir</label>
+                                        <div class="col-md-3">
+                                            <div class='input-group date' id='datetimepicker2' data-plugin="datepicker" data-date-format="dd/mm/yyyy">
+                                                <input type='text' class="form-control" name="tanggal_akhir" id="tanggal_akhir" readonly value="{{date('d/m/'.$tahun)}}"/>
+                                                <span class="input-group-addon bg-info text-white">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Pemeriksa</label>
                                         <div class="col-md-6">
@@ -239,12 +260,7 @@
 @section('footscript')
     <link rel="stylesheet" href="{{asset('theme/backend/libs/misc/datatables/datatables.min.css')}}"/>
     <script src="{{asset('theme/backend/libs/misc/datatables/datatables.min.js')}}"></script>
-    <link rel="stylesheet" href="{{asset('css/noty.css')}}"/>
-    <script src="{{asset('js/noty.js')}}"></script>
-    <script src="{{asset('js/tindak-lanjut.js')}}"></script>
-    <script src="{{ asset('vendor/unisharp/laravel-ckeditor/ckeditor.js') }}"></script>
-    <script>
-
+	<script>
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -256,21 +272,51 @@
 		$('.select2').select2();
         // loaddata();
         $('#table').DataTable();
+        function loaddata()
+        {
+            var tanggal_awal=$('#tanggal_awal').val();
+            var tanggal_akhir=$('#tanggal_akhir').val();
+            var pemeriksa=$('#pemeriksa').val();
+            var no_lhp=$('#no_lhp').val();
+            var no_temuan=$('#no_temuan').val();
+            var no_rekomendasi=$('#no_rekomendasi').val();
+            var status_rekomendasi=$('#status_rekomendasi').val();
+            
+            $.ajax({
+                url : '{{url("/")}}/data-tindaklanjut-list',
+                data : { tahun : '{{$tahun}}', tgl_awal : tanggal_awal, tgl_akhir : tanggal_akhir, rekomid : no_rekomendasi, temuan_id : no_temuan, statusrekom : status_rekomendasi},
+                type : 'POST',
+                dataType : 'JSON',
+                success : function(res){
+                    $('#data').html(res,function(){
+                        $('#table-data').DataTable();
+                    });
+                }
+            });
+            // $('#data').load(flagsUrl+'/data-tindaklanjut-list/{{$tahun}}',function(){
+            //     $('#table').DataTable();
+            // });
+        }
 
-        var pesan='{{Session::get("success")}}';
-        var error='{{Session::get("error")}}';
-        if(pesan!='')
-            swal("Berhasil", pesan, "success");
-        if(error!='')
-            swal("Gagal", error, "error");
+        function getdata(tahun)
+        {
+            location.href=flagsUrl+'/data-tindaklanjut/'+tahun;
+        }
+        function rincian(rincian,id)
+        {
+            //load-table-rincian/{jenis}/{idtemuan?}/{statusrekomendasi?}/{view?}
+            var d=id.split('__');
+            var id_temuan=d[1];
+            var id_rekom=d[0];
+            var id_lhp=d[2];
+            $('#table-rincian').load(flagsUrl + '/load-table-rincian/'+rincian+'/'+id_temuan+'/'+id_rekom+'/1');
+            $('#modalrincian').modal('show');
+        }
 	</script>
 	<style>
 	.select2-container{
 		width:100% !important;
 	}
-    .modal {
-    overflow-y:auto;
-    }
 	</style>
 @endsection
 @section('modal')

@@ -96,7 +96,7 @@
                                     </div>
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Nomor Temuan</label>
-                                        <div class="col-md-6">
+                                        <div class="col-md-6" id="select-temuan">
                                             <select class="select2 form-control" name="no_temuan" id="no_temuan" onchange="loaddata()"></select>
                                         </div>
                                     </div>
@@ -142,10 +142,10 @@
                                     $no=1;
                                     $tem=$tgl=$aksi=$pic2='';
                                 @endphp
-                                @foreach ($temuan as $idlhp=>$item)
+                                @foreach ($temuan as $idtemuan=>$item)
                                     @php
                                         $norekom=$tglselesai=$aksi=$rincian='';
-                                        $tem.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">';
+                                        $tem='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">';
                                         $tem.='<div class="col-md-2"><small><i>No. Temuan</i></small><br>
                                             <b>'.$item->no_temuan.'</b>
                                             </div>';
@@ -153,9 +153,9 @@
                                             <b>'.$item->temuan.'</b>
                                             </div>';
                                         $tem.='</div>';
-                                        $tgl.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">&nbsp;</div>';
-                                        $pic2.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">&nbsp;</div>';
-                                        $aksi.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">&nbsp;</div>';
+                                        $tgl='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">&nbsp;</div>';
+                                        $pic2='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">&nbsp;</div>';
+                                        $aksi='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">&nbsp;</div>';
                                         
                                         
                                         $tem.='<br><div class="row" style="height:35px;border-bottom:1px dotted #ddd">';
@@ -272,6 +272,10 @@
 		$('.select2').select2();
         // loaddata();
         $('#table').DataTable();
+        $('#no_lhp').on('change',function(){
+            var idlhp=$(this).val();
+
+        });
         function loaddata()
         {
             var tanggal_awal=$('#tanggal_awal').val();
@@ -284,7 +288,7 @@
             
             $.ajax({
                 url : '{{url("/")}}/data-tindaklanjut-list',
-                data : { tahun : '{{$tahun}}', tgl_awal : tanggal_awal, tgl_akhir : tanggal_akhir, rekomid : no_rekomendasi, temuan_id : no_temuan, statusrekom : status_rekomendasi},
+                data : { tahun : '{{$tahun}}',pemeriksa:pemeriksa, tgl_awal : tanggal_awal, tgl_akhir : tanggal_akhir, rekomid : no_rekomendasi, temuan_id : no_temuan, statusrekom : status_rekomendasi},
                 type : 'POST',
                 dataType : 'JSON',
                 success : function(res){

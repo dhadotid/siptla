@@ -199,7 +199,7 @@ class TindakLanjutController extends Controller
             $temuan[$v->id_temuan]=$v;
             $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
         }
-        // return $rekomendasi;
+        // return $temuan;
         return view('backend.pages.data-lhp.auditor-junior.tindaklanjut')
                 ->with('tahun',$tahun)
                 ->with('rekomid',$rekomid)

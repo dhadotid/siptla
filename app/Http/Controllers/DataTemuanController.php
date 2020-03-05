@@ -564,4 +564,12 @@ class DataTemuanController extends Controller
         $temuan=DataTemuan::where('id_lhp',$idlhp)->get();
         return $temuan;
     }
+
+    public function publish_lhp($idlhp)
+    {
+        $temuan=DaftarTemuan::where('id',$idlhp)->first();
+        $temuan->status_lhp='Publish LHP';
+        $temuan->publish_flag=1;
+        $temuan->save();
+    }
 }

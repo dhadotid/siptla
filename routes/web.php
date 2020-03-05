@@ -47,6 +47,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('data-lhp-review/{id}','DataTemuanController@review_lhp')->name('data-lhp.review');
     Route::get('form-lhp-review/{id}/{idreview?}','DataTemuanController@form_review_lhp')->name('data-lhp.form-review');
     Route::get('hapus-lhp-review/{id}/{idreview?}','DataTemuanController@hapus_lhp_review')->name('data-lhp.hapus-lhp-review');
+    Route::get('publish-lhp/{idlhp}','DataTemuanController@publish_lhp');
     
     Route::post('simpan-lhp-review/{idlhp}','DataTemuanController@simpan_lhp_review')->name('simpan-lhp-review');
     Route::post('data-lhp-store','DataTemuanController@store')->name('data-lhp.store');

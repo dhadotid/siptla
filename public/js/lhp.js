@@ -290,3 +290,33 @@ function detailrekom(id)
     });
     $('#modal-detail-rekom').modal('show');
 }
+
+function publishlhp(idlhp)
+{
+    var tahun = $('#tahun').val();
+    swal({
+        title: "Apakah Anda Yakin ?",
+        text: "Ingin Mempublish Data LHP ini",
+        icon: "warning",
+        buttons: [
+            'Tidak!',
+            'Ya, Publish'
+        ],
+        dangerMode: true,
+    }).then(function (isConfirm) {
+        if (isConfirm) {
+            $.ajax({
+                url: flagsUrl + '/publish-lhp/' + idlhp,
+                success: function () {
+                    swal({
+                        title: 'Berhasil!',
+                        text: 'Publish Data LHP Berhasil',
+                        icon: 'success'
+                    }).then(function () {
+                        location.href = flagsUrl +'/data-lhp/'+tahun;
+                    });
+                }
+            });
+        }
+    }); 
+}

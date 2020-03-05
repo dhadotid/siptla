@@ -133,7 +133,7 @@
                                     <th class="text-center" style="width:15px;">#</th>
                                     {{-- <th class="text-center">No.<br>Temuan</th> --}}
                                     <th class="text-center">Temuan</th>
-                                    <th class="text-center">No.<br>Rekomendasi</th>
+                                    {{-- <th class="text-center">No.<br>Rekomendasi</th>--}}
                                     <th class="text-center">Rekomendasi</th>
                                     <th class="text-center">Tanggal<br>Penyelesaian</th>
                                     <th class="text-center">Rincian<br>Tindak Lanjut</th>
@@ -151,9 +151,15 @@
                                         {
                                             foreach($rekomendasi[$item->id] as $key=>$val)
                                             {
-                                                $norekom.='<li style="height:32px;">'.$val->nomor_rekomendasi.'</li>';
+                                                // $norekom.='<li style="height:32px;">'.$val->nomor_rekomendasi.'</li>';
                                                 
-                                                $rekom.='<li style="height:32px;">- '.(strlen($val->rekomendasi) > 30 ? '<a href="#" data-toggle="tooltip" data-title="'.$val->rekomendasi.'" title="'.$val->rekomendasi.'">'.substr($val->rekomendasi,0,30).' ...</a>' : $val->rekomendasi ).'</li>';
+                                                $rekom.='<li style="height:32px;">
+                                                    <div class="row">
+                                                        <div style="width:30px;float:left">'.$val->nomor_rekomendasi.'</div>
+                                                        <div style="width:90%;float:left">'.(strlen($val->rekomendasi) > 30 ? '<a href="#" data-toggle="tooltip" data-title="'.$val->rekomendasi.'" title="'.$val->rekomendasi.'">'.substr($val->rekomendasi,0,30).' ...</a>' : $val->rekomendasi ).'</div>
+                                                    </div>';
+                                                    
+                                                $rekom.='</li>';
 
                                                     
                                                     $tglselesai.='<div id="tgl_penyelesaian_'.$item->id.'_'.$val->id.'">';
@@ -202,7 +208,7 @@
                                         {{-- <td class="text-center"></td> --}}
                                         <td class="text-left">
                                             No. {{$item->no_temuan}} <br>{!!(strlen($item->temuan) > 30 ? '<a href="#" data-toggle="tooltip" data-title="'.$item->temuan.'" title="'.$item->temuan.'">'.substr($item->temuan,0,30).' ...</a>' : $item->temuan )!!}</td>
-                                        <td class="text-center"><ul>{!!$norekom!!}</ul></td>
+                                        {{-- <td class="text-center"><ul>{!!$norekom!!}</ul></td> --}}
                                         <td class="text-left"><ul>{!!$rekom!!}</ul></td>
                                         <td class="text-center"><ul>{!!$tglselesai!!}</ul></td>
                                         <td class="text-center"><ul>{!!$rincian!!}</ul></td>

@@ -1,5 +1,5 @@
 <div class="modal fade" id="modaltambahtindaklanjut" role="dialog">
-		<div class="modal-dialog" id="modal-size">
+		<div class="modal-dialog modal-lg" id="modal-size">
 			<div class="modal-content">
                 <form method="POST" class="form-horizontal" id="form_tindaklanjut_add" action="{{url('tindaklanjut-unitkerja-simpan')}}" enctype="multipart/form-data">
                     @csrf

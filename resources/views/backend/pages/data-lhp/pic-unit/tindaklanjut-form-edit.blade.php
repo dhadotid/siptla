@@ -69,6 +69,13 @@
             </div>
         </div>
         <input type="hidden" name="idtl" value="{{$tl->id}}">
+        <div class="form-group" style="margin-top:-20px;">
+            <label for="exampleTextInput1" class="col-sm-12 control-label text-left">Rencana Tindak Lanjut:
+            </label>
+            <div class="col-sm-12">
+                <textarea class="form-control"  name="action_plan" placeholder="Rencana Tindak Lanjut" id="action_plan">{{$tl->action_plan}}</textarea>
+            </div>
+        </div>
        <div class="form-group" style="margin-top:-20px;">
             <label for="exampleTextInput1" class="col-sm-12 control-label text-left">Tindak Lanjut:
             </label>
@@ -76,13 +83,7 @@
                 <textarea class="form-control"  name="tindak_lanjut" placeholder="Tindak Lanjut" id="tindak_lanjut">{{$tl->tindak_lanjut}}</textarea>
             </div>
         </div>
-       <div class="form-group" style="margin-top:-20px;">
-            <label for="exampleTextInput1" class="col-sm-12 control-label text-left">Rencana Tindak Lanjut:
-            </label>
-            <div class="col-sm-12">
-                <textarea class="form-control"  name="action_plan" placeholder="Rencana Tindak Lanjut" id="action_plan">{{$tl->action_plan}}</textarea>
-            </div>
-        </div>
+       
         <div class="form-group" style="margin-top:-20px;">
             <label for="exampleTextInput1" class="col-sm-12 control-label text-left">Dokumen Pendukung:</label>
             <div class="col-sm-12">

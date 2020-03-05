@@ -1,5 +1,5 @@
     <div class="modal fade" id="modaltambahtindaklanjut" tabindex="-1" role="dialog">
-		<div class="modal-dialog" style="width:50% !important">
+		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
                 <form method="POST" class="form-horizontal" id="form_tindaklanjut_add" >
                     @csrf

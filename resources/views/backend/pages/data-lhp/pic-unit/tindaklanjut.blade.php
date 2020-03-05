@@ -161,7 +161,7 @@
                                                     else
                                                         $pic2.='<li style="height:32px;">-</li>';
 
-                                                    $tglselesai.='<div id="tgl_penyelesaian_'.$item->id.'_'.$val->id.'">';
+                                                    $tglselesai.='<div style="height:32px;"  id="tgl_penyelesaian_'.$item->id.'_'.$val->id.'">';
                                                     if($val->tanggal_penyelesaian!='')
                                                     {
                                                         $tglselesai.='<li style="height:32px;">'.tgl_indo($val->tanggal_penyelesaian).'</li>';
@@ -203,8 +203,8 @@
                                                             $styleaksi='display:none';
                                                         }
                                                     }
-                                                    $aksi.='<li style="margin-bottom:1px;height:32px;" id="aksi_rekomendasi_'.$item->id.'_'.$val->id.'">
-                                                        <div class="btn-group" style="'.$styleaksi.'">
+                                                    $aksi.='<li style="margin-bottom:1px;height:32px;">
+                                                        <div class="btn-group" style="'.$styleaksi.'" id="aksi_rekomendasi_'.$item->id.'_'.$val->id.'">
                                                             <button type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
                                                             <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
                                                                 <span class="caret"></span>
@@ -215,7 +215,13 @@
                                                                 </li>
                                                                 <li><a href="javascript:detailtindaklanjut('.$val->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
                                                         if($val->pic_1_temuan_id==$user_pic->id)
+                                                        {
+                                                            if($val->pic_2_temuan_id!='')
+                                                            {
                                                                 $aksi.='<li><a href="javascript:rangkumantindaklanjut('.$val->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Rangkuman Tindak Lanjut</a></li>';
+                                                            }
+
+                                                        }
                                                         $aksi.='</ul>
                                                         </div></li>';
 

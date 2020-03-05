@@ -495,12 +495,12 @@ class TindakLanjutController extends Controller
         if($sv)
         {
             return redirect('data-tindaklanjut-unitkerja/'.$tahun)
-                ->with('success', 'Anda telah Berhasil Menambah data Tindak Lanjut Untuk Nomor Rekomendasi '.$request->nomor_rekomendasi.'.');
+                ->with('success', 'Anda telah Berhasil Menambah data Tindak Lanjut ');
         }
         else
         {
             return redirect('data-tindaklanjut-unitkerja/'.$tahun)
-                ->with('error', 'Menambah data Tindak Lanjut Untuk Nomor Rekomendasi '.$request->nomor_rekomendasi.' Gagal');
+                ->with('error', 'Menambah data Tindak Lanjut Gagal');
         }
     }
     public function unitkerja_tindak_lanjut_edit_simpan(Request $request)

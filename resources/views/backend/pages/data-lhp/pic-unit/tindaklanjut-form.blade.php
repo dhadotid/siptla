@@ -51,7 +51,7 @@
                     <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
                         <label for="exampleTextInput1" class="col-sm-12 control-label text-left" style="font-size:10px;font-style:italic">Rekomendasi:</label>
                         <div class="col-sm-12">
-                            <input type="text" class="d_nomor_rekomendasi" name="nomor_rekomendasi" placeholder="Rekomendasi" id="nomor_rekomendasi"readonly style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;background:#eee !important;width:100%" value="{{isset($rekomendasi->rekomendasi) ? $rekomendasi->rekomendasi : ''}}">
+                            <textarea class="d_nomor_rekomendasi" name="nomor_rekomendasi" placeholder="Rekomendasi" id="nomor_rekomendasi"readonly style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;background:#eee !important;width:100%">{{isset($rekomendasi->rekomendasi) ? $rekomendasi->rekomendasi : ''}}</textarea>
                         </div>
                     </div>
                 </div>
@@ -101,7 +101,13 @@
                 </div>
             </div>
         </div>
-        
+        <div class="form-group" style="margin-top:-20px;">
+            <label for="exampleTextInput1" class="col-sm-12 control-label text-left">Rencana Tindak Lanjut:
+            </label>
+            <div class="col-sm-12">
+                <textarea class="form-control"  name="action_plan" placeholder="Rencana Tindak Lanjut" id="action_plan"></textarea>
+            </div>
+        </div>
        <div class="form-group" style="margin-top:-20px;">
             <label for="exampleTextInput1" class="col-sm-12 control-label text-left">Tindak Lanjut:
             </label>
@@ -109,13 +115,7 @@
                 <textarea class="form-control"  name="tindak_lanjut" placeholder="Tindak Lanjut" id="tindak_lanjut"></textarea>
             </div>
         </div>
-       <div class="form-group" style="margin-top:-20px;">
-            <label for="exampleTextInput1" class="col-sm-12 control-label text-left">Rencana Tindak Lanjut:
-            </label>
-            <div class="col-sm-12">
-                <textarea class="form-control"  name="action_plan" placeholder="Rencana Tindak Lanjut" id="action_plan"></textarea>
-            </div>
-        </div>
+       
         <div class="form-group" style="margin-top:-20px;">
             <label for="exampleTextInput1" class="col-sm-12 control-label text-left">Dokumen Pendukung:</label>
             <div class="col-sm-12">

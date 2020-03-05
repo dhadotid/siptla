@@ -34,7 +34,7 @@
                             </td>
                             <td class="text-center">{{tgl_indo($item->tanggal_lhp)}}</td>
                             <td>{{$item->judul_lhp}}</td>
-                            <td class="text-center">{{isset($item->dpemeriksa->pemeriksa) ? $item->dpemeriksa->pemeriksa : '-'}}</td>
+                            <td class="text-left">{{isset($item->dpemeriksa->pemeriksa) ? $item->dpemeriksa->pemeriksa : '-'}}</td>
                             <td class="">{{isset($item->djenisaudit->jenis_audit) ? $item->djenisaudit->jenis_audit : '-'}}</td>
                             <td class="text-center">
                                 @if ($item->status_lhp=='Create LHP')
@@ -57,10 +57,10 @@
                                 @endif --}}
                                 
                             </td>
-                            <td class="text-align:center">
+                            <td class="text-align:center"  style="width:70px;">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-bars"></i></button>
-                                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+                                    <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-bars"></i></button>
+                                    <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
@@ -119,7 +119,7 @@
                         </td>
                         <td class="text-center">{{tgl_indo($item->tanggal_lhp)}}</td>
                         <td>{{$item->judul_lhp}}</td>
-                        <td class="text-center">{{isset($item->dpemeriksa->pemeriksa) ? $item->dpemeriksa->pemeriksa : '-'}}</td>
+                        <td class="text-left">{{isset($item->dpemeriksa->pemeriksa) ? $item->dpemeriksa->pemeriksa : '-'}}</td>
                         <td class="">{{isset($item->djenisaudit->jenis_audit) ? $item->djenisaudit->jenis_audit : '-'}}</td>
                         <td class="text-center">
                             @if ($item->status_lhp=='Create LHP')
@@ -142,10 +142,10 @@
                             @endif --}}
                             
                         </td>
-                        <td class="text-align:center">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-bars"></i></button>
-                                <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+                        <td class="text-align:center;" style="width:70px;">
+                            <div class="btn-group"> 
+                                <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-bars"></i></button>
+                                <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu" role="menu">
@@ -171,6 +171,9 @@
                                         @if ($item->status_lhp!='Publish LHP') 
                                             <li>
                                                 <a href="#" data-toggle="modal" data-target="#modaladdreview" data-value="{{$item->lhp_id}}" class="btn-add-review"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Tanggapan dan Review LHP</a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:publishlhp({{$item->lhp_id}})"><i class="glyphicon glyphicon-check"></i> &nbsp;&nbsp;Publish LHP</a>
                                             </li>
                                         @endif    
                                     @endif

@@ -1,4 +1,4 @@
-<h3 class="text-center">Rincian Nilai Penutupan Rekening</h3><table class="table table-bordered">
+<h3 class="text-center">Rincian Nilai Penutupan Rekening</h3><table class="table table-bordered" id="table-rincian">
             <thead>
                 <tr class="inverse">
                     <th class="text-center">No</th>
@@ -33,6 +33,9 @@
                     $no++;
                     $totalnilai+=$v->saldo_akhir;
                 @endphp
+                @if (isset($idtl))
+                    <input type="hidden" id="idformtindaklanjut" name="idformtindaklanjut" value="{{$idtl}}">
+                @endif
                 <input type="hidden" id="total_nilai" value="{{$totalnilai}}">
 
                     <tr >

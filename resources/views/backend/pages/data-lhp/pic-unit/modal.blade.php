@@ -26,6 +26,31 @@
 		</div>
     </div>
 
+    <div class="modal fade" id="modaledittindaklanjut" role="dialog" style="z-index:1000000 !important;">
+		<div class="modal-dialog" id="modal-size">
+			<div class="modal-content">
+                <form method="POST" class="form-horizontal" id="form_tindaklanjut_edit"  enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Edit Tindak Lanjut </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div id="left-div" class="col-md-12">
+                                <div id="konten-edit-form"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
+                        <input type="submit" onclick="" class="btn btn-success" value="Simpan">
+                    </div>
+				</form>
+			</div>
+		</div>
+    </div>
+
 
 {{-- Modal Rincian Sewa--}}
  <div class="modal fade" id="modalrinciansewa" role="dialog">
@@ -241,7 +266,7 @@
 {{-- END Modal Rincian--}}
 
 {{-- Modal TIndal Lanjut--}}
- <div class="modal fade" id="addtindaklanjutrincian" role="dialog">
+ <div class="modal fade" id="addtindaklanjutrincian" role="dialog" style="z-index:100000 !important">
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <div class="modal-header">
@@ -262,7 +287,7 @@
 	</div>  
 {{-- END Modal Rincian--}}
 {{-- Modal TIndal Lanjut--}}
- <div class="modal fade" id="listtindaklanjutrincian" role="dialog">
+ <div class="modal fade" id="listtindaklanjutrincian" role="dialog" style="z-index:100000 !important">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
                 <div class="modal-header">
@@ -271,6 +296,24 @@
                 </div>
                     <div class="modal-body">
                         <div id="list-tindaklanjut-rincian"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-success">Tutup</button>
+                    </div>
+			</div>
+		</div>
+	</div>  
+{{-- END Modal Rincian--}}
+{{-- Modal TIndal Lanjut--}}
+ <div class="modal fade" id="listrinciantl" role="dialog">
+		<div class="modal-dialog" style="width:60% !important">
+			<div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Data Rincian Tindak Lanjut</h4>
+                </div>
+                    <div class="modal-body">
+                        <div id="list-rincian"></div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" data-dismiss="modal" class="btn btn-success">Tutup</button>

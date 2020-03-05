@@ -377,7 +377,25 @@ class TindakLanjutController extends Controller
     public function unitkerja_edit_form($idlhp,$temuan_id,$rekom_id,$id_tl)
     {
         $tl=TindakLanjutTemuan::find($id_tl);
-        return $tl;
+
+        $data=DaftarTemuan::find($idlhp);
+
+        $user_pic=PICUnit::where('id_user',Auth::user()->id)->first();
+
+        $temuan=DataTemuan::where('id_lhp',$idlhp)->first();
+
+        $rekomendasi=DataRekomendasi::where('id',$tl->rekomendasi_id)->first();
+        
+        
+
+        return view('backend.pages.data-lhp.pic-unit.tindaklanjut-form-edit')
+                        ->with('rekomendasi',$rekomendasi)
+                        ->with('tl',$tl)
+                        ->with('temuan_id',$temuan_id)
+                        ->with('data',$data)
+                        ->with('rekom_id',$rekom_id)
+                        ->with('idlhp',$idlhp)
+                        ->with('temuan',$temuan);
     }
     public function unitkerja_add_form($idlhp,$temuan_id_index,$rekom_id_index)
     {
@@ -461,7 +479,8 @@ class TindakLanjutController extends Controller
             $filenameWithExt = $request->file('dokumen_pendukung')->getClientOriginalName();
             $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
             $extension = $request->file('dokumen_pendukung')->getClientOriginalExtension();
-            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            // $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $fileNameToStore = time().'.'.$extension;
             $path = $request->file('dokumen_pendukung')->storeAs('public/dokumen',$fileNameToStore);
 
             $dokumen=new DokumenTindakLanjut;
@@ -483,6 +502,63 @@ class TindakLanjutController extends Controller
             return redirect('data-tindaklanjut-unitkerja/'.$tahun)
                 ->with('error', 'Menambah data Tindak Lanjut Untuk Nomor Rekomendasi '.$request->nomor_rekomendasi.' Gagal');
         }
+    }
+    public function unitkerja_tindak_lanjut_edit_simpan(Request $request)
+    {
+        // return $request->all();
+        $idtl=$request->idtl;
+        $tindaklanjut=TindakLanjutTemuan::find($idtl);
+        $tindaklanjut->lhp_id = $request->idlhp;
+        $tindaklanjut->temuan_id = $request->temuan_id;
+        $tindaklanjut->rekomendasi_id = $request->rekomendasi_id;
+        $tindaklanjut->tindak_lanjut = $request->tindak_lanjut;
+        $tindaklanjut->rincian = $request->jenis;
+        $tindaklanjut->action_plan = $request->action_plan;
+        $tindaklanjut->tgl_tindaklanjut = $request->tgl_tindak_lanjut;
+        $sv=$tindaklanjut->save();
+
+        $idtindaklanjut=$tindaklanjut->id;
+
+        if($request->hasFile('dokumen_pendukung')){
+            $file = $request->file('dokumen_pendukung');
+            $filenameWithExt = $request->file('dokumen_pendukung')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('dokumen_pendukung')->getClientOriginalExtension();
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $fileNameToStore = time().'.'.$extension;
+            $path = $request->file('dokumen_pendukung')->storeAs('public/dokumen',$fileNameToStore);
+
+            $dokumen=DokumenTindakLanjut::where('id_tindak_lanjut_temuan',$idtl)->first();
+            if($dokumen)
+            {
+                $dokumen->nama_dokumen=$fileNameToStore;
+                $dokumen->path=$path;
+                $dokumen->save();
+            }
+            else
+            {
+                $dokumen=new DokumenTindakLanjut;
+                $dokumen->id_tindak_lanjut_temuan=$idtl;
+                $dokumen->nama_dokumen=$fileNameToStore;
+                $dokumen->path=$path;
+                $dokumen->save();
+            }
+        }
+
+        $lhp=DaftarTemuan::find($request->idlhp);
+        $tahun=$lhp->tahun_pemeriksa;
+        $data['idrekomendasi']=$request->rekomendasi_id;
+        return $data;
+        // if($sv)
+        // {
+        //     return redirect('data-tindaklanjut-unitkerja/'.$tahun)
+        //         ->with('success', 'Anda telah Berhasil Menambah data Tindak Lanjut Untuk Nomor Rekomendasi '.$request->nomor_rekomendasi.'.');
+        // }
+        // else
+        // {
+        //     return redirect('data-tindaklanjut-unitkerja/'.$tahun)
+        //         ->with('error', 'Menambah data Tindak Lanjut Untuk Nomor Rekomendasi '.$request->nomor_rekomendasi.' Gagal');
+        // }
     }
 
     public function form_tindaklanjut_rincian($idrincian,$jenis)
@@ -743,10 +819,150 @@ class TindakLanjutController extends Controller
         {
             $dok[$v->id_tindak_lanjut_temuan]=$v;
         }
-        $tl=TindakLanjutTemuan::where('rekomendasi_id',$idrekomendasi)->get();
+        $tl=TindakLanjutTemuan::where('rekomendasi_id',$idrekomendasi)->with('drekomendasi')->get();
+        $rekom=DataRekomendasi::find($idrekomendasi);
+        $arrayidtl=array();
+        foreach($tl as $k=>$v)
+        {
+            $arrayidtl[$v->id]=$v->id;
+        }
+        $jenis=$rekom->rincian;
+        $user_pic=PICUnit::where('id_user',Auth::user()->id)->first();
+        $where=['unit_kerja_id'=>$user_pic->id,'id_rekomendasi'=>$idrekomendasi];
+
+        if($jenis=='sewa')
+            $rincian=RincianSewa::where($where)->get();
+        elseif($jenis=='uangmuka')
+            $rincian=RincianUangMuka::where($where)->get();
+        elseif($jenis=='listrik')
+            $rincian=RincianListrik::where($where)->get();
+        elseif($jenis=='piutang')
+            $rincian=RincianPiutang::where($where)->get();
+        elseif($jenis=='piutangkaryawan')
+            $rincian=RincianPiutangKaryawan::where($where)->get();
+        elseif($jenis=='hutangtitipan')
+            $rincian=RincianHutangTitipan::where($where)->get();
+        elseif($jenis=='penutupanrekening')
+            $rincian=RincianPenutupanRekening::where($where)->get();
+        elseif($jenis=='umum')
+            $rincian=RincianUmum::where($where)->get();
+
+        $tlrincian=TindakLanjutRincian::where('id_rekomendasi',$idrekomendasi)->get();
+        $tindaklanjut_rincian=array();
+        foreach($tlrincian as $k=>$v)
+        {
+            $tindaklanjut_rincian[$v->id_tindak_lanjut][]=$v;
+        }
+        // return $rincian;
         return view('backend.pages.data-lhp.pic-unit.tindaklanjut-table')
+                ->with('user_pic',$user_pic)
+                ->with('rincian',$rincian)
+                ->with('tindaklanjut_rincian',$tindaklanjut_rincian)
                 ->with('tindaklanjut',$tl)
                 ->with('dok',$dok)
                 ->with('idrekomendasi',$idrekomendasi);
+    }
+
+    function hapus_tindak_lanjut($idtl)
+    {
+        $tl=TindakLanjutTemuan::find($idtl);
+        $del=$tl->delete();
+
+        DokumenTindakLanjut::where('id_tindak_lanjut_temuan',$idtl)->first()->delete();
+
+        if($del)
+            echo 1;
+        else
+            echo 0;
+    }
+
+    function list_rincian($idrekomendasi,$idunitkerja,$idtl)
+    {
+        $rekom=DataRekomendasi::find($idrekomendasi);
+        $jenis=$rekom->rincian;
+        $idtemuan=$rekom->id_temuan;
+        $where=['unit_kerja_id'=>$idunitkerja,'id_rekomendasi'=>$idrekomendasi];
+
+        if($jenis=='sewa')
+        {
+            $rincian=RincianSewa::where($where)->get();
+            return view('backend.pages.data-lhp.rincian-table.table-sewa')
+                    ->with('rincian',$rincian)
+                    ->with('idtl',$idtl)
+                    ->with('idtemuan',$idtemuan)
+                    ->with('jenis',$jenis)
+                    ->with('idrekomendasi',$idrekomendasi);
+        }
+        elseif($jenis=='uangmuka')
+        {
+            $rincian=RincianUangMuka::where($where)->get();
+            return view('backend.pages.data-lhp.rincian-table.table-uangmuka')
+                    ->with('rincian',$rincian)
+                    ->with('idtl',$idtl)
+                    ->with('idtemuan',$idtemuan)
+                    ->with('jenis',$jenis)
+                    ->with('idrekomendasi',$idrekomendasi);
+        }
+        elseif($jenis=='listrik')
+        {
+            $rincian=RincianListrik::where($where)->get();
+            return view('backend.pages.data-lhp.rincian-table.table-listrik')
+                    ->with('rincian',$rincian)
+                    ->with('idtl',$idtl)
+                    ->with('idtemuan',$idtemuan)
+                    ->with('jenis',$jenis)
+                    ->with('idrekomendasi',$idrekomendasi);
+        }
+        elseif($jenis=='piutang')
+        {
+            $rincian=RincianPiutang::where($where)->get();
+            return view('backend.pages.data-lhp.rincian-table.table-piutang')
+                    ->with('rincian',$rincian)
+                    ->with('idtl',$idtl)
+                    ->with('idtemuan',$idtemuan)
+                    ->with('jenis',$jenis)
+                    ->with('idrekomendasi',$idrekomendasi);
+        }
+        elseif($jenis=='piutangkaryawan')
+        {
+            $rincian=RincianPiutangKaryawan::where($where)->get();
+            return view('backend.pages.data-lhp.rincian-table.table-piutangkaryawan')
+                    ->with('rincian',$rincian)
+                    ->with('idtl',$idtl)
+                    ->with('idtemuan',$idtemuan)
+                    ->with('jenis',$jenis)
+                    ->with('idrekomendasi',$idrekomendasi);
+        }
+        elseif($jenis=='hutangtitipan')
+        {
+            $rincian=RincianHutangTitipan::where($where)->get();
+            return view('backend.pages.data-lhp.rincian-table.table-hutangtitipan')
+                    ->with('rincian',$rincian)
+                    ->with('idtl',$idtl)
+                    ->with('idtemuan',$idtemuan)
+                    ->with('jenis',$jenis)
+                    ->with('idrekomendasi',$idrekomendasi);
+        }
+        elseif($jenis=='penutupanrekening')
+        {
+            $rincian=RincianPenutupanRekening::where($where)->get();
+            return view('backend.pages.data-lhp.rincian-table.table-penutupanrekening')
+                    ->with('rincian',$rincian)
+                    ->with('idtl',$idtl)
+                    ->with('idtemuan',$idtemuan)
+                    ->with('jenis',$jenis)
+                    ->with('idrekomendasi',$idrekomendasi);
+        }
+        elseif($jenis=='umum')
+        {
+            $rincian=RincianUmum::where($where)->get();
+            return view('backend.pages.data-lhp.rincian-table.table-umum')
+                    ->with('rincian',$rincian)
+                    ->with('idtl',$idtl)
+                    ->with('idtemuan',$idtemuan)
+                    ->with('jenis',$jenis)
+                    ->with('idrekomendasi',$idrekomendasi);
+        }
+
     }
 }

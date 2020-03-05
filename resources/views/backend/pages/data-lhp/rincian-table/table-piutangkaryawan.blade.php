@@ -1,4 +1,4 @@
-<h3 class="text-center">Rincian Nilai Pembayaran Piutang Karyawan</h3><table class="table table-bordered">
+<h3 class="text-center">Rincian Nilai Pembayaran Piutang Karyawan</h3><table class="table table-bordered" id="table-rincian">
             <thead>
                 <tr class="inverse">
                     <th class="text-center">No</th>
@@ -30,6 +30,9 @@
                     $totalnilai+=$v->pinjaman;
                 @endphp
             @endforeach
+            @if (isset($idtl))
+                <input type="hidden" id="idformtindaklanjut" name="idformtindaklanjut" value="{{$idtl}}">
+            @endif
             <input type="hidden" id="total_nilai" value="{{$totalnilai}}">
 
                     <tr >

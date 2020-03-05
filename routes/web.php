@@ -91,13 +91,17 @@ Route::group(['middleware'=>'auth'],function(){
     Route::post('data-tindaklanjut-list','TindakLanjutController@junior_list');
     Route::post('data-tindaklanjut-unitkerja-list','TindakLanjutController@unitkerja_list');
     Route::post('tindaklanjut-unitkerja-simpan','TindakLanjutController@unitkerja_tindak_lanjut_simpan');
+    Route::post('tindaklanjut-unitkerja-edit-simpan','TindakLanjutController@unitkerja_tindak_lanjut_edit_simpan');
     Route::get('tindak-lanjut-unitkerja-form-add/{idlhp}/{temuan_id_index}/{rekom_id_index}','TindakLanjutController@unitkerja_add_form');
     Route::get('tindak-lanjut-unitkerja-form-edit/{idlhp}/{temuan_id}/{rekom_id}/{idtl}','TindakLanjutController@unitkerja_edit_form');
+    Route::get('hapus-tindak-lanjut/{idtl}','TindakLanjutController@hapus_tindak_lanjut');
     
     Route::get('form-tindaklanjut-rincian/{idrincian}/{jenis}','TindakLanjutController@form_tindaklanjut_rincian');
     Route::get('list-tindaklanjut-rincian/{idrincian}/{jenis}','TindakLanjutController@list_tindaklanjut_rincian');
     Route::get('hapus-rincian/{idrincian}/{jenis}','TindakLanjutController@hapus_rincian_jenis');
     Route::post('simpan-tindaklanjut-rincian','TindakLanjutController@simpan_tindaklanjut_rincian');
+    
+    Route::get('list-rincian/{idrekomendasi}/{idunitkerja}/{idtl}','TindakLanjutController@list_rincian');
 
     Route::get('table-data-tindaklanjut/{idrekomendasi}','TindakLanjutController@table_data_tindaklanjut');
 
@@ -171,4 +175,6 @@ Route::get('force-logout',function(){
     return redirect('login')->with('error',Session::get('error'));
 });
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('open-file/{dir1}/{dir2}/{filename}', 'Controller@open_file')->name('home');
+Route::get('read-pdf/{dir1}/{dir2}/{filename}', 'Controller@read_pdf')->name('home');
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');

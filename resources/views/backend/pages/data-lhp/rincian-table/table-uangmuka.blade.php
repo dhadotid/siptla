@@ -1,4 +1,4 @@
- <h3 class="text-center">Rincian Nilai Uang Muka</h3><table class="table table-bordered">
+ <h3 class="text-center">Rincian Nilai Uang Muka</h3><table class="table table-bordered"  id="table-rincian">
             <thead>
                 <tr class="inverse">
                     <th class="text-center">No</th>
@@ -33,7 +33,9 @@
             @endphp
             @endforeach
             <input type="hidden" id="total_nilai" value="{{$totalnilai}}">
-
+            @if (isset($idtl))
+                <input type="hidden" id="idformtindaklanjut" name="idformtindaklanjut" value="{{$idtl}}">
+            @endif
                 <tr >
                             <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut('uangmuka','{{$idtemuan}}','{{$idrekomendasi}}',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
                 </tr>

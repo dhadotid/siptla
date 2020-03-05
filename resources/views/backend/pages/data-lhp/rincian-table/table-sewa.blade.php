@@ -1,4 +1,4 @@
-<h3 class="text-center">Rincian Nilai Pembayaran Sewa</h3><table class="table table-bordered">
+<h3 class="text-center">Rincian Nilai Pembayaran Sewa</h3><table class="table table-bordered" id="table-rincian">
     <thead>
         <tr class="inverse">
             <th class="text-center">No</th>
@@ -24,7 +24,7 @@
             <td class="text-center">{{date('d/m/Y',strtotime($v->tgl_pks))}}</td>
             <td class="text-center">{{rupiah($v->nilai_pekerjaan)}}</td>
             <td class="text-center">{{date('d/m/Y',strtotime($v->masa_berlaku))}}</td>
-            <td class="text-center">
+            <td class="text-center" style="width:90px;">
                 <a href="javascript:addtindaklanjutrincian({{$v->id}},'sewa')" class="btn-delete btn btn-xs btn-info"><i class="glyphicon glyphicon-plus"></i></a>&nbsp;
                 <a href="javascript:listtindaklanjutrincian({{$v->id}},'sewa')" class="btn-edit btn btn-xs btn-success"><i class="glyphicon glyphicon-list"></i></a>
             </td>
@@ -34,7 +34,9 @@
             $totalnilai+=$v->nilai_pekerjaan;
         @endphp
     @endforeach   
-    
+        @if (isset($idtl))
+                <input type="hidden" id="idformtindaklanjut" name="idformtindaklanjut" value="{{$idtl}}">
+            @endif
         <input type="hidden" id="total_nilai" value="{{$totalnilai}}">
       
     </tbody>

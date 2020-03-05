@@ -1,4 +1,4 @@
-<table class="table table-bordered">
+<table class="table table-bordered" id="table-rincian">
     <thead>
         @php
             $kontribusi=['Tindak Lanjut','Nilai (Rp)','Tanggal','Jenis Setoran','Bank Tujuan','No.Ref','Jenis Rekening','Dokumen Pendukung'];

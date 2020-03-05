@@ -691,6 +691,33 @@ $('#form_tindaklanjut_rincian').on('submit', function (event) {
     })
 });
 
+$('#form_tindaklanjut_edit').on('submit', function (event) {
+    $('#modaledittindaklanjut').modal('hide');
+    event.preventDefault();
+    $.ajax({
+        url: flagsUrl + '/tindaklanjut-unitkerja-edit-simpan',
+        method: "POST",
+        data: new FormData(this),
+        dataType: 'JSON',
+        contentType: false,
+        cache: false,
+        processData: false,
+        success: function (res) {
+            swal({
+                title: 'Berhasil!',
+                text: 'Data Tindak Lanjut Berhasil Di Edit',
+                icon: 'success'
+            }).then(function () {
+                $('#table-data-tindaklanjut').load(flagsUrl + '/table-data-tindaklanjut/' + res.idrekomendasi, function () {
+                    $('[data-toggle="tooltip"]').tooltip();
+                });
+                // gettablerincian_unitkerja(res.jenis, res.temuan_id, res.rekomendasi_id) 
+            });
+            
+        }
+    })
+});
+
 function detailtindaklanjut(idrekomendasi) {
 
     $('#table-data-tindaklanjut').load(flagsUrl + '/table-data-tindaklanjut/'+idrekomendasi,function(){
@@ -702,7 +729,60 @@ function detailtindaklanjut(idrekomendasi) {
 function edittl(tl_id,rekomendasi_id,temuan_id,lhp_id)
 {
 
-    $('#konten-add-form').load(flagsUrl + '/tindak-lanjut-unitkerja-form-edit/' + lhp_id + '/' + temuan_id + '/' + rekomendasi_id + '/' + tl_id, function () {
+    $('#konten-edit-form').load(flagsUrl + '/tindak-lanjut-unitkerja-form-edit/' + lhp_id + '/' + temuan_id + '/' + rekomendasi_id + '/' + tl_id, function () {
         CKEDITOR.replace('action_plan');
     });
+    
+    $('#modaledittindaklanjut').modal('show');
+}
+function hapustl(tl_id, idrekomendasi)
+{
+    swal({
+        title: "Apakah Anda Yakin ?",
+        text: "Ingin Menghapus Data Tindak Lanjut ini ?",
+        icon: "warning",
+        buttons: [
+            'Tidak!',
+            'Ya, Hapus'
+        ],
+        dangerMode: true,
+    }).then(function (isConfirm) {
+        if (isConfirm) {
+            $.ajax({
+                url: flagsUrl + '/hapus-tindak-lanjut/' + tl_id,
+                success: function (res) {
+                    if(res==1)
+                    {
+                        swal({
+                            title: 'Berhasil!',
+                            text: 'Hapus Data Tindak Lanjut Berhasil',
+                            icon: 'success'
+                        }).then(function () {
+                            $('#table-data-tindaklanjut').load(flagsUrl + '/table-data-tindaklanjut/' + idrekomendasi, function () {
+                                $('[data-toggle="tooltip"]').tooltip();
+                            });
+                        });
+                    }
+                    else
+                    {
+                        swal({
+                            title: 'Gagal!',
+                            text: 'Hapus Data Tindak Lanjut Tidak Berhasil',
+                            icon: 'error'
+                        })
+                    }
+                }
+            });
+        } else {
+
+        }
+    });
+}
+
+function listrinciantl(idrekomendasi,idunitkerja,idtl)
+{
+    $('#list-rincian').load(flagsUrl +'/list-rincian/'+idrekomendasi+'/'+idunitkerja+'/'+idtl,function(){
+
+    });
+    $('#listrinciantl').modal('show');
 }

@@ -38,13 +38,41 @@
                     </td>
                     <td class="text-center">
                         @if (isset($dok[$item->id]))
-                            <a class="btn btn-xs btn-success" data-toggle="tooltip" data-title="Lihat Dokumen" title="Lihat Dokumen"><i class="fa fa-file-o"></i></a>
+                            <a href="{{url('read-pdf/'.$dok[$item->id]->path)}}" target="_blank" class="btn btn-xs btn-success" data-toggle="tooltip" data-title="Lihat Dokumen" title="Lihat Dokumen"><i class="fa fa-file-o"></i></a>
                         @else
                             -
                         @endif
                     </td>
-                    <td class="text-left">
-
+                    <td class="text-center">
+                        @if (isset($tindaklanjut_rincian[$item->id]))
+                            @if (count($tindaklanjut_rincian[$item->id])==0)
+                                @if (isset($item->drekomendasi->rincian))
+                                    @if ($item->drekomendasi->rincian!='')
+                                        <a href="#" class="badge badge-secondary" style="font-size:15px">0</a>
+                                        <a href="javascript:listrinciantl({{$item->rekomendasi_id}},{{$user_pic->id}},{{$item->id}})" class="badge badge-secondary" style="font-size:15px"><i class="fa fa-list"></i></a>
+                                    @else
+                                        <a href="#" class="badge badge-secondary" style="font-size:15px">0</a>
+                                    @endif
+                                @else
+                                    <a href="#" class="badge badge-secondary" style="font-size:15px">0</a>
+                                @endif
+                            @else
+                                <a href="#" class="badge badge-primary" style="font-size:15px">{{count($tindaklanjut_rincian[$item->id])}} </a>
+                                <a href="javascript:listrinciantl({{$item->rekomendasi_id}},{{$user_pic->id}},{{$item->id}})" class="badge badge-secondary" style="font-size:15px"><i class="fa fa-list"></i></a>
+                            @endif
+                        @else
+                            @if (isset($item->drekomendasi->rincian))
+                                    @if ($item->drekomendasi->rincian!='')
+                                        <a href="#" class="badge badge-secondary" style="font-size:15px">0</a>
+                                        <a href="javascript:listrinciantl({{$item->rekomendasi_id}},{{$user_pic->id}},{{$item->id}})" class="badge badge-secondary" style="font-size:15px"><i class="fa fa-list"></i></a>
+                                    @else
+                                        <a href="#" class="badge badge-secondary" style="font-size:15px">0</a>
+                                    @endif
+                                @else
+                                    <a href="#" class="badge badge-secondary" style="font-size:15px">0</a>
+                                @endif
+                        @endif
+                        
                     </td>
                     <td class="text-center" style="width:80px;">
                         <div style="width:80px;">

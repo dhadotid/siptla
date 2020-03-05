@@ -21,4 +21,17 @@ class Controller extends BaseController
         }
         return $data;
     }
+
+    public function open_file($dir1,$dir2,$filename)
+    {
+        $file=$dir1.'/'.$dir2.'/'.$filename;
+        return response()->file(storage_path('app').'/'.$file);
+        // return '<iframe src="/uploads/media/default/0001/01/540cb75550adf33f281f29132dddd14fded85bfc.pdf" width="100%" height="500px">';
+    }
+    public function read_pdf($dir1,$dir2,$filename)
+    {
+        echo '<iframe src="'.url('open-file/'.$dir1.'/'.$dir2.'/'.$filename).'" width="100%" height="100%">
+                </iframe>';
+        // return '<iframe src="/uploads/media/default/0001/01/540cb75550adf33f281f29132dddd14fded85bfc.pdf" width="100%" height="500px">';
+    }
 }

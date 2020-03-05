@@ -14,6 +14,10 @@ class TindakLanjutTemuan extends Model
     {
         return $this->belongsTo('App\Models\DataRekomendasi','rekomendasi_id');
     }
+    function drekomendasi()
+    {
+        return $this->belongsTo('App\Models\DataRekomendasi','rekomendasi_id');
+    }
     function temuan()
     {
         return $this->belongsTo('App\Models\DataTemuan','temuan_id');

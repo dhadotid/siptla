@@ -42,8 +42,8 @@ function settglpenyelesaian(temuan_id, rekom_id) {
                 url: flagsUrl + '/set-tgl-penyelesaian/' + temuan_id + '/' + rekom_id + '/' + tgl,
                 success: function (res) {
                     if (res) {
-                        $('#tgl_penyelesaian_' + temuan_id + '_' + rekom_id).text(res);
-                        $('#aksi_rekomendasi_'+ temuan_id + '_' + rekom_id).attr('style','display:block !important;');
+                        $('#tgl_penyelesaian_' + temuan_id + '_' + rekom_id).html(res);
+                        $('#aksi_rekomendasi_'+ temuan_id + '_' + rekom_id).attr('style','display:inline-block !important;');
                     }
                 }
             });
@@ -58,9 +58,10 @@ $('.btn-add').on('click',function(){
     var d=id.split('__')
     var temuan_id=d[1];
     var rekom_id=d[2];
+    var rrk=rekom_id.split('_')
     var lhp_id=d[0];
     closerightdiv();
-    $('#konten-add-form').load(flagsUrl + '/tindak-lanjut-unitkerja-form-add/' + lhp_id+'/'+temuan_id+'/'+rekom_id,function(){
+    $('#konten-add-form').load(flagsUrl + '/tindak-lanjut-unitkerja-form-add/' + lhp_id + '/' + temuan_id + '/' + rekom_id + '/' + rrk[0],function(){
         CKEDITOR.replace('action_plan');
     });
 });

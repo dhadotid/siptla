@@ -93,7 +93,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::post('data-tindaklanjut-unitkerja-list','TindakLanjutController@unitkerja_list');
     Route::post('tindaklanjut-unitkerja-simpan','TindakLanjutController@unitkerja_tindak_lanjut_simpan');
     Route::post('tindaklanjut-unitkerja-edit-simpan','TindakLanjutController@unitkerja_tindak_lanjut_edit_simpan');
-    Route::get('tindak-lanjut-unitkerja-form-add/{idlhp}/{temuan_id_index}/{rekom_id_index}','TindakLanjutController@unitkerja_add_form');
+    Route::get('tindak-lanjut-unitkerja-form-add/{idlhp}/{temuan_id_index}/{rekom_id_index}/{rekom_id?}','TindakLanjutController@unitkerja_add_form');
     Route::get('tindak-lanjut-unitkerja-form-edit/{idlhp}/{temuan_id}/{rekom_id}/{idtl}','TindakLanjutController@unitkerja_edit_form');
     Route::get('hapus-tindak-lanjut/{idtl}','TindakLanjutController@hapus_tindak_lanjut');
     

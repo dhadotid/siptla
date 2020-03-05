@@ -322,4 +322,22 @@
 		</div>
 	</div>  
 {{-- END Modal Rincian--}}
+ <div class="modal fade" id="rangkuman-tindaklanjut-rekomendasi" role="dialog">
+		<div class="modal-dialog" style="width:70% !important">
+			<div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Data Tindak Lanjut</h4>
+                </div>
+                    <div class="modal-body">
+                        <div id="list-rangkuman"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-success">Tutup</button>
+                        <button type="button" class="btn btn-info"><i class="fa fa-save"></i> Simpan</button>
+                    </div>
+			</div>
+		</div>
+	</div>  
+{{-- END Modal Rincian--}}
 

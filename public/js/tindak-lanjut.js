@@ -43,6 +43,7 @@ function settglpenyelesaian(temuan_id, rekom_id) {
                 success: function (res) {
                     if (res) {
                         $('#tgl_penyelesaian_' + temuan_id + '_' + rekom_id).text(res);
+                        $('#aksi_rekomendasi_'+ temuan_id + '_' + rekom_id).attr('style','display:block !important;');
                     }
                 }
             });
@@ -603,7 +604,8 @@ function hapusrincian(id, jenis) {
 
 //---------------
 function listtindaklanjutrincian(idrincian,jenis){
-    $('#list-tindaklanjut-rincian').load(flagsUrl + '/list-tindaklanjut-rincian/' + idrincian + '/' + jenis, function () {
+    var idtl = $('#idformtindaklanjut').val();
+    $('#list-tindaklanjut-rincian').load(flagsUrl + '/list-tindaklanjut-rincian/' + idrincian + '/' + jenis+'/'+idtl, function () {
         // $('#table').DataTable();
     });
     $('#listtindaklanjutrincian').modal('show');
@@ -668,6 +670,7 @@ function simpanrincianunitkerja()
 }
 
 $('#form_tindaklanjut_rincian').on('submit', function (event) {
+    $('#addtindaklanjutrincian').modal('hide');
     event.preventDefault();
     $.ajax({
         url: flagsUrl + '/simpan-tindaklanjut-rincian',
@@ -683,8 +686,8 @@ $('#form_tindaklanjut_rincian').on('submit', function (event) {
                 text: 'Update Data Rincian Tindak Lanjut Berhasil Di Tambah',
                 icon: 'success'
             }).then(function () {
-                $('#addtindaklanjutrincian').modal('hide');
-                // gettablerincian_unitkerja(res.jenis, res.temuan_id, res.rekomendasi_id) 
+                
+                gettablerincian_unitkerja(res.jenis, res.temuan_id, res.rekomendasi_id) 
             });
             
         }
@@ -785,4 +788,9 @@ function listrinciantl(idrekomendasi,idunitkerja,idtl)
 
     });
     $('#listrinciantl').modal('show');
+}
+
+function rangkumantindaklanjut(idrekomendasi)
+{
+    $('#rangkuman-tindaklanjut-rekomendasi').modal('show');
 }

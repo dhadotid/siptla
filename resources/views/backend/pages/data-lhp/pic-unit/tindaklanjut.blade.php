@@ -153,7 +153,7 @@
                                             {
                                                 foreach($rekomendasi[$item->id] as $key=>$val)
                                                 {
-                                                    $norekom.=$val->nomor_rekomendasi.'<br>';
+                                                    $norekom.='<li style="height:32px;">'.$val->nomor_rekomendasi.'</li>';
                                                     $rekom.='<li style="height:32px;">- '.(strlen($val->rekomendasi) > 30 ? '<a href="#" data-toggle="tooltip" title="'.$val->rekomendasi.'">'.substr($val->rekomendasi,0,30).' ...</a>' : $val->rekomendasi ).'</li>';
 
                                                     if(isset($val->picunit2->nama_pic))
@@ -162,33 +162,62 @@
                                                         $pic2.='<li style="height:32px;">-</li>';
 
                                                     $tglselesai.='<div id="tgl_penyelesaian_'.$item->id.'_'.$val->id.'">';
+                                                    if($val->tanggal_penyelesaian!='')
+                                                    {
+                                                        $tglselesai.='<li style="height:32px;">'.tgl_indo($val->tanggal_penyelesaian).'</li>';
+                                                    }
+                                                    else
+                                                    {
+                                                        $tglselesai.='<li style="height:32px;">
+                                                            <div class="input-group date" id="datetimepicker2" >
+                                                                <input type="text" data-plugin="datepicker" data-date-format="dd/mm/yyyy" class="form-control" name="tanggal_penyelesaian" id="tanggal_penyelesaian_'.$item->id.'_'.$val->id.'" value="'.date('d/m/Y').'" style="height:30px !important;width:120px !important;min-width:120px !important; "/>
+                                                                <span class="input-group-addon bg-info text-white" style="cursor:pointer" onclick="settglpenyelesaian('.$item->id.','.$val->id.')"><i class="glyphicon glyphicon-ok-sign"></i> Set</span>
+                                                            </div>    
+                                                        </li>';
+                                                    }
+                                                    $tglselesai.='</div>';
+
+                                                    $user_pic=\App\Models\PICUnit::where('id_user',Auth::user()->id)->first();
+                                                    $styleaksi='display:none';
+                                                    if($val->pic_2_temuan_id==$user_pic->id)
+                                                    {
                                                         if($val->tanggal_penyelesaian!='')
                                                         {
-                                                            $tglselesai.='<li style="height:32px;">'.tgl_indo($val->tanggal_penyelesaian).'</li>';
+                                                            $styleaksi='display:block';
                                                         }
                                                         else
                                                         {
-                                                            $tglselesai.='<li style="height:32px;">
-                                                                <div class="input-group date" id="datetimepicker2" >
-                                                                    <input type="text" data-plugin="datepicker" data-date-format="dd/mm/yyyy" class="form-control" name="tanggal_penyelesaian" id="tanggal_penyelesaian_'.$item->id.'_'.$val->id.'" value="'.date('d/m/Y').'" style="height:30px !important;width:120px !important;min-width:120px !important; "/>
-                                                                    <span class="input-group-addon bg-info text-white" style="cursor:pointer" onclick="settglpenyelesaian('.$item->id.','.$val->id.')"><i class="glyphicon glyphicon-ok-sign"></i> Set</span>
-                                                                </div>    
-                                                            </li>';
+                                                            $styleaksi='display:none';
                                                         }
-                                                    $tglselesai.='</div>';
-                                                    $aksi.='<li style="margin-bottom:1px;height:32px;">
-                                                    <div class="btn-group">
-                                                        <button type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
-                                                        <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
-                                                            <span class="caret"></span>
-                                                        </button>
-                                                        <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">
-                                                            <li>
-                                                                <a href="#" class="btn-add" data-toggle="modal" data-target="#modaltambahtindaklanjut" data-value="'.$item->id_lhp.'__'.$item->id.'_0__'.$val->id.'_0'.'" style="font-size:11px;"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Tindak Lanjut</a>
-                                                            </li>
-                                                            <li><a href="javascript:detailtindaklanjut('.$val->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>
-                                                        </ul>
-                                                    </div></li>';
+                                                    }
+                                                    
+                                                    if($val->pic_1_temuan_id==$user_pic->id)
+                                                    {
+
+                                                        if($val->tanggal_penyelesaian!='')
+                                                        {
+                                                            $styleaksi='display:block';
+                                                        }
+                                                        else
+                                                        {
+                                                            $styleaksi='display:none';
+                                                        }
+                                                    }
+                                                    $aksi.='<li style="margin-bottom:1px;height:32px;" id="aksi_rekomendasi_'.$item->id.'_'.$val->id.'">
+                                                        <div class="btn-group" style="'.$styleaksi.'">
+                                                            <button type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
+                                                            <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">
+                                                                <li>
+                                                                    <a href="#" class="btn-add" data-toggle="modal" data-target="#modaltambahtindaklanjut" data-value="'.$item->id_lhp.'__'.$item->id.'_0__'.$val->id.'_0'.'" style="font-size:11px;"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Tindak Lanjut</a>
+                                                                </li>
+                                                                <li><a href="javascript:detailtindaklanjut('.$val->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
+                                                        if($val->pic_1_temuan_id==$user_pic->id)
+                                                                $aksi.='<li><a href="javascript:rangkumantindaklanjut('.$val->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Rangkuman Tindak Lanjut</a></li>';
+                                                        $aksi.='</ul>
+                                                        </div></li>';
 
                                                     // <li><a target="_blank" href="'.url('data-tindak-lanjut-unitkerja/'.$val->id.'/'.$item->id).'" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>
                                                     //<li><a href="#" data-toggle="modal" data-target="#lihattindaklanjut" data-value="'.$val->id.'" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>
@@ -201,7 +230,7 @@
                                             {{-- <td class="text-left">{{(strlen($item->temuan) > 30 ? substr($item->temuan,0,30).' ...' : $item->temuan )}}</td> --}}
                                             <td class="text-left">
                                             No. {{$item->no_temuan}} <br>{!!(strlen($item->temuan) > 30 ? '<a href="#" data-toggle="tooltip" data-title="'.$item->temuan.'">'.substr($item->temuan,0,30).' ...</a>' : $item->temuan )!!}</td>
-                                            <td class="text-center">{!!$norekom!!}</td>
+                                            <td class="text-center"><ul>{!!$norekom!!}</ul></td>
                                             <td class="text-left"><ul>{!!$rekom!!}</ul></td>
                                             <td class="text-center"><ul>{!!$tglselesai!!}</ul></td>
                                             <td class="text-left"><ul>{!!$pic2!!}</ul></td>

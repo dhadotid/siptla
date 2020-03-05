@@ -169,40 +169,81 @@ class TindakLanjutController extends Controller
 
        
         $pemeriksa=Pemeriksa::orderBy('code')->get();
-        $datalhp=DaftarTemuan::where('user_input_id',Auth::user()->id)->where('status_lhp','Publish LHP')->where('tahun_pemeriksa',$tahun)->orderBy('id','desc')->get();
-        // return $datalhp;
-        $idlhparray=array();
-        foreach($datalhp as $k=>$v)
-        {
-            $idlhparray[$v->id]=$v->id;
-        }
-        $temuan=$rekomendasi=$idtemuanarray=array();
-        if(count($idlhparray)!=0)
-        {
-            $temuan=DataTemuan::whereIn('id_lhp',$idlhparray)->get();
-            foreach($temuan as $kk=>$vv)
-            {
-                $idtemuanarray[]=$vv->id;
-            }
+
+        $picunit=PICUNit::all();
+        $pic=$user_pic=array();
+        foreach($picunit as $k=>$v){
+            $pic[$v->id]=$v;
+
+            if($v->id_user==Auth::user()->id)
+                $user_pic=$v;
         }
 
-        if(count($idtemuanarray)!=0)
+        $pemeriksa=Pemeriksa::orderBy('code')->get();
+        // $datalhp=DaftarTemuan::where('user_input_id',Auth::user()->id)->where('status_lhp','Publish LHP')->orderBy('id','desc')->get();
+
+
+        $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                                ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                                ->where('daftar_lhp.status_lhp','Publish LHP')
+                                ->where('daftar_lhp.tahun_pemeriksa',$tahun)
+                                ->where('daftar_lhp.user_input_id',Auth::user()->id)
+                                ->whereNull('data_rekomendasi.deleted_at')
+                                ->orderBy('data_rekomendasi.nomor_rekomendasi')
+                                ->get();
+
+        $lhp=$temuan=$rekomendasi=array();
+        foreach($alldata as $k=>$v)
         {
-            $rekom=DataRekomendasi::whereIn('id_temuan',$idtemuanarray)->get();
-            foreach($rekom as $k=>$v)
-            {
-                $rekomendasi[$v->id_temuan][]=$v;
-            }
+            $lhp[$v->id_lhp]=$v;
+            $temuan[$v->id_temuan]=$v;
+            $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
         }
+        // return $rekomendasi;
         return view('backend.pages.data-lhp.auditor-junior.tindaklanjut')
                 ->with('tahun',$tahun)
                 ->with('rekomid',$rekomid)
-                ->with('idlhparray',$idlhparray)
-                ->with('datalhp',$datalhp)
-                ->with('pemeriksa',$pemeriksa)
+                ->with('temuanid',$temuanid)
+                ->with('alldata',$alldata)
+                ->with('pic',$pic)
+                ->with('lhp',$lhp)
                 ->with('rekomendasi',$rekomendasi)
-                ->with('temuan',$temuan)
-                ->with('temuanid',$temuanid);
+                ->with('pemeriksa',$pemeriksa)
+                ->with('temuan',$temuan);
+        // $datalhp=DaftarTemuan::where('user_input_id',Auth::user()->id)->where('status_lhp','Publish LHP')->where('tahun_pemeriksa',$tahun)->orderBy('id','desc')->get();
+        // // return $datalhp;
+        // $idlhparray=array();
+        // foreach($datalhp as $k=>$v)
+        // {
+        //     $idlhparray[$v->id]=$v->id;
+        // }
+        // $temuan=$rekomendasi=$idtemuanarray=array();
+        // if(count($idlhparray)!=0)
+        // {
+        //     $temuan=DataTemuan::whereIn('id_lhp',$idlhparray)->get();
+        //     foreach($temuan as $kk=>$vv)
+        //     {
+        //         $idtemuanarray[]=$vv->id;
+        //     }
+        // }
+
+        // if(count($idtemuanarray)!=0)
+        // {
+        //     $rekom=DataRekomendasi::whereIn('id_temuan',$idtemuanarray)->get();
+        //     foreach($rekom as $k=>$v)
+        //     {
+        //         $rekomendasi[$v->id_temuan][]=$v;
+        //     }
+        // }
+        // return view('backend.pages.data-lhp.auditor-junior.tindaklanjut')
+        //         ->with('tahun',$tahun)
+        //         ->with('rekomid',$rekomid)
+        //         ->with('idlhparray',$idlhparray)
+        //         ->with('datalhp',$datalhp)
+        //         ->with('pemeriksa',$pemeriksa)
+        //         ->with('rekomendasi',$rekomendasi)
+        //         ->with('temuan',$temuan)
+        //         ->with('temuanid',$temuanid);
     }
     
     public function unitkerja_index($tahun=null,$rekomid=null,$temuanid=null)

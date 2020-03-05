@@ -30,11 +30,7 @@
                     </td>
                     <td class="text-center"><i class="fa fa-calendar"></i> {{tgl_indo($item->tgl_tindaklanjut)}}</td>
                     <td class="text-left">
-                        @if (strlen($item->action_plan)>=30)
-                            <a href="#" data-toggle="tooltip" data-title="{{$item->action_plan}}" title="{!!$item->action_plan!!}">{!!substr($item->action_plan,0,35)!!}...</a>
-                        @else
-                            {!!$item->action_plan!!}
-                        @endif    
+                            {!!$item->action_plan!!}  
                     </td>
                     <td class="text-center">
                         @if (isset($dok[$item->id]))

@@ -50,28 +50,7 @@
                                     <div class="form-group">
                                         <label for="my-input" class="col-md-12"><h5>Masukan Parameter Cetak Laporan di bawah ini :</h5></label>
                                     </div>
-                                    <div class="form-group" style="margin-bottom:5px;">
-                                        <label for="my-input" class="col-md-3">Tanggal Awal</label>
-                                        <div class="col-md-3">
-                                            <div class='input-group date' id='datetimepicker' data-plugin="datepicker" data-date-format="dd/mm/yyyy">
-                                                <input type='text' class="form-control" name="tanggal_awal" id="tanggal_awal" readonly value="01/{{date('m/'.$tahun)}}"/>
-                                                <span class="input-group-addon bg-info text-white">
-                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group" style="margin-bottom:5px;">
-                                        <label for="my-input" class="col-md-3">Tanggal Akhir</label>
-                                        <div class="col-md-3">
-                                            <div class='input-group date' id='datetimepicker2' data-plugin="datepicker" data-date-format="dd/mm/yyyy">
-                                                <input type='text' class="form-control" name="tanggal_akhir" id="tanggal_akhir" readonly value="{{date('d/m/'.$tahun)}}"/>
-                                                <span class="input-group-addon bg-info text-white">
-                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                   
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Pemeriksa</label>
                                         <div class="col-md-6">
@@ -88,8 +67,8 @@
                                         <div class="col-md-6">
                                             <select class="select2 form-control" name="no_lhp" id="no_lhp" onchange="loaddata()">
                                                 <option>&nbsp;</option>
-                                                @foreach ($datalhp as $item)
-                                                    <option value="{{$item->id}}">{{$item->no_lhp}} - {{$item->judul_lhp}}</option>
+                                                @foreach ($lhp as $item)
+                                                    <option value="{{$item->id_lhp}}">{{$item->no_lhp}} - {{$item->judul_lhp}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -131,92 +110,122 @@
                             <thead>
                                 <tr class="primary">
                                     <th class="text-center" style="width:15px;">#</th>
-                                    {{-- <th class="text-center">No.<br>Temuan</th> --}}
-                                    <th class="text-center">Temuan</th>
-                                    {{-- <th class="text-center">No.<br>Rekomendasi</th>--}}
-                                    <th class="text-center">Rekomendasi</th>
+                                    <th class="text-center">Temuan / Rekomendasi</th>
                                     <th class="text-center">Tanggal<br>Penyelesaian</th>
-                                    <th class="text-center">Rincian<br>Tindak Lanjut</th>
+                                    <th class="text-center">PIC 2</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @php
                                     $no=1;
+                                    $tem=$tgl=$aksi=$pic2='';
                                 @endphp
-                                @foreach ($temuan as $item)
+                                @foreach ($temuan as $idlhp=>$item)
                                     @php
-                                        $rekom=$norekom=$tglselesai=$aksi=$rincian='';
-                                        if(isset($rekomendasi[$item->id]))
+                                        $norekom=$tglselesai=$aksi=$rincian='';
+                                        $tem.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">';
+                                        $tem.='<div class="col-md-2"><small><i>No. Temuan</i></small><br>
+                                            <b>'.$item->no_temuan.'</b>
+                                            </div>';
+                                        $tem.='<div class="col-md-10"><small><i>Temuan</i></small><br>
+                                            <b>'.$item->temuan.'</b>
+                                            </div>';
+                                        $tem.='</div>';
+                                        $tgl.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">&nbsp;</div>';
+                                        $pic2.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">&nbsp;</div>';
+                                        $aksi.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">&nbsp;</div>';
+                                        
+                                        
+                                        $tem.='<br><div class="row" style="height:35px;border-bottom:1px dotted #ddd">';
+                                        $tem.='<div class="col-md-2"><small><i>No. Rekomendasi</i></small></div>';
+                                        $tem.='<div class="col-md-10"><small><i>Rekomendasi</i></small></div>';
+                                        $tem.='</div>';
+
+                                        $tgl.='<br><div class="row" style="height:35px;border-bottom:1px dotted #ddd">';
+                                        $tgl.='<div class="col-md-2">&nbsp;</div>';
+                                        $tgl.='<div class="col-md-10">&nbsp;</div>';
+                                        $tgl.='</div>';
+
+                                        $pic2.='<br><div class="row" style="height:35px;border-bottom:1px dotted #ddd">';
+                                        $pic2.='<div class="col-md-2">&nbsp;</div>';
+                                        $pic2.='<div class="col-md-10">&nbsp;</div>';
+                                        $pic2.='</div>';
+                                        
+                                        $aksi.='<br><div class="row" style="height:35px;border-bottom:1px dotted #ddd">';
+                                        $aksi.='<div class="col-md-2">&nbsp;</div>';
+                                        $aksi.='<div class="col-md-10">&nbsp;</div>';
+                                        $aksi.='</div>';
+                                        if(isset($rekomendasi[$item->id_temuan]))
                                         {
-                                            foreach($rekomendasi[$item->id] as $key=>$val)
+                                            foreach($rekomendasi[$item->id_temuan] as $k=>$v)
                                             {
-                                                // $norekom.='<li style="height:32px;">'.$val->nomor_rekomendasi.'</li>';
+                                                $drekom=strlen($v->rekomendasi);
+                                                if($drekom>=250)
+                                                    $text_rekom='<a href="#" data-toggle="tooltip" data-placement="top" title="'.$v->rekomendasi.'">'.substr($v->rekomendasi,0,250).'...</a>';
+                                                else
+                                                    $text_rekom=$v->rekomendasi;
+
+                                                $tem.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0">';
+                                                $tem.='<div class="col-md-1 text-center">'.$v->nomor_rekomendasi.'</div>';
+                                                $tem.='<div class="col-md-11">'.$text_rekom.'</div>';
+                                                $tem.='</div>';
                                                 
-                                                $rekom.='<li style="height:32px;">
-                                                    <div class="row">
-                                                        <div style="width:30px;float:left">'.$val->nomor_rekomendasi.'</div>
-                                                        <div style="width:90%;float:left">'.(strlen($val->rekomendasi) > 30 ? '<a href="#" data-toggle="tooltip" data-title="'.$val->rekomendasi.'" title="'.$val->rekomendasi.'">'.substr($val->rekomendasi,0,30).' ...</a>' : $val->rekomendasi ).'</div>
-                                                    </div>';
-                                                    
-                                                $rekom.='</li>';
 
-                                                    
-                                                    $tglselesai.='<div id="tgl_penyelesaian_'.$item->id.'_'.$val->id.'">';
-                                                        if($val->tanggal_penyelesaian!='')
-                                                        {
-                                                            $tglselesai.='<li style="height:32px;">'.tgl_indo($val->tanggal_penyelesaian).'</li>';
-                                                        }
-                                                        else
-                                                        {
-                                                            $tglselesai.='<li style="height:32px;">-</li>';
-                                                            // $tglselesai.='<li style="height:32px;">
-                                                            //     <div class="input-group date" id="datetimepicker2" >
-                                                            //         <input type="text" data-plugin="datepicker" data-date-format="dd/mm/yyyy" class="form-control" name="tanggal_penyelesaian" id="tanggal_penyelesaian_'.$item->id.'_'.$val->id.'" value="'.date('d/m/Y').'" style="height:30px !important;width:120px !important;min-width:120px !important; "/>
-                                                            //         <span class="input-group-addon bg-info text-white" style="cursor:pointer" onclick="settglpenyelesaian('.$item->id.','.$val->id.')"><i class="glyphicon glyphicon-ok-sign"></i> Set</span>
-                                                            //     </div>    
-                                                            // </li>';
-                                                        }
-                                                    $tglselesai.='</div>';
-                                                    $aksi.='<li style="margin-bottom:1px;height:32px;">
-                                                    <div class="btn-group">
-                                                        <button type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
-                                                        <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
-                                                            <span class="caret"></span>
-                                                        </button>
-                                                        <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">
-                                                            <li>
-                                                                <a href="#" class="btn-add" data-toggle="modal" data-target="#modaltambahtindaklanjut" data-value="'.$item->id_lhp.'__'.$item->id.'_0__'.$val->id.'_0'.'" style="font-size:11px;"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Tindak Lanjut</a>
-                                                            </li>
-                                                            <li><a href="#" target="_blank" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>
-                                                        </ul>
-                                                    </div></li>';
+                                                if($v->pic_2_temuan_id!='')
+                                                    $pic2.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0;width:150px;"><div class="col-md-12 text-center">'.(isset($pic[$v->pic_2_temuan_id]) ? $$pic[$v->pic_2_temuan_id]->nama_pic : '').'</div></div>';
+                                                else
+                                                    $pic2.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0;width:150px;"><div class="col-md-12 text-center">'.(isset($pic[$v->pic_2_temuan_id]) ? $$pic[$v->pic_2_temuan_id]->nama_pic : '-').'</div></div>';
 
-                                                if($val->rincian!='')
-                                                    {
-                                                       $rincian.='<li style="margin-bottom:1px;height:32px;">
-                                                            <a href="javascript:rincian(\''.$val->rincian.'\',\''.$val->id.'__'.$item->id.'__'.$item->id_lhp.'\')" class="btn btn-xs btn-danger" style="height:28px;"><i class="fa fa-flag"></i></a>
-                                                        </li>'; 
-                                                    }
-                                                    else
-                                                        $rincian.='<li style="margin-bottom:1px;height:32px;">-</li>';
+                                                $tgl.='<div style="height:60px;"  id="tgl_penyelesaian_'.$item->id_temuan.'_'.$v->id.'">';
+                                                if($v->tanggal_penyelesaian!='')
+                                                {
+                                                    $tgl.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0">
+                                                            <div class="col-md-12"><span class="label label-info"><i class="fa fa-calendar"></i> '.tgl_indo($v->tanggal_penyelesaian).'</span></div>
+                                                        </div>';
+                                                    // $tglselesai.='<li style="height:32px;">'.tgl_indo($val->tanggal_penyelesaian).'</li>';
+                                                }
+                                                else
+                                                {
+                                                   $tgl.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0">
+                                                            <div class="col-md-12"><i class="label label-danger">Belum Di Set</i></div>
+                                                        </div>';
+                                                }
+                                                $tgl.='</div>';
+                                                    $user_pic=\App\Models\PICUnit::where('id_user',Auth::user()->id)->first();
+                                                    $styleaksi='display:none';
+                                                    
+                                                    $aksi.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
+                                                        <div class="btn-group" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
+                                                            <button type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
+                                                            <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">
+                                                                <li>
+                                                                    <a href="#" class="btn-add" data-toggle="modal" data-target="#modaltambahtindaklanjut" data-value="'.$v->id_lhp.'__'.$item->id_temuan.'_0__'.$v->id.'_0'.'" style="font-size:11px;"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Tindak Lanjut</a>
+                                                                </li>
+                                                                <li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
+
+                                                                $aksi.='<li><a href="javascript:rangkumantindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Rangkuman Tindak Lanjut</a></li>';
+
+                                                        
+                                                        $aksi.='</ul>
+                                                        </div></div>';
                                             }
                                         }
                                     @endphp
                                     <tr>
                                         <td class="text-center">{{$no}}</td>
-                                        {{-- <td class="text-center"></td> --}}
-                                        <td class="text-left">
-                                            No. {{$item->no_temuan}} <br>{!!(strlen($item->temuan) > 30 ? '<a href="#" data-toggle="tooltip" data-title="'.$item->temuan.'" title="'.$item->temuan.'">'.substr($item->temuan,0,30).' ...</a>' : $item->temuan )!!}</td>
-                                        {{-- <td class="text-center"><ul>{!!$norekom!!}</ul></td> --}}
-                                        <td class="text-left"><ul>{!!$rekom!!}</ul></td>
-                                        <td class="text-center"><ul>{!!$tglselesai!!}</ul></td>
-                                        <td class="text-center"><ul>{!!$rincian!!}</ul></td>
-                                        <td class="text-center"><ul>{!!$aksi!!}</ul></td>
+                                        <td class="text-left">{!!$tem!!}</td>
+                                        <td class="text-center">{!!$tgl!!}</td>
+                                        <td class="text-left">{!!$pic2!!}</td>
+                                        <td class="text-center">{!!$aksi!!}</td>
                                     </tr>
                                     @php
                                         $no++;
                                     @endphp
+                                    
                                 @endforeach
                             </tbody>
                         </table>
@@ -230,7 +239,12 @@
 @section('footscript')
     <link rel="stylesheet" href="{{asset('theme/backend/libs/misc/datatables/datatables.min.css')}}"/>
     <script src="{{asset('theme/backend/libs/misc/datatables/datatables.min.js')}}"></script>
-	<script>
+    <link rel="stylesheet" href="{{asset('css/noty.css')}}"/>
+    <script src="{{asset('js/noty.js')}}"></script>
+    <script src="{{asset('js/tindak-lanjut.js')}}"></script>
+    <script src="{{ asset('vendor/unisharp/laravel-ckeditor/ckeditor.js') }}"></script>
+    <script>
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -242,51 +256,21 @@
 		$('.select2').select2();
         // loaddata();
         $('#table').DataTable();
-        function loaddata()
-        {
-            var tanggal_awal=$('#tanggal_awal').val();
-            var tanggal_akhir=$('#tanggal_akhir').val();
-            var pemeriksa=$('#pemeriksa').val();
-            var no_lhp=$('#no_lhp').val();
-            var no_temuan=$('#no_temuan').val();
-            var no_rekomendasi=$('#no_rekomendasi').val();
-            var status_rekomendasi=$('#status_rekomendasi').val();
-            
-            $.ajax({
-                url : '{{url("/")}}/data-tindaklanjut-list',
-                data : { tahun : '{{$tahun}}', tgl_awal : tanggal_awal, tgl_akhir : tanggal_akhir, rekomid : no_rekomendasi, temuan_id : no_temuan, statusrekom : status_rekomendasi},
-                type : 'POST',
-                dataType : 'JSON',
-                success : function(res){
-                    $('#data').html(res,function(){
-                        $('#table-data').DataTable();
-                    });
-                }
-            });
-            // $('#data').load(flagsUrl+'/data-tindaklanjut-list/{{$tahun}}',function(){
-            //     $('#table').DataTable();
-            // });
-        }
 
-        function getdata(tahun)
-        {
-            location.href=flagsUrl+'/data-tindaklanjut/'+tahun;
-        }
-        function rincian(rincian,id)
-        {
-            //load-table-rincian/{jenis}/{idtemuan?}/{statusrekomendasi?}/{view?}
-            var d=id.split('__');
-            var id_temuan=d[1];
-            var id_rekom=d[0];
-            var id_lhp=d[2];
-            $('#table-rincian').load(flagsUrl + '/load-table-rincian/'+rincian+'/'+id_temuan+'/'+id_rekom+'/1');
-            $('#modalrincian').modal('show');
-        }
+        var pesan='{{Session::get("success")}}';
+        var error='{{Session::get("error")}}';
+        if(pesan!='')
+            swal("Berhasil", pesan, "success");
+        if(error!='')
+            swal("Gagal", error, "error");
 	</script>
 	<style>
 	.select2-container{
 		width:100% !important;
 	}
+    .modal {
+    overflow-y:auto;
+    }
 	</style>
 @endsection
 @section('modal')

@@ -145,7 +145,7 @@
                                 @foreach ($temuan as $idlhp=>$item)
                                     @php
                                         $norekom=$tglselesai=$aksi=$rincian='';
-                                        $tem.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">';
+                                        $tem='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">';
                                         $tem.='<div class="col-md-2"><small><i>No. Temuan</i></small><br>
                                             <b>'.$item->no_temuan.'</b>
                                             </div>';
@@ -153,9 +153,9 @@
                                             <b>'.$item->temuan.'</b>
                                             </div>';
                                         $tem.='</div>';
-                                        $tgl.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">&nbsp;</div>';
-                                        $pic2.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">&nbsp;</div>';
-                                        $aksi.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">&nbsp;</div>';
+                                        $tgl='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">&nbsp;</div>';
+                                        $pic2='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">&nbsp;</div>';
+                                        $aksi='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">&nbsp;</div>';
                                         
                                         
                                         $tem.='<br><div class="row" style="height:35px;border-bottom:1px dotted #ddd">';

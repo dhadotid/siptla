@@ -143,13 +143,15 @@
                                     <th class="text-center">Temuan / Rekomendasi</th>
                                     <th class="text-center">Tanggal<br>Penyelesaian</th>
                                     <th class="text-center">PIC 2</th>
+                                     <th class="text-center">Tindak<br>Lanjut</th>
+
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @php
                                     $no=1;
-                                    $tem=$tgl=$aksi=$pic2='';
+                                    $tem=$tgl=$aksi=$pic2=$tindak_lanjut='';
                                 @endphp
                                 @foreach ($temuan as $idtemuan=>$item)
                                     @php
@@ -165,6 +167,12 @@
                                         $tgl='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">&nbsp;</div>';
                                         $pic2='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">&nbsp;</div>';
                                         $aksi='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">&nbsp;</div>';
+                                        $tindak_lanjut='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">&nbsp;</div>';
+                                        
+                                        $tindak_lanjut.='<br><div class="row" style="height:35px;border-bottom:1px dotted #ddd">';
+                                        $tindak_lanjut.='<div class="col-md-2">&nbsp;</div>';
+                                        $tindak_lanjut.='<div class="col-md-10">&nbsp;</div>';
+                                        $tindak_lanjut.='</div>';
                                         
                                         
                                         $tem.='<br><div class="row" style="height:35px;border-bottom:1px dotted #ddd">';
@@ -181,6 +189,7 @@
                                         $pic2.='<div class="col-md-2">&nbsp;</div>';
                                         $pic2.='<div class="col-md-10">&nbsp;</div>';
                                         $pic2.='</div>';
+                                        
                                         
                                         $aksi.='<br><div class="row" style="height:35px;border-bottom:1px dotted #ddd">';
                                         $aksi.='<div class="col-md-2">&nbsp;</div>';
@@ -201,6 +210,18 @@
                                                 $tem.='<div class="col-md-11">'.$text_rekom.'</div>';
                                                 $tem.='</div>';
                                                 
+                                                if(isset($gettindaklanjut[$v->id]))
+                                                {
+                                                    $tindak_lanjut.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0">';
+                                                    $tindak_lanjut.='<div class="col-md-12 text-center"><span class="label label-inverse">'.count($gettindaklanjut[$v->id]).'</i></div>';
+                                                    $tindak_lanjut.='</div>';
+                                                }
+                                                else
+                                                {
+                                                    $tindak_lanjut.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0">';
+                                                    $tindak_lanjut.='<div class="col-md-12 text-center">&nbsp</div>';
+                                                    $tindak_lanjut.='</div>';
+                                                }  
 
                                                 if($v->pic_2_temuan_id!='')
                                                     $pic2.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0;width:150px;"><div class="col-md-12 text-center">'.(isset($pic[$v->pic_2_temuan_id]) ? $$pic[$v->pic_2_temuan_id]->nama_pic : '').'</div></div>';
@@ -250,6 +271,8 @@
                                         <td class="text-left">{!!$tem!!}</td>
                                         <td class="text-center">{!!$tgl!!}</td>
                                         <td class="text-left">{!!$pic2!!}</td>
+                                        
+                                        <td class="text-center">{!!$tindak_lanjut!!}</td>
                                         <td class="text-center">{!!$aksi!!}</td>
                                     </tr>
                                     @php
@@ -269,8 +292,8 @@
 @section('footscript')
     <link rel="stylesheet" href="{{asset('theme/backend/libs/misc/datatables/datatables.min.css')}}"/>
     <script src="{{asset('theme/backend/libs/misc/datatables/datatables.min.js')}}"></script>
-    <script src="{{asset('js/tindak-lanjut-junior.js')}}"></script>
     <script src="{{ asset('vendor/unisharp/laravel-ckeditor/ckeditor.js') }}"></script>
+    <script src="{{asset('js/tindak-lanjut-junior.js')}}"></script>
 	<script>
         $.ajaxSetup({
             headers: {

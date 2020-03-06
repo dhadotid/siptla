@@ -98,7 +98,20 @@ function getbulan($bln)
     $bulan=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
     return $bulan[$bln-1];
 }
-
+function betweendate($cekdate,$date1,$date2)
+{
+    $currentDate = $cekdate;
+    $currentDate = date('Y-m-d', strtotime($currentDate));
+    
+    $startDate = date('Y-m-d', strtotime($date1));
+    $endDate = date('Y-m-d', strtotime($date2));
+    
+    if (($currentDate >= $startDate) && ($currentDate <= $endDate)){
+       return 1;
+    }else{
+        return 0;
+    }
+}
 function datauserpic($data)
 {
     $user=array();

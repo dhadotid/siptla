@@ -16,7 +16,7 @@
                         </div>
                         <div class="col-md-1 text-right" style="padding-top:10px;">Tahun</div>
                         <div class="col-md-2 text-left">
-                            <select name="tahun" id="tahun" class="form-control text-left" data-plugin="select2" onchange="getdata(this.value)" style="width:50%">
+                            <select name="tahun" id="tahun" class="form-control text-left" onchange="getdata(this.value)" style="width:100%">
                                 @for ($i = date('Y'); $i >= (date('Y')-5); $i--)
                                     @if ($tahun==$i)
                                         <option value="{{$i}}" selected="selected"}}>{{$i}}</option>
@@ -74,7 +74,7 @@
                                     </div>
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Pemeriksa</label>
-                                        <div class="col-md-6">
+                                        <div class="col-md-7">
                                             <select class="select2 form-control" name="pemeriksa" id="pemeriksa" onchange="loaddata()">
                                                 <option>&nbsp;</option>
                                                 @foreach ($pemeriksa as $item)
@@ -85,7 +85,7 @@
                                     </div>
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Nomor LHP</label>
-                                        <div class="col-md-6">
+                                        <div class="col-md-9">
                                             <select class="select2 form-control" name="no_lhp" id="no_lhp" onchange="loaddata()">
                                                 <option>&nbsp;</option>
                                                 @foreach ($lhp as $item)
@@ -96,20 +96,29 @@
                                     </div>
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Nomor Temuan</label>
-                                        <div class="col-md-6" id="select-temuan">
+                                        <div class="col-md-9" id="select-temuan">
                                             <select class="select2 form-control" name="no_temuan" id="no_temuan" onchange="loaddata()"></select>
                                         </div>
                                     </div>
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Nomor Rekomendasi</label>
-                                        <div class="col-md-6">
+                                        <div class="col-md-9" id="select-rekomendasi">
                                             <select class="select2 form-control" name="no_rekomendasi" id="no_rekomendasi" onchange="loaddata()"></select>
                                         </div>
                                     </div>
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Status Rekomendasi</label>
-                                        <div class="col-md-6">
-                                            <select class="select2 form-control" name="status_rekomendasi" id="status_rekomendasi" onchange="loaddata()"></select>
+                                        <div class="col-md-9" id="select-status-rekom">
+                                            <select class="select2 form-control" name="status_rekomendasi" id="status_rekomendasi" onchange="loaddata()">
+                                                <option value="">-Pilih-</option>
+                                            @php
+                                                $statusrekom=\App\Models\StatusRekomendasi::all();
+                                                foreach($statusrekom as $k=>$v)
+                                                {
+                                                    echo '<option value="'.$v->id.'">'.$v->rekomendasi.'</option>';
+                                                }
+                                            @endphp
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -260,6 +269,8 @@
 @section('footscript')
     <link rel="stylesheet" href="{{asset('theme/backend/libs/misc/datatables/datatables.min.css')}}"/>
     <script src="{{asset('theme/backend/libs/misc/datatables/datatables.min.js')}}"></script>
+    <script src="{{asset('js/tindak-lanjut-junior.js')}}"></script>
+    <script src="{{ asset('vendor/unisharp/laravel-ckeditor/ckeditor.js') }}"></script>
 	<script>
         $.ajaxSetup({
             headers: {
@@ -274,8 +285,17 @@
         $('#table').DataTable();
         $('#no_lhp').on('change',function(){
             var idlhp=$(this).val();
-
+            $('#select-temuan').load(flagsUrl+'/temuan-by-lhp-select/'+idlhp,function(){
+                $('.select2').select2();
+                $('#no_temuan').on('change',function(){
+                    var idtemuan=$(this).val();
+                    $('#select-rekomendasi').load(flagsUrl+'/rekomendasi-by-temuan-select/'+idtemuan,function(){
+                        $('.select2').select2();
+                    });
+                });
+            });
         });
+        
         function loaddata()
         {
             var tanggal_awal=$('#tanggal_awal').val();
@@ -290,11 +310,8 @@
                 url : '{{url("/")}}/data-tindaklanjut-list',
                 data : { tahun : '{{$tahun}}',pemeriksa:pemeriksa, tgl_awal : tanggal_awal, tgl_akhir : tanggal_akhir, rekomid : no_rekomendasi, temuan_id : no_temuan, statusrekom : status_rekomendasi},
                 type : 'POST',
-                dataType : 'JSON',
                 success : function(res){
-                    $('#data').html(res,function(){
-                        $('#table-data').DataTable();
-                    });
+                    $('#data').html(res);
                 }
             });
             // $('#data').load(flagsUrl+'/data-tindaklanjut-list/{{$tahun}}',function(){
@@ -325,4 +342,5 @@
 @endsection
 @section('modal')
     @include('backend.pages.data-lhp.pic-unit.modal')
+    @include('backend.pages.data-lhp.auditor-junior.modal-tindaklanjut')
 @endsection

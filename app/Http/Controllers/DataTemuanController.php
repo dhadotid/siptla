@@ -564,6 +564,18 @@ class DataTemuanController extends Controller
         $temuan=DataTemuan::where('id_lhp',$idlhp)->get();
         return $temuan;
     }
+    public function temuan_by_lhp_select($idlhp)
+    {
+        $temuan=DataTemuan::where('id_lhp',$idlhp)->get();
+        $select ='<select class="select2 form-control" name="no_temuan" id="no_temuan" onchange="loaddata()">';
+        $select.='<option value="">-Pilih-</option>';
+        foreach($temuan as $v)
+        {
+            $select.='<option value="'.$v->id.'">'.$v->no_temuan.' - '.$v->temuan.'</option>';
+        }
+        $select.='</select>';
+        return $select;
+    }
 
     public function publish_lhp($idlhp)
     {

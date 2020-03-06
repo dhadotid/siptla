@@ -139,12 +139,15 @@ class RincianSewaController extends Controller
         $idtindaklanjut=0;
         if(isset($request->tindak_lanjut))
         {
+            $rekom=DataRekomendasi::where('id',$request->idrekomendasi)->with('dtemuan')->first();
             $tindaklanjut=new TindakLanjutTemuan;
             $tindaklanjut->lhp_id = 
             $tindaklanjut->temuan_id = $request->idtemuan;
             $tindaklanjut->rekomendasi_id = $request->idrekomendasi;
             $tindaklanjut->rangkuman = $request->tindak_lanjut;
             $tindaklanjut->rincian = $request->jenis;
+            $tindaklanjut->pic_1_id = $rekom->pic_1_temuan_id;
+            $tindaklanjut->pic_2_id = $rekom->pic_2_temuan_id;
             $tindaklanjut->save();
             
             $idtindaklanjut=$tindaklanjut->id;

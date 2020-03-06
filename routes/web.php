@@ -62,6 +62,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::post('data-temuan-lhp-simpan/{idlhp}','DataTemuanController@data_temuan_lhp_simpan')->name('data-temuan-lhp.simpan');
     Route::post('data-temuan-lhp-update/{temuan_id}','DataTemuanController@data_temuan_lhp_update')->name('data-temuan-lhp.update');
     Route::get('temuan-by-lhp/{idlhp}','DataTemuanController@temuan_by_lhp')->name('temuan.by-lhp');
+    Route::get('temuan-by-lhp-select/{idlhp}','DataTemuanController@temuan_by_lhp_select')->name('temuan.by-lhp');
 
     
     Route::get('rekomendasi-edit-data/{idrekom}','DataRekomendasiController@rekomendasi_edit_data')->name('rekomendasi.edit-data');
@@ -74,6 +75,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('update-jlh-rekomendasi/{idtemuan}/{st_rekom?}','DataRekomendasiController@update_jlh_rekomendasi');
     Route::get('rekomendasi-by-temuan/{idtemuan}/{status?}','DataRekomendasiController@rekomendasi_by_temuan')->name('rekomendasi.by-temuan');
     Route::get('rincian-nilai-rekom/{idrekom}','DataRekomendasiController@rincian_nilai');
+    Route::get('rekomendasi-by-temuan-select/{idtemuan}','DataRekomendasiController@rekomendasi_by_temuan_select')->name('rekomendasi.by-temuan');
     
     Route::get('load-table-rincian/{jenis}/{idtemuan?}/{statusrekomendasi?}/{view?}','DataRekomendasiController@load_tabel_rincian');
     Route::get('load-table-rincian-unitkerja/{jenis}/{idtemuan?}/{statusrekomendasi?}/{view?}','DataRekomendasiController@load_tabel_rincian_unitkerja');
@@ -96,6 +98,8 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('tindak-lanjut-unitkerja-form-add/{idlhp}/{temuan_id_index}/{rekom_id_index}/{rekom_id?}','TindakLanjutController@unitkerja_add_form');
     Route::get('tindak-lanjut-unitkerja-form-edit/{idlhp}/{temuan_id}/{rekom_id}/{idtl}','TindakLanjutController@unitkerja_edit_form');
     Route::get('hapus-tindak-lanjut/{idtl}','TindakLanjutController@hapus_tindak_lanjut');
+    
+    Route::get('detail-tindaklanjut-junior/{idrekom}','TindakLanjutController@detail_tindaklanjut_junior');
     
     Route::get('form-tindaklanjut-rincian/{idrincian}/{jenis}','TindakLanjutController@form_tindaklanjut_rincian');
     Route::get('list-tindaklanjut-rincian/{idrincian}/{jenis}/{idtl?}','TindakLanjutController@list_tindaklanjut_rincian');

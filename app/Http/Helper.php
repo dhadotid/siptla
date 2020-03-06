@@ -98,6 +98,11 @@ function getbulan($bln)
     $bulan=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
     return $bulan[$bln-1];
 }
+function getbulantoangka($bln)
+{
+    $bulan=['Januari'=>1,'Februari'=>2,'Maret'=>3,'April'=>4,'Mei'=>5,'Juni'=>6,'Juli'=>7,'Agustus'=>8,'September'=>9,'Oktober'=>10,'November'=>11,'Desember'=>12];
+    return $bulan[$bln];
+}
 function betweendate($cekdate,$date1,$date2)
 {
     $currentDate = $cekdate;

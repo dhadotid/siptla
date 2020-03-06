@@ -102,7 +102,8 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('hapus-tindak-lanjut/{idtl}','TindakLanjutController@hapus_tindak_lanjut');
     
     Route::get('detail-tindaklanjut-junior/{idrekom}','TindakLanjutController@detail_tindaklanjut_junior');
-    Route::get('detail-tindaklanjut-pic1/{idrekom}','TindakLanjutController@detail_tindaklanjut_junior');
+    Route::get('detail-tindaklanjut-pic1/{idrekom}','TindakLanjutController@detail_tindaklanjut_picunit1');
+    Route::post('review-pic1-simpan','TindakLanjutController@review_pic1_simpan');
     
     Route::get('form-tindaklanjut-rincian/{idrincian}/{jenis}','TindakLanjutController@form_tindaklanjut_rincian');
     Route::get('list-tindaklanjut-rincian/{idrincian}/{jenis}/{idtl?}','TindakLanjutController@list_tindaklanjut_rincian');

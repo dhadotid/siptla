@@ -1282,7 +1282,7 @@ class TindakLanjutController extends Controller
                 ->with('status',$status)
                 ->with('id_rekomendasi',$idrekomendasi);
     }
-    public function detail_tindaklanjut_pic1($idrekomendasi)
+    public function detail_tindaklanjut_picunit1($idrekomendasi)
     {
         $rekom=DataRekomendasi::where('id',$idrekomendasi)->with('picunit1')->with('picunit2')->first();
         // return $rekom;
@@ -1325,5 +1325,22 @@ class TindakLanjutController extends Controller
                 ->with('pic2',$pic2)
                 ->with('status',$status)
                 ->with('id_rekomendasi',$idrekomendasi);
+    }
+
+    public function review_pic1_simpan(Request $request)
+    {
+        // return $request->all();
+        $data['monev']=$monev=$request->review;
+        $data['idrekom']=$idrekom=$request->idrekom;
+        $data['tgl']=$tgl=date('Y-m-d',strtotime($request->tgl));
+
+        $rekom=DataRekomendasi::find($idrekom);
+        $rekom->review_monev=$monev;
+        $rekom->tanggal_penyelesaian=$tgl;
+        $save=$rekom->save();
+        if($save)
+            echo 1;
+        else
+            echo 0;
     }
 }

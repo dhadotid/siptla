@@ -297,8 +297,11 @@
                                                             {
                                                                 $aksi.=' <li><a href="javascript:reviewtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-file"></i> &nbsp;&nbsp;Review Tindak Lanjut</a></li>';
                                                             }
+                                                            if($v->review_monev!='')
+                                                            {
+                                                                $aksi.=' <li><a href="javascript:publishpic1('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Auditor</a></li>';
+                                                            }
 
-                                                            $aksi.=' <li><a href="javascript:publishpic1('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Auditor</a></li>';
                                                             if($v->pic_2_temuan_id!='')
                                                             {
                                                                 $aksi.='<li><a href="javascript:rangkumantindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Rangkuman Tindak Lanjut</a></li>';
@@ -376,4 +379,5 @@
 @endsection
 @section('modal')
     @include('backend.pages.data-lhp.pic-unit.modal')
+    @include('backend.pages.data-lhp.pic-unit.modal-tindaklanjut')
 @endsection

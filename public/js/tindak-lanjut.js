@@ -810,7 +810,7 @@ function publishpic1(idrekomendasi)
     }).then(function (isConfirm) {
         if (isConfirm) {
             $.ajax({
-                url: flagsUrl + '/publish-rekomendasi-to-auditor-junior/' + tl_id,
+                url: flagsUrl + '/publish-rekomendasi-to-auditor-junior/' + idrekomendasi,
                 success: function (res) {
                     if (res == 1) {
                         swal({
@@ -843,10 +843,70 @@ function reviewtindaklanjut(idrekomendasi) {
         // var catatan_monev = document.getElementById('catatan_monev');
         // var review_spi = document.getElementById('review_spi');
         // alert(catatan_monev)
-        // CKEDITOR.replace('catatan_monev');
-        CKEDITOR.replace('review_spi');
+        CKEDITOR.replace('catatan_monev');
+        // CKEDITOR.replace('review_spi');
         $('#table-tl-detail').DataTable();
-        $('#status_rekomendasi').select2()
     });
     $('#modaldetailtindaklanjut').modal('show');
+}
+
+function validasireview()
+{
+    // var catatan_monev=$('#catatan_monev').val();
+    var catatan_monev = CKEDITOR.instances.catatan_monev.getData();
+    var idrekomendasi = $('#idrekomendasi').val();
+    var tgl_penyelesaian = $('#tgl_selesai').val();
+    // alert(tgl_penyelesaian);
+    if(catatan_monev=='')
+        notif('error', 'Catatan Monev Belum Diisi');
+    else 
+    {
+        swal({
+            title: "Apakah Anda Yakin ?",
+            text: "Ingin Menyimpan Review Ini?",
+            icon: "warning",
+            buttons: [
+                'Tidak!',
+                'Ya, Simpan'
+            ],
+            dangerMode: true,
+        }).then(function (isConfirm) {
+            
+            if (isConfirm) {
+                $.ajax({
+                    url: flagsUrl + '/review-pic1-simpan',
+                    method:'POST',
+                    data: {review:catatan_monev,idrekom:idrekomendasi,tgl:tgl_penyelesaian},
+                    success: function (res) {
+                        $('#modaldetailtindaklanjut').modal('hide');
+                        if (res == 1) {
+                            swal({
+                                title: 'Berhasil!',
+                                text: 'Review Tindak Lanjut Berhasil Disimpan',
+                                icon: 'success'
+                            }).then(function () {
+                                $('#table-data-tindaklanjut').load(flagsUrl + '/table-data-tindaklanjut/' + idrekomendasi, function () {
+                                    $('[data-toggle="tooltip"]').tooltip();
+                                });
+                            });
+                        }
+                        else {
+                            swal({
+                                title: 'Gagal!',
+                                text: 'Review Tindak Lanjut Gagal Disimpan',
+                                icon: 'error'
+                            })
+                        }
+                    }
+                });
+            } else {
+
+            }
+        });
+        /*
+        
+        
+        
+        */
+    }
 }

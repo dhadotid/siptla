@@ -11,7 +11,7 @@
                 
 
 
-<div class="row" style="padding:0 10px;margin-top:10px;">
+                <div class="row" style="padding:0 10px;margin-top:10px;">
                     <div class="col-md-12" style="border:1px solid #bbb;border-radius:5px;padding:5px 20px 0px 20px;background:#eee;">
 
                             <h4 style="margin:0px;padding:0px;margin-bottom:10px;">Data Temuan</h4>

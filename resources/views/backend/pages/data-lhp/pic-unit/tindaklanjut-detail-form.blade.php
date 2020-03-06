@@ -5,13 +5,11 @@
 				<h4 class="panel-title">Rangkuman Tindak Lanjut</h4>
 				<i class="fa acc-switch"></i>
 			</a>
-		</div>
+        </div>
+        <input type="hidden" name="idrekomendasi" value="{{$rekom->id}}" id="idrekomendasi">
 		<div id="collapse-rangkuman" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-1" aria-expanded="false" style="height: 0px;">
 			<div class="panel-body">
-                
-
-
-<div class="row" style="padding:0 10px;margin-top:10px;">
+                <div class="row" style="padding:0 10px;margin-top:10px;">
                     <div class="col-md-12" style="border:1px solid #bbb;border-radius:5px;padding:5px 20px 0px 20px;background:#eee;">
 
                             <h4 style="margin:0px;padding:0px;margin-bottom:10px;">Data Temuan</h4>
@@ -143,24 +141,7 @@
                     @endif
                     </div>
                 </div>
-                @if ($rekom->pic2_temuan_2!='')
-                    <div class="row" style="padding:0 10px;" id="monev-pic1">
-                        <div class="col-md-12" style="border:1px solid #bbb;border-radius:5px;padding:5px 20px 0px 20px;margin-top:5px;">
-
-                                <h4 style="margin:0px;padding:0px;margin-bottom:10px;">Catatan Monvev PIC 1</h4>
-                            
-                                <div class="row" style="margin:0px;padding:0px;margin-bottom:10px;">
-                                    <div class="col-md-12" style="margin:0px;padding:0px;margin-bottom:10px;">
-                                        <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
-                                            <div class="col-sm-12">
-                                                <textarea class="fz11" name="catatan_monev" placeholder="Catatan Monev PIC 1" id="catatan_monev"  style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                        </div>
-                    </div>
-                @endif
+                
                 <div class="row" style="padding:0 10px;margin:15px 0 10px">
                     <table id="table-tl-detail" class="table table-bordered table-striped" style="width:100%">
                         <thead>
@@ -231,44 +212,35 @@
 	<div class="panel panel-info">
 		<div class="panel-heading" role="tab" id="heading-2">
 			<a class="accordion-toggle" role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapse-review" aria-expanded="true" aria-controls="collapse-review">
-				<h4 class="panel-title">Form Review SPI</h4>
+				<h4 class="panel-title">Form Review</h4>
 				<i class="fa acc-switch"></i>
 			</a>
 		</div>
 		<div id="collapse-review" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-2" aria-expanded="true">
 			<div class="panel-body">
-                 <div class="row" style="padding:0 10px;" id="monev-pic1">
-                    <div class="col-md-12" style="border:1px solid #bbb;border-radius:5px;padding:5px 20px 0px 20px;margin-top:5px;">
+                <div class="row" style="padding:0 10px;" id="monev-pic1">
+                        <div class="col-md-12" style="border-radius:5px;padding:5px 0px 0px 0px;margin-top:5px;">
 
-                            <h4 style="margin:0px;padding:0px;margin-bottom:10px;">Review SPI</h4>
-                        
-                            <div class="row" style="margin:0px;padding:0px;margin-bottom:10px;">
-                                <div class="col-md-12" style="margin:0px;padding:0px;margin-bottom:10px;">
-                                    <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
-                                        <div class="col-sm-12">
-                                            <textarea class="fz11" name="review_spi" placeholder="" id="review_spi"  style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px"></textarea>
+                                <h4 style="margin:0px;padding:0px;margin-bottom:10px;">Catatan Monev</h4>
+                            
+                                <div class="row" style="margin:0px;padding:0px;margin-bottom:10px;">
+                                    <div class="col-md-12" style="margin:0px;padding:0px;margin-bottom:10px;">
+                                        <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
+                                            <div class="col-sm-12">
+                                                <textarea class="fz11" name="catatan_monev" placeholder="" id="catatan_monev"  style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px"></textarea>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                    </div>
+                        </div>
                 </div>
                 <div class="row" style="margin-top:10px;">
                     <div class="col-md-12">
                         <div class="form-group" style="padding-top:20px;" id="div_status_rekomendasi">
-                            <label for="exampleTextInput1" class="col-sm-2 control-label text-right">Status Rekomendasi :
+                            <label for="exampleTextInput1" class="col-sm-2 control-label text-right">Tanggal Penyelesaian :
                             </label>
                             <div class="col-sm-3">
-                                <select name="status_rekomendasi" class="form-control" data-plugin="select2" id="status_rekomendasi">
-                                    <option value="">-- Pilih --</option>
-                                    @foreach ($status as $key=>$item)
-                                        @if ($item->id==$rekom->status_rekomendasi_id)
-                                            <option value="{{$item->id}}" selected="selected">{{$item->rekomendasi}}</option>
-                                        @else
-                                            <option value="{{$item->id}}">{{$item->rekomendasi}}</option>
-                                        @endif
-                                    @endforeach
-                                </select>
+                                    <input type='date' class="form-control" name="tgl_selesai" id="tgl_selesai" value="{{$rekom->tanggal_penyelesaian}}"/>
                             </div>
                         </div>
                     </div>

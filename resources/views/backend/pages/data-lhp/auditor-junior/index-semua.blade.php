@@ -15,7 +15,7 @@
                     <div class="row">
                         <div class="col-md-2 text-left">Tahun
                             <select name="tahun" id="tahun" class="form-control text-left" data-plugin="select2" onchange="getdata(this.value)" style="width:50%">
-                                @for ($i = (date('Y')-5); $i <= (date('Y')); $i++)
+                                @for ($i = (date('Y')-20); $i <= (date('Y')); $i++)
                                     @if ($tahun==$i)
                                         <option value="{{$i}}" selected="selected"}}>{{$i}}</option>
                                     @else

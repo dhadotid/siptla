@@ -17,7 +17,7 @@
                         <div class="col-md-1 text-right" style="padding-top:10px;">Tahun</div>
                         <div class="col-md-2 text-left">
                             <select name="tahun" id="tahun" class="form-control text-left" onchange="getdata(this.value)" style="width:100%">
-                                @for ($i = date('Y'); $i >= (date('Y')-5); $i--)
+                                @for ($i = date('Y'); $i >= (date('Y')-20); $i--)
                                     @if ($tahun==$i)
                                         <option value="{{$i}}" selected="selected"}}>{{$i}}</option>
                                     @else
@@ -210,18 +210,27 @@
                                                 $tem.='<div class="col-md-11">'.$text_rekom.'</div>';
                                                 $tem.='</div>';
                                                 
-                                                if(isset($gettindaklanjut[$v->id]))
+                                                if($item->publish_pic_1==0)
                                                 {
                                                     $tindak_lanjut.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0">';
-                                                    $tindak_lanjut.='<div class="col-md-12 text-center"><span class="label label-inverse">'.count($gettindaklanjut[$v->id]).'</i></div>';
+                                                    $tindak_lanjut.='<div class="col-md-12 text-center"><span class="label label-danger">0</span></div>';
                                                     $tindak_lanjut.='</div>';
                                                 }
                                                 else
                                                 {
-                                                    $tindak_lanjut.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0">';
-                                                    $tindak_lanjut.='<div class="col-md-12 text-center">&nbsp</div>';
-                                                    $tindak_lanjut.='</div>';
-                                                }  
+                                                    if(isset($gettindaklanjut[$v->id]))
+                                                    {
+                                                        $tindak_lanjut.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0">';
+                                                        $tindak_lanjut.='<div class="col-md-12 text-center"><span class="label label-inverse">'.count($gettindaklanjut[$v->id]).'</span></div>';
+                                                        $tindak_lanjut.='</div>';
+                                                    }
+                                                    else
+                                                    {
+                                                        $tindak_lanjut.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0">';
+                                                        $tindak_lanjut.='<div class="col-md-12 text-center"><span class="label label-danger">0</span></div>';
+                                                        $tindak_lanjut.='</div>';
+                                                    }  
+                                                }
 
                                                 if($v->pic_2_temuan_id!='')
                                                     $pic2.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0;width:150px;"><div class="col-md-12 text-center">'.(isset($pic[$v->pic_2_temuan_id]) ? $$pic[$v->pic_2_temuan_id]->nama_pic : '').'</div></div>';
@@ -246,6 +255,8 @@
                                                     $user_pic=\App\Models\PICUnit::where('id_user',Auth::user()->id)->first();
                                                     $styleaksi='display:none';
                                                     
+                                                    if($item->publish_pic_1==1)
+                                                    {
                                                     $aksi.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
                                                         <div class="btn-group" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
                                                             <button type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
@@ -253,16 +264,16 @@
                                                                 <span class="caret"></span>
                                                             </button>
                                                             <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">
-                                                                <li>
-                                                                    <a href="#" class="btn-add" data-toggle="modal" data-target="#modaltambahtindaklanjut" data-value="'.$v->id_lhp.'__'.$item->id_temuan.'_0__'.$v->id.'_0'.'" style="font-size:11px;"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Tindak Lanjut</a>
-                                                                </li>
+                                                                
                                                                 <li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
 
-                                                                $aksi.='<li><a href="javascript:rangkumantindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Rangkuman Tindak Lanjut</a></li>';
-
-                                                        
                                                         $aksi.='</ul>
                                                         </div></div>';
+                                                    }
+                                                    else
+                                                    {
+                                                        $aksi.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">&nbsp;</div>';
+                                                    }
                                             }
                                         }
                                     @endphp

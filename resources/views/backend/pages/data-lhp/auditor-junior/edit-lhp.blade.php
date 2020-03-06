@@ -46,7 +46,7 @@
             <div class="col-sm-3">
                 <select name="tahun_pemeriksaan" class="form-control" id="edit_tahun_pemeriksaan" data-plugin="select2">
                     <option value="">-- Pilih --</option>
-                    @for ($i = date('Y'); $i >= (date('Y')-10); $i--)
+                    @for ($i = date('Y'); $i >= (date('Y')-20); $i--)
                         @if (date('Y')==$i)
                             <option value="{{$i}}" selected="selected">{{$i}}</option>
                         @else

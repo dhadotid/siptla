@@ -667,19 +667,24 @@ class TindakLanjutController extends Controller
         // $rekomendasi=DataRekomendasi::whereIn('id_temuan',$arrayidtemuan)->get();
         
         
-        $drekomendasi=$drekom=array();
+        $drekomendasi=$drekom=$rkm_idx=array();
         foreach($rekomendasi as $k=>$v)
         {
             // if($v->dtemuan->id_lhp==$idlhp)
                 $drekomendasi[$k]=$v;
                 $drekom[$v->id]=$v;
+                $rkm_idx[$v->id]=$k;
         }
         // return $drekomendasi[$rekom_idx];
         // return $drekomendasi;
         if($idrekom==null)
             $rrekom=isset($drekomendasi[$rekom_idx]) ? $drekomendasi[$rekom_idx] : array();
         else
+        {
             $rrekom=isset($drekom[$idrekom]) ? $drekom[$idrekom] : array();
+            $rekom_idx=$rkm_idx[$idrekom];
+            // return $rkm_idx;
+        }
 
         return view('backend.pages.data-lhp.pic-unit.tindaklanjut-form')
                         ->with('rekomendasi',$rrekom)

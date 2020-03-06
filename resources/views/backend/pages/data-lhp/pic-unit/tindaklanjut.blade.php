@@ -216,9 +216,9 @@
                                                 }
 
                                                 if($v->pic_2_temuan_id!='')
-                                                    $pic2.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0;width:150px;"><div class="col-md-12 text-center">'.(isset($pic[$v->pic_2_temuan_id]) ? $$pic[$v->pic_2_temuan_id]->nama_pic : '').'</div></div>';
+                                                    $pic2.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0;width:150px;"><div class="col-md-12 text-center">'.(isset($pic[$v->pic_2_temuan_id]) ? $pic[$v->pic_2_temuan_id]->nama_pic : '').'</div></div>';
                                                 else
-                                                    $pic2.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0;width:150px;"><div class="col-md-12 text-center">'.(isset($pic[$v->pic_2_temuan_id]) ? $$pic[$v->pic_2_temuan_id]->nama_pic : '-').'</div></div>';
+                                                    $pic2.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0;width:150px;"><div class="col-md-12 text-center">'.(isset($pic[$v->pic_2_temuan_id]) ? $pic[$v->pic_2_temuan_id]->nama_pic : '-').'</div></div>';
 
                                                 $tgl.='<div style="height:60px;"  id="tgl_penyelesaian_'.$item->id_temuan.'_'.$v->id.'">';
                                                 if($v->tanggal_penyelesaian!='')

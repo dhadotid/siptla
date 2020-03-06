@@ -62,7 +62,19 @@
                 <div class="col-md-10" style="margin:0px;padding:0px;margin-bottom:10px;">
                     <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
                         <div class="col-sm-12">
-                            <textarea type="text" class="fz11" name="action_plan_pic1" placeholder="Action Plan PIC 1" id="action_plan_pic1" readonly style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px"></textarea>
+                            {{-- <textarea type="text" class="fz11" name="action_plan_pic1" placeholder="Action Plan PIC 1" id="action_plan_pic1" readonly style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px"> --}}
+                            <div style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px;font-size:11px !important;">    
+                                @php
+                                if(isset($pic1['action_plan']))
+                                {
+                                    foreach($pic1['action_plan'] as $k=>$v)
+                                    {
+                                        echo ($v);
+                                    }
+                                }
+                                @endphp
+                            </div>
+                            {{-- </textarea> --}}
                         </div>
                     </div>
                 </div>
@@ -95,7 +107,19 @@
                     <div class="col-md-10" style="margin:0px;padding:0px;margin-bottom:10px;">
                         <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
                             <div class="col-sm-12">
-                                <textarea type="text" class="fz11" name="action_plan_pic2" placeholder="Action Plan PIC 2" id="action_plan_pic1" readonly style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px"></textarea>
+                                {{-- <textarea type="text" class="fz11" name="action_plan_pic2" placeholder="Action Plan PIC 2" id="action_plan_pic1" readonly style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px"> --}}
+                                <div style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px;font-size:11px !important;">   
+                                    @php
+                                    if(isset($pic2['action_plan']))
+                                    {
+                                        foreach($pic2['action_plan'] as $k=>$v)
+                                        {
+                                            echo $v;
+                                        }
+                                    }
+                                    @endphp    
+                                </div>
+                                {{-- </textarea> --}}
                             </div>
                         </div>
                     </div>
@@ -132,9 +156,58 @@
                 <th>Unit Kerja</th>
                 <th>Tanggal</th>
                 <th>Tindak Lanjut</th>
-                <th>Dokumen Pendukung</th>
+                <th>Dokumen<br>Pendukung</th>
             </tr>
         </thead>
+        <tbody>
+            @php
+                $no=1;
+            @endphp
+            @if (isset($pic1['tindak_lanjut']))
+                @foreach ($pic1['tindak_lanjut'] as $item)
+                    <tr>
+                        <td class="text-center">{{$no}}</td>
+                        <td class="text-left">
+                            {{(isset($pic[$item->pic_1_id]) ? $pic[$item->pic_1_id]->nama_pic : '')}} 
+                        </td>
+                        <td style="width:100px;">{{tgl_indo($item->tgl_tindaklanjut)}}</td>
+                        <td>{{($item->tindak_lanjut)}}</td>
+                        <td class="text-center" style="width:60px;">
+                            @if (isset($dokumen[$item->id]))
+                                <a data-toggle="tooltip" class="btn btn-xs btn-success" style="height:25px;" target="_blank" title="Lihat Dokumen Pendukung" href="{{url('read-file/'.$dokumen[$item->id]->path)}}"><i class="fa fa-search"></i></a>    
+                            @else
+                                -
+                            @endif
+                        </td>
+                    </tr>
+                @php
+                    $no++;
+                @endphp
+                @endforeach
+            @endif
+            @if (isset($pic2['tindak_lanjut']))
+                @foreach ($pic2['tindak_lanjut'] as $item)
+                    <tr>
+                        <td class="text-center">{{$no}}</td>
+                        <td class="text-left">
+                            {{(isset($pic[$item->pic_2_id]) ? $pic[$item->pic_2_id]->nama_pic : '')}} 
+                        </td>
+                        <td style="width:100px;">{{tgl_indo($item->tgl_tindaklanjut)}}</td>
+                        <td>{{($item->tindak_lanjut)}}</td>
+                        <td class="text-center" style="width:60px;">
+                            @if (isset($dokumen[$item->id]))
+                                <a data-toggle="tooltip" class="btn btn-xs btn-success" style="height:25px;" target="_blank" title="Lihat Dokumen Pendukung" href="{{url('read-file/'.$dokumen[$item->id]->path)}}"><i class="fa fa-search"></i></a>    
+                            @else
+                                -
+                            @endif
+                        </td>
+                    </tr>
+                @php
+                    $no++;
+                @endphp
+                @endforeach
+            @endif
+        </tbody>
     </table>
 </div>
 <div class="row" style="padding:0 10px;" id="monev-pic1">

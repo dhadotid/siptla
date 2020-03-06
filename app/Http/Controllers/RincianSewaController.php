@@ -139,15 +139,24 @@ class RincianSewaController extends Controller
         $idtindaklanjut=0;
         if(isset($request->tindak_lanjut))
         {
+            $user_pic=PICUnit::where('id_user',Auth::user()->id)->first();
             $rekom=DataRekomendasi::where('id',$request->idrekomendasi)->with('dtemuan')->first();
+
             $tindaklanjut=new TindakLanjutTemuan;
             $tindaklanjut->lhp_id = 
             $tindaklanjut->temuan_id = $request->idtemuan;
             $tindaklanjut->rekomendasi_id = $request->idrekomendasi;
             $tindaklanjut->rangkuman = $request->tindak_lanjut;
             $tindaklanjut->rincian = $request->jenis;
-            $tindaklanjut->pic_1_id = $rekom->pic_1_temuan_id;
-            $tindaklanjut->pic_2_id = $rekom->pic_2_temuan_id;
+
+            if($user_pic)
+            {
+                if($rekom->pic_1_temuan_id==$user_pic->id)
+                    $tindaklanjut->pic_1_id = $rekom->pic_1_temuan_id;
+                
+                if($rekom->pic_2_temuan_id==$user_pic->id)
+                    $tindaklanjut->pic_2_id = $rekom->pic_2_temuan_id;
+            }
             $tindaklanjut->save();
             
             $idtindaklanjut=$tindaklanjut->id;

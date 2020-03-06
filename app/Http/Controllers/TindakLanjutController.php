@@ -55,6 +55,8 @@ class TindakLanjutController extends Controller
     {
         // dd($request);
         $rekom=DataRekomendasi::where('id',$idrekom)->with('dtemuan')->first();
+        $user_pic=PICUnit::where('id_user',Auth::user()->id)->first();
+        
         $idlhp=0;
         if(isset($rekom->dtemuan->id_lhp))
             $idlhp=$rekom->dtemuan->id_lhp;
@@ -74,8 +76,16 @@ class TindakLanjutController extends Controller
         $tindak->lhp_id = $idlhp;
         $tindak->temuan_id = $idtemuan;
         $tindak->rekomendasi_id = $idrekom;
-        $tindak->pic_1_id = $rekom->pic_1_temuan_id;
-        $tindak->pic_2_id = $rekom->pic_2_temuan_id;
+        if($user_pic)
+        {
+            if($rekom->pic_1_temuan_id==$user_pic->id)
+                $tindak->pic_1_id = $rekom->pic_1_temuan_id;
+            
+            if($rekom->pic_2_temuan_id==$user_pic->id)
+                $tindak->pic_2_id = $rekom->pic_2_temuan_id;
+        }
+        // $tindak->pic_1_id = $rekom->pic_1_temuan_id;
+        // $tindak->pic_2_id = $rekom->pic_2_temuan_id;
         $tindak->tindak_lanjut = $tindaklanjut;
         $tindak->nilai = $nilai_tindaklanjut;
         $c=$tindak->save();
@@ -274,17 +284,26 @@ class TindakLanjutController extends Controller
                                 ->orderBy('data_rekomendasi.nomor_rekomendasi')
                                 ->get();
 
-        $lhp=$temuan=$rekomendasi=array();
+        $lhp=$temuan=$rekomendasi=$arrayrekomid=array();
         foreach($alldata as $k=>$v)
         {
             $lhp[$v->id_lhp]=$v;
             $temuan[$v->id_temuan]=$v;
             $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
+            $arrayrekomid[$v->id_rekom]=$v->id_rekom;
         }
-        // return $temuan;
+
+        $get_tl=TindakLanjutTemuan::whereIn('rekomendasi_id',$arrayrekomid)->get();
+        $tindaklanjut=array();
+        foreach($get_tl as $k=>$v)
+        {
+            $tindaklanjut[$v->rekomendasi_id][]=$v;
+        }
+        // return $tindaklanjut;
         return view('backend.pages.data-lhp.auditor-junior.tindaklanjut')
                 ->with('tahun',$tahun)
                 ->with('rekomid',$rekomid)
+                ->with('gettindaklanjut',$tindaklanjut)
                 ->with('temuanid',$temuanid)
                 ->with('alldata',$alldata)
                 ->with('pic',$pic)
@@ -360,17 +379,26 @@ class TindakLanjutController extends Controller
                                 ->orderBy('data_rekomendasi.nomor_rekomendasi')
                                 ->get();
 
-        $lhp=$temuan=$rekomendasi=array();
+        $lhp=$temuan=$rekomendasi=$arrayrekomid=array();
         foreach($alldata as $k=>$v)
         {
             $lhp[$v->id_lhp]=$v;
             $temuan[$v->id_temuan]=$v;
             $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
+            $arrayrekomid[$v->id_rekom]=$v->id_rekom;
+        }
+
+        $get_tl=TindakLanjutTemuan::whereIn('rekomendasi_id',$arrayrekomid)->get();
+        $tindaklanjut=array();
+        foreach($get_tl as $k=>$v)
+        {
+            $tindaklanjut[$v->rekomendasi_id][]=$v;
         }
         // return $rekomendasi;
         return view('backend.pages.data-lhp.pic-unit.tindaklanjut')
                 ->with('tahun',$tahun)
                 ->with('rekomid',$rekomid)
+                ->with('gettindaklanjut',$tindaklanjut)
                 ->with('temuanid',$temuanid)
                 ->with('alldata',$alldata)
                 ->with('pic',$pic)
@@ -671,6 +699,8 @@ class TindakLanjutController extends Controller
     {
         // return $request->all();
         $rekom=DataRekomendasi::where('id',$request->rekomendasi_id)->with('dtemuan')->first();
+        $user_pic=PICUnit::where('id_user',Auth::user()->id)->first();
+        
         $tindaklanjut=new TindakLanjutTemuan;
         $tindaklanjut->lhp_id = $request->idlhp;
         $tindaklanjut->temuan_id = $request->temuan_id;
@@ -679,8 +709,16 @@ class TindakLanjutController extends Controller
         $tindaklanjut->rincian = $request->jenis;
         $tindaklanjut->action_plan = $request->action_plan;
         $tindaklanjut->tgl_tindaklanjut = $request->tgl_tindak_lanjut;
-        $tindaklanjut->pic_1_id = $rekom->pic_1_temuan_id;
-        $tindaklanjut->pic_2_id = $rekom->pic_2_temuan_id;
+        if($user_pic)
+        {
+            if($rekom->pic_1_temuan_id==$user_pic->id)
+                $tindaklanjut->pic_1_id = $rekom->pic_1_temuan_id;
+            
+            if($rekom->pic_2_temuan_id==$user_pic->id)
+                $tindaklanjut->pic_2_id = $rekom->pic_2_temuan_id;
+                // $tindaklanjut->pic_1_id = $rekom->pic_1_temuan_id;
+                // $tindaklanjut->pic_2_id = $rekom->pic_2_temuan_id;
+        }
         $sv=$tindaklanjut->save();
 
         $idtindaklanjut=$tindaklanjut->id;
@@ -979,14 +1017,26 @@ class TindakLanjutController extends Controller
             // $dokumen->save();
         }
         $rekommm=DataRekomendasi::where('id',$request->id_rekomendasi)->with('dtemuan')->first();
+        $user_pic=PICUnit::where('id_user',Auth::user()->id)->first();
+        
         $insert=new TindakLanjutRincian;
         $insert->id_temuan = $rincian->id_temuan;
         $insert->id_rekomendasi = $rincian->id_rekomendasi;
         $insert->unit_kerja_id = $rincian->unit_kerja_id;
         $insert->id_tindak_lanjut = $request->idform;
         $insert->dokumen_pendukung = $path;
-        $insert->pic_1_id = $rekommm->pic_1_temuan_id;
-        $insert->pic_2_id = $rekommm->pic_2_temuan_id;
+
+        if($user_pic)
+        {
+            if($rekommm->pic_1_temuan_id==$user_pic->id)
+                $insert->pic_1_id = $rekom->pic_1_temuan_id;
+            
+            if($rekommm->pic_2_temuan_id==$user_pic->id)
+                $insert->pic_2_id = $rekom->pic_2_temuan_id;
+                
+                // $insert->pic_1_id = $rekommm->pic_1_temuan_id;
+                // $insert->pic_2_id = $rekommm->pic_2_temuan_id;
+        }
 
         if($jenis=='kontribusi' || $jenis=='sewa' || $jenis=='listrik' || $jenis=='piutang' || $jenis=='piutangkaryawan' || $jenis=='hutangtitipan')
         {
@@ -1188,8 +1238,42 @@ class TindakLanjutController extends Controller
         $rekom=DataRekomendasi::where('id',$idrekomendasi)->with('picunit1')->with('picunit2')->first();
         // return $rekom;
         $status=StatusRekomendasi::all();
+        $picunit=PICUNit::all();
+        $pic=$user_pic=array();
+        foreach($picunit as $k=>$v){
+            $pic[$v->id]=$v;
+        }
+
+        $d_tindaklanjut=TindakLanjutTemuan::where('rekomendasi_id',$idrekomendasi)->orderBy('tgl_tindaklanjut')->get();
+        $pic1=$pic2=$arrayidtl=array();
+        foreach($d_tindaklanjut as $k=>$v)
+        {
+            if($v->pic_1_id!=0)
+            {
+                $pic1['tindak_lanjut'][]=$v;
+                $pic1['action_plan'][]=$v->action_plan;
+
+            }
+            if($v->pic_2_id!=0)
+            {
+                $pic2['tindak_lanjut'][]=$v;
+                $pic2['action_plan'][]=$v->action_plan;
+            }
+            $arrayidtl[$v->id]=$v->id;
+        }
+
+        $dok=DokumenTindakLanjut::whereIn('id_tindak_lanjut_temuan',$arrayidtl)->get();
+        $dokumen=array();
+        foreach($dok as $k=>$v)
+        {
+            $dokumen[$v->id_tindak_lanjut_temuan]=$v;
+        }
         return view('backend.pages.data-lhp.auditor-junior.tindaklanjut-detail-form')
                 ->with('rekom',$rekom)
+                ->with('dokumen',$dokumen)
+                ->with('pic',$pic)
+                ->with('pic1',$pic1)
+                ->with('pic2',$pic2)
                 ->with('status',$status)
                 ->with('id_rekomendasi',$idrekomendasi);
     }

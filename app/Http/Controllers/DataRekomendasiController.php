@@ -1004,6 +1004,19 @@ class DataRekomendasiController extends Controller
         return $rekom;
     }
 
+    public function rekomendasi_by_temuan_select($idtemuan)
+    {
+        $rekom=DataRekomendasi::where('id_temuan',$idtemuan)->get();
+        $select ='<select class="select2 form-control" name="no_rekomendasi" id="no_rekomendasi" onchange="loaddata()">';
+        $select.='<option value="">-Pilih-</option>';
+        foreach($rekom as $v)
+        {
+            $select.='<option value="'.$v->id.'">'.$v->nomor_rekomendasi.' - '.$v->rekomendasi.'</option>';
+        }
+        $select.='</select>';
+        return $select;
+    }
+
     public function rincian_nilai($idrekom)
     {
         $rekom=DataRekomendasi::find($idrekom);

@@ -1276,4 +1276,15 @@ class DataRekomendasiController extends Controller
 
         echo $table;
     }
+
+    public function publish_rekomendasi_to_auditor_junior($idrekomendasi)
+    {
+        $rekom=DataRekomendasi::find($idrekomendasi);
+        $rekom->publish_pic_1=1;
+        $c=$rekom->save();
+        if($c)
+            echo 1;
+        else
+            echo 0;
+    }
 }

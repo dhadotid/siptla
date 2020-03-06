@@ -1282,4 +1282,48 @@ class TindakLanjutController extends Controller
                 ->with('status',$status)
                 ->with('id_rekomendasi',$idrekomendasi);
     }
+    public function detail_tindaklanjut_pic1($idrekomendasi)
+    {
+        $rekom=DataRekomendasi::where('id',$idrekomendasi)->with('picunit1')->with('picunit2')->first();
+        // return $rekom;
+        $status=StatusRekomendasi::all();
+        $picunit=PICUNit::all();
+        $pic=$user_pic=array();
+        foreach($picunit as $k=>$v){
+            $pic[$v->id]=$v;
+        }
+
+        $d_tindaklanjut=TindakLanjutTemuan::where('rekomendasi_id',$idrekomendasi)->orderBy('tgl_tindaklanjut')->get();
+        $pic1=$pic2=$arrayidtl=array();
+        foreach($d_tindaklanjut as $k=>$v)
+        {
+            if($v->pic_1_id!=0)
+            {
+                $pic1['tindak_lanjut'][]=$v;
+                $pic1['action_plan'][]=$v->action_plan;
+
+            }
+            if($v->pic_2_id!=0)
+            {
+                $pic2['tindak_lanjut'][]=$v;
+                $pic2['action_plan'][]=$v->action_plan;
+            }
+            $arrayidtl[$v->id]=$v->id;
+        }
+
+        $dok=DokumenTindakLanjut::whereIn('id_tindak_lanjut_temuan',$arrayidtl)->get();
+        $dokumen=array();
+        foreach($dok as $k=>$v)
+        {
+            $dokumen[$v->id_tindak_lanjut_temuan]=$v;
+        }
+        return view('backend.pages.data-lhp.pic-unit.tindaklanjut-detail-form')
+                ->with('rekom',$rekom)
+                ->with('dokumen',$dokumen)
+                ->with('pic',$pic)
+                ->with('pic1',$pic1)
+                ->with('pic2',$pic2)
+                ->with('status',$status)
+                ->with('id_rekomendasi',$idrekomendasi);
+    }
 }

@@ -272,7 +272,14 @@
                                                     }
                                                     else
                                                     {
-                                                        $aksi.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">&nbsp;</div>';
+                                                        $aksi.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
+                                                            <div class="btn-group">
+                                                                <button type="button" disabled class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
+                                                                <button type="button" disabled class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
+                                                                    <span class="caret"></span>
+                                                                </button>
+                                                            </div>
+                                                        </div>';
                                                     }
                                             }
                                         }

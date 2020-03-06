@@ -795,3 +795,58 @@ function rangkumantindaklanjut(idrekomendasi)
 {
     $('#rangkuman-tindaklanjut-rekomendasi').modal('show');
 }
+
+function publishpic1(idrekomendasi)
+{
+    swal({
+        title: "Apakah Anda Yakin ?",
+        text: "Ingin Mempublish Rekomendasi Ini Ke Auditor ?",
+        icon: "warning",
+        buttons: [
+            'Tidak!',
+            'Ya, Publish'
+        ],
+        dangerMode: true,
+    }).then(function (isConfirm) {
+        if (isConfirm) {
+            $.ajax({
+                url: flagsUrl + '/publish-rekomendasi-to-auditor-junior/' + tl_id,
+                success: function (res) {
+                    if (res == 1) {
+                        swal({
+                            title: 'Berhasil!',
+                            text: 'Publish Rekomendasi Berhasil',
+                            icon: 'success'
+                        }).then(function () {
+                            $('#table-data-tindaklanjut').load(flagsUrl + '/table-data-tindaklanjut/' + idrekomendasi, function () {
+                                $('[data-toggle="tooltip"]').tooltip();
+                            });
+                        });
+                    }
+                    else {
+                        swal({
+                            title: 'Gagal!',
+                            text: 'Publish Rekomendasi Tidak Berhasil',
+                            icon: 'error'
+                        })
+                    }
+                }
+            });
+        } else {
+
+        }
+    });
+}
+
+function reviewtindaklanjut(idrekomendasi) {
+    $('#form-detail-tindaklanjut').load(flagsUrl + '/detail-tindaklanjut-pic1/' + idrekomendasi, function () {
+        // var catatan_monev = document.getElementById('catatan_monev');
+        // var review_spi = document.getElementById('review_spi');
+        // alert(catatan_monev)
+        // CKEDITOR.replace('catatan_monev');
+        CKEDITOR.replace('review_spi');
+        $('#table-tl-detail').DataTable();
+        $('#status_rekomendasi').select2()
+    });
+    $('#modaldetailtindaklanjut').modal('show');
+}

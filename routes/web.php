@@ -76,7 +76,9 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('rekomendasi-by-temuan/{idtemuan}/{status?}','DataRekomendasiController@rekomendasi_by_temuan')->name('rekomendasi.by-temuan');
     Route::get('rincian-nilai-rekom/{idrekom}','DataRekomendasiController@rincian_nilai');
     Route::get('rekomendasi-by-temuan-select/{idtemuan}','DataRekomendasiController@rekomendasi_by_temuan_select')->name('rekomendasi.by-temuan');
-    
+    Route::get('publish-rekomendasi-to-auditor-junior/{idrekomendasi}','DataRekomendasiController@publish_rekomendasi_to_auditor_junior');
+
+
     Route::get('load-table-rincian/{jenis}/{idtemuan?}/{statusrekomendasi?}/{view?}','DataRekomendasiController@load_tabel_rincian');
     Route::get('load-table-rincian-unitkerja/{jenis}/{idtemuan?}/{statusrekomendasi?}/{view?}','DataRekomendasiController@load_tabel_rincian_unitkerja');
     Route::get('form-rincian/{jenis}/{idtemuan?}/{idrekomendasi?}/{id?}/{pic1?}/{pic2?}','RincianSewaController@form_rincian');
@@ -100,6 +102,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('hapus-tindak-lanjut/{idtl}','TindakLanjutController@hapus_tindak_lanjut');
     
     Route::get('detail-tindaklanjut-junior/{idrekom}','TindakLanjutController@detail_tindaklanjut_junior');
+    Route::get('detail-tindaklanjut-pic1/{idrekom}','TindakLanjutController@detail_tindaklanjut_junior');
     
     Route::get('form-tindaklanjut-rincian/{idrincian}/{jenis}','TindakLanjutController@form_tindaklanjut_rincian');
     Route::get('list-tindaklanjut-rincian/{idrincian}/{jenis}/{idtl?}','TindakLanjutController@list_tindaklanjut_rincian');

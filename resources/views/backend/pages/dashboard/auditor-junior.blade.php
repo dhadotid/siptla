@@ -24,7 +24,7 @@
 					<span class="pull-right fz-lg fw-500 counter" style="height:68px;padding-top:15px;">
 						Tahun&nbsp;&nbsp;
 						<select class="form-control pull-right" name="tahun" id="tahun" style="width:200px;" onchange="location.href='{{url('dashboard')}}/'+this.value">
-							@for($thn=date('Y');$thn>=(date('Y')-6);$thn--)
+							@for($thn=date('Y');$thn>=(date('Y')-20);$thn--)
 								@if ($thn==$tahun)
 									<option value="{{$thn}}" selected="selected" style="text-align:right">{{$thn}}</option>
 								@else

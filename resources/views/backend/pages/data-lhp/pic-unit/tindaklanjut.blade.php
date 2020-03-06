@@ -16,8 +16,8 @@
                         </div>
                         <div class="col-md-1 text-right" style="padding-top:10px;">Tahun</div>
                         <div class="col-md-2 text-left">
-                            <select name="tahun" id="tahun" class="form-control text-left" data-plugin="select2" onchange="getdata(this.value)" style="width:50%">
-                                @for ($i = date('Y'); $i >= (date('Y')-5); $i--)
+                            <select name="tahun" id="tahun" class="form-control text-left" onchange="getdata(this.value)" style="width:100%">
+                                @for ($i = date('Y'); $i >= (date('Y')-20); $i--)
                                     @if ($tahun==$i)
                                         <option value="{{$i}}" selected="selected"}}>{{$i}}</option>
                                     @else
@@ -193,19 +193,27 @@
                                                 $tem.='<div class="col-md-11">'.$v->rekomendasi.'</div>';
                                                 $tem.='</div>';
                                                 
-                                                
-                                                if(isset($gettindaklanjut[$v->id]))
+                                                if($item->publish_pic_2==0 && $item->pic_2_temuan_id!='')
                                                 {
                                                     $tindak_lanjut.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0">';
-                                                    $tindak_lanjut.='<div class="col-md-12 text-center"><span class="label label-inverse">'.count($gettindaklanjut[$v->id]).'</i></div>';
+                                                    $tindak_lanjut.='<div class="col-md-12 text-center"><span class="label label-danger">0</span></div>';
                                                     $tindak_lanjut.='</div>';
                                                 }
                                                 else
                                                 {
-                                                    $tindak_lanjut.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0">';
-                                                    $tindak_lanjut.='<div class="col-md-12 text-center">&nbsp</div>';
-                                                    $tindak_lanjut.='</div>';
-                                                }  
+                                                    if(isset($gettindaklanjut[$v->id]))
+                                                    {
+                                                        $tindak_lanjut.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0">';
+                                                        $tindak_lanjut.='<div class="col-md-12 text-center"><span class="label label-inverse">'.count($gettindaklanjut[$v->id]).'</i></div>';
+                                                        $tindak_lanjut.='</div>';
+                                                    }
+                                                    else
+                                                    {
+                                                        $tindak_lanjut.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0">';
+                                                        $tindak_lanjut.='<div class="col-md-12 text-center">&nbsp</div>';
+                                                        $tindak_lanjut.='</div>';
+                                                    }  
+                                                }
 
                                                 if($v->pic_2_temuan_id!='')
                                                     $pic2.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0;width:150px;"><div class="col-md-12 text-center">'.(isset($pic[$v->pic_2_temuan_id]) ? $$pic[$v->pic_2_temuan_id]->nama_pic : '').'</div></div>';
@@ -259,6 +267,11 @@
                                                         }
                                                     }
 
+                                                if($item->publish_pic_2==0 && $item->pic_2_temuan_id!='')
+                                                {
+                                                    $aksi.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">&nbsp;</div>';
+                                                }
+                                                else{
                                                     $aksi.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
                                                         <div class="btn-group" style="'.$styleaksi.'" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
                                                             <button type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
@@ -280,6 +293,7 @@
                                                         }
                                                         $aksi.='</ul>
                                                         </div></div>';
+                                                }
                                             }
                                         }
                                     @endphp

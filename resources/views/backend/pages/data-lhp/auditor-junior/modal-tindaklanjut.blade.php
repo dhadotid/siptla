@@ -13,7 +13,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
-                        <button type="button" data-dismiss="modal" class="btn btn-success"><i class="fa fa-save"></i> Simpan</button>
+                        <button type="button" data-dismiss="modal" class="btn btn-success"><i class="fa fa-save"></i> Publish</button>
                         <button type="button" data-dismiss="modal" class="btn btn-info"><i class="fa fa-file"></i> Draft</button>
                         
                     </div>

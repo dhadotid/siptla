@@ -19,7 +19,7 @@
                                 <label for="exampleTextInput1" class="col-sm-4 control-label">Tahun Pemeriksaan</label>
                                 <div class="col-sm-3">
                                     <select name="tahun" id="tahun" class="form-control text-left select2" data-plugin="select2" >
-                                        @for ($i = (date('Y')-5); $i <= (date('Y')); $i++)
+                                        @for ($i = (date('Y')-20); $i <= (date('Y')); $i++)
                                             <option value="{{$i}}" {{date('Y')==$i ? 'selected="selected"' : ''}}>{{$i}}</option>
                                         @endfor
                                     </select>

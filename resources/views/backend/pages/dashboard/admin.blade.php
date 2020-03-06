@@ -24,7 +24,7 @@
 					<span class="pull-right fz-lg fw-500 counter" style="height:68px;padding-top:15px;">
 						Tahun&nbsp;&nbsp;
 						<select class="form-control pull-right" name="tahun" id="tahun" style="width:200px;">
-							@for($thn=date('Y');$thn>=(date('Y')-6);$thn--)
+							@for($thn=date('Y');$thn>=(date('Y')-20);$thn--)
 								<option value="{{$thn}}" style="text-align:right">{{$thn}}</option>
 							@endfor
 						</select>

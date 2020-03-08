@@ -1,14 +1,4 @@
-<div class="panel-group accordion" id="accordion" role="tablist" aria-multiselectable="true"  style="border:1px solid #eee;">
-	<div class="panel panel-info">
-		<div class="panel-heading" role="tab" id="heading-1">
-			<a class="accordion-toggle collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-rangkuman" aria-expanded="false" aria-controls="collapse-rangkuman">
-				<h4 class="panel-title">Rangkuman Tindak Lanjut</h4>
-				<i class="fa acc-switch"></i>
-			</a>
-        </div>
-        <input type="hidden" name="idrekomendasi" value="{{$rekom->id}}" id="idrekomendasi">
-		<div id="collapse-rangkuman" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-1" aria-expanded="false" style="height: 0px;">
-			<div class="panel-body">
+
                 <div class="row" style="padding:0 10px;margin-top:10px;">
                     <div class="col-md-12" style="border:1px solid #bbb;border-radius:5px;padding:5px 20px 0px 20px;background:#eee;">
 
@@ -142,7 +132,7 @@
                     </div>
                 </div>
                 
-                <div class="row" style="padding:0 10px;margin:15px 0 10px">
+                <div class="row" style="padding:0;margin:5px 0px 10px 0px">
                     <table id="table-tl-detail" class="table table-bordered table-striped" style="width:100%">
                         <thead>
                             <tr>
@@ -204,63 +194,4 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-        </div>
-	</div>
-</div>
-<div class="panel-group accordion" id="accordion2" role="tablist" aria-multiselectable="true"  style="border:1px solid #eee;">
-	<div class="panel panel-info">
-		<div class="panel-heading" role="tab" id="heading-2">
-			<a class="accordion-toggle" role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapse-review" aria-expanded="true" aria-controls="collapse-review">
-				<h4 class="panel-title">Form Review</h4>
-				<i class="fa acc-switch"></i>
-			</a>
-		</div>
-		<div id="collapse-review" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-2" aria-expanded="true">
-			<div class="panel-body">
-                <div class="row" style="padding:0 10px;" id="monev-pic1">
-                        <div class="col-md-12" style="border-radius:5px;padding:5px 0px 0px 0px;margin-top:5px;">
-
-                                @if ($rekom->publish_pic_1==1)
-                                    <h4 style="margin:0px;padding:0px;margin-bottom:10px;">Catatan Monev
-                                    &nbsp;<span class="text-info"><i>(Sudah Publish Ke Auditor Junior)</i></span>
-                                    </h4>
-                                @else
-                                    <h4 style="margin:0px;padding:0px;margin-bottom:10px;">Catatan Monev</h4>
-                                @endif
-                            
-                                <div class="row" style="margin:0px;padding:0px;margin-bottom:10px;">
-                                    <div class="col-md-12" style="margin:0px;padding:0px;margin-bottom:10px;">
-                                        <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
-                                            <div class="col-sm-12">
-                                                @if ($rekom->publish_pic_1==1)
-                                                   <textarea class="fz11" name="catatan_monev" placeholder="" id="catatan_monev"  style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px" readonly>{{$rekom->review_monev}}</textarea>
-                                                @else
-                                                    <textarea class="fz11" name="catatan_monev" placeholder="" id="catatan_monev"  style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px">{{$rekom->review_monev}}</textarea>
-                                                @endif
-                                                
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                        </div>
-                </div>
-                <div class="row" style="margin-top:10px;">
-                    <div class="col-md-12">
-                        <div class="form-group" style="padding-top:20px;" id="div_status_rekomendasi">
-                            <label for="exampleTextInput1" class="col-sm-2 control-label text-right">Tanggal Penyelesaian :
-                            </label>
-                            <div class="col-sm-3">
-                                @if ($rekom->publish_pic_1==1)
-                                    <input type='date' class="form-control" name="tgl_selesai" id="tgl_selesai" value="{{$rekom->tanggal_penyelesaian}}" readonly/>
-                                @else
-                                    <input type='date' class="form-control" name="tgl_selesai" id="tgl_selesai" value="{{$rekom->tanggal_penyelesaian}}"/>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-	</div>
-</div>
+            

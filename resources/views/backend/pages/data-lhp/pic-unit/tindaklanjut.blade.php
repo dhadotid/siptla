@@ -261,7 +261,7 @@
                                                 }
                                                 
 
-                                                if($v->pic_2_temuan_id!='')
+                                                if($v->pic_2_temuan_id!='' && $v->pic_2_temuan_id!=',')
                                                 {
                                                     $listpic2=explode(',', $v->pic_2_temuan_id);
                                                     // print_r($listpic2);
@@ -337,7 +337,7 @@
                                                         }
                                                     }
 
-                                                if($item->publish_pic_2==0 && $item->pic_2_temuan_id!='')
+                                                if($item->publish_pic_2==0 && $item->pic_2_temuan_id!='' && $item->pic_2_temuan_id!=',')
                                                 {
                                                     if(in_array($user_pic->id,$listpic2))
                                                     {

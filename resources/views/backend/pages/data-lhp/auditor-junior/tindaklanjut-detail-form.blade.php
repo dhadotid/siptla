@@ -146,6 +146,20 @@
                                     </div>
                                 
                                 </div>
+                                <div class="row" style="padding:0 10px;">
+                                    <div class="col-md-12" style="border-radius:5px;padding:5px 0px 0px 0px;margin-top:5px;">
+                                            <h4 style="margin:0px;padding:0px;margin-bottom:10px;">Catatan Monev</h4>
+                                            <div class="row" style="margin:0px;padding:0px;margin-bottom:10px;">
+                                                <div class="col-md-12" style="margin:0px;padding:0px;margin-bottom:10px;">
+                                                    <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
+                                                        <div class="col-sm-12">
+                                                                <textarea class="fz11" name="catatan_monev" placeholder="" id="catatan_monev"  style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px">{{$rekom->review_monev}}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
                             </div>
 
                     @endif

@@ -20,7 +20,7 @@
                     @if (in_array($item->lhp_id,$arraylhp))
                         <tr>
                             <td class="text-center">{{ ($key + 1) }}</td>
-                            <td class="text-center">
+                            <td class="text-left">
                                 {{$item->no_lhp}}
                                 {{-- <small style="font-size:10px;"><em>Nomor LHP :</em></small><br> --}}
                             </td>
@@ -57,10 +57,10 @@
                                 @endif --}}
                                 
                             </td>
-                            <td class="text-align:center"  style="width:70px;">
+                            <td class="text-align:center"  style="width:80px;">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-bars"></i></button>
-                                    <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
+                                    <button type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
+                                    <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
@@ -104,7 +104,7 @@
                 @else
                     <tr>
                         <td class="text-center">{{ ($key + 1) }}</td>
-                        <td class="text-center">
+                        <td class="text-left">
                             {{$item->no_lhp}}
                             {{-- <small style="font-size:10px;"><em>Nomor LHP :</em></small><br> --}}
                         </td>
@@ -142,10 +142,10 @@
                             @endif --}}
                             
                         </td>
-                        <td class="text-align:center;" style="width:70px;">
+                        <td class="text-align:center;" style="width:80px;">
                             <div class="btn-group"> 
-                                <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-bars"></i></button>
-                                <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
+                                <button type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
+                                <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu" role="menu">

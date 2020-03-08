@@ -186,8 +186,38 @@ class DataTemuanController extends Controller
                     ->with('djenisaudit')
                     ->orderBy('tanggal_lhp','desc')->get();
             
+            $idlhp=$idtemuan=$filteridlhp=array();
+            foreach($data as $k=>$v)
+            {
+                $idlhp[$v->lhp_id]=$v->lhp_id;
+            }
+
+            $user_pic=PICUnit::where('id_user',Auth::user()->id)->first();
+            $tem=DataTemuan::whereIn('id_lhp',$idlhp)->get();
+            foreach($tem as $k=>$v)
+            {
+                $idtemuan[$v->id]=$v->id;
+                if($user_pic->id==$v->pic_temuan_id)
+                    $filteridlhp[$v->id_lhp]=$v->id_lhp;
+            }
+            $rekom=DataRekomendasi::whereIn('id_temuan',$idtemuan)
+                        ->where(function($query) use ($user_pic){
+                                    $query->where('pic_1_temuan_id', $user_pic->id);
+                                    $query->orWhere('pic_2_temuan_id','like', "%$user_pic->id%,");
+                                })    
+                        ->with('dtemuan')->get();
+
+            foreach($rekom as $kr=>$vr)
+            {
+                if(isset($vr->dtemuan->id_lhp))
+                    $filteridlhp[$vr->dtemuan->id_lhp]=$vr->dtemuan->id_lhp;
+            }
+
+            // return $filteridlhp;
+
             return view('backend.pages.data-lhp.pic-unit.data')
                 ->with('data',$data)
+                ->with('filteridlhp',$filteridlhp)
                 ->with('arraylhp',$arraylhp)
                 ->with('statusrekom',$statusrekom)
                 ->with('drekom',$drekom);

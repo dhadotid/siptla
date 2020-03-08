@@ -793,6 +793,7 @@ function listrinciantl(idrekomendasi,idunitkerja,idtl)
 
 function rangkumantindaklanjut(idrekomendasi)
 {
+    $('#list-rangkuman').load(flagsUrl + '/list-rangkuman/'+idrekomendasi);
     $('#rangkuman-tindaklanjut-rekomendasi').modal('show');
 }
 
@@ -818,9 +819,10 @@ function publishpic1(idrekomendasi)
                             text: 'Publish Rekomendasi Berhasil',
                             icon: 'success'
                         }).then(function () {
-                            $('#table-data-tindaklanjut').load(flagsUrl + '/table-data-tindaklanjut/' + idrekomendasi, function () {
-                                $('[data-toggle="tooltip"]').tooltip();
-                            });
+                            // $('#table-data-tindaklanjut').load(flagsUrl + '/table-data-tindaklanjut/' + idrekomendasi, function () {
+                            //     $('[data-toggle="tooltip"]').tooltip();
+                            // });
+                            location.href = flagsUrl +'/data-tindaklanjut-unitkerja/'+$('#tahun').val()
                         });
                     }
                     else {
@@ -859,9 +861,10 @@ function publishpic2(idrekomendasi)
                             text: 'Publish Rekomendasi Berhasil',
                             icon: 'success'
                         }).then(function () {
-                            $('#table-data-tindaklanjut').load(flagsUrl + '/table-data-tindaklanjut/' + idrekomendasi, function () {
-                                $('[data-toggle="tooltip"]').tooltip();
-                            });
+                            // $('#table-data-tindaklanjut').load(flagsUrl + '/table-data-tindaklanjut/' + idrekomendasi, function () {
+                            //     $('[data-toggle="tooltip"]').tooltip();
+                            // });
+                            location.href = flagsUrl + '/data-tindaklanjut-unitkerja/' + $('#tahun').val()
                         });
                     }
                     else {
@@ -898,6 +901,7 @@ function validasireview()
     var idrekomendasi = $('#idrekomendasi').val();
     var tgl_penyelesaian = $('#tgl_selesai').val();
     // alert(tgl_penyelesaian);
+    var tahun = $('#tahun').val();
     if(catatan_monev=='')
         notif('error', 'Catatan Monev Belum Diisi');
     else 
@@ -926,9 +930,10 @@ function validasireview()
                                 text: 'Review Tindak Lanjut Berhasil Disimpan',
                                 icon: 'success'
                             }).then(function () {
-                                $('#table-data-tindaklanjut').load(flagsUrl + '/table-data-tindaklanjut/' + idrekomendasi, function () {
-                                    $('[data-toggle="tooltip"]').tooltip();
-                                });
+                                // $('#table-data-tindaklanjut').load(flagsUrl + '/table-data-tindaklanjut/' + idrekomendasi, function () {
+                                //     $('[data-toggle="tooltip"]').tooltip();
+                                // });
+                                location.href = flagsUrl + '/data-tindaklanjut-unitkerja/' + tahun
                             });
                         }
                         else {

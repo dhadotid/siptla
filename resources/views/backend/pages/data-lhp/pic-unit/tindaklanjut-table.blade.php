@@ -75,6 +75,7 @@
                             @php
                                 $userunit=\App\Models\PICUnit::where('id_user',Auth::user()->id)->first();
                                 $listpic2=array();
+                                
                             @endphp
                             @if ($userunit->id==$item->pic_1_id)
                                 <a href="javascript:edittl({{$item->id}},{{$item->rekomendasi_id}},{{$item->temuan_id}},{{$item->lhp_id}})" class="btn-delete btn btn-xs btn-info" data-toggle="tooltip" data-title="Edit Tindak Lanjut" title="Edit Tindak Lanjut"><i class="glyphicon glyphicon-edit"></i></a>&nbsp;

@@ -152,10 +152,10 @@ class RincianSewaController extends Controller
             if($user_pic)
             {
                 if($rekom->pic_1_temuan_id==$user_pic->id)
-                    $tindaklanjut->pic_1_id = $rekom->pic_1_temuan_id;
+                    $tindaklanjut->pic_1_id = $user_pic->id;
                 
                 if($rekom->pic_2_temuan_id==$user_pic->id)
-                    $tindaklanjut->pic_2_id = $rekom->pic_2_temuan_id;
+                    $tindaklanjut->pic_2_id = $user_pic->id;
             }
             $tindaklanjut->save();
             

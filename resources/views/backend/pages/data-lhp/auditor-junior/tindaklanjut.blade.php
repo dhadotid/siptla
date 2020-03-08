@@ -176,7 +176,7 @@
                                         
                                         
                                         $tem.='<br><div class="row" style="height:35px;border-bottom:1px dotted #ddd">';
-                                        $tem.='<div class="col-md-2"><small><i>No. Rekomendasi</i></small></div>';
+                                        $tem.='<div class="col-md-2"><small><i>No.Rekom</i></small></div>';
                                         $tem.='<div class="col-md-10"><small><i>Rekomendasi</i></small></div>';
                                         $tem.='</div>';
 
@@ -205,14 +205,14 @@
                                                 else
                                                     $text_rekom=$v->rekomendasi;
 
-                                                $tem.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0">';
+                                                $tem.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd;padding:5px 0">';
                                                 $tem.='<div class="col-md-1 text-center">'.$v->nomor_rekomendasi.'</div>';
                                                 $tem.='<div class="col-md-11">'.$text_rekom.'</div>';
                                                 $tem.='</div>';
                                                 
                                                 if($item->publish_pic_1==0)
                                                 {
-                                                    $tindak_lanjut.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0">';
+                                                    $tindak_lanjut.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd;padding:5px 0">';
                                                     $tindak_lanjut.='<div class="col-md-12 text-center"><span class="label label-danger">0</span></div>';
                                                     $tindak_lanjut.='</div>';
                                                 }
@@ -220,34 +220,46 @@
                                                 {
                                                     if(isset($gettindaklanjut[$v->id]))
                                                     {
-                                                        $tindak_lanjut.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0">';
+                                                        $tindak_lanjut.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd;padding:5px 0">';
                                                         $tindak_lanjut.='<div class="col-md-12 text-center"><span class="label label-inverse">'.count($gettindaklanjut[$v->id]).'</span></div>';
                                                         $tindak_lanjut.='</div>';
                                                     }
                                                     else
                                                     {
-                                                        $tindak_lanjut.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0">';
+                                                        $tindak_lanjut.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd;padding:5px 0">';
                                                         $tindak_lanjut.='<div class="col-md-12 text-center"><span class="label label-danger">0</span></div>';
                                                         $tindak_lanjut.='</div>';
                                                     }  
                                                 }
 
                                                 if($v->pic_2_temuan_id!='')
-                                                    $pic2.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0;width:150px;"><div class="col-md-12 text-center">'.(isset($pic[$v->pic_2_temuan_id]) ? $$pic[$v->pic_2_temuan_id]->nama_pic : '').'</div></div>';
+                                                {
+                                                    $listpic2=explode(',', $v->pic_2_temuan_id);
+                                                    // print_r($listpic2);
+                                                        $pic2.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd;padding:5px 0;width:250px;"><div class="col-md-12 text-left">';
+                                                            foreach($listpic2 as $kp=>$vp)
+                                                            {
+                                                                $pic2.=(isset($pic[$vp]) ? $pic[$vp]->nama_pic : '').'<br>';
+                                                            }
+                                                            
+                                                        $pic2.='</div></div>';
+                                                       
+                                                    }
+                                                }
                                                 else
-                                                    $pic2.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0;width:150px;"><div class="col-md-12 text-center">'.(isset($pic[$v->pic_2_temuan_id]) ? $$pic[$v->pic_2_temuan_id]->nama_pic : '-').'</div></div>';
+                                                    $pic2.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd;padding:5px 0;width:250px;"><div class="col-md-12 text-left">-</div></div>';
 
-                                                $tgl.='<div style="height:60px;"  id="tgl_penyelesaian_'.$item->id_temuan.'_'.$v->id.'">';
+                                                $tgl.='<div style="height:75px;"  id="tgl_penyelesaian_'.$item->id_temuan.'_'.$v->id.'">';
                                                 if($v->tanggal_penyelesaian!='')
                                                 {
-                                                    $tgl.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0">
+                                                    $tgl.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd;padding:5px 0">
                                                             <div class="col-md-12"><span class="label label-info"><i class="fa fa-calendar"></i> '.tgl_indo($v->tanggal_penyelesaian).'</span></div>
                                                         </div>';
                                                     // $tglselesai.='<li style="height:32px;">'.tgl_indo($val->tanggal_penyelesaian).'</li>';
                                                 }
                                                 else
                                                 {
-                                                   $tgl.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0">
+                                                   $tgl.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd;padding:5px 0">
                                                             <div class="col-md-12"><i class="label label-danger">Belum Di Set</i></div>
                                                         </div>';
                                                 }
@@ -257,7 +269,7 @@
                                                     
                                                     if($item->publish_pic_1==1)
                                                     {
-                                                    $aksi.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
+                                                    $aksi.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
                                                         <div class="btn-group" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
                                                             <button type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
                                                             <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
@@ -272,7 +284,7 @@
                                                     }
                                                     else
                                                     {
-                                                        $aksi.='<div class="row" style="height:60px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
+                                                        $aksi.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
                                                             <div class="btn-group">
                                                                 <button type="button" disabled class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
                                                                 <button type="button" disabled class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">

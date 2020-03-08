@@ -47,7 +47,8 @@ class DataRekomendasiController extends Controller
             {
                 $pic2.=$v.',';
             }
-            $insert->pic_2_temuan_id=substr($pic2,0,-1);
+            // $insert->pic_2_temuan_id=substr($pic2,0,-1);
+            $insert->pic_2_temuan_id=$pic2;
         }   
         $insert->jangka_waktu_id=$request->jangka_waktu;
         $insert->status_rekomendasi_id=$request->status_rekomendasi;
@@ -367,7 +368,8 @@ class DataRekomendasiController extends Controller
         {
             $pic2.=$v.',';
         }   
-        $update->pic_2_temuan_id=substr($pic2,0,-1);
+        // $update->pic_2_temuan_id=substr($pic2,0,-1);
+        $update->pic_2_temuan_id=$pic2;
         $update->jangka_waktu_id=$request->jangka_waktu;
         $update->status_rekomendasi_id=$request->status_rekomendasi;
         $update->review_auditor=$request->review_auditor;
@@ -1281,6 +1283,16 @@ class DataRekomendasiController extends Controller
     {
         $rekom=DataRekomendasi::find($idrekomendasi);
         $rekom->publish_pic_1=1;
+        $c=$rekom->save();
+        if($c)
+            echo 1;
+        else
+            echo 0;
+    }
+    public function publish_rekomendasi_to_pic1($idrekomendasi)
+    {
+        $rekom=DataRekomendasi::find($idrekomendasi);
+        $rekom->publish_pic_2=1;
         $c=$rekom->save();
         if($c)
             echo 1;

@@ -79,10 +79,10 @@ class TindakLanjutController extends Controller
         if($user_pic)
         {
             if($rekom->pic_1_temuan_id==$user_pic->id)
-                $tindak->pic_1_id = $rekom->pic_1_temuan_id;
+                $tindak->pic_1_id = $user_pic->id;
             
             if($rekom->pic_2_temuan_id==$user_pic->id)
-                $tindak->pic_2_id = $rekom->pic_2_temuan_id;
+                $tindak->pic_2_id = $user_pic->id;
         }
         // $tindak->pic_1_id = $rekom->pic_1_temuan_id;
         // $tindak->pic_2_id = $rekom->pic_2_temuan_id;
@@ -373,13 +373,17 @@ class TindakLanjutController extends Controller
                                 ->where('daftar_lhp.tahun_pemeriksa',$tahun)
                                 ->where(function($query) use ($user_pic){
                                     $query->where('data_rekomendasi.pic_1_temuan_id', $user_pic->id);
-                                    $query->orWhere('data_rekomendasi.pic_2_temuan_id', $user_pic->id);
+                                    $query->orWhere('data_rekomendasi.pic_2_temuan_id','like', "%$user_pic->id%,");
+                                    // $query->orWhere('data_rekomendasi.pic_2_temuan_id', $user_pic->id);
                                 })
                                 ->whereNull('data_rekomendasi.deleted_at')
                                 ->orderBy('data_rekomendasi.nomor_rekomendasi')
                                 ->get();
 
+        
+
         $lhp=$temuan=$rekomendasi=$arrayrekomid=array();
+        $idpic2=array();
         foreach($alldata as $k=>$v)
         {
             $lhp[$v->id_lhp]=$v;
@@ -388,14 +392,33 @@ class TindakLanjutController extends Controller
             $arrayrekomid[$v->id_rekom]=$v->id_rekom;
         }
 
+        $rinc['sewa']=RincianSewa::whereIn('id_rekomendasi',$arrayrekomid)->get();
+        $rinc['uangmuka']=RincianUangMuka::whereIn('id_rekomendasi',$arrayrekomid)->get();
+        $rinc['listrik']=RincianListrik::whereIn('id_rekomendasi',$arrayrekomid)->get();
+        $rinc['piutang']=RincianPiutang::whereIn('id_rekomendasi',$arrayrekomid)->get();
+        $rinc['piutangkary']=RincianPiutangKaryawan::whereIn('id_rekomendasi',$arrayrekomid)->get();
+        $rinc['titipan']=RincianHutangTitipan::whereIn('id_rekomendasi',$arrayrekomid)->get();
+        $rinc['penutupanrekening']=RincianPenutupanRekening::whereIn('id_rekomendasi',$arrayrekomid)->get();
+        $rinc['umum']=RincianUmum::whereIn('id_rekomendasi',$arrayrekomid)->get();
+
+        $rincian=array();
+        foreach($rinc as $jns=>$det)
+        {
+            foreach($det as $k=>$v)
+            {
+                $rincian[$jns][$v->id_rekomendasi][]=$v;
+            }
+        }
+
         $get_tl=TindakLanjutTemuan::whereIn('rekomendasi_id',$arrayrekomid)->get();
         $tindaklanjut=array();
         foreach($get_tl as $k=>$v)
         {
             $tindaklanjut[$v->rekomendasi_id][]=$v;
         }
-        // return $rekomendasi;
+        // return $tindaklanjut;
         return view('backend.pages.data-lhp.pic-unit.tindaklanjut')
+                ->with('rincian',$rincian)
                 ->with('tahun',$tahun)
                 ->with('rekomid',$rekomid)
                 ->with('gettindaklanjut',$tindaklanjut)
@@ -648,7 +671,7 @@ class TindakLanjutController extends Controller
         $rekomendasi=DataRekomendasi::where('id_temuan',$temuan_id)
             ->where(function($query) use ($user_pic){
                  $query->where('pic_1_temuan_id', $user_pic->id);
-                 $query->orWhere('pic_2_temuan_id', $user_pic->id);
+                 $query->orWhere('pic_2_temuan_id', 'like',"%$user_pic->id%,");
              })
              ->with('dtemuan')->get();
         // ->where('pic_1_temuan_id',$user_pic->id)
@@ -658,7 +681,7 @@ class TindakLanjutController extends Controller
             $rekomendasi=DataRekomendasi::where('id_temuan',$dtem->id)
                 ->where(function($query) use ($user_pic){
                     $query->where('pic_1_temuan_id', $user_pic->id);
-                    $query->orWhere('pic_2_temuan_id', $user_pic->id);
+                    $query->orWhere('pic_2_temuan_id', 'like',"%$user_pic->id%,");
                 })->with('dtemuan')->get();
             // ->where('pic_1_temuan_id',$user_pic->id)
         }
@@ -717,10 +740,10 @@ class TindakLanjutController extends Controller
         if($user_pic)
         {
             if($rekom->pic_1_temuan_id==$user_pic->id)
-                $tindaklanjut->pic_1_id = $rekom->pic_1_temuan_id;
+                $tindaklanjut->pic_1_id = $user_pic->id;
             
             if($rekom->pic_2_temuan_id==$user_pic->id)
-                $tindaklanjut->pic_2_id = $rekom->pic_2_temuan_id;
+                $tindaklanjut->pic_2_id = $user_pic->id;
                 // $tindaklanjut->pic_1_id = $rekom->pic_1_temuan_id;
                 // $tindaklanjut->pic_2_id = $rekom->pic_2_temuan_id;
         }

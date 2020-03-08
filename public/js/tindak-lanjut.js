@@ -837,6 +837,47 @@ function publishpic1(idrekomendasi)
         }
     });
 }
+function publishpic2(idrekomendasi)
+{
+    swal({
+        title: "Apakah Anda Yakin ?",
+        text: "Ingin Mempublish Rekomendasi Ini Ke PIC 1 ?",
+        icon: "warning",
+        buttons: [
+            'Tidak!',
+            'Ya, Publish'
+        ],
+        dangerMode: true,
+    }).then(function (isConfirm) {
+        if (isConfirm) {
+            $.ajax({
+                url: flagsUrl + '/publish-rekomendasi-to-pic1/' + idrekomendasi,
+                success: function (res) {
+                    if (res == 1) {
+                        swal({
+                            title: 'Berhasil!',
+                            text: 'Publish Rekomendasi Berhasil',
+                            icon: 'success'
+                        }).then(function () {
+                            $('#table-data-tindaklanjut').load(flagsUrl + '/table-data-tindaklanjut/' + idrekomendasi, function () {
+                                $('[data-toggle="tooltip"]').tooltip();
+                            });
+                        });
+                    }
+                    else {
+                        swal({
+                            title: 'Gagal!',
+                            text: 'Publish Rekomendasi Tidak Berhasil',
+                            icon: 'error'
+                        })
+                    }
+                }
+            });
+        } else {
+
+        }
+    });
+}
 
 function reviewtindaklanjut(idrekomendasi) {
     $('#form-detail-tindaklanjut').load(flagsUrl + '/detail-tindaklanjut-pic1/' + idrekomendasi, function () {

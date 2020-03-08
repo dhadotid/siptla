@@ -77,6 +77,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('rincian-nilai-rekom/{idrekom}','DataRekomendasiController@rincian_nilai');
     Route::get('rekomendasi-by-temuan-select/{idtemuan}','DataRekomendasiController@rekomendasi_by_temuan_select')->name('rekomendasi.by-temuan');
     Route::get('publish-rekomendasi-to-auditor-junior/{idrekomendasi}','DataRekomendasiController@publish_rekomendasi_to_auditor_junior');
+    Route::get('publish-rekomendasi-to-pic1/{idrekomendasi}','DataRekomendasiController@publish_rekomendasi_to_pic1');
 
 
     Route::get('load-table-rincian/{jenis}/{idtemuan?}/{statusrekomendasi?}/{view?}','DataRekomendasiController@load_tabel_rincian');

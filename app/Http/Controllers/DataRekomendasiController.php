@@ -1344,4 +1344,28 @@ class DataRekomendasiController extends Controller
                 ->with('pic2',$pic2)
                 ->with('idrekomendasi',$idrekomendasi);
     }
+
+    public function rangkuman_simpan(Request $request)
+    {
+        $path='';
+        if($request->hasFile('file_pendukung')){
+            $file = $request->file('file_pendukung');
+            $filenameWithExt = $request->file('file_pendukung')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('file_pendukung')->getClientOriginalExtension();
+            $fileNameToStore = time().'.'.$extension;
+            $path = $request->file('file_pendukung')->storeAs('public/dokumen',$fileNameToStore);
+        }
+
+        $idrekomendasi=$request->idrekomendasi;
+        $simpan = DataRekomendasi::find($idrekomendasi);
+        $simpan->rangkuman_rekomendasi=$request->txt_rangkuman_rekomendasi;
+        $simpan->file_pendukung=$path;
+        $c=$simpan->save();
+
+        if($c)
+            echo 1;
+        else
+            echo 0;
+    }
 }

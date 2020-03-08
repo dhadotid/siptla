@@ -140,11 +140,11 @@
                             <thead>
                                 <tr class="primary">
                                     <th class="text-center" style="width:15px;">#</th>
-                                    <th class="text-center">Temuan / Rekomendasi</th>
+                                    <th class="text-center"><div style="width:420px;">Temuan / Rekomendasi</div></th>
                                     <th class="text-center">Tanggal<br>Penyelesaian</th>
                                     <th class="text-center">PIC 2</th>
-                                     <th class="text-center">Tindak<br>Lanjut</th>
-
+                                    <th class="text-center">Tindak<br>Lanjut</th>
+                                    <th class="text-center">Rincian</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
@@ -152,46 +152,61 @@
                                 @php
                                     $no=1;
                                     $tem=$tgl=$aksi=$pic2=$tindak_lanjut='';
+                                    $user_pic=\App\Models\PICUnit::where('id_user',Auth::user()->id)->first();
                                 @endphp
                                 @foreach ($temuan as $idtemuan=>$item)
                                     @php
-                                        $norekom=$tglselesai=$aksi=$rincian='';
-                                        $tem='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">';
+                                        $norekom=$tglselesai=$aksi=$rincian=$rinc='';
+                                        $tem='<div class="row" style="height:80px;border-bottom:1px dotted #ddd">';
                                         $tem.='<div class="col-md-2"><small><i>No. Temuan</i></small><br>
                                             <b>'.$item->no_temuan.'</b>
                                             </div>';
-                                        $tem.='<div class="col-md-10"><small><i>Temuan</i></small><br>
+                                        if(strlen($item->temuan)>=150)
+                                        {
+                                            $tem.='<div class="col-md-10"><small><i>Temuan</i></small><br>
+                                            <b><a href="#" data-toggle="tooltip" title="'.$item->temuan.'">'.substr($item->temuan,0,150).' ...</a></b>
+                                            </div>';
+                                        }
+                                        else
+                                        {
+                                            $tem.='<div class="col-md-10"><small><i>Temuan</i></small><br>
                                             <b>'.$item->temuan.'</b>
                                             </div>';
+                                        }
                                         $tem.='</div>';
-                                        $tgl='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">&nbsp;</div>';
-                                        $pic2='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">&nbsp;</div>';
-                                        $aksi='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">&nbsp;</div>';
-                                        $tindak_lanjut='<div class="row" style="height:75px;border-bottom:1px dotted #ddd">&nbsp;</div>';
+                                        $tgl='<div class="row" style="height:80px;border-bottom:1px dotted #ddd">&nbsp;</div>';
+                                        $pic2='<div class="row" style="height:80px;border-bottom:1px dotted #ddd">&nbsp;</div>';
+                                        $aksi='<div class="row" style="height:80px;border-bottom:1px dotted #ddd">&nbsp;</div>';
+                                        $tindak_lanjut='<div class="row" style="height:80px;border-bottom:1px dotted #ddd">&nbsp;</div>';
                                         
-                                        $tindak_lanjut.='<br><div class="row" style="height:35px;border-bottom:1px dotted #ddd">';
+                                        $tindak_lanjut.='<div class="row" style="height:20px;border-bottom:1px dotted #ddd">';
                                         $tindak_lanjut.='<div class="col-md-2">&nbsp;</div>';
                                         $tindak_lanjut.='<div class="col-md-10">&nbsp;</div>';
                                         $tindak_lanjut.='</div>';
                                         
+                                        $rinc='<div class="row" style="height:80px;border-bottom:1px dotted #ddd">&nbsp;</div>';
                                         
-                                        $tem.='<br><div class="row" style="height:35px;border-bottom:1px dotted #ddd">';
+                                        $rinc.='<div class="row" style="height:20px;border-bottom:1px dotted #ddd">';
+                                        $rinc.='<div class="col-md-12">&nbsp;</div>';
+                                        $rinc.='</div>';
+                                        
+                                        $tem.='<div class="row" style="height:20px;border-bottom:1px dotted #ddd">';
                                         $tem.='<div class="col-md-2"><small><i>No.Rekom</i></small></div>';
                                         $tem.='<div class="col-md-10"><small><i>Rekomendasi</i></small></div>';
                                         $tem.='</div>';
 
-                                        $tgl.='<br><div class="row" style="height:35px;border-bottom:1px dotted #ddd">';
+                                        $tgl.='<div class="row" style="height:20px;border-bottom:1px dotted #ddd">';
                                         $tgl.='<div class="col-md-2">&nbsp;</div>';
                                         $tgl.='<div class="col-md-10">&nbsp;</div>';
                                         $tgl.='</div>';
 
-                                        $pic2.='<br><div class="row" style="height:35px;border-bottom:1px dotted #ddd">';
+                                        $pic2.='<div class="row" style="height:20px;border-bottom:1px dotted #ddd">';
                                         $pic2.='<div class="col-md-2">&nbsp;</div>';
                                         $pic2.='<div class="col-md-10">&nbsp;</div>';
                                         $pic2.='</div>';
                                         
                                         
-                                        $aksi.='<br><div class="row" style="height:35px;border-bottom:1px dotted #ddd">';
+                                        $aksi.='<div class="row" style="height:20px;border-bottom:1px dotted #ddd">';
                                         $aksi.='<div class="col-md-2">&nbsp;</div>';
                                         $aksi.='<div class="col-md-10">&nbsp;</div>';
                                         $aksi.='</div>';
@@ -205,14 +220,14 @@
                                                 else
                                                     $text_rekom=$v->rekomendasi;
 
-                                                $tem.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd;padding:5px 0">';
+                                                $tem.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">';
                                                 $tem.='<div class="col-md-1 text-center">'.$v->nomor_rekomendasi.'</div>';
                                                 $tem.='<div class="col-md-11">'.$text_rekom.'</div>';
                                                 $tem.='</div>';
                                                 
                                                 if($item->publish_pic_1==0)
                                                 {
-                                                    $tindak_lanjut.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd;padding:5px 0">';
+                                                    $tindak_lanjut.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">';
                                                     $tindak_lanjut.='<div class="col-md-12 text-center"><span class="label label-danger">0</span></div>';
                                                     $tindak_lanjut.='</div>';
                                                 }
@@ -220,57 +235,93 @@
                                                 {
                                                     if(isset($gettindaklanjut[$v->id]))
                                                     {
-                                                        $tindak_lanjut.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd;padding:5px 0">';
+                                                        $tindak_lanjut.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">';
                                                         $tindak_lanjut.='<div class="col-md-12 text-center"><span class="label label-inverse">'.count($gettindaklanjut[$v->id]).'</span></div>';
                                                         $tindak_lanjut.='</div>';
                                                     }
                                                     else
                                                     {
-                                                        $tindak_lanjut.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd;padding:5px 0">';
+                                                        $tindak_lanjut.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">';
                                                         $tindak_lanjut.='<div class="col-md-12 text-center"><span class="label label-danger">0</span></div>';
                                                         $tindak_lanjut.='</div>';
                                                     }  
+                                                }
+
+                                                $jlhrincian=0;
+                                                if($v->rincian!='')
+                                                {
+                                                    if(isset($rincian[$v->rincian][$v->id_rekomendasi]))
+                                                    {
+                                                        $rinc.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">';
+                                                        $rinc.='<div class="col-md-12 text-center" style=""><span class="label label-info">'.count($rincian[$v->rincian][$v->id_rekomendasi]).'</i></div>';
+                                                        $rinc.='</div>';
+                                                        $jlhrincian=count($rincian[$v->rincian][$v->id_rekomendasi]);
+                                                    }
+                                                    else
+                                                    {
+                                                        $rinc.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">';
+                                                        $rinc.='<div class="col-md-12 text-center" style=""><span class="label label-inverse">0</i></div>';
+                                                        $rinc.='</div>';
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    $rinc.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">';
+                                                    $rinc.='<div class="col-md-12 text-center" style=""><span class="label label-success">Tidak Ada</i></div>';
+                                                    $rinc.='</div>';
                                                 }
 
                                                 if($v->pic_2_temuan_id!='')
                                                 {
                                                     $listpic2=explode(',', $v->pic_2_temuan_id);
                                                     // print_r($listpic2);
-                                                        $pic2.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd;padding:5px 0;width:250px;"><div class="col-md-12 text-left">';
-                                                            foreach($listpic2 as $kp=>$vp)
-                                                            {
-                                                                $pic2.=(isset($pic[$vp]) ? $pic[$vp]->nama_pic : '').'<br>';
-                                                            }
+                                                   
+                                                    $pic2.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:280px;"><div class="col-md-12 text-left">';
+                                                        $c=1;
+                                                        $t_pic='';
+                                                        $c=0;
+                                                        foreach($listpic2 as $kp=>$vp)
+                                                        {
                                                             
+                                                            if($c<3)
+                                                                $pic2.=(isset($pic[$vp]) ? $pic[$vp]->nama_pic : '').'<br>';
+                                                            else
+                                                                $t_pic.=(isset($pic[$vp]) ? $pic[$vp]->nama_pic : '').'<br>';
+
+                                                            
+                                                            $c++;
+                                                        }
+                                                        
+                                                    if($c>3)
+                                                        $pic2.='<a href="#" class="label label-default" data-toggle="tooltip" data-html="true" title="'.$t_pic.'">Lainnya</a></div></div>';
+                                                    else
                                                         $pic2.='</div></div>';
-                                                       
-                                                    }
                                                 }
                                                 else
-                                                    $pic2.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd;padding:5px 0;width:250px;"><div class="col-md-12 text-left">-</div></div>';
+                                                    $pic2.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:280px;"><div class="col-md-12 text-left">-</div></div>';
 
-                                                $tgl.='<div style="height:75px;"  id="tgl_penyelesaian_'.$item->id_temuan.'_'.$v->id.'">';
+                                                $tgl.='<div style="height:80px;"  id="tgl_penyelesaian_'.$item->id_temuan.'_'.$v->id.'">';
                                                 if($v->tanggal_penyelesaian!='')
                                                 {
-                                                    $tgl.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd;padding:5px 0">
+                                                    $tgl.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">
                                                             <div class="col-md-12"><span class="label label-info"><i class="fa fa-calendar"></i> '.tgl_indo($v->tanggal_penyelesaian).'</span></div>
                                                         </div>';
                                                     // $tglselesai.='<li style="height:32px;">'.tgl_indo($val->tanggal_penyelesaian).'</li>';
                                                 }
                                                 else
                                                 {
-                                                   $tgl.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd;padding:5px 0">
+                                                   $tgl.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">
                                                             <div class="col-md-12"><i class="label label-danger">Belum Di Set</i></div>
                                                         </div>';
                                                 }
                                                 $tgl.='</div>';
-                                                    $user_pic=\App\Models\PICUnit::where('id_user',Auth::user()->id)->first();
+                                                    
                                                     $styleaksi='display:none';
                                                     
                                                     if($item->publish_pic_1==1)
                                                     {
-                                                    $aksi.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
-                                                        <div class="btn-group" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
+                                                        $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
+                                                            <div class="btn-group" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
                                                             <button type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
                                                             <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
                                                                 <span class="caret"></span>
@@ -284,12 +335,17 @@
                                                     }
                                                     else
                                                     {
-                                                        $aksi.='<div class="row" style="height:75px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
+                                                        $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
                                                             <div class="btn-group">
-                                                                <button type="button" disabled class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
-                                                                <button type="button" disabled class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
+                                                                <button type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
+                                                                <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
                                                                     <span class="caret"></span>
                                                                 </button>
+                                                                <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">
+                                                                
+                                                                <li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
+
+                                                        $aksi.='</ul>
                                                             </div>
                                                         </div>';
                                                     }
@@ -303,6 +359,7 @@
                                         <td class="text-left">{!!$pic2!!}</td>
                                         
                                         <td class="text-center">{!!$tindak_lanjut!!}</td>
+                                        <td class="text-center" style="font-size:11px !important;">{!!$rinc!!}</td>
                                         <td class="text-center">{!!$aksi!!}</td>
                                     </tr>
                                     @php
@@ -391,6 +448,17 @@
 	.select2-container{
 		width:100% !important;
 	}
+     .tooltip-inner {
+        text-align: left !important;
+    }
+    div[role=tooltip]
+    {
+        width:300px !important;
+    }
+    thead, tbody
+    {
+        font-size:11px !important;
+    }
 	</style>
 @endsection
 @section('modal')

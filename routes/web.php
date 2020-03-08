@@ -79,6 +79,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('publish-rekomendasi-to-auditor-junior/{idrekomendasi}','DataRekomendasiController@publish_rekomendasi_to_auditor_junior');
     Route::get('publish-rekomendasi-to-pic1/{idrekomendasi}','DataRekomendasiController@publish_rekomendasi_to_pic1');
     Route::get('list-rangkuman/{idrekomendasi}','DataRekomendasiController@list_rangkuman');
+    Route::post('rangkuman-simpan','DataRekomendasiController@rangkuman_simpan');
 
     Route::get('load-table-rincian/{jenis}/{idtemuan?}/{statusrekomendasi?}/{view?}','DataRekomendasiController@load_tabel_rincian');
     Route::get('load-table-rincian-unitkerja/{jenis}/{idtemuan?}/{statusrekomendasi?}/{view?}','DataRekomendasiController@load_tabel_rincian_unitkerja');
@@ -188,4 +189,5 @@ Route::get('force-logout',function(){
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('open-file/{dir1}/{dir2}/{filename}', 'Controller@open_file')->name('home');
 Route::get('read-pdf/{dir1}/{dir2}/{filename}', 'Controller@read_pdf')->name('home');
+Route::get('read-file/{dir1}/{dir2}/{filename}', 'Controller@read_pdf')->name('home');
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');

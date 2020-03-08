@@ -2,7 +2,7 @@
  <div class="modal fade" id="modaldetailtindaklanjut"  role="dialog">
 		<div class="modal-dialog" style="width:80% !important;top:-50px !important;">
 			<div class="modal-content">
-                <form action="{{ url('review-pic1-simpan') }}" method="POST" class="form-horizontal" id="tindaklanjut-pic1">
+                <form action="{{ url('review-pic1-simpan') }}" method="POST" class="form-horizontal" id="tindaklanjut-pic1" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

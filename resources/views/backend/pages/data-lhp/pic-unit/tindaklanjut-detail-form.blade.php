@@ -91,7 +91,7 @@
                                 </div>
                             
                             </div>
-                    @if ($rekom->pic2_temuan_2!='')
+                    @if ($rekom->pic_2_temuan_id!='')
 
                             <div id="pic2">
                                 <div class="row" style="margin:0px;padding:0px;">
@@ -103,7 +103,15 @@
                                     <div class="col-md-10" style="margin:0px;padding:0px;margin-bottom:10px;">
                                         <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
                                             <div class="col-sm-12">
-                                                <input type="text"  readonly class="fz11" name="pic_2" placeholder="PIC 2" id="pic_1"readonly style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%">
+                                                {{-- <input type="text"  readonly class="fz11" name="pic_2" placeholder="PIC 2" id="pic_1"readonly style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%"> --}}
+                                                @php
+                                                    $pic2list=explode(',',$rekom->pic_2_temuan_id);
+                                                @endphp
+                                                @foreach ($pic2list as $item)
+                                                    @if(isset($pic[$item]))
+                                                        <span class="label label-default" style="font-size:12px;">{{$pic[$item]->nama_pic}}</span>
+                                                    @endif
+                                                @endforeach
                                             </div>
                                         </div>
                                     </div>
@@ -142,7 +150,7 @@
                     </div>
                 </div>
                 
-                <div class="row" style="padding:0 10px;margin:15px 0 10px">
+                <div class="row" style="padding:0;margin:15px 0 10px">
                     <table id="table-tl-detail" class="table table-bordered table-striped" style="width:100%">
                         <thead>
                             <tr>
@@ -260,6 +268,66 @@
                         </div>
                     </div>
                 </div>
+                
+            </div>
+        </div>
+	</div>
+</div>
+<div class="panel-group accordion" id="accordion3" role="tablist" aria-multiselectable="true"  style="border:1px solid #eee;">
+	<div class="panel panel-info">
+		<div class="panel-heading" role="tab" id="heading-3">
+			<a class="accordion-toggle" role="button" data-toggle="collapse" data-parent="#accordion3" href="#collapse-rangkuman" aria-expanded="true" aria-controls="collapse-rangkuman">
+				<h4 class="panel-title">Form Rangkuman</h4>
+				<i class="fa acc-switch"></i>
+			</a>
+        </div>
+        <input type="hidden" id="tahun_thn" name="tahun">
+		<div id="collapse-rangkuman" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-3" aria-expanded="true">
+			<div class="panel-body">
+               <div class="row" style="padding:0 10px;">
+                        <div class="col-md-12" style="border-radius:5px;padding:5px 0px 0px 0px;margin-top:5px;">
+
+                                @if ($rekom->publish_pic_1==1)
+                                    <h4 style="margin:0px;padding:0px;margin-bottom:10px;">Rangkuman Tindak Lanjut
+                                    &nbsp;<span class="text-info"><i>(Sudah Publish Ke Auditor Junior)</i></span>
+                                    </h4>
+                                @else
+                                    <h4 style="margin:0px;padding:0px;margin-bottom:10px;">Rangkuman Tindak Lanjut</h4>
+                                @endif
+                            
+                                <div class="row" style="margin:0px;padding:0px;margin-bottom:10px;">
+                                    <div class="col-md-12" style="margin:0px;padding:0px;margin-bottom:10px;">
+                                        <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
+                                            <div class="col-sm-12">
+                                                @if ($rekom->publish_pic_1==1)
+                                                   <textarea class="fz11" name="txt_rangkuman_rekomendasi" placeholder="" id="txt_rangkuman_rekomendasi"  style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px" readonly>{{$rekom->rangkuman_rekomendasi}}</textarea>
+                                                @else
+                                                    <textarea class="fz11" name="txt_rangkuman_rekomendasi" placeholder="" id="txt_rangkuman_rekomendasi"  style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px">{{$rekom->rangkuman_rekomendasi}}</textarea>
+                                                @endif
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                </div>
+                 <div class="row" style="margin-top:10px;">
+                    <div class="col-md-12">
+                        <div class="form-group" style="margin-top:-20px;">
+                            <label for="exampleTextInput1" class="col-sm-12 control-label text-left">Dokumen Pendukung:</label>
+                            <div class="col-sm-11">
+                                <input type="file" class="form-control"  id="file_pendukung"  name="file_pendukung"  placeholder="Dokumen Pendukung" accept=".doc,.docx,.pdf,.xls,.xlsx">
+                                <small><i>*Biarkan Kosong Jika Tidak Ingin Di Ganti</i></small>
+                            </div>
+                            <div class="col-sm-1">
+                                @if ($rekom->file_pendukung!='')
+                                    <a data-toggle="tooltip" title="Lihat Dokumen" href="{{url('read-file/'.$rekom->file_pendukung)}}" target="_blank" class="btn btn-info"><i class="fa fa-search"></i></a>
+                                @endif
+                            </div>
+                        </div>    
+                    </div>
+                 </div>
+                
             </div>
         </div>
 	</div>

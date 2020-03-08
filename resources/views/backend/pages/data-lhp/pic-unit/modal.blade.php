@@ -329,13 +329,15 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Rangkuman Data Tindak Lanjut</h4>
                 </div>
+                <form method="POST" class="form-horizontal" id="form_list_rangkuman" enctype="multipart/form-data">
                     <div class="modal-body">
                         <div id="list-rangkuman"></div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" data-dismiss="modal" class="btn btn-success">Tutup</button>
-                        <button type="button" class="btn btn-info"><i class="fa fa-save"></i> Simpan</button>
+                        <button type="submit" class="btn btn-info"><i class="fa fa-save"></i> Simpan</button>
                     </div>
+                </form>
 			</div>
 		</div>
 	</div>  

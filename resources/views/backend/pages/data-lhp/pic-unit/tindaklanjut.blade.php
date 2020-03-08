@@ -368,9 +368,9 @@
                                                 elseif($item->publish_pic_2==1 && $item->pic_2_temuan_id!='')
                                                 {
                                                     $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
-                                                            <div class="btn-group" style="'.$styleaksi.'" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
-                                                                <button type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
-                                                                <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
+                                                            <div data-toggle="tooltip" title="Data Rekomendasi Sudah Publish Ke PIC 1" class="btn-group" style="'.$styleaksi.'" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
+                                                                <button type="button" class="btn btn-success btn-xs" style="height:28px;"><i class="fa fa-check"></i></button>
+                                                                <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
                                                                     <span class="caret"></span>
                                                                 </button>
                                                                 <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">';
@@ -392,10 +392,22 @@
                                                         </div>';
                                                 }
                                                 else{
+                                                    if($v->publish_pic_1==1)
+                                                    {
+                                                        $icon='fa-check';
+                                                        $color='success';
+                                                        $toggle='data-toggle="tooltip" title="Data Rekomendasi Sudah Publish Ke Auditor"';
+                                                    }
+                                                    else
+                                                    {
+                                                        $icon='fa-bars';
+                                                        $color='primary';
+                                                        $toggle='';
+                                                    }
                                                     $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
-                                                        <div class="btn-group" style="'.$styleaksi.'" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
-                                                            <button type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
-                                                            <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
+                                                        <div  class="btn-group" style="'.$styleaksi.'" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
+                                                            <button '.$toggle.' type="button" class="btn btn-'.$color.' btn-xs" style="height:28px;"><i class="fa '.$icon.'"></i></button>
+                                                            <button type="button" class="btn btn-'.$color.' btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
                                                                 <span class="caret"></span>
                                                             </button>
                                                             <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">
@@ -405,7 +417,7 @@
                                                             
                                                             if($v->publish_pic_2==1 && $v->pic_2_temuan_id!='')
                                                             {
-                                                                $aksi.=' <li><a href="javascript:reviewtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-file"></i> &nbsp;&nbsp;Review Tindak Lanjut</a></li>';
+                                                                $aksi.=' <li><a href="javascript:reviewtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-file"></i> &nbsp;&nbsp;Review & Rangkuman Tindak Lanjut</a></li>';
                                                             }
 
                                                             if($v->publish_pic_1==0)
@@ -417,7 +429,7 @@
                                                             
                                                             if($v->pic_2_temuan_id=='')
                                                             {
-                                                                $aksi.=' <li><a href="javascript:reviewtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-file"></i> &nbsp;&nbsp;Review Tindak Lanjut</a></li>';
+                                                                $aksi.=' <li><a href="javascript:reviewtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-file"></i> &nbsp;&nbsp;Review & Rangkuman Tindak Lanjut</a></li>';
                                                                 
 
                                                                 if($v->publish_pic_1==1)
@@ -453,7 +465,7 @@
                                                                         $aksi.=' <li><a href="javascript:publishpic1('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Auditor</a></li>';
                                                                     }
                                                                 }
-                                                                $aksi.='<li><a href="javascript:rangkumantindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Rangkuman Tindak Lanjut</a></li>';
+                                                                // $aksi.='<li><a href="javascript:rangkumantindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Rangkuman Tindak Lanjut</a></li>';
                                                             }
 
                                                         }
@@ -491,9 +503,9 @@
     <link rel="stylesheet" href="{{asset('theme/backend/libs/misc/datatables/datatables.min.css')}}"/>
     <script src="{{asset('theme/backend/libs/misc/datatables/datatables.min.js')}}"></script>
     <link rel="stylesheet" href="{{asset('css/noty.css')}}"/>
-    <script src="{{asset('js/noty.js')}}"></script>
     <script src="{{ asset('vendor/unisharp/laravel-ckeditor/ckeditor.js') }}"></script>
     <script src="{{asset('js/tindak-lanjut.js')}}"></script>
+    <script src="{{asset('js/noty.js')}}"></script>
     <script>
 
         $.ajaxSetup({

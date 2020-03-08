@@ -93,7 +93,7 @@
                                 </div>
                             
                             </div>
-                    @if ($rekom->pic2_temuan_2!='')
+                    @if ($rekom->pic_2_temuan_id!='')
 
                             <div id="pic2">
                                 <div class="row" style="margin:0px;padding:0px;">
@@ -105,7 +105,15 @@
                                     <div class="col-md-10" style="margin:0px;padding:0px;margin-bottom:10px;">
                                         <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
                                             <div class="col-sm-12">
-                                                <input type="text"  readonly class="fz11" name="pic_2" placeholder="PIC 2" id="pic_1"readonly style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%">
+                                                {{-- <input type="text"  readonly class="fz11" name="pic_2" placeholder="PIC 2" id="pic_1"readonly style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%"> --}}
+                                                @php
+                                                    $pic2list=explode(',',$rekom->pic_2_temuan_id);
+                                                @endphp
+                                                @foreach ($pic2list as $item)
+                                                    @if(isset($pic[$item]))
+                                                        <span class="label label-default" style="font-size:12px;">{{$pic[$item]->nama_pic}}</span>
+                                                    @endif
+                                                @endforeach
                                             </div>
                                         </div>
                                     </div>

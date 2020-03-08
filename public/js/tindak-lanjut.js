@@ -791,11 +791,7 @@ function listrinciantl(idrekomendasi,idunitkerja,idtl)
     $('#listrinciantl').modal('show');
 }
 
-function rangkumantindaklanjut(idrekomendasi)
-{
-    $('#list-rangkuman').load(flagsUrl + '/list-rangkuman/'+idrekomendasi);
-    $('#rangkuman-tindaklanjut-rekomendasi').modal('show');
-}
+
 
 function publishpic1(idrekomendasi)
 {
@@ -888,8 +884,10 @@ function reviewtindaklanjut(idrekomendasi) {
         // var review_spi = document.getElementById('review_spi');
         // alert(catatan_monev)
         CKEDITOR.replace('catatan_monev');
+        CKEDITOR.replace('txt_rangkuman_rekomendasi');
+        $('#tahun_thn').val($('#tahun').val());
         // CKEDITOR.replace('review_spi');
-        $('#table-tl-detail').DataTable();
+        // $('#table-tl-detail').DataTable();
     });
     $('#modaldetailtindaklanjut').modal('show');
 }
@@ -918,35 +916,34 @@ function validasireview()
         }).then(function (isConfirm) {
             
             if (isConfirm) {
-                $.ajax({
-                    url: flagsUrl + '/review-pic1-simpan',
-                    method:'POST',
-                    data: {review:catatan_monev,idrekom:idrekomendasi,tgl:tgl_penyelesaian},
-                    success: function (res) {
-                        $('#modaldetailtindaklanjut').modal('hide');
-                        if (res == 1) {
-                            swal({
-                                title: 'Berhasil!',
-                                text: 'Review Tindak Lanjut Berhasil Disimpan',
-                                icon: 'success'
-                            }).then(function () {
-                                // $('#table-data-tindaklanjut').load(flagsUrl + '/table-data-tindaklanjut/' + idrekomendasi, function () {
-                                //     $('[data-toggle="tooltip"]').tooltip();
-                                // });
-                                location.href = flagsUrl + '/data-tindaklanjut-unitkerja/' + tahun
-                            });
-                        }
-                        else {
-                            swal({
-                                title: 'Gagal!',
-                                text: 'Review Tindak Lanjut Gagal Disimpan',
-                                icon: 'error'
-                            })
-                        }
-                    }
-                });
-            } else {
-
+                $('#tindaklanjut-pic1').submit();
+                // $.ajax({
+                //     url: flagsUrl + '/review-pic1-simpan',
+                //     method:'POST',
+                //     data: {review:catatan_monev,idrekom:idrekomendasi,tgl:tgl_penyelesaian},
+                //     success: function (res) {
+                //         $('#modaldetailtindaklanjut').modal('hide');
+                //         if (res == 1) {
+                //             swal({
+                //                 title: 'Berhasil!',
+                //                 text: 'Review Tindak Lanjut Berhasil Disimpan',
+                //                 icon: 'success'
+                //             }).then(function () {
+                //                 // $('#table-data-tindaklanjut').load(flagsUrl + '/table-data-tindaklanjut/' + idrekomendasi, function () {
+                //                 //     $('[data-toggle="tooltip"]').tooltip();
+                //                 // });
+                //                 location.href = flagsUrl + '/data-tindaklanjut-unitkerja/' + tahun
+                //             });
+                //         }
+                //         else {
+                //             swal({
+                //                 title: 'Gagal!',
+                //                 text: 'Review Tindak Lanjut Gagal Disimpan',
+                //                 icon: 'error'
+                //             })
+                //         }
+                //     }
+                // });
             }
         });
         /*
@@ -956,3 +953,50 @@ function validasireview()
         */
     }
 }
+
+function rangkumantindaklanjut(idrekomendasi) {
+    $('#list-rangkuman').load(flagsUrl + '/list-rangkuman/' + idrekomendasi), function () {
+        CKEDITOR.replace('txt_rangkuman_rekomendasi');
+        $('#table-tl-detail').DataTable();
+    };
+    $('#rangkuman-tindaklanjut-rekomendasi').modal('show');
+}
+
+$('#form_list_rangkuman').on('submit', function (event) {
+    event.preventDefault();
+    var rangkuman_rekomendasi = $('#txt_rangkuman_rekomendasi').val();
+    // var rangkuman_rekomendasi = CKEDITOR.instances.rangkuman_rekomendasi.getData();
+    var tahun = $('#tahun').val();
+    if (rangkuman_rekomendasi == '')
+        notif('error', 'Catatan Monev Belum Diisi');
+    else {
+        
+        $.ajax({
+            url: flagsUrl + '/rangkuman-simpan',
+            method: "POST",
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (res) {
+                if (res == 1) {
+                    swal({
+                        title: 'Berhasil!',
+                        text: 'Rangkumamn Berhasil Disimpan',
+                        icon: 'success'
+                    }).then(function () {
+                        location.href = flagsUrl + '/data-tindaklanjut-unitkerja/' + tahun
+                    });
+                }
+                else {
+                    swal({
+                        title: 'Gagal!',
+                        text: 'Rangkumamn Gagal Disimpan',
+                        icon: 'error'
+                    })
+                }
+            }
+        })
+    }
+});
+//form_list_rangkuman

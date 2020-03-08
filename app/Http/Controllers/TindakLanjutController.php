@@ -1353,17 +1353,33 @@ class TindakLanjutController extends Controller
     public function review_pic1_simpan(Request $request)
     {
         // return $request->all();
-        $data['monev']=$monev=$request->review;
-        $data['idrekom']=$idrekom=$request->idrekom;
-        $data['tgl']=$tgl=date('Y-m-d',strtotime($request->tgl));
+        $tahun=$request->tahun;
+        $data['monev']=$monev=$request->catatan_monev;
+        $data['idrekom']=$idrekom=$request->idrekomendasi;
+        $data['tgl']=$tgl=date('Y-m-d',strtotime($request->tgl_selesai));
+
+        $path='';
+        if($request->hasFile('file_pendukung')){
+            $file = $request->file('file_pendukung');
+            $filenameWithExt = $request->file('file_pendukung')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('file_pendukung')->getClientOriginalExtension();
+            $fileNameToStore = time().'.'.$extension;
+            $path = $request->file('file_pendukung')->storeAs('public/dokumen',$fileNameToStore);
+        }
 
         $rekom=DataRekomendasi::find($idrekom);
         $rekom->review_monev=$monev;
         $rekom->tanggal_penyelesaian=$tgl;
+        $rekom->rangkuman_rekomendasi=$request->txt_rangkuman_rekomendasi;
+
+        if($rekom!='')
+            $rekom->file_pendukung=$path;
+
         $save=$rekom->save();
         if($save)
-            echo 1;
+            return redirect('data-tindaklanjut-unitkerja/'.$tahun)->with('success','Data Review dan Rangkuman Berhasil Di Simpan');
         else
-            echo 0;
+            return redirect('data-tindaklanjut-unitkerja/'.$tahun)->with('error','Data Review dan Rangkuman Gagal Di Simpan');
     }
 }

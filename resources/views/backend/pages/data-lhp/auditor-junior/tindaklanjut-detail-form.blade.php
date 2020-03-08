@@ -8,7 +8,9 @@
 		</div>
 		<div id="collapse-rangkuman" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-1" aria-expanded="false" style="height: 0px;">
 			<div class="panel-body">
-                
+            <input type="hidden" name="idrekomendasi" id="idrekomendasi" value="{{$rekom->id}}">
+            <input type="hidden" name="publish" id="publish">
+            <input type="hidden" name="tahun" id="tahun_junior">
 
 
                 <div class="row" style="padding:0 10px;margin-top:10px;">
@@ -259,16 +261,27 @@
 		</div>
 		<div id="collapse-review" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-2" aria-expanded="true">
 			<div class="panel-body">
-                 <div class="row" style="padding:0 10px;" id="monev-pic1">
+                 <div class="row" style="padding:0;" id="monev-pic1">
                     <div class="col-md-12" style="border:1px solid #bbb;border-radius:5px;padding:5px 20px 0px 20px;margin-top:5px;">
 
-                            <h4 style="margin:0px;padding:0px;margin-bottom:10px;">Review SPI</h4>
+                                @if ($rekom->published=='1')
+                                    <h4 style="margin:0px;padding:0px;margin-bottom:10px;">Review SPI
+                                    &nbsp;<span class="text-info"><i>(Sudah Publish Ke Auditor Senior)</i></span>
+                                    </h4>
+                                @else
+                                    <h4 style="margin:0px;padding:0px;margin-bottom:10px;">Review SPI</h4>
+                                @endif
+                            {{-- <h4 style="margin:0px;padding:0px;margin-bottom:10px;"></h4> --}}
                         
                             <div class="row" style="margin:0px;padding:0px;margin-bottom:10px;">
                                 <div class="col-md-12" style="margin:0px;padding:0px;margin-bottom:10px;">
                                     <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
                                         <div class="col-sm-12">
-                                            <textarea class="fz11" name="review_spi" placeholder="" id="review_spi"  style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px"></textarea>
+                                            @if ($rekom->published=='1')
+                                                <textarea class="fz11" name="review_spi" readonly placeholder="" id="review_spi"  style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px">{{$rekom->review_spi}}</textarea>
+                                            @else
+                                                <textarea class="fz11" name="review_spi" placeholder="" id="review_spi"  style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px">{{$rekom->review_spi}}</textarea>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

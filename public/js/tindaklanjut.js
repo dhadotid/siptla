@@ -145,3 +145,21 @@ $('.edit-summernote-tindaklanjut').summernote({
 $('#nominal').on('keyup', function (e) {
     $(this).val(format($(this).val()));
 });
+
+function update_rincian(rekom_id,temuan_id)
+{
+    $('#form-rincian').load(flagsUrl +'/formupdaterincian/'+temuan_id+'/'+rekom_id,function(){
+        $('#rincian_tl').select2();
+    });
+    $('#modal-update-rincian').modal('show')
+}
+
+function pilihrincian(val,idtemuan,idrekom) {
+    // $('#det-update-rincian').load(flagsUrl + '/load-table-rincian/' + val + '/' + idtemuan + '/' + idrekom);
+    gettablerincian(val, idtemuan, idrekom)
+}
+
+function gettablerincian(jenis, idtemuan, idrekom)
+{
+    $('#det-update-rincian').load(flagsUrl + '/load-table-rincian/' + jenis + '/' + idtemuan + '/' + idrekom);
+}

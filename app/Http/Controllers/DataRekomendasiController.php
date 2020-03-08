@@ -288,7 +288,16 @@ class DataRekomendasiController extends Controller
                     <a href="#" class="btn btn-sm btn-'.($status).'">'.$v->statusrekomendasi->rekomendasi.'</a>
                     <br>
                     <div style="margin-top:10px;">
-                        <a class="label label-primary fz-sm" href="'.url('data-tindak-lanjut/'.$v->rekom_id.'/'.$idtemuan.'').'" target="_blank">'.(isset($tl[$v->rekom_id]) ? count($tl[$v->rekom_id]) : 0).'&nbsp;Tindak Lanjut</a> &nbsp;';
+                        <a class="label label-primary fz-sm" href="'.url('data-tindak-lanjut/'.$v->rekom_id.'/'.$idtemuan.'').'" target="_blank">'.(isset($tl[$v->rekom_id]) ? count($tl[$v->rekom_id]) : 0).'&nbsp;Tindak Lanjut</a> &nbsp;&nbsp;';
+
+                        if($v->rincian!='')
+                        {
+                            $table.='<a class="label label-danger fz-sm" href="javascript:update_rincian('.$v->rekom_id.','.$idtemuan.')"><i class="fa fa-check"></i> Rincian : '.ucwords($v->rincian).'</a> &nbsp;<br>';
+                        }
+                        else
+                        {
+                            $table.='<a class="label label-success fz-sm" href="javascript:update_rincian('.$v->rekom_id.','.$idtemuan.')"><i class="fa fa-link"></i> Update Rincian</a> &nbsp;<br>';
+                        }
                         //<a style="color:#fff" href="javascript:formtindaklanjut('.$v->rekom_id.',-1)" class="label label-info fz-sm" data-value="0"><i class="fa fa-plus-circle"></i>&nbsp;Tambah Rincian</a>
                 $table.='</div>
                 </li>';
@@ -571,7 +580,7 @@ class DataRekomendasiController extends Controller
                 </tr>';
             $table.='</thead><tbody>';
 
-            $rincian=RincianSewa::where('id_temuan',$idtemuan)->get();
+            $rincian=RincianSewa::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
             $no=1;
             $totalnilai=0;
             foreach($rincian as $k=>$v)
@@ -628,7 +637,7 @@ class DataRekomendasiController extends Controller
                 </tr>';
             $table.='</thead><tbody>';
 
-            $rincian=RincianUangMuka::where('id_temuan',$idtemuan)->get();
+            $rincian=RincianUangMuka::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
             $no=1;
             $totalnilai=0;
             foreach($rincian as $k=>$v)
@@ -684,7 +693,7 @@ class DataRekomendasiController extends Controller
                 </tr>';
             $table.='</thead><tbody>';
 
-            $rincian=RincianListrik::where('id_temuan',$idtemuan)->get();
+            $rincian=RincianListrik::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
             $no=1;
             $totalnilai=0;
             foreach($rincian as $k=>$v)
@@ -738,7 +747,7 @@ class DataRekomendasiController extends Controller
                 </tr>';
             $table.='</thead><tbody>';
 
-            $rincian=RincianPiutang::where('id_temuan',$idtemuan)->get();
+            $rincian=RincianPiutang::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
             $no=1;
             $totalnilai=0;
             foreach($rincian as $k=>$v)
@@ -790,7 +799,7 @@ class DataRekomendasiController extends Controller
                 </tr>';
             $table.='</thead><tbody>';
 
-            $rincian=RincianPiutangKaryawan::where('id_temuan',$idtemuan)->get();
+            $rincian=RincianPiutangKaryawan::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
             $no=1;
             $totalnilai=0;
             foreach($rincian as $k=>$v)
@@ -844,7 +853,7 @@ class DataRekomendasiController extends Controller
                 </tr>';
             $table.='</thead><tbody>';
 
-            $rincian=RincianHutangTitipan::where('id_temuan',$idtemuan)->get();
+            $rincian=RincianHutangTitipan::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
             $no=1;
             $totalnilai=0;
             foreach($rincian as $k=>$v)
@@ -901,7 +910,7 @@ class DataRekomendasiController extends Controller
                 </tr>';
             $table.='</thead><tbody>';
 
-            $rincian=RincianPenutupanRekening::where('id_temuan',$idtemuan)->get();
+            $rincian=RincianPenutupanRekening::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
             $no=1;
             $totalnilai=0;
             foreach($rincian as $k=>$v)
@@ -956,7 +965,7 @@ class DataRekomendasiController extends Controller
                 </tr>';
             $table.='</thead><tbody>';
 
-            $rincian=RincianUmum::where('id_temuan',$idtemuan)->get();
+            $rincian=RincianUmum::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
             $no=1;
             $totalnilai=0;
             foreach($rincian as $k=>$v)
@@ -1281,6 +1290,16 @@ class DataRekomendasiController extends Controller
         echo $table;
     }
 
+    public function publish_rekomendasi_to_auditor_senior($idrekomendasi)
+    {
+        $rekom=DataRekomendasi::find($idrekomendasi);
+        $rekom->published=1;
+        $c=$rekom->save();
+        if($c)
+            echo 1;
+        else
+            echo 0;
+    }
     public function publish_rekomendasi_to_auditor_junior($idrekomendasi)
     {
         $rekom=DataRekomendasi::find($idrekomendasi);
@@ -1367,5 +1386,57 @@ class DataRekomendasiController extends Controller
             echo 1;
         else
             echo 0;
+    }
+
+    public function formupdaterincian($idtemuan,$idrekom)
+    {
+        $user_pic=PICUnit::get();
+        $userpic=array();
+        foreach($user_pic as $k=>$v)
+        {
+            $userpic[$v->id]=$v;
+        }
+        $rekomendasi=DataRekomendasi::where('id',$idrekom)->with('picunit1')->with('picunit2')->first();
+        $temuan=DataTemuan::find($idtemuan);
+        // return $userpic[$rekomendasi->pic_1_temuan_id];
+        // return $user_pic;
+        $form='<div class="form-group" style="margin-bottom:10px;">
+                <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Rincian Tindak Lanjut :
+                </label>
+                <div class="col-sm-9">
+                    <select name="rincian_tl" class="form-control" id="rincian_tl" data-plugin="select2" onchange="pilihrincian(this.value,\''.$idtemuan.'\',\''.$idrekom.'\')">
+                        <option value="">-- Pilih --</option>';
+                        foreach (rinciantindaklanjut() as $key=>$item)
+                        {
+                            $form.='<option value="'.$key.'">'.$item.'</option>';
+                        }
+            $form.='</select>
+                </div>
+            </div>';
+        $form.='<input type="hidden" name="idlhp" id="idlhp" value="'.$temuan->id_lhp.'">';
+        $form.='<input type="hidden" name="idrekom" id="idrekom" value="'.$idrekom.'">';
+        $form.='<div class="form-group" style="margin-bottom:10px;">
+                <label for="exampleTextInput1" class="col-sm-3 control-label text-right">PIC 1 :
+                </label>
+                <div class="col-sm-9" style="padding-top:5px;"><span class="label label-info fz-md">'.(isset($userpic[$rekomendasi->pic_1_temuan_id]) ? $userpic[$rekomendasi->pic_1_temuan_id]->nama_pic : '') .'</span></div>
+            </div>';
+        if($rekomendasi->pic_2_temuan_id!='' && $rekomendasi->pic_2_temuan_id!=',')
+        {
+            $form.='<div class="form-group" style="margin-bottom:10px;">
+                <label for="exampleTextInput1" class="col-sm-3 control-label text-right">PIC 2 :
+                </label>
+                <div class="col-sm-9" style="padding-top:5px;">';
+                $pic2list=explode(',',$rekomendasi->pic_2_temuan_id);
+                $form.='<ul>';
+                foreach($pic2list as $kp=>$vp)
+                {
+                    $form.='<li style="margin-bottom:5px;"><span class="label label-default fz-sm">'.(isset($userpic[$vp]) ? $userpic[$vp]->nama_pic : '') .'</span></li>';
+                }
+                $form.='</ul>';
+            $form.='</div>
+            </div>';
+        }
+        $form.='<div id="det-update-rincian"></div>';
+        return $form;
     }
 }

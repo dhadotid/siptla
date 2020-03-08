@@ -134,10 +134,10 @@
                                                     </td>
                                                 @endforeach
                                                 <td class="text-align:center">
-                                                    <div style="text-align:center;width:100px;">
+                                                    <div style="text-align:center;width:80px;">
                                                         <div class="btn-group">
-                                                            <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-bars"></i></button>
-                                                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+                                                            <button type="button" class="btn btn-primary btn-xs" style="width:25px;"><i class="fa fa-bars"></i></button>
+                                                            <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="width:25px;">
                                                                 <span class="caret"></span>
                                                             </button>
                                                             <ul class="dropdown-menu" role="menu">
@@ -188,6 +188,7 @@
     <script src="{{asset('js')}}/js.js"></script>
     <script src="{{asset('js')}}/temuan.js"></script>
     <script src="{{asset('js')}}/tindaklanjut.js"></script>
+    <script src="{{asset('js')}}/tindak-lanjut-junior.js"></script>
     <script src="{{asset('js')}}/jquery-ui.js"></script>
 	<script>
         $.ajaxSetup({
@@ -287,6 +288,10 @@
     .kolom-hide
     {
         display:none;
+    }
+    .select2-container
+    {
+        z-index:20000 !important;
     }
     </style>
 @endsection

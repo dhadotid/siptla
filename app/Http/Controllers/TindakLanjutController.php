@@ -1382,4 +1382,30 @@ class TindakLanjutController extends Controller
         else
             return redirect('data-tindaklanjut-unitkerja/'.$tahun)->with('error','Data Review dan Rangkuman Gagal Di Simpan');
     }
+
+    public function tindaklanjut_junior_simpan(Request $request)
+    {
+        // return $request->all();
+        $tahun=$request->tahun;
+        $rekom=DataRekomendasi::find($request->idrekomendasi);
+        $rekom->review_spi=$request->review_spi;
+        $rekom->status_rekomendasi_id=$request->status_rekomendasi;
+        $rekom->published=$request->publish;
+        $save=$rekom->save();
+
+        if($request->publish==0)
+        {
+            if($save)
+                return redirect('data-tindaklanjut/'.$tahun)->with('success','Data Review Berhasil Di Simpan Sebagai Draft');
+            else
+                return redirect('data-tindaklanjut/'.$tahun)->with('error','Data Review Gagal Di Simpan Sebagai Draft');
+        }
+        else
+        {
+            if($save)
+                return redirect('data-tindaklanjut/'.$tahun)->with('success','Data Review Berhasil Di Simpan dan Di Publish Ke Auditor Senior');
+            else
+                return redirect('data-tindaklanjut/'.$tahun)->with('error','Data Review Gagal Di Simpan');
+        }
+    }
 }

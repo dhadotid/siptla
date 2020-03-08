@@ -13,8 +13,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
-                        <button type="button" data-dismiss="modal" class="btn btn-success"><i class="fa fa-save"></i> Publish</button>
-                        <button type="button" data-dismiss="modal" class="btn btn-info"><i class="fa fa-file"></i> Draft</button>
+                        <button type="button"  class="btn btn-success" onclick="publishtljunior()" id="btn-publish"><i class="fa fa-save"></i> Publish</button>
+                        <button type="button"  class="btn btn-info" onclick="drafttljunior()" id="btn-draft"><i class="fa fa-file"></i> Draft</button>
                         
                     </div>
 				</form>

@@ -131,6 +131,115 @@ class RincianSewaController extends Controller
                 ->with('jenis',$jenis);
         }
     }
+    public function form_rincian2($jenis,$idtemuan,$idrekomendasi,$id=-1)
+    {
+
+        $dpic=$array_pic=array();
+        $rekom=DataRekomendasi::find($idrekomendasi);
+        if($rekom->pic_1_temuan_id!=null)
+            $dpic[]=$rekom->pic_1_temuan_id;
+
+        
+        if($rekom->pic_2_temuan_id!='' && $rekom->pic_2_temuan_id!=',')
+        {
+            $array_pic=explode(',',$rekom->pic_2_temuan_id);
+            foreach($array_pic as $k=>$v)
+            {
+                $dpic[]=$v;
+            }
+        }
+
+        $pic=PICUnit::whereIn('id',$dpic)->orderBy('nama_pic')->get();
+       
+        if($jenis=='sewa')
+        {
+            return view('backend.pages.data-lhp.rincian-form.form-sewa')
+                ->with('jenis',$jenis)
+                ->with('idtemuan',$idtemuan)
+                ->with('idrekomendasi',$idrekomendasi)
+                ->with('idform',$idrekomendasi)
+                ->with('id',$id)
+                ->with('pic',$pic)
+                ->with('jenis',$jenis);
+        }
+        elseif($jenis=='uangmuka')
+        {
+            return view('backend.pages.data-lhp.rincian-form.form-uangmuka')
+                ->with('jenis',$jenis)
+                ->with('idtemuan',$idtemuan)
+                ->with('idrekomendasi',$idrekomendasi)
+                ->with('idform',$idrekomendasi)
+                ->with('id',$id)
+                ->with('pic',$pic)
+                ->with('jenis',$jenis);
+        }
+        elseif($jenis=='listrik')
+        {
+            return view('backend.pages.data-lhp.rincian-form.form-listrik')
+                ->with('jenis',$jenis)
+                ->with('idtemuan',$idtemuan)
+                ->with('idrekomendasi',$idrekomendasi)
+                ->with('idform',$idrekomendasi)
+                ->with('id',$id)
+                ->with('pic',$pic)
+                ->with('jenis',$jenis);
+        }
+        elseif($jenis=='piutang')
+        {
+            return view('backend.pages.data-lhp.rincian-form.form-piutang')
+                ->with('jenis',$jenis)
+                ->with('idtemuan',$idtemuan)
+                ->with('idrekomendasi',$idrekomendasi)
+                ->with('idform',$idrekomendasi)
+                ->with('id',$id)
+                ->with('pic',$pic)
+                ->with('jenis',$jenis);
+        }
+        elseif($jenis=='piutangkaryawan')
+        {
+            return view('backend.pages.data-lhp.rincian-form.form-piutangkaryawan')
+                ->with('jenis',$jenis)
+                ->with('idtemuan',$idtemuan)
+                ->with('idrekomendasi',$idrekomendasi)
+                ->with('idform',$idrekomendasi)
+                ->with('id',$id)
+                ->with('pic',$pic)
+                ->with('jenis',$jenis);
+        }
+        elseif($jenis=='hutangtitipan')
+        {
+            return view('backend.pages.data-lhp.rincian-form.form-hutangtitipan')
+                ->with('jenis',$jenis)
+                ->with('idtemuan',$idtemuan)
+                ->with('idrekomendasi',$idrekomendasi)
+                ->with('idform',$idrekomendasi)
+                ->with('id',$id)
+                ->with('pic',$pic)
+                ->with('jenis',$jenis);
+        }
+        elseif($jenis=='penutupanrekening')
+        {
+            return view('backend.pages.data-lhp.rincian-form.form-penutupanrekening')
+                ->with('jenis',$jenis)
+                ->with('idtemuan',$idtemuan)
+                ->with('idrekomendasi',$idrekomendasi)
+                ->with('idform',$idrekomendasi)
+                ->with('id',$id)
+                ->with('pic',$pic)
+                ->with('jenis',$jenis);
+        }
+        elseif($jenis=='umum')
+        {
+            return view('backend.pages.data-lhp.rincian-form.form-umum')
+                ->with('jenis',$jenis)
+                ->with('idtemuan',$idtemuan)
+                ->with('idrekomendasi',$idrekomendasi)
+                ->with('idform',$idrekomendasi)
+                ->with('id',$id)
+                ->with('pic',$pic)
+                ->with('jenis',$jenis);
+        }
+    }
 
     public function form_rincian_simpan(Request $request)
     {
@@ -353,5 +462,29 @@ class RincianSewaController extends Controller
         $dt['idrekomendasi']=$data->id_rekomendasi;
         $data->delete();
         return $dt;
+    }
+
+    public function update_rincian(Request $request)
+    {
+        // return $request->all();
+        $rincian=$request->rincian_tl;
+        $idlhp=$request->idlhp;
+        $idrekom=$request->idrekom;
+
+        $rekom=DataRekomendasi::find($idrekom);
+        $rekom->rincian=$rincian;
+        $c=$rekom->save();
+
+        if($c)
+        {
+            $data['status']=1;
+            $data['idtemuan']=$rekom->id_temuan;
+            $data['statusrekom']=$rekom->status_rekomendasi_id;
+        }
+        else
+        {
+            $data['status']=0;
+        }
+        return $data;
     }
 }

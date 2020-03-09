@@ -44,7 +44,7 @@ function settglpenyelesaian(temuan_id, rekom_id) {
                     if (res) {
                         $('#tgl_penyelesaian_' + temuan_id + '_' + rekom_id).html(res);
                         $('#aksi_rekomendasi_'+ temuan_id + '_' + rekom_id).attr('style','display:inline-block !important;');
-                        $('#jlh_tl_' + temuan_id + '_' + rekom_id).html('<span class="label label-danger">0</span>');
+                        $('#jlh_tl_' + temuan_id + '_' + rekom_id).html('<span class="label label-danger fz-sm">0</span>');
                     }
                 }
             });

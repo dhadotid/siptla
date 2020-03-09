@@ -176,6 +176,13 @@ class DataTemuanController extends Controller
                     ->with('dpemeriksa')
                     ->with('djenisaudit')
                     ->orderBy('tanggal_lhp','desc')->get();
+
+                // $data=DaftarTemuan::selectRaw('*,data_rekomendasi.id as idrekom')->join('pemeriksa','pemeriksa.id','=','daftar_lhp.pemeriksa_id')
+                //                 ->join('jenis_audit','jenis_audit.id','=','daftar_lhp.jenis_audit_id')
+                //                 ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                //                 ->join('data_rekomendasi','data_rekomendasi.id_temuan','=','data_temuan.id')
+                //                 ->where('data_rekomendasi.senior_user_id',Auth::user()->id)
+                //                 ->orderBy('daftar_lhp.tanggal_lhp','desc')->get();
         }
        elseif(Auth::user()->level=='pic-unit')
         {
@@ -600,7 +607,7 @@ class DataTemuanController extends Controller
             $temuan=DataTemuan::where('id_lhp',$idlhp)->where('pic_temuan_id',$userpic_id)->get();
         else
             $temuan=DataTemuan::where('id_lhp',$idlhp)->get();
-            
+
         $select ='<select class="select2 form-control" name="no_temuan" id="no_temuan" onchange="loaddata()">';
         $select.='<option value="">-Pilih-</option>';
         foreach($temuan as $v)

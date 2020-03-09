@@ -231,7 +231,7 @@
                                                 if(isset($gettindaklanjut[$v->id]))
                                                 {
                                                     $tindak_lanjut.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">';
-                                                    $tindak_lanjut.='<div class="col-md-12 text-center"><span class="label label-info">'.count($gettindaklanjut[$v->id]).'</span></div>';
+                                                    $tindak_lanjut.='<div class="col-md-12 text-center"><span class="label label-info fz-sm">'.count($gettindaklanjut[$v->id]).'</span></div>';
                                                     $tindak_lanjut.='</div>';
                                                     $jlhtl=count($gettindaklanjut[$v->id]);
                                                 }
@@ -251,7 +251,7 @@
                                                     if(isset($rincian[$v->rincian][$v->id_rekomendasi]))
                                                     {
                                                         $rinc.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">';
-                                                        $rinc.='<div class="col-md-12 text-center" style="margin-top:5px;"><span class="label label-info">'.count($rincian[$v->rincian][$v->id_rekomendasi]).'</i></div>';
+                                                        $rinc.='<div class="col-md-12 text-center" style="margin-top:5px;"><span class="label label-info fz-sm">'.count($rincian[$v->rincian][$v->id_rekomendasi]).'</i></div>';
                                                         $rinc.='</div>';
                                                         $jlhrincian=count($rincian[$v->rincian][$v->id_rekomendasi]);
                                                     }

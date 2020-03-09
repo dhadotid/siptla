@@ -122,13 +122,12 @@
                 <input type="file" class="form-control"  id="add-dokumen"  name="dokumen_pendukung"  placeholder="Dokumen Pendukung" accept=".doc,.docx,.pdf,.xls,.xlsx">
             </div>
         </div>    
-        @if ($rekomendasi->rincian!='')
-            
-            <div class="form-group">
+        @if ($rekomendasi->rincian!='')  
+            {{-- <div class="form-group">
                 <div class="col-sm-12">
                     <a href="javascript:updaterincian_unitkerja('{{isset($rekomendasi->id) ? $rekomendasi->rincian : 0}}',{{isset($rekomendasi->id) ? $rekomendasi->id_temuan.','.$rekomendasi->id : '0,0'}})" onclick=""><u>Update Rincian Tindak Lanjut</u></a>
                 </div>
-            </div>    
+            </div>     --}}
         @endif
     </div>
 </div>

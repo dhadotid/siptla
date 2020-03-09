@@ -380,6 +380,11 @@
                                                             $aksi.=' <li><a class="" href="javascript:publishpic2('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke PIC 1</a></li>';
                                                         }
                                                     }
+
+                                                    if($v->rincian!='')
+                                                    {
+                                                        $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Update Rincian</a></li>';
+                                                    }
                                                     $aksi.='</ul></div>
                                                         </div>';
                                                 }
@@ -396,15 +401,17 @@
                                                     if(in_array($user_pic->id,$listpic2))
                                                     {
                                                         // print_r($listpic2);
-                                                        
                                                         $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
                                                         if($jlhrincian!=0)
                                                         {
                                                             $aksi.=' <li><a href="javascript:tambahrincian('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Tambah Rincian Tindak Lanjut</a></li>';
                                                         }
                                                         
-                                                        $aksi.=' <li><a href="#" style="font-size:11px;"><i class="glyphicon glyphicon-check"></i> &nbsp;&nbsp;Sudah Publish Ke PIC 1</a></li>';
-                                                        
+                                                        $aksi.=' <li><a href="#" style="font-size:11px;"><i class="glyphicon glyphicon-check"></i> &nbsp;&nbsp;Sudah Publish Ke PIC 1</a></li>';     
+                                                    }
+                                                    if($v->rincian!='')
+                                                    {
+                                                        $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Update Rincian</a></li>';
                                                     }
                                                     $aksi.='</ul></div>
                                                         </div>';
@@ -490,7 +497,10 @@
                                                             }
 
                                                         }
-                                                        
+                                                        if($v->rincian!='')
+                                                        {
+                                                            $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Update Rincian</a></li>';
+                                                        }
                                                         $aksi.='</ul>
                                                         </div></div>';
                                                 }

@@ -275,7 +275,9 @@ class TindakLanjutController extends Controller
         // $datalhp=DaftarTemuan::where('user_input_id',Auth::user()->id)->where('status_lhp','Publish LHP')->orderBy('id','desc')->get();
 
 
-        $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+        if(Auth::user()->level=='auditor-junior')
+        {
+            $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
                                 ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
                                 ->where('daftar_lhp.status_lhp','Publish LHP')
                                 ->where('daftar_lhp.tahun_pemeriksa',$tahun)
@@ -283,6 +285,18 @@ class TindakLanjutController extends Controller
                                 ->whereNull('data_rekomendasi.deleted_at')
                                 ->orderBy('data_rekomendasi.nomor_rekomendasi')
                                 ->get();
+        }
+        elseif(Auth::user()->level=='auditor-senior')
+        {
+            $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                                ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                                ->where('daftar_lhp.status_lhp','Publish LHP')
+                                ->where('daftar_lhp.tahun_pemeriksa',$tahun)
+                                ->whereNull('data_rekomendasi.deleted_at')
+                                ->orderBy('data_rekomendasi.nomor_rekomendasi')
+                                ->get();
+        }
+        
 
         $lhp=$temuan=$rekomendasi=$arrayrekomid=array();
         foreach($alldata as $k=>$v)

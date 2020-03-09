@@ -1017,9 +1017,20 @@ class DataRekomendasiController extends Controller
         return $rekom;
     }
 
-    public function rekomendasi_by_temuan_select($idtemuan)
+    public function rekomendasi_by_temuan_select($idtemuan,$userpic_id=null)
     {
-        $rekom=DataRekomendasi::where('id_temuan',$idtemuan)->get();
+        if($userpic_id!=null)
+        {
+            $rekom=DataRekomendasi::where('id_temuan',$idtemuan)->where(function($query) use ($userpic_id){
+                                    $query->where('pic_1_temuan_id', $userpic_id);
+                                    $query->orWhere('pic_2_temuan_id','like', "%$userpic_id%,");
+                                    // $query->orWhere('data_rekomendasi.pic_2_temuan_id', $user_pic->id);
+                                })->get();
+
+        }
+        else
+            $rekom=DataRekomendasi::where('id_temuan',$idtemuan)->get();
+
         $select ='<select class="select2 form-control" name="no_rekomendasi" id="no_rekomendasi" onchange="loaddata()">';
         $select.='<option value="">-Pilih-</option>';
         foreach($rekom as $v)

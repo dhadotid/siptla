@@ -62,7 +62,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::post('data-temuan-lhp-simpan/{idlhp}','DataTemuanController@data_temuan_lhp_simpan')->name('data-temuan-lhp.simpan');
     Route::post('data-temuan-lhp-update/{temuan_id}','DataTemuanController@data_temuan_lhp_update')->name('data-temuan-lhp.update');
     Route::get('temuan-by-lhp/{idlhp}','DataTemuanController@temuan_by_lhp')->name('temuan.by-lhp');
-    Route::get('temuan-by-lhp-select/{idlhp}','DataTemuanController@temuan_by_lhp_select')->name('temuan.by-lhp');
+    Route::get('temuan-by-lhp-select/{idlhp}/{user_pid_id?}','DataTemuanController@temuan_by_lhp_select');
 
     
     Route::get('formupdaterincian/{idtemuan}/{idrekom}','DataRekomendasiController@formupdaterincian');
@@ -76,7 +76,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('update-jlh-rekomendasi/{idtemuan}/{st_rekom?}','DataRekomendasiController@update_jlh_rekomendasi');
     Route::get('rekomendasi-by-temuan/{idtemuan}/{status?}','DataRekomendasiController@rekomendasi_by_temuan')->name('rekomendasi.by-temuan');
     Route::get('rincian-nilai-rekom/{idrekom}','DataRekomendasiController@rincian_nilai');
-    Route::get('rekomendasi-by-temuan-select/{idtemuan}','DataRekomendasiController@rekomendasi_by_temuan_select')->name('rekomendasi.by-temuan');
+    Route::get('rekomendasi-by-temuan-select/{idtemuan}/{user_pic_id?}','DataRekomendasiController@rekomendasi_by_temuan_select');
     Route::get('publish-rekomendasi-to-auditor-junior/{idrekomendasi}','DataRekomendasiController@publish_rekomendasi_to_auditor_junior');
     Route::get('publish-rekomendasi-to-auditor-senior/{idrekomendasi}','DataRekomendasiController@publish_rekomendasi_to_auditor_senior');
     Route::get('publish-rekomendasi-to-pic1/{idrekomendasi}','DataRekomendasiController@publish_rekomendasi_to_pic1');

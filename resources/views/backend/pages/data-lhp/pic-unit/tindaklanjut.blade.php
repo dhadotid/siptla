@@ -96,20 +96,29 @@
                                     </div>
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Nomor Temuan</label>
-                                        <div class="col-md-6">
+                                        <div class="col-md-6" id="select-temuan">
                                             <select class="select2 form-control" name="no_temuan" id="no_temuan" onchange="loaddata()"></select>
                                         </div>
                                     </div>
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Nomor Rekomendasi</label>
-                                        <div class="col-md-6">
+                                        <div class="col-md-6" id="select-rekomendasi">
                                             <select class="select2 form-control" name="no_rekomendasi" id="no_rekomendasi" onchange="loaddata()"></select>
                                         </div>
                                     </div>
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Status Rekomendasi</label>
                                         <div class="col-md-6">
-                                            <select class="select2 form-control" name="status_rekomendasi" id="status_rekomendasi" onchange="loaddata()"></select>
+                                             <select class="select2 form-control" name="status_rekomendasi" id="status_rekomendasi" onchange="loaddata()">
+                                                <option value="">-Pilih-</option>
+                                            @php
+                                                $statusrekom=\App\Models\StatusRekomendasi::all();
+                                                foreach($statusrekom as $k=>$v)
+                                                {
+                                                    echo '<option value="'.$v->id.'">'.$v->rekomendasi.'</option>';
+                                                }
+                                            @endphp
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -531,7 +540,18 @@
 		$('.select2').select2();
         // loaddata();
         $('#table').DataTable();
-
+        $('#no_lhp').on('change',function(){
+            var idlhp=$(this).val();
+            $('#select-temuan').load(flagsUrl+'/temuan-by-lhp-select/'+idlhp+'/{{$user_pic->id}}',function(){
+                $('.select2').select2();
+                $('#no_temuan').on('change',function(){
+                    var idtemuan=$(this).val();
+                    $('#select-rekomendasi').load(flagsUrl+'/rekomendasi-by-temuan-select/'+idtemuan+'/{{$user_pic->id}}',function(){
+                        $('.select2').select2();
+                    });
+                });
+            });
+        });
         var pesan='{{Session::get("success")}}';
         var error='{{Session::get("error")}}';
         if(pesan!='')

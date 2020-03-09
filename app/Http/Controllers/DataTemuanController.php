@@ -604,7 +604,15 @@ class DataTemuanController extends Controller
     public function temuan_by_lhp_select($idlhp,$userpic_id=null)
     {
         if($userpic_id!=null)
-            $temuan=DataTemuan::where('id_lhp',$idlhp)->where('pic_temuan_id',$userpic_id)->get();
+        {
+            $temuan=DataTemuan::join('data_rekomendasi','data_rekomendasi.id_temuan','=','data_temuan.id')
+                    ->where(function($query) use ($userpic_id){
+                        $query->where('data_rekomendasi.pic_1_temuan_id', $userpic_id);
+                        $query->orWhere('data_rekomendasi.pic_2_temuan_id','like', "%$userpic_id%,");
+                        // $query->orWhere('data_rekomendasi.pic_2_temuan_id', $user_pic->id);
+                    })->where('data_temuan.id_lhp',$idlhp)
+                    ->get();
+        }
         else
             $temuan=DataTemuan::where('id_lhp',$idlhp)->get();
 
@@ -612,7 +620,7 @@ class DataTemuanController extends Controller
         $select.='<option value="">-Pilih-</option>';
         foreach($temuan as $v)
         {
-            $select.='<option value="'.$v->id.'">'.$v->no_temuan.' - '.$v->temuan.'</option>';
+            $select.='<option value="'.$v->id_temuan.'">'.$v->no_temuan.' - '.$v->temuan.'</option>';
         }
         $select.='</select>';
         return $select;

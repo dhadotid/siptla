@@ -215,7 +215,7 @@ class TindakLanjutController extends Controller
                 ->with('lhp',$lhp)
                 ->with('rekomendasi',$rekomendasi)
                 ->with('pemeriksa',$pemeriksaa)
-                ->with('temuan',$temuan);
+                ->with('temuan',$alldata);
 
         // $temuan=$rekomendasi=$idtemuanarray=array();
         // $datalhp=DaftarTemuan::where('user_input_id',Auth::user()->id)->where('status_lhp','Publish LHP')->orderBy('id','desc')->get();

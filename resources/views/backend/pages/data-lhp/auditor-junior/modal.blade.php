@@ -375,3 +375,22 @@
 		</div>
 	</div>  
 {{-- END Modal Rincian Umum--}}
+{{-- Modal Rincian Umum--}}
+ <div class="modal fade" id="detailtljunior"  tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+                @csrf
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Detail Tindak Lanjut</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="detail-tl-rincian"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-default">Tutup</button>
+                </div>
+			</div>
+		</div>
+	</div>  
+{{-- END Modal Rincian Umum--}}

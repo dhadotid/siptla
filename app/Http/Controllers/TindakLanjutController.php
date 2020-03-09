@@ -1440,4 +1440,55 @@ class TindakLanjutController extends Controller
                 return redirect('data-tindaklanjut/'.$tahun)->with('error','Data Review Gagal Di Simpan');
         }
     }
+
+    public function detail_tl_rincian($idrekomendasi)
+    {
+        $dokumen=DokumenTindakLanjut::all();
+        $dok=array();
+        foreach($dokumen as $k=>$v)
+        {
+            $dok[$v->id_tindak_lanjut_temuan]=$v;
+        }
+        $tl=TindakLanjutTemuan::where('rekomendasi_id',$idrekomendasi)->with('drekomendasi')->with('pic1')->with('pic2')->get();
+        $rekom=DataRekomendasi::find($idrekomendasi);
+        $arrayidtl=array();
+        foreach($tl as $k=>$v)
+        {
+            $arrayidtl[$v->id]=$v->id;
+        }
+        $jenis=$rekom->rincian;
+        $where=['id_rekomendasi'=>$idrekomendasi];
+
+        $rincian=array();
+        if($jenis=='sewa')
+            $rincian=RincianSewa::where($where)->get();
+        elseif($jenis=='uangmuka')
+            $rincian=RincianUangMuka::where($where)->get();
+        elseif($jenis=='listrik')
+            $rincian=RincianListrik::where($where)->get();
+        elseif($jenis=='piutang')
+            $rincian=RincianPiutang::where($where)->get();
+        elseif($jenis=='piutangkaryawan')
+            $rincian=RincianPiutangKaryawan::where($where)->get();
+        elseif($jenis=='hutangtitipan')
+            $rincian=RincianHutangTitipan::where($where)->get();
+        elseif($jenis=='penutupanrekening')
+            $rincian=RincianPenutupanRekening::where($where)->get();
+        elseif($jenis=='umum')
+            $rincian=RincianUmum::where($where)->get();
+
+        $tlrincian=TindakLanjutRincian::where('id_rekomendasi',$idrekomendasi)->get();
+        $tindaklanjut_rincian=array();
+        foreach($tlrincian as $k=>$v)
+        {
+            $tindaklanjut_rincian[$v->id_tindak_lanjut][]=$v;
+        }
+        // return $rincian;
+        return view('backend.pages.data-lhp.auditor-junior.tindaklanjut-lhp-table')
+                ->with('rincian',$rincian)
+                ->with('tindaklanjut_rincian',$tindaklanjut_rincian)
+                ->with('tindaklanjut',$tl)
+                ->with('dok',$dok)
+                ->with('idrekomendasi',$idrekomendasi);
+    }
 }

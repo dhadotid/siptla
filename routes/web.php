@@ -125,6 +125,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('data-rekanan','RekananController@data_rekanan')->name('data-rekanan');
     
     Route::get('set-tgl-penyelesaian/{temuan_id}/{rekom_id}/{tgl}/{bln}/{thn}','TindakLanjutController@set_tgl_penyelesaian');
+    Route::get('detail-tl-rincian/{rekom_id}','TindakLanjutController@detail_tl_rincian');
 
     Route::post('tindaklanjut-junior-simpan','TindakLanjutController@tindaklanjut_junior_simpan');
 });

@@ -443,10 +443,10 @@
                                                             if($v->publish_pic_2==1 && $v->pic_2_temuan_id!='')
                                                             {
                                                                 $aksi.=' <li><a href="javascript:reviewtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-file"></i> &nbsp;&nbsp;Review & Rangkuman Tindak Lanjut</a></li>';
-                                                                 if($v->review_monev!='')
-                                                                    {
-                                                                        $aksi.=' <li><a href="javascript:publishpic1('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Auditor</a></li>';
-                                                                    }
+                                                                //  if($v->review_monev!='')
+                                                                //     {
+                                                                //         $aksi.=' <li><a href="javascript:publishpic1('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Auditor</a></li>';
+                                                                //     }
                                                             }
 
                                                             if($v->publish_pic_1==0)

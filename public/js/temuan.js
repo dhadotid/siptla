@@ -1247,3 +1247,10 @@ function publishlhp(idlhp) {
         }
     });
 }
+
+function detailtljunior(idrekom) {
+    $('#detail-tl-rincian').load(flagsUrl +'/detail-tl-rincian/'+idrekom,function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+    $('#detailtljunior').modal('show')
+}

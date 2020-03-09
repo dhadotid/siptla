@@ -288,7 +288,7 @@ class DataRekomendasiController extends Controller
                     <a href="#" class="btn btn-sm btn-'.($status).'">'.$v->statusrekomendasi->rekomendasi.'</a>
                     <br>
                     <div style="margin-top:10px;">
-                        <a class="label label-primary fz-sm" href="'.url('data-tindak-lanjut/'.$v->rekom_id.'/'.$idtemuan.'').'" target="_blank">'.(isset($tl[$v->rekom_id]) ? count($tl[$v->rekom_id]) : 0).'&nbsp;Tindak Lanjut</a> &nbsp;&nbsp;';
+                        <a class="label label-primary fz-sm" href="javascript:detailtljunior('.$v->rekom_id.')">'.(isset($tl[$v->rekom_id]) ? count($tl[$v->rekom_id]) : 0).'&nbsp;Tindak Lanjut</a> &nbsp;&nbsp;';
 
                         if($v->rincian!='')
                         {

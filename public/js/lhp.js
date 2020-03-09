@@ -320,3 +320,8 @@ function publishlhp(idlhp)
         }
     }); 
 }
+
+function detailtljunior(idrekom)
+{
+    $('#detailtljunior').modal('show')
+}

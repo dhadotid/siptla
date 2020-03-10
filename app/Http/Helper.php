@@ -195,4 +195,21 @@ function rinciantindaklanjut()
     }
     return $drinc;
 }
+function singkatanstatus($status)
+{
+    $s=explode('(',$status);
+    $st=str_replace(')','',$s[1]);
+    return $st;
+}
+function warnasingkatanstatus($status)
+{
+    if($status=='BTL')
+        return 'warning';
+    elseif($status=='BS')
+        return 'info';
+    elseif($status=='SS')
+        return 'success';
+    elseif($status=='TDL')
+        return 'danger';
+}
 ?>

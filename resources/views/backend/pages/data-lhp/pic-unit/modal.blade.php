@@ -248,7 +248,7 @@
 {{-- END Modal Rincian--}}
 {{-- Modal TIndal Lanjut--}}
  <div class="modal fade" id="lihattindaklanjut" role="dialog">
-		<div class="modal-dialog modal-lg">
+		<div class="modal-dialog modal-lg" style="width:70% !important">
 			<div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

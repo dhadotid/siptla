@@ -19,6 +19,7 @@ use App\Models\RincianHutangTitipan;
 use App\Models\RincianPenutupanRekening;
 use App\Models\RincianUmum;
 use App\Models\TindakLanjutRincian;
+use App\Models\CatatanMonev;
 use App\Models\StatusRekomendasi;
 use Auth;
 class TindakLanjutController extends Controller
@@ -274,7 +275,12 @@ class TindakLanjutController extends Controller
         $pemeriksa=Pemeriksa::orderBy('code')->get();
         // $datalhp=DaftarTemuan::where('user_input_id',Auth::user()->id)->where('status_lhp','Publish LHP')->orderBy('id','desc')->get();
 
-
+        $statusrekom=StatusRekomendasi::all();
+        $st=array();
+        foreach($statusrekom as $k=>$v)
+        {
+            $st[$v->id]=$v;
+        }
         if(Auth::user()->level=='auditor-junior')
         {
             $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
@@ -292,6 +298,7 @@ class TindakLanjutController extends Controller
                                 ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
                                 ->where('daftar_lhp.status_lhp','Publish LHP')
                                 ->where('daftar_lhp.tahun_pemeriksa',$tahun)
+                                ->where('data_rekomendasi.senior_user_id',Auth::user()->id)
                                 ->whereNull('data_rekomendasi.deleted_at')
                                 ->orderBy('data_rekomendasi.nomor_rekomendasi')
                                 ->get();
@@ -313,7 +320,7 @@ class TindakLanjutController extends Controller
         {
             $tindaklanjut[$v->rekomendasi_id][]=$v;
         }
-        // return $tindaklanjut;
+        // return $st;
         return view('backend.pages.data-lhp.auditor-junior.tindaklanjut')
                 ->with('tahun',$tahun)
                 ->with('rekomid',$rekomid)
@@ -321,6 +328,7 @@ class TindakLanjutController extends Controller
                 ->with('temuanid',$temuanid)
                 ->with('alldata',$alldata)
                 ->with('pic',$pic)
+                ->with('strekom',$st)
                 ->with('lhp',$lhp)
                 ->with('rekomendasi',$rekomendasi)
                 ->with('pemeriksa',$pemeriksa)
@@ -406,6 +414,8 @@ class TindakLanjutController extends Controller
             $arrayrekomid[$v->id_rekom]=$v->id_rekom;
         }
 
+        $jlhtl=$this->jlh_tindaklanjut();
+        // return $jlhtl;
         $rinc['sewa']=RincianSewa::whereIn('id_rekomendasi',$arrayrekomid)->get();
         $rinc['uangmuka']=RincianUangMuka::whereIn('id_rekomendasi',$arrayrekomid)->get();
         $rinc['listrik']=RincianListrik::whereIn('id_rekomendasi',$arrayrekomid)->get();
@@ -430,9 +440,18 @@ class TindakLanjutController extends Controller
         {
             $tindaklanjut[$v->rekomendasi_id][]=$v;
         }
+        $statusrekom=StatusRekomendasi::all();
+        $st=array();
+        foreach($statusrekom as $k=>$v)
+        {
+            $st[$v->id]=$v;
+        }
+
         // return $tindaklanjut;
         return view('backend.pages.data-lhp.pic-unit.tindaklanjut')
+                ->with('jumlahtl',$jlhtl)
                 ->with('rincian',$rincian)
+                ->with('strekom',$st)
                 ->with('tahun',$tahun)
                 ->with('rekomid',$rekomid)
                 ->with('gettindaklanjut',$tindaklanjut)
@@ -537,19 +556,30 @@ class TindakLanjutController extends Controller
 
         $wh=array();
         if($request->rekomid!='')
-            $wh['data_rekomendasi.id']=$request->rekomid;
+        {
+            if($request->rekomid!=0)
+                $wh['data_rekomendasi.id']=$request->rekomid;
+        }
 
         if($request->temuan_id!='')
-            $wh['data_temuan.id']=$request->temuan_id;
+        {
+            if($request->temuan_id!=0)
+                $wh['data_temuan.id']=$request->temuan_id;
+        }
 
         if($request->statusrekom!='')
             $wh['data_rekomendasi.status_rekomendasi_id']=$request->statusrekom;
 
         if($request->pemeriksa!='')
-            $wh['daftar_lhp.pemeriksa_id']=$request->pemeriksa;
+        {
+            if($request->pemeriksa!=0)
+                $wh['daftar_lhp.pemeriksa_id']=$request->pemeriksa;
+        }
 
         // return $wh;
         $pemeriksaa=Pemeriksa::orderBy('code')->get();
+        $jlhtl=$this->jlh_tindaklanjut();
+
         $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
                                 ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
                                 ->where('daftar_lhp.status_lhp','Publish LHP')
@@ -565,6 +595,7 @@ class TindakLanjutController extends Controller
                                 ->get();
 
         
+                                $jlhtl=$this->jlh_tindaklanjut();
 
         $lhp=$temuan=$rekomendasi=$arrayrekomid=array();
         $idpic2=array();
@@ -608,7 +639,7 @@ class TindakLanjutController extends Controller
             // if(betweendate($v->tanggal_lhp,$t_awal,$t_akhir))
             // {
                 $lhp[$v->id_lhp]=$v;
-                $temuan[]=$v;
+                $temuan[$v->id_temuan]=$v;
                 $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
             // }
             // $dt['cek'][]=$v->tanggal_lhp;
@@ -617,10 +648,18 @@ class TindakLanjutController extends Controller
 
         }
         // return $temuan;
-                
+        $statusrekom=StatusRekomendasi::all();
+        $st=array();
+        foreach($statusrekom as $k=>$v)
+        {
+            $st[$v->id]=$v;
+        }
+ 
         return view('backend.pages.data-lhp.pic-unit.tindaklanjut-list')
-               ->with('tahun',$tahun)
+                ->with('jumlahtl',$jlhtl)
+                ->with('tahun',$tahun)
                 ->with('rekomid',$rekomid)
+                ->with('strekom',$st)
                 ->with('temuanid',$temuanid)
                 ->with('alldata',$alldata)
                 ->with('pic',$pic)
@@ -671,9 +710,23 @@ class TindakLanjutController extends Controller
     {
         list($temuan_id,$temuan_idx)=explode('_',$temuan_id_index);
         list($rekom_id,$rekom_idx)=explode('_',$rekom_id_index);
+        $user_pic=PICUnit::where('id_user',Auth::user()->id)->first();
+
         $data=DaftarTemuan::find($idlhp);
 
-        $user_pic=PICUnit::where('id_user',Auth::user()->id)->first();
+        $getrekom=DataRekomendasi::where('pic_1_temuan_id', $user_pic->id)->orWhere('pic_2_temuan_id', 'like',"%$user_pic->id%,")->with('dtemuan')->orderBy('nomor_rekomendasi')->get();
+        $getidtemuan=$datarekom=array();
+        foreach($getrekom as $kr=>$vr)
+        {
+            if(isset($vr->dtemuan->id_lhp))
+            {
+                if($vr->dtemuan->id_lhp==$idlhp)
+                {
+                    $getidtemuan[$vr->id_temuan]=$vr->id_temuan;
+                    $datarekom[$vr->id_temuan][]=$vr;
+                }
+            }
+        }
 
         // $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
         //                         ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
@@ -703,33 +756,41 @@ class TindakLanjutController extends Controller
         //                 ->with('drekomendasi',$drekomendasi)
         //                 ->with('temuan',isset($dtemuan[$temuan_idx]) ? $dtemuan[$temuan_idx] : array());
                         
-        $temuan=DataTemuan::where('id_lhp',$idlhp)->get();
+        // $temuan=DataTemuan::where('id_lhp',$idlhp)->get();
+        $temuan=DataTemuan::whereIn('id',$getidtemuan)->get();
         // $temuan=DataTemuan::where('pic_temuan_id',$user_pic->id)->get();
         // $temuan=DataTemuan::all();
-        $arrayidtemuan=$dtemuan=array();
+        $arrayidtemuan=$dtemuan=$ddtem=array();
         foreach($temuan as $k=>$v)
         {
             // if($idlhp==$v->id_lhp)
             $arrayidtemuan[$v->id]=$v->id;   
             $dtemuan[$k]=$v;
+            $ddtem[$v->id]=$v;
         }
 
-        $rekomendasi=DataRekomendasi::where('id_temuan',$temuan_id)
-            ->where(function($query) use ($user_pic){
-                 $query->where('pic_1_temuan_id', $user_pic->id);
-                 $query->orWhere('pic_2_temuan_id', 'like',"%$user_pic->id%,");
-             })
-             ->with('dtemuan')->get();
+        
         // ->where('pic_1_temuan_id',$user_pic->id)
         if($temuan_idx!=0)
         {
             $dtem=$dtemuan[$temuan_idx];
-            $rekomendasi=DataRekomendasi::where('id_temuan',$dtem->id)
-                ->where(function($query) use ($user_pic){
-                    $query->where('pic_1_temuan_id', $user_pic->id);
-                    $query->orWhere('pic_2_temuan_id', 'like',"%$user_pic->id%,");
-                })->with('dtemuan')->get();
+            // $rekomendasi=DataRekomendasi::where('id_temuan',$dtem->id)
+            //     ->where(function($query) use ($user_pic){
+            //         $query->where('pic_1_temuan_id', $user_pic->id);
+            //         $query->orWhere('pic_2_temuan_id', 'like',"%$user_pic->id%,");
+            //     })->with('dtemuan')->get();
+            $rekomendasi=$datarekom[$dtem->id];
             // ->where('pic_1_temuan_id',$user_pic->id)
+        }
+        else
+        {
+            $rekomendasi=$datarekom[$temuan_id];
+            // $rekomendasi=DataRekomendasi::where('id_temuan',$temuan_id)
+            // ->where(function($query) use ($user_pic){
+            //      $query->where('pic_1_temuan_id', $user_pic->id);
+            //      $query->orWhere('pic_2_temuan_id', 'like',"%$user_pic->id%,");
+            //  })
+            //  ->with('dtemuan')->get();
         }
 
         // return $arrayidtemuan;
@@ -743,9 +804,14 @@ class TindakLanjutController extends Controller
                 $drekomendasi[$k]=$v;
                 $drekom[$v->id]=$v;
                 $rkm_idx[$v->id]=$k;
+
+                // if($v->pic_1_temuan_id==$user_pic->id || $v->pic_2_temuan_id==$user_pic->id)
+                // $dtemuan[]=$ddtem[$v->id_temuan];
+                // else
+                //     $dtemuan=array();
         }
         // return $drekomendasi[$rekom_idx];
-        // return $drekomendasi;
+        // return $temuan_idx;
         if($idrekom==null)
             $rrekom=isset($drekomendasi[$rekom_idx]) ? $drekomendasi[$rekom_idx] : array();
         else
@@ -775,6 +841,13 @@ class TindakLanjutController extends Controller
         $rekom=DataRekomendasi::where('id',$request->rekomendasi_id)->with('dtemuan')->first();
         $user_pic=PICUnit::where('id_user',Auth::user()->id)->first();
         
+        $tem=TindakLanjutTemuan::where('rekomendasi_id',$request->rekomendasi_id)->get();
+        foreach($tem as $km=>$vm)
+        {
+            $vm->action_plan=$request->action_plan;
+            $vm->save();
+        }
+
         $tindaklanjut=new TindakLanjutTemuan;
         $tindaklanjut->lhp_id = $request->idlhp;
         $tindaklanjut->temuan_id = $request->temuan_id;
@@ -797,21 +870,27 @@ class TindakLanjutController extends Controller
 
         $idtindaklanjut=$tindaklanjut->id;
 
-        if($request->hasFile('dokumen_pendukung')){
-            $file = $request->file('dokumen_pendukung');
-            $filenameWithExt = $request->file('dokumen_pendukung')->getClientOriginalName();
-            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-            $extension = $request->file('dokumen_pendukung')->getClientOriginalExtension();
-            // $fileNameToStore = $filename.'_'.time().'.'.$extension;
-            $fileNameToStore = time().'.'.$extension;
-            $path = $request->file('dokumen_pendukung')->storeAs('public/dokumen',$fileNameToStore);
-
-            $dokumen=new DokumenTindakLanjut;
-            $dokumen->id_tindak_lanjut_temuan=$idtindaklanjut;
-            $dokumen->nama_dokumen=$fileNameToStore;
-            $dokumen->path=$path;
-            $dokumen->save();
+        $dokumen=DokumenTindakLanjut::where('id_tindak_lanjut_temuan',$request->form_tl)->get();
+        foreach($dokumen as $k=>$v)
+        {
+            $v->id_tindak_lanjut_temuan=$idtindaklanjut;
+            $v->save();
         }
+        // if($request->hasFile('dokumen_pendukung')){
+        //     $file = $request->file('dokumen_pendukung');
+        //     $filenameWithExt = $request->file('dokumen_pendukung')->getClientOriginalName();
+        //     $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+        //     $extension = $request->file('dokumen_pendukung')->getClientOriginalExtension();
+        //     // $fileNameToStore = $filename.'_'.time().'.'.$extension;
+        //     $fileNameToStore = time().'.'.$extension;
+        //     $path = $request->file('dokumen_pendukung')->storeAs('public/dokumen',$fileNameToStore);
+
+        //     $dokumen=new DokumenTindakLanjut;
+        //     $dokumen->id_tindak_lanjut_temuan=$idtindaklanjut;
+        //     $dokumen->nama_dokumen=$fileNameToStore;
+        //     $dokumen->path=$path;
+        //     $dokumen->save();
+        // }
 
         $lhp=DaftarTemuan::find($request->idlhp);
         $tahun=$lhp->tahun_pemeriksa;
@@ -1157,7 +1236,7 @@ class TindakLanjutController extends Controller
         $dok=array();
         foreach($dokumen as $k=>$v)
         {
-            $dok[$v->id_tindak_lanjut_temuan]=$v;
+            $dok[$v->id_tindak_lanjut_temuan][]=$v;
         }
         $tl=TindakLanjutTemuan::where('rekomendasi_id',$idrekomendasi)->with('drekomendasi')->get();
         $rekom=DataRekomendasi::find($idrekomendasi);
@@ -1504,5 +1583,83 @@ class TindakLanjutController extends Controller
                 ->with('tindaklanjut',$tl)
                 ->with('dok',$dok)
                 ->with('idrekomendasi',$idrekomendasi);
+    }
+
+     public function ajaxFiles(Request $request)
+    {
+
+        //  
+        // return $request->all();
+        // $file=$request->file;
+        // $newpath = $file->store('file/pengajuan_lelang');
+        $idformtl = $request->idformtl;
+        $idlhp = $request->idlhp;
+        $temuan_id = $request->temuan_id;
+        $rekomendasi_id = $request->rekomendasi_id;
+        $nama = $request->namafile;
+
+        $file = $request->file('file');
+        $filenameWithExt = $request->file('file')->getClientOriginalName();
+        $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+        $extension = $request->file('file')->getClientOriginalExtension();
+        $fileNameToStore = time().'.'.$extension;
+        $path = $request->file('file')->storeAs('public/dokumen',$fileNameToStore);
+
+        if($path)
+        {
+            $dokumen=new DokumenTindakLanjut;
+            $dokumen->id_tindak_lanjut_temuan=$idformtl;
+            $dokumen->nama_dokumen=$nama;
+            $dokumen->path=$path;
+            $dokumen->save();
+            return $path;
+        }
+        else
+        {
+            return array(
+                    'fail' => true,
+                    'errors' => 'Upload Gagal'
+                );
+        }
+    }
+
+    public function div_editor($idrekom,$idtl)
+    {
+        $rekom=DataRekomendasi::find($idrekom);
+        $form='<div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
+                        <div class="col-sm-12">
+                            <input type="hidden" id="idtl_catatan_monev" name="idtl_catatan_monev" value="'.$idtl.'">
+                            <input type="hidden" id="idrekom_catatan_monev" name="idrekom_catatan_monev" value="'.$idrekom.'">
+                            <textarea class="fz11" name="catatan_monev" placeholder="" id="catatan_monev_pic"  style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px"></textarea>
+                        </div>
+                    </div>';
+        return $form;
+    }
+
+    public function simpan_monev_pic(Request $request)
+    {
+        // return $request->all();
+        $idtl_catatan_monev=$request->idtl_catatan_monev;
+        $idrekom_catatan_monev=$request->idrekom_catatan_monev;
+        $catatan_monev=$request->catatan_monev;
+
+        $tindaklanjut=TindakLanjutTemuan::where('id',$idtl_catatan_monev)->with('drekomendasi')->first();
+        $catatan=new CatatanMonev;
+        $catatan->id_tindaklanjut=$idtl_catatan_monev;
+        $catatan->id_rekomendasi=$idrekom_catatan_monev;
+        $catatan->catatan_monev=$catatan_monev;
+        $catatan->pic_2=$tindaklanjut->pic_2_id;
+        $catatan->pic_1=$tindaklanjut->drekomendasi->pic_1_temuan_id;
+        $s=$catatan->save();
+        if($s)
+            echo 1;
+        else
+            echo 0;
+    }
+
+    public function detail_catatan($id)
+    {
+        $cat=CatatanMonev::find($id);
+        return $cat->catatan_monev;
     }
 }

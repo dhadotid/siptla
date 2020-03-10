@@ -83,6 +83,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('list-rangkuman/{idrekomendasi}','DataRekomendasiController@list_rangkuman');
     Route::post('rangkuman-simpan','DataRekomendasiController@rangkuman_simpan');
     
+    
     Route::post('update-rincian','RincianSewaController@update_rincian');
     Route::get('load-table-rincian/{jenis}/{idtemuan?}/{statusrekomendasi?}/{view?}','DataRekomendasiController@load_tabel_rincian');
     Route::get('load-table-rincian-unitkerja/{jenis}/{idtemuan?}/{statusrekomendasi?}/{view?}','DataRekomendasiController@load_tabel_rincian_unitkerja');
@@ -107,6 +108,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('tindak-lanjut-unitkerja-form-add/{idlhp}/{temuan_id_index}/{rekom_id_index}/{rekom_id?}','TindakLanjutController@unitkerja_add_form');
     Route::get('tindak-lanjut-unitkerja-form-edit/{idlhp}/{temuan_id}/{rekom_id}/{idtl}','TindakLanjutController@unitkerja_edit_form');
     Route::get('hapus-tindak-lanjut/{idtl}','TindakLanjutController@hapus_tindak_lanjut');
+    Route::post('upload-file-tindaklanjut','TindakLanjutController@ajaxFiles');
     
     Route::get('detail-tindaklanjut-junior/{idrekom}','TindakLanjutController@detail_tindaklanjut_junior');
     Route::get('detail-tindaklanjut-pic1/{idrekom}','TindakLanjutController@detail_tindaklanjut_picunit1');
@@ -121,13 +123,15 @@ Route::group(['middleware'=>'auth'],function(){
     
 
     Route::get('table-data-tindaklanjut/{idrekomendasi}','TindakLanjutController@table_data_tindaklanjut');
-
+    Route::get('div-editor/{idrekom}/{idtl}','TindakLanjutController@div_editor');
     Route::get('data-rekanan','RekananController@data_rekanan')->name('data-rekanan');
     
     Route::get('set-tgl-penyelesaian/{temuan_id}/{rekom_id}/{tgl}/{bln}/{thn}','TindakLanjutController@set_tgl_penyelesaian');
     Route::get('detail-tl-rincian/{rekom_id}','TindakLanjutController@detail_tl_rincian');
 
     Route::post('tindaklanjut-junior-simpan','TindakLanjutController@tindaklanjut_junior_simpan');
+    Route::post('simpan-monev-pic','TindakLanjutController@simpan_monev_pic');
+    Route::get('detail-catatan/{id}','TindakLanjutController@detail_catatan');
 });
 
 Route::group(['prefix'=>'laporan','middleware'=>'auth'],function(){

@@ -7,13 +7,13 @@
                             </div>
                         </div>
 
-                        <table id="table" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                         <table id="table" class="table table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                                 <tr class="primary">
                                     <th class="text-center" style="width:15px;">#</th>
                                     <th class="text-center"><div style="width:420px;">Temuan / Rekomendasi</div></th>
+                                    <th class="text-center">PIC</th>
                                     <th class="text-center">Tanggal<br>Penyelesaian</th>
-                                    <th class="text-center">PIC 2</th>
                                     <th class="text-center">Tindak<br>Lanjut</th>
                                     <th class="text-center">Rincian</th>
                                     <th class="text-center">Aksi</th>
@@ -29,13 +29,14 @@
                                     @php
                                         $norekom=$tglselesai=$aksi=$rincian=$rinc='';
                                         $tem='<div class="row" style="height:80px;border-bottom:1px dotted #ddd">';
-                                        $tem.='<div class="col-md-2"><small><i>No. Temuan</i></small><br>
+                                        $tem.='<div class="col-md-12 text-center"><small><i>Nomor LHP</i> : </small> <b><u>'.$item->no_lhp.'</u></b></div>
+                                        <div class="col-md-2"><small><i>Nomor</i></small><br>
                                             <b>'.$item->no_temuan.'</b>
                                             </div>';
-                                        if(strlen($item->temuan)>=150)
+                                        if(strlen($item->temuan)>=100)
                                         {
-                                            $tem.='<div class="col-md-10"><small><i>Temuan</i></small><br>
-                                            <b><a href="#" data-toggle="tooltip" title="'.$item->temuan.'">'.substr($item->temuan,0,150).' ...</a></b>
+                                            $tem.='<div class="col-md-10" data-toggle="tooltip" title="'.$item->temuan.'"><small><i>Temuan</i></small><br>
+                                            <b>'.substr($item->temuan,0,100).' ...</b>
                                             </div>';
                                         }
                                         else
@@ -62,7 +63,7 @@
                                         $rinc.='</div>';
                                         
                                         $tem.='<div class="row" style="height:20px;border-bottom:1px dotted #ddd">';
-                                        $tem.='<div class="col-md-2"><small><i>No.Rekom</i></small></div>';
+                                        $tem.='<div class="col-md-2"><small><i>Nomor</i></small></div>';
                                         $tem.='<div class="col-md-10"><small><i>Rekomendasi</i></small></div>';
                                         $tem.='</div>';
 
@@ -86,8 +87,8 @@
                                             foreach($rekomendasi[$item->id_temuan] as $k=>$v)
                                             {
                                                 $drekom=strlen($v->rekomendasi);
-                                                if($drekom>=250)
-                                                    $text_rekom='<a href="#" data-toggle="tooltip" data-placement="top" title="'.$v->rekomendasi.'">'.substr($v->rekomendasi,0,250).'...</a>';
+                                                if($drekom>=150)
+                                                    $text_rekom='<span data-toggle="tooltip" data-placement="top" title="'.$v->rekomendasi.'">'.substr($v->rekomendasi,0,150).'...</span>';
                                                 else
                                                     $text_rekom=$v->rekomendasi;
 
@@ -134,35 +135,40 @@
                                                     $rinc.='<div class="col-md-12 text-center" style=""><span class="label label-success">Tidak Ada</i></div>';
                                                     $rinc.='</div>';
                                                 }
-
+                                                $pic1='';
+                                                if($v->pic_1_temuan_id!='')
+                                                {
+                                                    $pic1='<small>PIC 1</small> :<br><b>'.(isset($pic[$v->pic_1_temuan_id]) ? $pic[$v->pic_1_temuan_id]->nama_pic : '').'</b>';
+                                                }
                                                 if($v->pic_2_temuan_id!='')
                                                 {
                                                     $listpic2=explode(',', $v->pic_2_temuan_id);
                                                     // print_r($listpic2);
                                                    
-                                                    $pic2.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:280px;"><div class="col-md-12 text-left">';
+                                                    $pic2.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:280px;">
+                                                        <div class="col-md-12 text-left">'.$pic1.'</div>';
                                                         $c=1;
                                                         $t_pic='';
                                                         $c=0;
                                                         foreach($listpic2 as $kp=>$vp)
                                                         {
                                                             
-                                                            if($c<3)
-                                                                $pic2.=(isset($pic[$vp]) ? $pic[$vp]->nama_pic : '').'<br>';
-                                                            else
+                                                            // if($c<3)
+                                                            //     $pic2.=(isset($pic[$vp]) ? $pic[$vp]->nama_pic : '').'<br>';
+                                                            // else
                                                                 $t_pic.=(isset($pic[$vp]) ? $pic[$vp]->nama_pic : '').'<br>';
 
                                                             
                                                             $c++;
                                                         }
                                                         
-                                                    if($c>3)
-                                                        $pic2.='<a href="#" class="label label-default" data-toggle="tooltip" data-html="true" title="'.$t_pic.'">Lainnya</a></div></div>';
-                                                    else
-                                                        $pic2.='</div></div>';
+                                                    // if($c>3)
+                                                        $pic2.='<div class="col-md-12 text-left"><small>PIC 2</small> :<br><a href="#" class="label label-default" data-toggle="tooltip" data-html="true" title="'.$t_pic.'">Daftar PIC 2</a></div></div></div>';
+                                                    // else
+                                                        // $pic2.='</div></div>';
                                                 }
                                                 else
-                                                    $pic2.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:280px;"><div class="col-md-12 text-left">-</div></div>';
+                                                    $pic2.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:280px;"><div class="col-md-12 text-left">'.$pic1.'</div></div>';
 
                                                 $tgl.='<div style="height:80px;"  id="tgl_penyelesaian_'.$item->id_temuan.'_'.$v->id.'">';
                                                 if($v->tanggal_penyelesaian!='')
@@ -251,9 +257,8 @@
                                     <tr>
                                         <td class="text-center">{{$no}}</td>
                                         <td class="text-left">{!!$tem!!}</td>
-                                        <td class="text-center">{!!$tgl!!}</td>
                                         <td class="text-left">{!!$pic2!!}</td>
-                                        
+                                        <td class="text-center">{!!$tgl!!}</td>
                                         <td class="text-center">{!!$tindak_lanjut!!}</td>
                                         <td class="text-center" style="font-size:11px !important;">{!!$rinc!!}</td>
                                         <td class="text-center">{!!$aksi!!}</td>

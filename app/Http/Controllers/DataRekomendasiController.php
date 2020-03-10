@@ -1021,21 +1021,26 @@ class DataRekomendasiController extends Controller
     {
         if($userpic_id!=null)
         {
+            // $rekom=array();
             $rekom=DataRekomendasi::where('id_temuan',$idtemuan)->where(function($query) use ($userpic_id){
                                     $query->where('pic_1_temuan_id', $userpic_id);
                                     $query->orWhere('pic_2_temuan_id','like', "%$userpic_id%,");
                                     // $query->orWhere('data_rekomendasi.pic_2_temuan_id', $user_pic->id);
                                 })->get();
-
+            
         }
         else
             $rekom=DataRekomendasi::where('id_temuan',$idtemuan)->get();
 
+
+        if(Auth::user()->level=='auditor-senior')
+            $rekom=DataRekomendasi::where('id_temuan',$idtemuan)->get();
+
         $select ='<select class="select2 form-control" name="no_rekomendasi" id="no_rekomendasi" onchange="loaddata()">';
-        $select.='<option value="">-Pilih-</option>';
+        $select.='<option value="0">-Semua-</option>';
         foreach($rekom as $v)
         {
-            $select.='<option value="'.$v->id.'">'.$v->nomor_rekomendasi.' - '.$v->rekomendasi.'</option>';
+            $select.='<option value="'.$v->id.'">'.$v->nomor_rekomendasi.' - '.substr($v->rekomendasi,0,80).' ...</option>';
         }
         $select.='</select>';
         return $select;
@@ -1046,6 +1051,7 @@ class DataRekomendasiController extends Controller
         $rekom=DataRekomendasi::find($idrekom);
         $jenis=$rincian=$rekom->rincian;
         $idtemuan=$rekom->id_temuan;
+        $table='Data Rincian Belum Tersedia';
         if($jenis=='sewa')
         {
             

@@ -1001,3 +1001,117 @@ $('#form_list_rangkuman').on('submit', function (event) {
     }
 });
 //form_list_rangkuman
+x=1;
+function add_kolom()
+{
+    x++;
+    var wrapper = $('.field_wrapper'); //Input field wrapper
+    var fieldHTML = '<div class="col-sm-6">\
+                    <input type="text" name="nama_file" id="nama-file-'+x+'" class="form-control" placeholder="Nama File">\
+                </div>\
+                <div class="col-sm-5">\
+                    <input type="file" class="form-control" onchange="uploadfile(this,'+x+')" id="add-dokumen-'+ x + '" name="dokumen_pendukung" placeholder="Dokumen Pendukung" accept=".doc,.docx,.pdf,.xls,.xlsx">\
+                    <span style="text-style:italic;font-weight:bold;"></span>\
+                </div>\
+                <div class="col-sm-1">\
+                    <div class="btn btn-success" id="loading-'+ x + '" style="display:none"><i class="fa fa-check"></i></div>\
+                    <div class="btn btn-success" id="ok-'+ x + '" style="display:none"><i class="fa fa-check"></i></div>\
+                    <div class="btn btn-danger" id="fail-'+ x + '" style="display:none"><i class="fa fa-trash"></i></div>\
+                </div>'; //New input field html 
+    $(wrapper).append(fieldHTML); //Add field html
+}
+
+function uploadfile(val, id) {
+
+    var idlhp = $('#idlhp').val();
+    var temuan_id = $('#temuan_id').val();
+    var rekomendasi_id = $('#rekomendasi_id').val();
+    var idformtl = $('#form_tl').val();
+    var namafile = $('#nama-file-'+id).val();
+    var file_data = val.files[0];
+    var csrf_token = $('#csrf_token').val();
+    if(namafile=='')
+    {
+        notif('error', 'Nama File Tindak Lanjut Belum Diisi');
+        $('#nama-file-' + id).focus();
+        $('#add-dokumen-'+id).val('');
+    }
+    else
+    {
+        var form_data = new FormData();
+        form_data.append('file', file_data);
+        form_data.append('idformtl', idformtl);
+        form_data.append('idlhp', idlhp);
+        form_data.append('temuan_id', temuan_id);
+        form_data.append('rekomendasi_id', rekomendasi_id);
+        form_data.append('namafile', namafile);
+        form_data.append('_token', csrf_token);
+
+        if (val != '') {
+            $('#loading_' + id).attr('style', 'display:block');
+            $.ajax({
+                url: flagsUrl + '/upload-file-tindaklanjut',
+                type: 'POST',
+                data: form_data,
+                dataType: 'html',
+                cache: false,
+                contentType: false,
+                processData: false,
+                enctype: "multipart/form-data",
+                success: function (res) {
+                    if (res.fail) {
+                        $('#fail-' + id).attr('style', 'display:block');
+                        $('#ok-' + id).attr('style', 'display:none');
+                        notif('error', 'Upload File Tindak Lanjut Error');
+                    }
+                    else {
+                        $('#ok-' + id).attr('style', 'display:block');
+                        $('#fail-' + id).attr('style', 'display:none');
+                        notif('success', 'Upload File Tindak Lanjut Berhasil');
+                    }
+                    $('#loading-' + id).attr('style', 'display:none');
+                },
+                error: function (xhr, status, error) {
+                    notif('error', 'Upload File Tindak Lanjut Error');
+                }
+            });
+        }
+    }
+}
+
+function editormonev(idrekom,idtl)
+{
+    $('#div-editor').load(flagsUrl+'/div-editor/'+idrekom+'/'+idtl,function(){
+        $('#idrekom_catatan_monev').val(idrekom)
+        $('#idtl_catatan_monev').val(idtl)
+        CKEDITOR.replace('catatan_monev_pic',{
+            height:350
+        });
+    });
+    $('#modaleditormonev').modal('show');
+}
+
+function simpanmonev()
+{
+    CKEDITOR.instances.catatan_monev_pic.updateElement();
+    $.ajax({
+        url: flagsUrl +'/simpan-monev-pic',
+        type : 'POST',
+        data: $('#monev-pic1').serialize(),
+        success : function(res)
+        {
+            if(res==1)
+                notif('success', 'Cacatan Monev untuk PIC 2 Berhasil Disimpan');
+            else
+                notif('error', 'Catatan Monev Gagal Disimpan');
+
+            $('#modaleditormonev').modal('hide')
+        }
+    });
+}
+
+function detailcatatan(id)
+{
+    $('#detailcatatan').load(flagsUrl + '/detail-catatan/' + id);
+    $('#modaldetailcatatan').modal('show');
+}

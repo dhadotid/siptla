@@ -1,13 +1,14 @@
  <table id="table" class="table table-striped table-bordered" cellspacing="0" width="100%">
     <thead>
         <tr class="primary">
-            <th class="text-center" style="width:15px;">#</th>
+            <th class="text-center" style="width:20px;">#</th>
             <th class="text-center">Tindak Lanjut</th>
-            <th class="text-center">Tanggal<br>Tindak Lanjut</th>
-            <th class="text-center">Rencana<br>Tindak Lanjut</th>
-            <th class="text-center">Dokumen<br>Pendukung</th>
-            <th class="text-center">Rincian</th>
-            <th class="text-center">Aksi</th>
+            <th class="text-center" style="width:120px;">Tanggal<br>Tindak Lanjut</th>
+            {{-- <th class="text-center" >Rencana<br>Tindak Lanjut</th> --}}
+            <th class="text-center" style="width:80px;">Dokumen<br>Pendukung</th>
+            <th class="text-center" style="width:70px;">Rincian</th>
+            <th class="text-center" style="width:75px;">Catatan</th>
+            <th class="text-center" style="width:70px;">Aksi</th>
         </tr>
     </thead>
     <tbody>
@@ -19,22 +20,36 @@
             
             
             @foreach ($tindaklanjut as $no=>$item)
+                @php
+                    $catatan=\App\Models\CatatanMonev::where('id_tindaklanjut',$item->id)->get();
+                @endphp
                 <tr>
                     <td class="text-center">{{$no+1}}</td>
                     <td class="text-left">
-                        @if (strlen($item->tindak_lanjut)>=30)
-                            <a href="#" data-toggle="tooltip" data-title="{{$item->tindak_lanjut}}" title="{{$item->tindak_lanjut}}">{!!substr($item->tindak_lanjut,0,35)!!}...</a>
+                        @if (strlen($item->tindak_lanjut)>=50)
+                            <a href="#" data-toggle="tooltip" data-title="{{$item->tindak_lanjut}}" title="{{$item->tindak_lanjut}}">{!!substr($item->tindak_lanjut,0,50)!!}...</a>
                         @else
                             {!!$item->tindak_lanjut!!}
                         @endif
                     </td>
                     <td class="text-center"><i class="fa fa-calendar"></i> {{tgl_indo($item->tgl_tindaklanjut)}}</td>
-                    <td class="text-left">
+                    {{-- <td class="text-left">
                             {!!$item->action_plan!!}  
-                    </td>
+                    </td> --}}
                     <td class="text-center">
                         @if (isset($dok[$item->id]))
-                            <a href="{{url('read-pdf/'.$dok[$item->id]->path)}}" target="_blank" class="btn btn-xs btn-success" data-toggle="tooltip" data-title="Lihat Dokumen" title="Lihat Dokumen"><i class="fa fa-file-o"></i></a>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-file"></i></button>
+                                <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    @foreach ($dok[$item->id] as $dk)
+                                        <li><a href="{{url('read-pdf/'.$dk->path)}}" target="_blank"><i class="fa fa-chevron-right"></i> {{$dk->nama_dokumen}}</a> </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            
                         @else
                             -
                         @endif
@@ -69,6 +84,23 @@
                                 @endif
                         @endif
                         
+                    </td>
+                    <td class="text-center" style="width:75px;">
+                        @if ($catatan->count()!=0)
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-list"></i></button>
+                                <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    @foreach ($catatan as $dk)
+                                        <li><a href="javascript:detailcatatan({{$dk->id}})"><i class="fa fa-chevron-right"></i> Detail Catatan</a> </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @else
+                            -
+                        @endif  
                     </td>
                     <td class="text-center" style="width:80px;">
                         <div style="width:80px;">

@@ -297,7 +297,24 @@ class DataTemuanController extends Controller
                 ->with('djenisaudit')
                 ->first();
 
-        $temuan=DataTemuan::selectRaw('*,data_temuan.id as temuan_id')->where('id_lhp',$id)->with('jenistemuan')->with('picunit')->with('levelresiko')->get();
+        $user_pic=PICUnit::where('id_user',Auth::user()->id)->first();
+
+        $getrekom=DataRekomendasi::where('pic_1_temuan_id', $user_pic->id)->orWhere('pic_2_temuan_id', 'like',"%$user_pic->id%,")->with('dtemuan')->orderBy('nomor_rekomendasi')->get();
+        $getidtemuan=$datarekom=array();
+        foreach($getrekom as $kr=>$vr)
+        {
+            if(isset($vr->dtemuan->id_lhp))
+            {
+                if($vr->dtemuan->id_lhp==$id)
+                {
+                    $getidtemuan[$vr->id_temuan]=$vr->id_temuan;
+                    $datarekom[$vr->id_temuan][]=$vr;
+                }
+            }
+        }
+
+        // $temuan=DataTemuan::selectRaw('*,data_temuan.id as temuan_id')->where('id_lhp',$id)->with('jenistemuan')->with('picunit')->with('levelresiko')->get();
+        $temuan=DataTemuan::selectRaw('*,data_temuan.id as temuan_id')->whereIn('id',$getidtemuan)->with('jenistemuan')->with('picunit')->with('levelresiko')->get();
         $dtemuan=$drekomendasi=array();
         $idx=0;
         foreach($temuan as $k=>$v)
@@ -605,22 +622,30 @@ class DataTemuanController extends Controller
     {
         if($userpic_id!=null)
         {
-            $temuan=DataTemuan::join('data_rekomendasi','data_rekomendasi.id_temuan','=','data_temuan.id')
+            $temuan=array();
+            $tem=DataTemuan::join('data_rekomendasi','data_rekomendasi.id_temuan','=','data_temuan.id')
                     ->where(function($query) use ($userpic_id){
                         $query->where('data_rekomendasi.pic_1_temuan_id', $userpic_id);
                         $query->orWhere('data_rekomendasi.pic_2_temuan_id','like', "%$userpic_id%,");
                         // $query->orWhere('data_rekomendasi.pic_2_temuan_id', $user_pic->id);
                     })->where('data_temuan.id_lhp',$idlhp)
                     ->get();
+            foreach($tem as $k=>$v){
+                $temuan[$v->id_temuan]=$v;
+            }
         }
         else
-            $temuan=DataTemuan::where('id_lhp',$idlhp)->get();
+            $temuan=DataTemuan::selectRaw('*, id as id_temuan')->where('id_lhp',$idlhp)->get();
 
+
+        if(Auth::user()->level=='auditor-senior')
+            $temuan=DataTemuan::selectRaw('*, id as id_temuan')->where('id_lhp',$idlhp)->get();
+        
         $select ='<select class="select2 form-control" name="no_temuan" id="no_temuan" onchange="loaddata()">';
-        $select.='<option value="">-Pilih-</option>';
+        $select.='<option value="0">-Semua-</option>';
         foreach($temuan as $v)
         {
-            $select.='<option value="'.$v->id_temuan.'">'.$v->no_temuan.' - '.$v->temuan.'</option>';
+            $select.='<option value="'.$v->id_temuan.'">'.$v->no_temuan.' - '.substr($v->temuan,0,80).'...</option>';
         }
         $select.='</select>';
         return $select;

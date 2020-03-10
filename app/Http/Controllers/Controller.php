@@ -34,4 +34,27 @@ class Controller extends BaseController
                 </iframe>';
         // return '<iframe src="/uploads/media/default/0001/01/540cb75550adf33f281f29132dddd14fded85bfc.pdf" width="100%" height="500px">';
     }
+
+    public function jlh_tindaklanjut($tahun=null,$bulan=null)
+    {
+        if($bulan==null)
+            $bln=date('m');
+        else
+            $bln=$bulan;
+        
+        if($tahun==null)
+            $thn=date('Y');
+        else
+            $thn=$tahun;
+
+        $dt=$thn.'-'.$bln;
+
+        $tl=TindakLanjutTemuan::where('tgl_tindaklanjut','like',"$dt%")->get();
+        $tindaklanjut=array();
+        foreach($tl as $k=>$v)
+        {
+            $tindaklanjut[$v->rekomendasi_id][]=$v;
+        }
+        return $tindaklanjut;
+    }
 }

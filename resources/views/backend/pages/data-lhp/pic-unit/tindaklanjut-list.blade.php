@@ -34,10 +34,10 @@
                                             <b>'.$item->no_temuan.'</b>
                                             </div>';
 
-                                        if(strlen($item->temuan)>=200)
+                                        if(strlen($item->temuan)>=100)
                                         {
-                                            $tem.='<div class="col-md-10"><small><i>Temuan</i></small><br>
-                                            <b><a href="#" data-toggle="tooltip" title="'.$item->temuan.'">'.substr($item->temuan,0,200).' ...</a></b>
+                                            $tem.='<div class="col-md-10" data-toggle="tooltip" title="'.$item->temuan.'"><small><i>Temuan</i></small><br>
+                                            <b>'.substr($item->temuan,0,100).' ...</b>
                                             </div>';
                                         }
                                         else
@@ -91,28 +91,28 @@
                                                 $tem.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">';
                                                 $tem.='<div class="col-md-1 text-center">'.$v->nomor_rekomendasi.'</div>';
 
-                                                if(strlen($v->rekomendasi)>=300)
-                                                    $tem.='<div class="col-md-11"><a href="#" data-toggle="tooltip" title="'.$v->rekomendasi.'">'.substr($v->rekomendasi,0,300).' ...</a></div>';
+                                                if(strlen($v->rekomendasi)>=150)
+                                                    $tem.='<div class="col-md-11" data-toggle="tooltip" title="'.$v->rekomendasi.'">'.substr($v->rekomendasi,0,150).' ...</div>';
                                                 else
                                                     $tem.='<div class="col-md-11">'.$v->rekomendasi.'</div>';
 
                                                 $tem.='</div>';
                                                 $jlhtl=0;
                                                 
-                                                if(isset($gettindaklanjut[$v->id]))
+                                                if(isset($jumlahtl[$v->id]))
                                                 {
                                                     $tindak_lanjut.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">';
                                                     $tindak_lanjut.='<div class="col-md-12 text-center"><span class="label label-info fz-sm">'.count($gettindaklanjut[$v->id]).'</span></div>';
                                                     $tindak_lanjut.='</div>';
-                                                    $jlhtl=count($gettindaklanjut[$v->id]);
+                                                    $jlhtl=count($jumlahtl[$v->id]);
                                                 }
                                                 else
                                                 {
                                                     $tindak_lanjut.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">';
                                                     // $tindak_lanjut.='<div class="col-md-12 text-center"><span class="label label-danger">0</span></div>';
-                                                    $tindak_lanjut.='<div class="col-md-12 text-center" id="jlh_tl_'.$item->id_temuan.'_'.$v->id.'">&nbsp;</div>';
+                                                    $tindak_lanjut.='<div class="col-md-12 text-center" id="jlh_tl_'.$item->id_temuan.'_'.$v->id.'"><span class="label label-danger fz-sm">0</span></div>';
                                                     $tindak_lanjut.='</div>';
-                                                }  
+                                                } 
                                                 
 
                                                 //Rincian
@@ -129,7 +129,7 @@
                                                     else
                                                     {
                                                         $rinc.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">';
-                                                        $rinc.='<div class="col-md-12 text-center" style="margin-top:5px;"><span class="label label-inverse fz-sm">0</i></div>';
+                                                        $rinc.='<div class="col-md-12 text-center" style="margin-top:5px;"><span class="label label-inverse">0</i></div>';
                                                         $rinc.='</div>';
                                                     }
                                                 }
@@ -183,7 +183,7 @@
                                                     $tgl.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">
                                                             <div class="col-md-12">
                                                             <div class="input-group date" id="datetimepicker2" >
-                                                                <input type="text" data-plugin="datepicker" data-date-format="dd/mm/yyyy" class="form-control" name="tanggal_penyelesaian" id="tanggal_penyelesaian_'.$item->id_temuan.'_'.$v->id.'" value="'.date('d/m/Y').'" style="height:30px !important;width:90px !important;min-width:90px !important;font-size:11px; "/>
+                                                                <input type="text" data-plugin="datepicker" data-date-format="dd/mm/yyyy" class="form-control datepicker" name="tanggal_penyelesaian" id="tanggal_penyelesaian_'.$item->id_temuan.'_'.$v->id.'" value="'.date('d/m/Y').'" style="height:30px !important;width:90px !important;min-width:90px !important;font-size:11px; "/>
                                                                 <span class="input-group-addon bg-info text-white" style="cursor:pointer" onclick="settglpenyelesaian('.$item->id_temuan.','.$v->id.')"><i class="glyphicon glyphicon-ok-sign"></i> Set</span>
                                                             </div>    
                                                         </div>    
@@ -251,6 +251,7 @@
                                                             $aksi.=' <li><a class="" href="javascript:publishpic2('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke PIC 1</a></li>';
                                                         }
                                                     }
+
                                                     if($v->rincian!='')
                                                     {
                                                         $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Update Rincian</a></li>';
@@ -271,20 +272,22 @@
                                                     if(in_array($user_pic->id,$listpic2))
                                                     {
                                                         // print_r($listpic2);
-                                                        
                                                         $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
                                                         if($jlhrincian!=0)
                                                         {
                                                             $aksi.=' <li><a href="javascript:tambahrincian('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Tambah Rincian Tindak Lanjut</a></li>';
                                                         }
                                                         
-                                                        $aksi.=' <li><a href="#" style="font-size:11px;"><i class="glyphicon glyphicon-check"></i> &nbsp;&nbsp;Sudah Publish Ke PIC 1</a></li>';
-                                                        
+                                                        $aksi.=' <li><a href="#" style="font-size:11px;"><i class="glyphicon glyphicon-check"></i> &nbsp;&nbsp;Sudah Publish Ke PIC 1</a></li>';     
                                                     }
                                                     if($v->rincian!='')
                                                     {
                                                         $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Update Rincian</a></li>';
                                                     }
+                                                    if($v->rangkuman_rekomendasi!='')
+                                                        {
+                                                            $aksi.=' <li><a href="javascript:publishpic1('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Auditor</a></li>';
+                                                        }
                                                     $aksi.='</ul></div>
                                                         </div>';
                                                 }
@@ -312,13 +315,14 @@
                                                         if($v->pic_1_temuan_id==$user_pic->id)
                                                         {
                                                             
-                                                            if($v->publish_pic_2==1 && $v->pic_2_temuan_id!='')
+                                                            // if($v->publish_pic_2==1 && $v->pic_2_temuan_id!='')
+                                                            if($v->publish_pic_2==1)
                                                             {
                                                                 $aksi.=' <li><a href="javascript:reviewtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-file"></i> &nbsp;&nbsp;Review & Rangkuman Tindak Lanjut</a></li>';
-                                                                 if($v->review_monev!='')
-                                                                    {
-                                                                        $aksi.=' <li><a href="javascript:publishpic1('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Auditor</a></li>';
-                                                                    }
+                                                                 if($v->rangkuman_rekomendasi!='')
+                                                                {
+                                                                    $aksi.=' <li><a href="javascript:publishpic1('.$v->id.')" style="font-size:11px;"><iclass="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Auditor</a></li>';
+                                                                }
                                                             }
 
                                                             if($v->publish_pic_1==0)
@@ -360,7 +364,7 @@
                                                                 }
                                                                 else
                                                                 {
-                                                                    if($v->review_monev!='')
+                                                                    if($v->rangkuman_rekomendasi!='')
                                                                     {
                                                                         $aksi.=' <li><a href="javascript:publishpic1('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Auditor</a></li>';
                                                                     }
@@ -398,4 +402,5 @@
                     </div>
 <script>
     $('#table').DataTable();
+    $('.datepicker').datepicker();
 </script>

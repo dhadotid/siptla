@@ -151,6 +151,7 @@
                 </div>
                 
                 <div class="row" style="padding:0;margin:15px 0 10px">
+                    
                     <table id="table-tl-detail" class="table table-bordered table-striped" style="width:100%">
                         <thead>
                             <tr>
@@ -159,6 +160,7 @@
                                 <th>Tanggal</th>
                                 <th>Tindak Lanjut</th>
                                 <th>Dokumen<br>Pendukung</th>
+                                <th>Catatan<br>Monev</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -169,10 +171,10 @@
                                 @foreach ($pic1['tindak_lanjut'] as $item)
                                     <tr>
                                         <td class="text-center">{{$no}}</td>
-                                        <td class="text-left">
+                                        <td class="text-left" style="width:280px;">
                                             {{(isset($pic[$item->pic_1_id]) ? $pic[$item->pic_1_id]->nama_pic : '')}} 
                                         </td>
-                                        <td style="width:100px;">{{tgl_indo($item->tgl_tindaklanjut)}}</td>
+                                        <td style="width:120px;">{{tgl_indo($item->tgl_tindaklanjut)}}</td>
                                         <td>{{($item->tindak_lanjut)}}</td>
                                         <td class="text-center" style="width:60px;">
                                             @if (isset($dokumen[$item->id]))
@@ -180,6 +182,9 @@
                                             @else
                                                 -
                                             @endif
+                                        </td>
+                                        <td class="text-center" style="width:70px;">
+                                            <a href="javascript:editormonev({{$rekom->id}},{{$item->id}})" class="btn btn-xs btn-info"><i class="fa fa-reply"></i></a>
                                         </td>
                                     </tr>
                                 @php
@@ -191,10 +196,10 @@
                                 @foreach ($pic2['tindak_lanjut'] as $item)
                                     <tr>
                                         <td class="text-center">{{$no}}</td>
-                                        <td class="text-left">
+                                        <td class="text-left" style="width:280px;">
                                             {{(isset($pic[$item->pic_2_id]) ? $pic[$item->pic_2_id]->nama_pic : '')}} 
                                         </td>
-                                        <td style="width:100px;">{{tgl_indo($item->tgl_tindaklanjut)}}</td>
+                                        <td style="width:120px;">{{tgl_indo($item->tgl_tindaklanjut)}}</td>
                                         <td>{{($item->tindak_lanjut)}}</td>
                                         <td class="text-center" style="width:60px;">
                                             @if (isset($dokumen[$item->id]))
@@ -202,6 +207,9 @@
                                             @else
                                                 -
                                             @endif
+                                        </td>
+                                        <td class="text-center" style="width:70px;">
+                                            <a href="javascript:editormonev({{$rekom->id}},{{$item->id}})" class="btn btn-xs btn-info"><i class="fa fa-reply"></i></a>
                                         </td>
                                     </tr>
                                 @php
@@ -212,11 +220,24 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="row" style="padding:0;margin:15px 0 10px">
+                    <div class="form-group" style="padding-top:20px;" id="div_status_rekomendasi">
+                            <label for="exampleTextInput1" class="col-sm-2 control-label text-right">Tanggal Penyelesaian :
+                            </label>
+                            <div class="col-sm-3">
+                                @if ($rekom->publish_pic_1==1)
+                                    <input type='date' class="form-control" name="tgl_selesai" id="tgl_selesai" value="{{$rekom->tanggal_penyelesaian}}" readonly/>
+                                @else
+                                    <input type='date' class="form-control" name="tgl_selesai" id="tgl_selesai" value="{{$rekom->tanggal_penyelesaian}}"/>
+                                @endif
+                            </div>
+                        </div>
+                </div>
             </div>
         </div>
 	</div>
 </div>
-<div class="panel-group accordion" id="accordion2" role="tablist" aria-multiselectable="true"  style="border:1px solid #eee;">
+{{-- <div class="panel-group accordion" id="accordion2" role="tablist" aria-multiselectable="true"  style="border:1px solid #eee;">
 	<div class="panel panel-info">
 		<div class="panel-heading" role="tab" id="heading-2">
 			<a class="accordion-toggle" role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapse-review" aria-expanded="true" aria-controls="collapse-review">
@@ -252,27 +273,16 @@
                                     </div>
                                 </div>
                         </div>
-                </div>
-                <div class="row" style="margin-top:10px;">
+                </div> <div class="row" style="margin-top:10px;">
                     <div class="col-md-12">
-                        <div class="form-group" style="padding-top:20px;" id="div_status_rekomendasi">
-                            <label for="exampleTextInput1" class="col-sm-2 control-label text-right">Tanggal Penyelesaian :
-                            </label>
-                            <div class="col-sm-3">
-                                @if ($rekom->publish_pic_1==1)
-                                    <input type='date' class="form-control" name="tgl_selesai" id="tgl_selesai" value="{{$rekom->tanggal_penyelesaian}}" readonly/>
-                                @else
-                                    <input type='date' class="form-control" name="tgl_selesai" id="tgl_selesai" value="{{$rekom->tanggal_penyelesaian}}"/>
-                                @endif
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
                 
             </div>
         </div>
 	</div>
-</div>
+</div> --}}
 <div class="panel-group accordion" id="accordion3" role="tablist" aria-multiselectable="true"  style="border:1px solid #eee;">
 	<div class="panel panel-info">
 		<div class="panel-heading" role="tab" id="heading-3">
@@ -300,9 +310,9 @@
                                         <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
                                             <div class="col-sm-12">
                                                 @if ($rekom->publish_pic_1==1)
-                                                   <textarea class="fz11" name="txt_rangkuman_rekomendasi" placeholder="" id="txt_rangkuman_rekomendasi"  style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px" readonly>{{$rekom->rangkuman_rekomendasi}}</textarea>
+                                                   <textarea class="fz11" name="txt_rangkuman_rekomendasi" placeholder="" id="catatan_monev"  style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px" readonly>{{$rekom->rangkuman_rekomendasi}}</textarea>
                                                 @else
-                                                    <textarea class="fz11" name="txt_rangkuman_rekomendasi" placeholder="" id="txt_rangkuman_rekomendasi"  style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px">{{$rekom->rangkuman_rekomendasi}}</textarea>
+                                                    <textarea class="fz11" name="txt_rangkuman_rekomendasi" placeholder="" id="catatan_monev"  style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px">{{$rekom->rangkuman_rekomendasi}}</textarea>
                                                 @endif
                                                 
                                             </div>

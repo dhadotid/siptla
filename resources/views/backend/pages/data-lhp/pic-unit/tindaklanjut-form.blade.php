@@ -2,7 +2,7 @@
     <div class="col-md-12" style="border:1px solid #bbb;border-radius:5px;padding:5px 20px 0px 20px;background:#eee;">
             <input type="hidden" name="idlhp" id="idlhp" value="{{$data->id}}">
             <input type="hidden" name="temuan_id" id="temuan_id" value="{{$temuan->id}}">
-            <input type="hidden" name="rekomendasi_id" id="rekomendasi_id" value="{{$rekom_id}}">
+            <input type="hidden" name="rekomendasi_id" id="rekomendasi_id" value="{{$rekomendasi->id}}">
             <input type="hidden" name="idformtindaklanjut" id="idformtindaklanjut" value="{{time()}}">
             <input type="hidden" name="jenis" id="jenis" value="{{$rekomendasi->rincian}}">
             <h4 style="margin:0px;padding:0px;margin-bottom:10px;">Data Temuan</h4>
@@ -105,7 +105,18 @@
             <label for="exampleTextInput1" class="col-sm-12 control-label text-left">Rencana Tindak Lanjut:
             </label>
             <div class="col-sm-12">
-                <textarea class="form-control"  name="action_plan" placeholder="Rencana Tindak Lanjut" id="action_plan"></textarea>
+                @php
+                    $get_tl=\App\Models\TindakLanjutTemuan::where('rekomendasi_id',$rekomendasi->id)->get();
+                    $action_plan='';
+                    foreach($get_tl as $kg=>$vg)
+                    {
+                        if($vg!='')
+                        {
+                            $action_plan=$vg->action_plan.'<br>';
+                        }
+                    }
+                @endphp
+                <textarea class="form-control"  name="action_plan" placeholder="Rencana Tindak Lanjut" id="action_plan">{{$action_plan}}</textarea>
             </div>
         </div>
        <div class="form-group" style="margin-top:-20px;">
@@ -115,11 +126,27 @@
                 <textarea class="form-control"  name="tindak_lanjut" placeholder="Tindak Lanjut" id="tindak_lanjut"></textarea>
             </div>
         </div>
-       
+        @php
+            $idformtl=substr(time(),0,5).''.$rekomendasi->id;
+        @endphp
+        <input type="hidden" id="form_tl" name="form_tl" value="{{$idformtl}}">
+        <input type="hidden" id="csrf_token" name="csrf_token" value="{{csrf_token()}}">
         <div class="form-group" style="margin-top:-20px;">
             <label for="exampleTextInput1" class="col-sm-12 control-label text-left">Dokumen Pendukung:</label>
-            <div class="col-sm-12">
-                <input type="file" class="form-control"  id="add-dokumen"  name="dokumen_pendukung"  placeholder="Dokumen Pendukung" accept=".doc,.docx,.pdf,.xls,.xlsx">
+                <div class="col-sm-6">
+                    <input type="text" name="nama_file" id="nama-file-1" class="form-control" placeholder="Nama File">
+                </div>
+                <div class="col-sm-5">
+                    <input type="file" class="form-control" onchange="uploadfile(this,1)" id="add-dokumen-1"  name="dokumen_pendukung"  placeholder="Dokumen Pendukung" accept=".doc,.docx,.pdf,.xls,.xlsx">
+                    <span style="text-style:italic;font-weight:bold;"></span>
+                </div>
+                <div class="col-sm-1">
+                    <div class="btn btn-success" id="ok-1" style="display:none"><i class="fa fa-check"></i></div>
+                    <div class="btn btn-danger" id="fail-1" style="display:none"><i class="fa fa-close"></i></div>
+                </div> 
+            <div class="field_wrapper"></div>
+            <div class="col-sm-12"> 
+                <div class="text-center"><a href="javascript:add_kolom()" class="label label-info add_button"><i class="fa fa-plus"></i> Tambah Dokumen Baru</a></div>
             </div>
         </div>    
         @if ($rekomendasi->rincian!='')  

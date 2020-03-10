@@ -71,7 +71,7 @@
                             <div class="row" style="margin:0px;padding:0px;margin-bottom:10px;">
                                 <div class="col-md-2" style="margin:0px;padding:0px;margin-bottom:10px;">
                                     <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
-                                        <label for="exampleTextInput1" class="col-sm-12 control-label text-left fz11" style="font-size:10px;font-style:italic">Action Plan PIC 1:</label>
+                                        <label for="exampleTextInput1" class="col-sm-12 control-label text-left fz11" style="font-size:10px;font-style:italic">Action Plan PIC:</label>
                                     </div>
                                 </div>
                                 <div class="col-md-10" style="margin:0px;padding:0px;margin-bottom:10px;">
@@ -121,7 +121,7 @@
                                     </div>
                                 
                                 </div>
-                                <div class="row" style="margin:0px;padding:0px;">
+                                {{-- <div class="row" style="margin:0px;padding:0px;">
                                     <div class="col-md-2" style="margin:0px;padding:0px;margin-bottom:10px;">
                                         <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
                                             <label for="exampleTextInput1" class="col-sm-12 control-label text-left fz11" style="font-size:10px;font-style:italic">Action Plan PIC 2:</label>
@@ -130,7 +130,7 @@
                                     <div class="col-md-10" style="margin:0px;padding:0px;margin-bottom:10px;">
                                         <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
                                             <div class="col-sm-12">
-                                                {{-- <textarea type="text" class="fz11" name="action_plan_pic2" placeholder="Action Plan PIC 2" id="action_plan_pic1" readonly style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px"> --}}
+                                                {{-- <textarea type="text" class="fz11" name="action_plan_pic2" placeholder="Action Plan PIC 2" id="action_plan_pic1" readonly style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px"> 
                                                 <div style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px;font-size:11px !important;">   
                                                     @php
                                                     if(isset($pic2['action_plan']))
@@ -142,20 +142,21 @@
                                                     }
                                                     @endphp    
                                                 </div>
-                                                {{-- </textarea> --}}
+                                                {{-- </textarea>
                                             </div>
                                         </div>
                                     </div>
                                 
-                                </div>
+                                </div> --}}
                                 <div class="row" style="padding:0 10px;">
                                     <div class="col-md-12" style="border-radius:5px;padding:5px 0px 0px 0px;margin-top:5px;">
-                                            <h4 style="margin:0px;padding:0px;margin-bottom:10px;">Catatan Monev</h4>
+                                            <h4 style="margin:0px;padding:0px;margin-bottom:10px;">Rangkuman</h4>
                                             <div class="row" style="margin:0px;padding:0px;margin-bottom:10px;">
                                                 <div class="col-md-12" style="margin:0px;padding:0px;margin-bottom:10px;">
                                                     <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
                                                         <div class="col-sm-12">
-                                                                <textarea class="fz11" name="catatan_monev" placeholder="" id="catatan_monev"  style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px">{{$rekom->review_monev}}</textarea>
+                                                                {{-- <textarea class="fz11" name="cata" placeholder="" id="cata"  style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px"></textarea> --}}
+                                                                {!!$rekom->rangkuman_rekomendasi!!}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -185,15 +186,15 @@
                         </div>
                     </div>
                 @endif
-                <div class="row" style="padding:0 10px;margin:15px 0 10px">
-                    <table id="table-tl-detail" class="table table-bordered table-striped" style="width:100%">
+                <div class="row" style="padding:0;margin:15px 0 10px">
+                    <table id="" class="table table-bordered table-striped" style="width:100%">
                         <thead>
                             <tr>
-                                <th>No</th>
-                                <th>Unit Kerja</th>
-                                <th>Tanggal</th>
+                                <th style="width:30px;"><div style="width:30px;">No</div></th>
+                                <th style="width:250px;"><div style="width:250px;">Unit Kerja</div></th>
+                                <th style="width:100px;"><div style="width:100px;">Tanggal</div></th>
                                 <th>Tindak Lanjut</th>
-                                <th>Dokumen<br>Pendukung</th>
+                                <th style="width:60px;"><div style="width:60px;">Dokumen<br>Pendukung</div></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -203,9 +204,11 @@
                             @if (isset($pic1['tindak_lanjut']))
                                 @foreach ($pic1['tindak_lanjut'] as $item)
                                     <tr>
-                                        <td class="text-center">{{$no}}</td>
+                                        <td class="text-center"><div style="width:30px;">{{$no}}</div></td>
                                         <td class="text-left">
-                                            {{(isset($pic[$item->pic_1_id]) ? $pic[$item->pic_1_id]->nama_pic : '')}} 
+                                            <div style="width:250px;">
+                                                {{(isset($pic[$item->pic_1_id]) ? $pic[$item->pic_1_id]->nama_pic : '')}} 
+                                            </div>
                                         </td>
                                         <td style="width:100px;">{{tgl_indo($item->tgl_tindaklanjut)}}</td>
                                         <td>{{($item->tindak_lanjut)}}</td>
@@ -225,9 +228,11 @@
                             @if (isset($pic2['tindak_lanjut']))
                                 @foreach ($pic2['tindak_lanjut'] as $item)
                                     <tr>
-                                        <td class="text-center">{{$no}}</td>
+                                        <td class="text-center"><div style="width:30px;">{{$no}}</div></td>
                                         <td class="text-left">
-                                            {{(isset($pic[$item->pic_2_id]) ? $pic[$item->pic_2_id]->nama_pic : '')}} 
+                                            <div style="width:250px;">
+                                                {{(isset($pic[$item->pic_2_id]) ? $pic[$item->pic_2_id]->nama_pic : '')}} 
+                                            </div>
                                         </td>
                                         <td style="width:100px;">{{tgl_indo($item->tgl_tindaklanjut)}}</td>
                                         <td>{{($item->tindak_lanjut)}}</td>
@@ -278,7 +283,7 @@
                                     <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
                                         <div class="col-sm-12">
                                             @if ($rekom->published=='1')
-                                                <textarea class="fz11" name="review_spi" readonly placeholder="" id="review_spi"  style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px">{{$rekom->review_spi}}</textarea>
+                                                {!!$rekom->review_spi!!}
                                             @else
                                                 <textarea class="fz11" name="review_spi" placeholder="" id="review_spi"  style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px">{{$rekom->review_spi}}</textarea>
                                             @endif
@@ -294,7 +299,7 @@
                             <label for="exampleTextInput1" class="col-sm-2 control-label text-right">Status Rekomendasi :
                             </label>
                             <div class="col-sm-3">
-                                <select name="status_rekomendasi" class="form-control" data-plugin="select2" id="status_rekomendasi">
+                                <select name="status_rekomendasi" {{($rekom->published=='1' ? 'disabled' : '')}}  class="form-control" data-plugin="select2" id="status_rekomendasi">
                                     <option value="">-- Pilih --</option>
                                     @foreach ($status as $key=>$item)
                                         @if ($item->id==$rekom->status_rekomendasi_id)

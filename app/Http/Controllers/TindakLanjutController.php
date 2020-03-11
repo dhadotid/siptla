@@ -153,70 +153,99 @@ class TindakLanjutController extends Controller
 
         $wh=array();
         if($request->rekomid!='')
-            $wh['data_rekomendasi.id']=$request->rekomid;
+        {
+            if($request->rekomid!=0)
+                $wh['data_rekomendasi.id']=$request->rekomid;
+        }
+        if($request->no_lhp!='')
+        {
+            if($request->no_lhp!=0)
+                $wh['daftar_lhp.id']=$request->no_lhp;
+        }
 
         if($request->temuan_id!='')
-            $wh['data_temuan.id']=$request->temuan_id;
+        {
+            if($request->temuan_id!=0)
+                $wh['data_temuan.id']=$request->temuan_id;
+        }
 
         if($request->statusrekom!='')
-            $wh['data_rekomendasi.status_rekomendasi_id']=$request->statusrekom;
+        {
+            if($request->statusrekom!=0)
+                $wh['data_rekomendasi.status_rekomendasi_id']=$request->statusrekom;
+        }
 
         if($request->pemeriksa!='')
-            $wh['daftar_lhp.pemeriksa_id']=$request->pemeriksa;
-
-        $pemeriksaa=Pemeriksa::orderBy('code')->get();
-        // $datalhp=DaftarTemuan::where('user_input_id',Auth::user()->id)->where('status_lhp','Publish LHP')->orderBy('id','desc')->get();
-
-
-        if(count($wh)!=0)
         {
-            $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
-                                    ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
-                                    ->where('daftar_lhp.status_lhp','Publish LHP')
-                                    ->where('daftar_lhp.tahun_pemeriksa',$tahun)
-                                    ->where('daftar_lhp.user_input_id',Auth::user()->id)
-                                    ->where($wh)
-                                    ->whereNull('data_rekomendasi.deleted_at')
-                                    ->orderBy('data_rekomendasi.nomor_rekomendasi')
-                                    ->get();
+            if($request->pemeriksa!=0)
+                $wh['daftar_lhp.pemeriksa_id']=$request->pemeriksa;
         }
-        else
+        $statusrekom=StatusRekomendasi::all();
+        $st=array();
+        foreach($statusrekom as $k=>$v)
         {
-            $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
-                                    ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
-                                    ->where('daftar_lhp.status_lhp','Publish LHP')
-                                    ->where('daftar_lhp.tahun_pemeriksa',$tahun)
-                                    ->where('daftar_lhp.user_input_id',Auth::user()->id)
-                                    ->whereNull('data_rekomendasi.deleted_at')
-                                    ->orderBy('data_rekomendasi.nomor_rekomendasi')
-                                    ->get();
+            $st[$v->id]=$v;
         }
+        if(Auth::user()->level=='auditor-junior')
+        {
+            // return $wh;
+            $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+                                ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                                ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                                ->where('daftar_lhp.status_lhp','Publish LHP')
+                                ->where('daftar_lhp.tahun_pemeriksa',$tahun)
+                                ->where($wh)
+                                ->where('daftar_lhp.user_input_id',Auth::user()->id)
+                                ->whereNull('data_rekomendasi.deleted_at')
+                                ->orderBy('data_rekomendasi.nomor_rekomendasi')
+                                ->get();
 
-        $lhp=$temuan=$rekomendasi=$dt=array();
+        }
+        elseif(Auth::user()->level=='auditor-senior')
+        {
+            $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+                                ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                                ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                                ->where('daftar_lhp.status_lhp','Publish LHP')
+                                ->where('daftar_lhp.tahun_pemeriksa',$tahun)
+                                ->where('data_rekomendasi.senior_user_id',Auth::user()->id)
+                                ->whereNull('data_rekomendasi.deleted_at')
+                                ->orderBy('data_rekomendasi.nomor_rekomendasi')
+                                ->get();
+        }
+        
+        ;
+        $lhp=$temuan=$rekomendasi=$arrayrekomid=array();
         foreach($alldata as $k=>$v)
         {
-            // if(betweendate($v->tanggal_lhp,$t_awal,$t_akhir))
-            // {
-                $lhp[$v->id_lhp]=$v;
-                $temuan[]=$v;
-                $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
-            // }
-            // $dt['cek'][]=$v->tanggal_lhp;
-            // $dt['awal'][]=$t_awal;
-            // $dt['akhir'][]=$t_akhir;
-            $dt['between'][]=betweendate($v->tanggal_lhp,$t_awal,$t_akhir);
+            $lhp[$v->id_lhp]=$v;
+            $temuan[$v->id_temuan]=$v;
+            $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
+            $arrayrekomid[$v->id_rekom]=$v->id_rekom;
         }
-        // return $temuan;
+
+        $get_tl=TindakLanjutTemuan::whereIn('rekomendasi_id',$arrayrekomid)->get();
+        $tindaklanjut=array();
+        foreach($get_tl as $k=>$v)
+        {
+            $tindaklanjut[$v->rekomendasi_id][]=$v;
+        }
+        // return $st;
+        $jlhtl=$this->jlh_tindaklanjut();
+
         return view('backend.pages.data-lhp.auditor-junior.tindaklanjut-data')
                 ->with('tahun',$tahun)
+                ->with('jumlahtl',$jlhtl)
                 ->with('rekomid',$rekomid)
+                ->with('gettindaklanjut',$tindaklanjut)
                 ->with('temuanid',$temuan_id)
                 ->with('alldata',$alldata)
                 ->with('pic',$pic)
+                ->with('strekom',$st)
                 ->with('lhp',$lhp)
                 ->with('rekomendasi',$rekomendasi)
-                ->with('pemeriksa',$pemeriksaa)
-                ->with('temuan',$alldata);
+                ->with('pemeriksa',$pemeriksa)
+                ->with('temuan',$temuan);
 
         // $temuan=$rekomendasi=$idtemuanarray=array();
         // $datalhp=DaftarTemuan::where('user_input_id',Auth::user()->id)->where('status_lhp','Publish LHP')->orderBy('id','desc')->get();
@@ -321,8 +350,11 @@ class TindakLanjutController extends Controller
             $tindaklanjut[$v->rekomendasi_id][]=$v;
         }
         // return $st;
+        $jlhtl=$this->jlh_tindaklanjut();
+
         return view('backend.pages.data-lhp.auditor-junior.tindaklanjut')
                 ->with('tahun',$tahun)
+                ->with('jumlahtl',$jlhtl)
                 ->with('rekomid',$rekomid)
                 ->with('gettindaklanjut',$tindaklanjut)
                 ->with('temuanid',$temuanid)
@@ -568,7 +600,10 @@ class TindakLanjutController extends Controller
         }
 
         if($request->statusrekom!='')
-            $wh['data_rekomendasi.status_rekomendasi_id']=$request->statusrekom;
+        {
+            if($request->statusrekom!=0)
+                $wh['data_rekomendasi.status_rekomendasi_id']=$request->statusrekom;
+        }
 
         if($request->pemeriksa!='')
         {

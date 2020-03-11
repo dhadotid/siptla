@@ -1,13 +1,4 @@
- <div class="table-responsive">
-                        <div class="row" style="margin-bottom:20px;">
-                            <div class="col-md-8">&nbsp;</div>
-                            <div class="col-md-4 text-right">
-                                <a class="btn btn-xs btn-primary"><i class="fa fa-print"></i> Cetak Data</a>
-                                <a class="btn btn-xs btn-success"><i class="fa fa-file-excel-o"></i> Export Ke Excel</a>
-                            </div>
-                        </div>
-
-                         <table id="table" class="table table-striped table-bordered" cellspacing="0" width="100%">
+ <table id="table" class="table table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                                 <tr class="primary">
                                     <th class="text-center" style="width:15px;">#</th>
@@ -63,7 +54,8 @@
                                         $rinc.='</div>';
                                         
                                         $tem.='<div class="row" style="height:20px;border-bottom:1px dotted #ddd">';
-                                        $tem.='<div class="col-md-2"><small><i>Nomor</i></small></div>';
+                                        $tem.='<div class="col-md-1"><small><i>Status</i></small></div>';
+                                        $tem.='<div class="col-md-1"><small><i>No.</i></small></div>';
                                         $tem.='<div class="col-md-10"><small><i>Rekomendasi</i></small></div>';
                                         $tem.='</div>';
 
@@ -93,8 +85,14 @@
                                                     $text_rekom=$v->rekomendasi;
 
                                                 $tem.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">';
+
+                                                if(isset($strekom[$v->status_rekomendasi_id]))
+                                                    $tem.='<div class="col-md-1 text-center"><span data-toggle="tooltip" title="'.$strekom[$v->status_rekomendasi_id]->rekomendasi.'" data-placement="right" class="label label-'.(warnasingkatanstatus(singkatanstatus($strekom[$v->status_rekomendasi_id]->rekomendasi))).'">'.singkatanstatus($strekom[$v->status_rekomendasi_id]->rekomendasi).'</span></div>';
+                                                else
+                                                    $tem.='<div class="col-md-1 text-center">-</div>';
+
                                                 $tem.='<div class="col-md-1 text-center">'.$v->nomor_rekomendasi.'</div>';
-                                                $tem.='<div class="col-md-11">'.$text_rekom.'</div>';
+                                                $tem.='<div class="col-md-10">'.$text_rekom.'</div>';
                                                 $tem.='</div>';
                                                 
                                                 
@@ -140,7 +138,7 @@
                                                 {
                                                     $pic1='<small>PIC 1</small> :<br><b>'.(isset($pic[$v->pic_1_temuan_id]) ? $pic[$v->pic_1_temuan_id]->nama_pic : '').'</b>';
                                                 }
-                                                if($v->pic_2_temuan_id!='')
+                                               if($v->pic_2_temuan_id!='')
                                                 {
                                                     $listpic2=explode(',', $v->pic_2_temuan_id);
                                                     // print_r($listpic2);
@@ -169,6 +167,7 @@
                                                 }
                                                 else
                                                     $pic2.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:280px;"><div class="col-md-12 text-left">'.$pic1.'</div></div>';
+
 
                                                 $tgl.='<div style="height:80px;"  id="tgl_penyelesaian_'.$item->id_temuan.'_'.$v->id.'">';
                                                 if($v->tanggal_penyelesaian!='')
@@ -270,7 +269,7 @@
                                 @endforeach
                             </tbody>
                         </table>
-                    </div>
 <script>
     $('#table').DataTable();
+    $('.datepicker').datepicker();
 </script>

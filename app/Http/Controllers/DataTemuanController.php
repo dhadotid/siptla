@@ -299,7 +299,12 @@ class DataTemuanController extends Controller
 
         $user_pic=PICUnit::where('id_user',Auth::user()->id)->first();
 
-        $getrekom=DataRekomendasi::where('pic_1_temuan_id', $user_pic->id)->orWhere('pic_2_temuan_id', 'like',"%$user_pic->id%,")->with('dtemuan')->orderBy('nomor_rekomendasi')->get();
+        if(Auth::user()->level=='pic-unit')
+            $getrekom=DataRekomendasi::where('pic_1_temuan_id', $user_pic->id)->orWhere('pic_2_temuan_id', 'like',"%$user_pic->id%,")->with('dtemuan')->orderBy('nomor_rekomendasi')->get();
+        else
+            $getrekom=DataRekomendasi::with('dtemuan')->orderBy('nomor_rekomendasi')->get();
+
+
         $getidtemuan=$datarekom=array();
         foreach($getrekom as $kr=>$vr)
         {

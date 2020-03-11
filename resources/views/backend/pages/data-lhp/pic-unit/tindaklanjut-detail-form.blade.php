@@ -310,7 +310,7 @@
                                         <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
                                             <div class="col-sm-12">
                                                 @if ($rekom->publish_pic_1==1)
-                                                   <textarea class="fz11" name="txt_rangkuman_rekomendasi" placeholder="" id="catatan_monev"  style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px" readonly>{{$rekom->rangkuman_rekomendasi}}</textarea>
+                                                   {!!$rekom->rangkuman_rekomendasi!!}
                                                 @else
                                                     <textarea class="fz11" name="txt_rangkuman_rekomendasi" placeholder="" id="catatan_monev"  style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;width:100%;min-height:50px">{{$rekom->rangkuman_rekomendasi}}</textarea>
                                                 @endif
@@ -326,8 +326,14 @@
                         <div class="form-group" style="margin-top:-20px;">
                             <label for="exampleTextInput1" class="col-sm-12 control-label text-left">Dokumen Pendukung:</label>
                             <div class="col-sm-11">
-                                <input type="file" class="form-control"  id="file_pendukung"  name="file_pendukung"  placeholder="Dokumen Pendukung" accept=".doc,.docx,.pdf,.xls,.xlsx">
-                                <small><i>*Biarkan Kosong Jika Tidak Ingin Di Ganti</i></small>
+                                @if ($rekom->publish_pic_1==0)
+                                    <input type="file" class="form-control"  id="file_pendukung"  name="file_pendukung"  placeholder="Dokumen Pendukung" accept=".doc,.docx,.pdf,.xls,.xlsx">
+                                    <small><i>*Biarkan Kosong Jika Tidak Ingin Di Ganti</i></small>
+                                @else
+                                    @if ($rekom->file_pendukung!='')
+                                        <a data-toggle="tooltip" title="Lihat Dokumen" href="{{url('read-file/'.$rekom->file_pendukung)}}" target="_blank" class="btn btn-info"><i class="fa fa-search"></i> Lihat Dokumen</a>
+                                    @endif
+                                @endif
                             </div>
                             <div class="col-sm-1">
                                 @if ($rekom->file_pendukung!='')

@@ -406,7 +406,6 @@
                                                 elseif($v->publish_pic_2==1 && trim($v->pic_2_temuan_id)!='')
                                                 {
                                                     
-                                                    
                                                     if(in_array($user_pic->id,$listpic2))
                                                     {
                                                         $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
@@ -424,6 +423,25 @@
                                                         }
                                                         
                                                         $aksi.=' <li><a href="#" style="font-size:11px;"><i class="glyphicon glyphicon-check"></i> &nbsp;&nbsp;Sudah Publish Ke PIC 1</a></li>';     
+                                                    }
+                                                    elseif($v->publish_pic_1==1)
+                                                    {
+                                                        $icon='fa-check';
+                                                        $color='success';
+                                                        $toggle='data-toggle="tooltip" title="Data Rekomendasi Sudah Publish Ke Auditor"';
+                                                        $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
+                                                        <div  class="btn-group" style="'.$styleaksi.'" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
+                                                            <button '.$toggle.' type="button" class="btn btn-'.$color.' btn-xs" style="height:28px;"><i class="fa '.$icon.'"></i></button>
+                                                            <button type="button" class="btn btn-'.$color.' btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">
+                                                               ';
+                                                         $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
+
+                                                        $aksi.=' <li><a href="javascript:reviewtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-file"></i> &nbsp;&nbsp;Review & Rangkuman Tindak Lanjut</a></li>';
+                                                        $aksi.=' <li><a href="#" style="font-size:11px;"><i class="glyphicon glyphicon-check"></i> &nbsp;&nbsp;Sudah Publish Ke Auditor</a></li>';
+                                                                
                                                     }
                                                     else
                                                     {

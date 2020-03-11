@@ -378,19 +378,61 @@
                                                     }
                                                     else
                                                     {
-                                                        $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
-                                                            <div class="btn-group">
-                                                                <button type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
-                                                                <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
+                                                        if($v->published=='1')
+                                                        {
+                                                            $icon='fa-check';
+                                                            $color='success';
+                                                            $toggle='data-toggle="tooltip" title="Data Rekomendasi Sudah Publish Ke Auditor Senior"';
+                                                            $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
+                                                                <div class="btn-group" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
+                                                                <button '.$toggle.' type="button" class="btn btn-'.$color.' btn-xs" style="height:28px;"><i class="fa '.$icon.'"></i></button>
+                                                                <button type="button" class="btn btn-'.$color.' btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
                                                                     <span class="caret"></span>
                                                                 </button>
-                                                                <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">
+                                                                <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">';
                                                                 
-                                                                <li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
+                                                            if($v->published=='1')
+                                                                $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.',1)" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
+                                                            else
+                                                                $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
 
-                                                        $aksi.='</ul>
-                                                            </div>
-                                                        </div>';
+                                                                if($v->review_spi=='')
+                                                                {
+                                                                    $aksi.='<li><a disabled data-toggle="tooltip" title="Anda Belum Menambahkan Review/Catatan Monev Untuk Rekomendasi Ini" href="#" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Senior</a></li>';
+                                                                }
+                                                                else
+                                                                {
+                                                                    if($v->published=='1')
+                                                                    {
+                                                                        $aksi.='<li><a href="#" style="font-size:11px;"><i class="glyphicon glyphicon-ok"></i> &nbsp;&nbsp;Sudah Publish Ke Senior</a></li>';
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        $aksi.='<li><a href="javascript:publishkesenior('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Senior</a></li>';
+                                                                    }
+                                                                }    
+
+                                                            $aksi.='</ul>
+                                                            </div></div>';
+                                                        }
+                                                        else
+                                                        {
+
+                                                        
+                                                            $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
+                                                                <div class="btn-group">
+                                                                    <button type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
+                                                                    <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
+                                                                        <span class="caret"></span>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">
+                                                                    
+                                                                    <li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
+
+                                                            $aksi.='</ul>
+                                                                </div>
+                                                            </div>';
+                                                        }
                                                     }
                                             }
                                         }
@@ -466,7 +508,7 @@
             
             $.ajax({
                 url : '{{url("/")}}/data-tindaklanjut-list',
-                data : { tahun : '{{$tahun}}',pemeriksa:pemeriksa, tgl_awal : tanggal_awal, tgl_akhir : tanggal_akhir, rekomid : no_rekomendasi, temuan_id : no_temuan, statusrekom : status_rekomendasi},
+                data : { tahun : '{{$tahun}}',pemeriksa: pemeriksa, no_lhp:no_lhp, tgl_awal: tanggal_awal, tgl_akhir: tanggal_akhir, rekomid: no_rekomendasi, temuan_id: no_temuan, statusrekom: status_rekomendasi},
                 type : 'POST',
                 success : function(res){
                     $('#data').html(res);

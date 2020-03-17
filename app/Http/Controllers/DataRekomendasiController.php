@@ -281,8 +281,17 @@ class DataRekomendasiController extends Controller
 
                 $table.='<li style="margin-bottom:10px;padding:10px 0;border-bottom:1px solid #bbb;">
                     <a href="javascript:hapusrekomendasi(\''.$v->id_temuan.'\',\''.$v->id.'\')" class="btn btn-danger btn-xs pull-right"><i class="fa fa-trash"></i> Hapus Rekomendasi</a>
-                    <a href="javascript:rekomedit(\''.$v->id_temuan.'\',\''.$v->id.'\')" class="btn btn-info btn-xs pull-right"><i class="fa fa-edit"></i> Edit Rekomendasi</a>
-                    <u>Nilai Rekomendasi :</u><br><h5><span class="text-primary">Rp.'.number_format($v->nominal_rekomendasi,2,',','.').'</span></h5>
+                    <a href="javascript:rekomedit(\''.$v->id_temuan.'\',\''.$v->id.'\')" class="btn btn-info btn-xs pull-right"><i class="fa fa-edit"></i> Edit Rekomendasi</a>';
+
+                if(Auth::user()->level=='auditor-senior' || Auth::user()->level=='super-user')
+                {
+                    if($v->senior_publish==0)
+                    {
+                        $table.='<a href="javascript:rekomsetujui(\''.$v->id_temuan.'\',\''.$v->rekom_id.'\',\''.$v->status_rekomendasi_id.'\')" class="btn btn-success btn-xs pull-right"><i class="fa fa-edit"></i> Setujui Rekomendasi</a>';
+                    }
+                }
+                    
+                $table.='<u>Nilai Rekomendasi :</u><br><h5><span class="text-primary">Rp.'.number_format($v->nominal_rekomendasi,2,',','.').'</span></h5>
                     <br>
                     <u>Rekomendasi : </u><br><h4>'.$v->rekomendasi.'</h4><br>
                     <a href="#" class="btn btn-sm btn-'.($status).'">'.$v->statusrekomendasi->rekomendasi.'</a>
@@ -1455,5 +1464,13 @@ class DataRekomendasiController extends Controller
         }
         $form.='<div id="det-update-rincian"></div>';
         return $form;
+    }
+
+    public function setujui_rekomendasi($idrekom)
+    {
+        $rekom=DataRekomendasi::find($idrekom);
+        $rekom->senior_publish=1;
+        $rekom->save();
+
     }
 }

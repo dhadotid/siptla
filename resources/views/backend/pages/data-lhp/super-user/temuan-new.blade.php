@@ -139,15 +139,15 @@
                                                     </td>
                                                 @endforeach
                                                 <td class="text-center">
-                                                    @if (isset($jlhsetujurekom[Auth::user()->id][$idlhp][$item->temuan_id]['setuju']))
-                                                        <span class="label label-success">{{count($jlhsetujurekom[Auth::user()->id][$idlhp][$item->temuan_id]['setuju'])}}</span>
+                                                    @if (isset($jlhsetujurekom[$idlhp][$item->temuan_id]['setuju']))
+                                                        <span class="label label-success">{{count($jlhsetujurekom[$idlhp][$item->temuan_id]['setuju'])}}</span>
                                                     @else
                                                         <span class="label label-danger">0</span>
                                                     @endif
                                                 </td>
                                                 <td class="text-center">
-                                                    @if (isset($jlhsetujurekom[Auth::user()->id][$idlhp][$item->temuan_id]['belum']))
-                                                        <span class="label label-success">{{count($jlhsetujurekom[Auth::user()->id][$idlhp][$item->temuan_id]['belum'])}}</span>
+                                                    @if (isset($jlhsetujurekom[$idlhp][$item->temuan_id]['belum']))
+                                                        <span class="label label-success">{{count($jlhsetujurekom[$idlhp][$item->temuan_id]['belum'])}}</span>
                                                     @else
                                                         <span class="label label-danger">0</span>
                                                     @endif

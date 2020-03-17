@@ -45,7 +45,7 @@
             @php
                 $g_url=explode('/',$url);
                 // echo $url;
-                $master=['pejabat-penandatangan','data-temuan','level-pic','pic-unit','pemeriksa','jenis-audit','jangka-waktu','status-rekomendasi','jenis-temuan','rekanan','level-resiko','data-lhp','level-pengguna','pengguna'];
+                $master=['pejabat-penandatangan','data-temuan','level-pic','pic-unit','pemeriksa','jenis-audit','jangka-waktu','status-rekomendasi','jenis-temuan','rekanan','level-resiko','data-lhp','level-pengguna','pengguna','periode-review'];
             @endphp
             <ul class="submenu" style="{{in_array($g_url[0],$master) ? 'display:block' : ''}}">
               @if (Auth::user()->level=='auditor-junior' || Auth::user()->level=='auditor-senior')
@@ -73,6 +73,7 @@
                   <li class="{{strpos($url,'data-lhp')!==false ? 'active open' : ''}}"><a href="{{url('data-lhp')}}"><span class="menu-text">Data LHP</span></a></li> 
                   {{-- <li class="{{$url=='level-pengguna' ? 'active open' : ''}}"><a href="{{url('level-pengguna')}}"><span class="menu-text">Data Level Pengguna</span></a></li>  --}}
                   <li class="{{strpos($url,'pengguna')!==false ? 'active open' : ''}}"><a href="{{url('pengguna')}}"><span class="menu-text">Data Pengguna</span></a></li> 
+                  <li class="{{strpos($url,'periode-review')!==false ? 'active open' : ''}}"><a href="{{url('periode-review')}}"><span class="menu-text">Periode Review</span></a></li> 
               @endif
               @if (Auth::user()->level=='super-user')
                   <li class="{{strpos($url,'level-pic')!==false  ? 'active open' : ''}}"><a href="{{url('level-pic')}}"><span class="menu-text">Level PIC Unit</span></a></li>
@@ -85,7 +86,7 @@
                   <li class="{{strpos($url,'rekanan')!==false ? 'active open' : ''}}"><a href="{{url('rekanan')}}"><span class="menu-text">Rekanan</span></a></li>
                   <li class="{{strpos($url,'level-resiko')!==false ? 'active open' : ''}}"><a href="{{url('level-resiko')}}"><span class="menu-text">Level Resiko</span></a></li>
                   <li class="{{strpos($url,'pejabat-penandatangan')!==false ? 'active open' : ''}}"><a href="{{url('pejabat-penandatangan')}}"><span class="menu-text">Pejabat Penanda Tangan</span></a></li>
-                  
+                  <li class="{{strpos($url,'periode-review')!==false ? 'active open' : ''}}"><a href="{{url('periode-review')}}"><span class="menu-text">Periode Review</span></a></li> 
               @endif
             </ul>
           </li>
@@ -143,8 +144,8 @@
               <span class="menu-text">Data LHP</span>
             </a>
           </li>
-          <li class="{{$url=='data-tindaklanjut-senior' ? 'active' : ''}}">
-            <a href="{{url('data-tindaklanjut-senior')}}">
+          <li class="{{$url=='data-tindaklanjut-su' ? 'active' : ''}}">
+            <a href="{{url('data-tindaklanjut-su')}}">
                 <i class="menu-icon fa fa-list"></i>
                 <span class="menu-text">Data Tindak Lanjut</span>
               </a>

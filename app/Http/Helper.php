@@ -39,7 +39,12 @@ function adddate($tgl,$add)
     $tgl2 = date('Y-m-d', strtotime('+'.$add.' days', strtotime($tgl1)));
     return $tgl2;
 }
-
+function periodereview()
+{
+    $data['tanggal_mulai']=4;
+    $data['tanggal_selesai']=25;
+    return $data;
+}
 function jenis_level()
 {
     $level=[

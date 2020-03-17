@@ -83,13 +83,11 @@
                                         <li>
                                             <a href="#" data-toggle="modal" data-target="#modalreview" data-value="{{$item->lhp_id}}" class="btn-review"><i class="glyphicon glyphicon-comment"></i> &nbsp;&nbsp;Tanggapan dan Review LHP</a>
                                         </li>
-                                        @if (Auth::user()->level=='super-user')  
                                             @if ($item->status_lhp!='Publish LHP') 
                                                 <li>
                                                     <a href="#" data-toggle="modal" data-target="#modaladdreview" data-value="{{$item->lhp_id}}" class="btn-add-review"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Tanggapan dan Review LHP</a>
                                                 </li>
                                             @endif    
-                                        @endif
                                         <li>
                                             <a href="#" class="btn-edit" data-toggle="modal" data-target="#modalubah" data-value="{{$item->lhp_id}}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit LHP</a>
                                         </li>
@@ -167,7 +165,6 @@
                                     <li>
                                         <a href="#" data-toggle="modal" data-target="#modalreview" data-value="{{$item->lhp_id}}" class="btn-review"><i class="glyphicon glyphicon-comment"></i> &nbsp;&nbsp;Tanggapan dan Review LHP</a>
                                     </li>
-                                    @if (Auth::user()->level=='super-user')  
                                         @if ($item->status_lhp!='Publish LHP') 
                                             <li>
                                                 <a href="#" data-toggle="modal" data-target="#modaladdreview" data-value="{{$item->lhp_id}}" class="btn-add-review"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Tanggapan dan Review LHP</a>
@@ -176,7 +173,6 @@
                                                 <a href="javascript:publishlhp({{$item->lhp_id}})"><i class="glyphicon glyphicon-check"></i> &nbsp;&nbsp;Publish LHP</a>
                                             </li>
                                         @endif    
-                                    @endif
                                     <li>
                                         <a href="#" class="btn-edit" data-toggle="modal" data-target="#modalubah" data-value="{{$item->lhp_id}}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit LHP</a>
                                     </li>

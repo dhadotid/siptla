@@ -213,6 +213,34 @@ $('#datatable-temuan tbody').on('click', 'span.rekomendasi-detail', function () 
 // {
 
 // }
+function rekomsetujui(idtemuan, idrekom, status_rekom) {
+    swal({
+        title: "Apakah Anda Yakin ?",
+        text: "Ingin Menyetujui dengan benar Data Rekomendasi yang telah diinput ?",
+        icon: "warning",
+        buttons: [
+            'Tidak!',
+            'Ya, Setujui'
+        ],
+        dangerMode: true,
+    }).then(function (isConfirm) {
+        if (isConfirm) {
+            $.ajax({
+                url: flagsUrl + '/setujui-rekomendasi/' + idrekom,
+                success: function () {
+                    swal({
+                        title: 'Berhasil!',
+                        text: 'Data Rekomendasi Telah Disetujui dan Akan segera di Publish ke PIC Unit',
+                        icon: 'success'
+                    }).then(function () {
+                        $('#temuan_' + idtemuan).load(flagsUrl + '/rekomendasi-data-new/' + idtemuan + '/' + status_rekom);
+                    });
+
+                }
+            });
+        }
+    });
+}
 function formatdatatable(idtemuan) {
 
     var div = $('<div/>')

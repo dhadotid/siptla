@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title')
-    <title>Data Level Resiko </title>
+    <title>Data Periode Review </title>
 @endsection
 @section('modal')
 	<div class="modal fade" id="modaltambah" tabindex="-1" role="dialog">
@@ -8,14 +8,29 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title">Tambah Data Level Resiko </h4>
+					<h4 class="modal-title">Tambah Data Periode Review </h4>
 				</div>
 				<div class="modal-body">
-					<form action="{{ route('level-resiko.store') }}" method="POST">
+					<form action="{{ route('periode-review.store') }}" method="POST">
 						@csrf
                         <div class="form-group">
-							<label>Level Resiko </label>
-							<input type="text" name="level_resiko" class="form-control" placeholder="Level Resiko "/>
+							<label>Tanggal Mulai</label>
+							<input type="number" name="tanggal_mulai" class="form-control" placeholder="Tanggal Mulai"/>
+						</div>
+                        <div class="form-group">
+							<label>Tanggal Selesai</label>
+							<input type="number" name="tanggal_selesai" class="form-control" placeholder="Tanggal Selesai"/>
+						</div>
+                        <div class="form-group">
+							<label>Status</label>
+							<select name="status" class="form-control">
+								<option value="1">Aktif</option>
+								<option value="0">Tidak Aktif</option>
+							</select>
+						</div>
+                        <div class="form-group">
+							<label>Keterangan</label>
+							<textarea name="keterangan" class="form-control" placeholder="Keterangan"></textarea>
 						</div>
 						
                         
@@ -34,15 +49,30 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title">Ubah Data Level Resiko </h4>
+					<h4 class="modal-title">Ubah Data Periode Review </h4>
 				</div>
 				<div class="modal-body">
 					<form id="form-update" method="POST">
 						@csrf
 						@method('PUT')
 						<div class="form-group">
-							<label>Level Resiko </label>
-							<input type="text" name="level_resiko" class="form-control" placeholder="Level Resiko " id="level_resiko"/>
+							<label>Tanggal Mulai</label>
+							<input type="number" name="tanggal_mulai" id="tanggal_mulai" class="form-control" placeholder="Tanggal Mulai"/>
+						</div>
+                        <div class="form-group">
+							<label>Tanggal Selesai</label>
+							<input type="number" name="tanggal_selesai" id="tanggal_selesai" class="form-control" placeholder="Tanggal Selesai"/>
+						</div>
+                        <div class="form-group">
+							<label>Status</label>
+							<select name="status" id="status" class="form-control">
+								<option value="1">Aktif</option>
+								<option value="0">Tidak Aktif</option>
+							</select>
+						</div>
+                        <div class="form-group">
+							<label>Keterangan</label>
+							<textarea name="keterangan" id="keterangan" class="form-control" placeholder="Keterangan"></textarea>
 						</div>
 					
 				</div>
@@ -60,7 +90,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title">Konfirmasi Hapus Data Level Resiko </h4>
+					<h4 class="modal-title">Konfirmasi Hapus Data Periode Review </h4>
 				</div>
 				<div class="modal-body">
 					<h5>Apakah anda yakin akan menghapus data ini?</h5>
@@ -82,8 +112,8 @@
 	<div class="col-md-12">
 		<div class="widget">
 			<header class="widget-header">
-				<span class="widget-title">Data Level Resiko </span>
-				@if (Auth::user()->level=='0')
+				<span class="widget-title">Data Periode Review </span>
+				@if (Auth::user()->level=='0' || Auth::user()->level=='super-user')
 					<a href="" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#modaltambah">+ Tambah Data</a>
 				@endif
 			</header><!-- .widget-header -->
@@ -115,18 +145,30 @@
 						<thead>
 							<tr>
 								<th class="text-center" style="width:15px;">#</th>
-								<th class="text-center">Level Resiko </th>
-								@if (Auth::user()->level=='0')
+								<th class="text-center">Tanggal Mulai </th>
+								<th class="text-center">Tanggal Selesai </th>
+								<th class="text-center">Status </th>
+								<th class="text-center">Keterangan </th>
+								@if (Auth::user()->level!='pic-unit')
 									<th class="text-center">Aksi</th>
 								@endif
 							</tr>
 						</thead>
 						<tbody>
-							@foreach ($levelpic as $key => $opd)
+							@foreach ($periodereview as $key => $opd)
 								<tr>
 									<td class="text-center">{{ $key = $key + 1 }}</td>
-									<td>{{ $opd->level_resiko }}</td>
-									@if (Auth::user()->level=='0')
+									<td class="text-center">{{ $opd->tanggal_mulai }}</td>
+									<td class="text-center">{{ $opd->tanggal_selesai }}</td>
+									<td class="text-center">
+										@if ($opd->status==1)
+											<span class="label label-success">Aktif</span>
+										@else
+											<span class="label label-danger">Tidak Aktif</span>
+										@endif	
+									</td>
+									<td class="text-center">{{ $opd->keterangan }}</td>
+									@if (Auth::user()->level!='pic-unit')
 										<td class="text-center">
 											<a class="btn btn-xs btn-warning btn-edit" data-toggle="modal" data-target="#modalubah" data-value="{{ $opd->id }}" style="height:24px !important;">
 												<i class="fa fa-edit"></i>
@@ -157,12 +199,14 @@
             var id = $(this).data('value')
 			// alert(id);
             $.ajax({
-                url: "{{ url('level-resiko') }}/"+id+"/edit",
+                url: "{{ url('periode-review') }}/"+id+"/edit",
                 success: function(res) {
-					$('#form-update').attr('action', "{{ url('level-resiko') }}/"+id)
+					$('#form-update').attr('action', "{{ url('periode-review') }}/"+id)
 
-					$('#level_resiko').val(res.level_resiko)
-					$('#code').val(res.code)
+					$('#tanggal_mulai').val(res.tanggal_mulai)
+					$('#tanggal_selesai').val(res.tanggal_selesai)
+					$('#status').val(res.status)
+					$('#keterangan').val(res.keterangan)
 					
                 }
             })
@@ -171,7 +215,7 @@
 		// delete action
         $('#table').on('click', '.btn-delete', function(){
             var id = $(this).data('value')
-			$('#form-delete').attr('action', "{{ url('level-resiko') }}/"+id)			
+			$('#form-delete').attr('action', "{{ url('periode-review') }}/"+id)			
         })
 
 		

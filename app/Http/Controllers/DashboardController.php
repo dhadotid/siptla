@@ -114,6 +114,33 @@ class DashboardController extends Controller
                     ->with('dpengguna',$dpengguna)
                     ->with('jenisaudit',$jenisaudit);
         }
+        elseif(Auth::user()->level=='super-user')
+        {
+            $user=User::all();
+            $duser=array();
+            foreach($user as $k=>$v)
+            {
+                $duser[$v->level][]=$v;
+            }
+
+            $jenistemuan=MasterTemuan::get()->count();
+            $status=StatusRekomendasi::get()->count();
+            $picunit=PICUnit::with('levelpic')->with('fak')->with('bid')->orderByRaw('RAND()')->limit(10)->get();
+            $jenisaudit=JenisAudit::get()->count();
+            return view('backend.pages.dashboard.admin')
+                    ->with('jenistemuan',$jenistemuan)
+                    ->with('datalevelpic',$datalevelpic)
+                    ->with('pemeriksa',$pemeriksa)
+                    ->with('dpemeriksa',$dpemeriksa)
+                    ->with('colorpemeriksa',$colorpemeriksa)
+                    ->with('status',$status)
+                    ->with('picunit',$picunit)
+                    ->with('color',$color)
+                    ->with('duser',$duser)
+                    ->with('tahun',$thn)
+                    ->with('dpengguna',$dpengguna)
+                    ->with('jenisaudit',$jenisaudit);
+        }
         elseif(Auth::user()->level=='auditor-junior')
         {
             // $lhp=DaftarTemuan::where('user_input_id',Auth::user()->id)->with('dpemeriksa')->with('djenisaudit')->get();

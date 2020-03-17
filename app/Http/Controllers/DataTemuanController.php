@@ -38,6 +38,15 @@ class DataTemuanController extends Controller
                     ->with('pemeriksa',$pemeriksa)
                     ->with('jenisaudit',$jenisaudit);
         }
+        elseif(Auth::user()->level=='auditor-senior')
+        {
+                return view('backend.pages.data-lhp.auditor-senior.index')
+                    ->with('tahun',$thn)
+                    ->with('data',$data)
+                    ->with('statusrekom',$statusrekom)
+                    ->with('pemeriksa',$pemeriksa)
+                    ->with('jenisaudit',$jenisaudit);
+        }
         else
             return view('backend.pages.data-lhp.auditor-junior.index')
                     ->with('tahun',$thn)
@@ -55,11 +64,24 @@ class DataTemuanController extends Controller
 
         $data['pemeriksa']=$pemeriksa=Pemeriksa::orderBy('pemeriksa')->get();
         $data['jenisaudit']=$jenisaudit=JenisAudit::orderBy('jenis_audit')->get();
-        return view('backend.pages.data-lhp.auditor-junior.index-semua')
+
+        if(Auth::user()->level=='auditor-senior')
+        {
+            return view('backend.pages.data-lhp.auditor-senior.index-semua')
                 ->with('tahun',$thn)
                 ->with('data',$data)
                 ->with('pemeriksa',$pemeriksa)
                 ->with('jenisaudit',$jenisaudit);
+        }
+        else
+        {
+            return view('backend.pages.data-lhp.auditor-junior.index-semua')
+                ->with('tahun',$thn)
+                ->with('data',$data)
+                ->with('pemeriksa',$pemeriksa)
+                ->with('jenisaudit',$jenisaudit);
+        }
+        
     }
     public function lhp_edit($id)
     {
@@ -175,8 +197,14 @@ class DataTemuanController extends Controller
                     // ->where('daftar_lhp.user_input_id',Auth::user()->id)
                     ->with('dpemeriksa')
                     ->with('djenisaudit')
-                    ->orderBy('tanggal_lhp','desc')->get();
+                    ->orderBy('tanggal_lhp','desc')
+                    ->get();
 
+            return view('backend.pages.data-lhp.auditor-senior.data')
+                ->with('data',$data)
+                ->with('arraylhp',$arraylhp)
+                ->with('statusrekom',$statusrekom)
+                ->with('drekom',$drekom);
                 // $data=DaftarTemuan::selectRaw('*,data_rekomendasi.id as idrekom')->join('pemeriksa','pemeriksa.id','=','daftar_lhp.pemeriksa_id')
                 //                 ->join('jenis_audit','jenis_audit.id','=','daftar_lhp.jenis_audit_id')
                 //                 ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
@@ -480,9 +508,7 @@ class DataTemuanController extends Controller
         {
             $dtem[$vtem->temuan_id]=$vtem;
         }
-        
-        
-
+   
         $rekom=DataRekomendasi::with('jenistemuan')->with('picunit1')->with('picunit2')->with('jangkawaktu')->with('statusrekomendasi')->get();
         $rekomendasi=$drekom=array();
         foreach($rekom as $k=>$v)
@@ -497,7 +523,9 @@ class DataTemuanController extends Controller
         // return $dtem;
         if($data)
         {
-            return view('backend.pages.data-lhp.auditor-junior.temuan-new')
+            if(Auth::user()->level=='auditor-senior')
+            {
+                return view('backend.pages.data-lhp.auditor-senior.temuan-new')
                     ->with('dt',$dt)
                     ->with('idlhp',$idlhp)
                     ->with('drekom',$drekom)
@@ -508,6 +536,21 @@ class DataTemuanController extends Controller
                     ->with('statusrekomendasi',$statusrekomendasi)
                     ->with('statusrekom',$statusrekom)
                     ->with('data',$data);
+            }
+            else
+            {
+                return view('backend.pages.data-lhp.auditor-junior.temuan-new')
+                    ->with('dt',$dt)
+                    ->with('idlhp',$idlhp)
+                    ->with('drekom',$drekom)
+                    ->with('rekomendasi',$rekomendasi)
+                    ->with('senior',$senior)
+                    ->with('temuan',$temuan)
+                    ->with('jangkawaktu',$jangkawaktu)
+                    ->with('statusrekomendasi',$statusrekomendasi)
+                    ->with('statusrekom',$statusrekom)
+                    ->with('data',$data);
+            }
         }
         else
         {

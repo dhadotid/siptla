@@ -74,6 +74,19 @@
                   {{-- <li class="{{$url=='level-pengguna' ? 'active open' : ''}}"><a href="{{url('level-pengguna')}}"><span class="menu-text">Data Level Pengguna</span></a></li>  --}}
                   <li class="{{strpos($url,'pengguna')!==false ? 'active open' : ''}}"><a href="{{url('pengguna')}}"><span class="menu-text">Data Pengguna</span></a></li> 
               @endif
+              @if (Auth::user()->level=='super-user')
+                  <li class="{{strpos($url,'level-pic')!==false  ? 'active open' : ''}}"><a href="{{url('level-pic')}}"><span class="menu-text">Level PIC Unit</span></a></li>
+                  <li class="{{strpos($url,'pic-unit')!==false  ? 'active open' : ''}}"><a href="{{url('pic-unit')}}"><span class="menu-text">PIC Unit</span></a></li>
+                  <li class="{{strpos($url,'pemeriksa')!==false  ? 'active open' : ''}}"><a href="{{url('pemeriksa')}}"><span class="menu-text">Pemeriksa</span></a></li>
+                  <li class="{{strpos($url,'jenis-audit')!==false  ? 'active open' : ''}}"><a href="{{url('jenis-audit')}}"><span class="menu-text">Jenis Audit</span></a></li>
+                  <li class="{{strpos($url,'jangka-waktu')!==false  ? 'active open' : ''}}"><a href="{{url('jangka-waktu')}}"><span class="menu-text">Jangka Waktu Penyelesaian</span></a></li>
+                  <li class="{{strpos($url,'status-rekomendasi')!==false  ? 'active open' : ''}}"><a href="{{url('status-rekomendasi')}}"><span class="menu-text">Status Rekomendasi</span></a></li>
+                  <li class="{{strpos($url,'jenis-temuan')!==false || $url=='data-temuan'  ? 'active open' : ''}}"><a href="{{url('jenis-temuan')}}"><span class="menu-text">Jenis Temuan</span></a></li>
+                  <li class="{{strpos($url,'rekanan')!==false ? 'active open' : ''}}"><a href="{{url('rekanan')}}"><span class="menu-text">Rekanan</span></a></li>
+                  <li class="{{strpos($url,'level-resiko')!==false ? 'active open' : ''}}"><a href="{{url('level-resiko')}}"><span class="menu-text">Level Resiko</span></a></li>
+                  <li class="{{strpos($url,'pejabat-penandatangan')!==false ? 'active open' : ''}}"><a href="{{url('pejabat-penandatangan')}}"><span class="menu-text">Pejabat Penanda Tangan</span></a></li>
+                  
+              @endif
             </ul>
           </li>
         @endif
@@ -105,11 +118,11 @@
               <span class="menu-text">Data LHP</span>
             </a>
           </li>
-          <li class="{{$url=='data-tindak-lanjut' ? 'active' : ''}}">
-            <a href="{{url('data-tindaklanjut')}}">
-              <i class="menu-icon fa fa-list"></i>
-              <span class="menu-text">Data Tindak Lanjut</span>
-            </a>
+          <li class="{{$url=='data-tindaklanjut-senior' ? 'active' : ''}}">
+            <a href="{{url('data-tindaklanjut-senior')}}">
+                <i class="menu-icon fa fa-list"></i>
+                <span class="menu-text">Data Tindak Lanjut</span>
+              </a>
           </li>
           {{-- <li class="has-submenu {{strpos($url,'data-lhp')!==false ? 'active open' : ''}}">
             <a href="javascript:void(0)" class="submenu-toggle">
@@ -123,6 +136,20 @@
             </ul>
           </li> --}}
         @endif
+        @if (Auth::user()->level=='super-user')
+         <li class="{{$url=='data-lhp' ? 'active' : ''}}">
+            <a href="{{url('data-lhp')}}">
+              <i class="menu-icon fa fa-list"></i>
+              <span class="menu-text">Data LHP</span>
+            </a>
+          </li>
+          <li class="{{$url=='data-tindaklanjut-senior' ? 'active' : ''}}">
+            <a href="{{url('data-tindaklanjut-senior')}}">
+                <i class="menu-icon fa fa-list"></i>
+                <span class="menu-text">Data Tindak Lanjut</span>
+              </a>
+          </li>
+          @endif
         @if (Auth::user()->level!='pic-unit')
         <li class="has-submenu {{strpos($url,'laporan')!==false ? 'active open' : ''}}">
           <a href="javascript:void(0)" class="submenu-toggle">

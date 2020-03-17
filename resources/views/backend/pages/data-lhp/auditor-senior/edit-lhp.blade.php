@@ -83,8 +83,10 @@
                     {{-- <input type="text" class="form-control"  name="status_lhp" placeholder="Status LHP" id="status_lhp" value="Create LHP" readonly> --}}
                     <select class="form-control edit_status_lhp_select" id="edit_status_lhp" data-plugin="select2" name="status_lhp">
                         <option value="Create LHP">Create LHP</option>
+                        @if (Auth::user()->level=='super-user')
                         <option value="Review LHP">Review LHP</option>
                         <option value="Publish LHP">Publish LHP</option>
+                        @endif
                     </select>
                     {{-- <input type="hidden" class="form-control"  name="flag_status_lhp" placeholder="Status LHP" id="flag_status_lhp" value="0"> --}}
                 </div>

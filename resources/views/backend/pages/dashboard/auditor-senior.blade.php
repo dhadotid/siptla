@@ -19,7 +19,56 @@
                     </span>
 				</div><!-- .widget -->
 			</div>
-			<div class="col-md-6 col-sm-6">
+			
+			<div class="col-md-3 col-sm-3">
+				<div class="widget p-md clearfix">
+								@php
+									$periode=\App\Models\PeriodeReview::first();
+									if($periode)
+									{
+										$tglmulai=$periode->tanggal_mulai;
+										$tglselesai=$periode->tanggal_selesai;
+										$id=$periode->id;
+									}
+									else
+									{
+										$tanggal=periodereview();
+										$tglmulai=$tanggal['tanggal_mulai'];
+										$tglselesai=$tanggal['tanggal_selesai'];
+										$id=0;
+									}
+
+									if(date('d')>=$tglmulai && date('d')<=$tglselesai)
+									{
+										$st_period=1;
+										$class='text-success';
+									}
+									else
+									{
+										$st_period=0;
+										$class='text-danger';
+									}
+								@endphp
+					<span class="pull-left" style="height:68px;width:100%">
+						<small class="text-color">Periode Review</small> : <span id="status_periode" class="{{$class}}" style="font-size:13px;font-weight:bold;">{{$st_period==1 ? 'Aktif' : 'Tidak Aktif'}}</span>
+						<div style="margin-top:5px;" class="row">
+							<div class="col-md-5">
+								<label class="switch">
+									<input type="checkbox" {{$st_period==1 ? 'checked' : ''}} onchange="periode({{$id}})" id="input-period">
+									<span class="slider"></span>
+								</label>
+							</div>
+							<div class="col-md-7">
+								
+								<small class="text-color" style="font-size:10px">Tanggal Mulai :</small> <b>{{$tglmulai}}</b><br>
+								<small class="text-color" style="font-size:10px">Tanggal Selesai :</small> <b>{{$tglselesai}}</b>
+							</div>
+							
+						</div>
+					</span>
+				</div>
+			</div>
+			<div class="col-md-3 col-sm-3">
 				<div class="widget p-md clearfix">
 					<span class="pull-right fz-lg fw-500 counter" style="height:68px;padding-top:15px;">
 						Tahun&nbsp;&nbsp;
@@ -200,7 +249,32 @@
 				}
 			}
 		});
-		
+		function periode(id)
+		{
+			var checkBox = document.getElementById("input-period");
+
+			if (checkBox.checked == true){
+				$.ajax({
+					url : flagsUrl+'/status-periode/'+id+'/1',
+					success : function(){
+						$('#status_periode').removeClass('text-danger');
+						$('#status_periode').addClass('text-success');
+						$('#status_periode').text('Aktif');
+						swal("Berhasil", "Status Periode Review Berhasil Di Edit", "success");
+					}
+				});
+			} else {
+				$.ajax({
+					url : flagsUrl+'/status-periode/'+id+'/0',
+					success : function(){
+						$('#status_periode').removeClass('text-success');
+						$('#status_periode').addClass('text-danger');
+						$('#status_periode').text('Tidak Aktif');
+						swal("Berhasil", "Status Periode Review Berhasil Di Edit", "success");
+					}
+				});
+			}
+		}
 	</script>
 	<style>
 	.box{
@@ -221,5 +295,65 @@
 		width:100%;
 		float:left;
 	}
-	</style>
+
+		.switch {
+		position: relative;
+		display: inline-block;
+		width: 120px;
+		height: 40px;
+		}
+
+		.switch input { 
+		opacity: 0;
+		width: 0;
+		height: 0;
+		}
+
+		.slider {
+		position: absolute;
+		cursor: pointer;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: #ccc;
+		-webkit-transition: .4s;
+		transition: .4s;
+		}
+
+		.slider:before {
+		position: absolute;
+		content: "";
+		height: 32px;
+		width: 40px;
+		left: 30px;
+		bottom: 4px;
+		background-color: white;
+		-webkit-transition: .4s;
+		transition: .4s;
+		}
+
+		input:checked + .slider {
+		background-color: #2196F3;
+		}
+
+		input:focus + .slider {
+		box-shadow: 0 0 1px #2196F3;
+		}
+
+		input:checked + .slider:before {
+		-webkit-transform: translateX(26px);
+		-ms-transform: translateX(26px);
+		transform: translateX(26px);
+		}
+
+		/* Rounded sliders */
+		.slider.round {
+		border-radius: 34px;
+		}
+
+		.slider.round:before {
+		border-radius: 50%;
+		}
+		</style>
 @endsection

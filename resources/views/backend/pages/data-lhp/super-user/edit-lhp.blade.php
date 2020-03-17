@@ -83,15 +83,13 @@
                     {{-- <input type="text" class="form-control"  name="status_lhp" placeholder="Status LHP" id="status_lhp" value="Create LHP" readonly> --}}
                     <select class="form-control edit_status_lhp_select" id="edit_status_lhp" data-plugin="select2" name="status_lhp">
                         <option value="Create LHP">Create LHP</option>
-                        @if (Auth::user()->level=='super-user')
                         <option value="Review LHP">Review LHP</option>
                         <option value="Publish LHP">Publish LHP</option>
-                        @endif
                     </select>
                     {{-- <input type="hidden" class="form-control"  name="flag_status_lhp" placeholder="Status LHP" id="flag_status_lhp" value="0"> --}}
                 </div>
             </div>
-            <div class="form-group" style="display:none">
+            <div class="form-group" style="dipslay:none">
                 <label for="datetimepicker2" class="col-sm-4 control-label text-right">Review LHP</label>
                 <div class="col-sm-8">
                     <textarea class="form-control"  name="review_lhp" placeholder="Review LHP" id="edit_review_lhp"></textarea>

@@ -1479,6 +1479,17 @@ class TindakLanjutController extends Controller
                 ->with('status',$status)
                 ->with('id_rekomendasi',$idrekomendasi);
         }
+        elseif(Auth::user()->level=='super-user')
+        {
+            return view('backend.pages.data-lhp.super-user.tindaklanjut-detail-form')
+                ->with('rekom',$rekom)
+                ->with('dokumen',$dokumen)
+                ->with('pic',$pic)
+                ->with('pic1',$pic1)
+                ->with('pic2',$pic2)
+                ->with('status',$status)
+                ->with('id_rekomendasi',$idrekomendasi);
+        }
     }
     public function detail_tindaklanjut_picunit1($idrekomendasi)
     {

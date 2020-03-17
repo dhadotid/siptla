@@ -140,7 +140,7 @@
                     </div>
                     <div class="modal-body">
                         @if (Auth::user()->level=='auditor-senior')
-                            @include('backend.pages.data-lhp.auditor-senior.add-lhp',$data)
+                            @include('backend.pages.data-lhp.auditor-junior.add-lhp',$data)
                         @else
                             @include('backend.pages.data-lhp.auditor-junior.add-lhp',$data)
                         @endif

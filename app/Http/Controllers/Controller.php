@@ -7,6 +7,8 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Models\TindakLanjutTemuan;
+use App\Models\DataRekomendasi;
+use Auth;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -56,5 +58,33 @@ class Controller extends BaseController
             $tindaklanjut[$v->rekomendasi_id][]=$v;
         }
         return $tindaklanjut;
+    }
+
+    public function cekstrekomsenior()
+    {
+        $rekom=DataRekomendasi::with('dtemuan')->get();
+        $rekomendasi=array();
+        foreach($rekom as $k=>$v)
+        {
+            if(isset($v->dtemuan->id_lhp))
+            {
+                if(Auth::user()->level=='auditor-senior')
+                {
+                    if($v->senior_publish==1)
+                        $rekomendasi[$v->senior_user_id][$v->dtemuan->id_lhp][$v->id_temuan]['setuju'][]=$v;
+                    else
+                        $rekomendasi[$v->senior_user_id][$v->dtemuan->id_lhp][$v->id_temuan]['belum'][]=$v;
+                }
+                elseif(Auth::user()->level=='super-user')
+                {
+                    if($v->senior_publish==1)
+                        $rekomendasi[$v->dtemuan->id_lhp][$v->id_temuan]['setuju'][]=$v;
+                    else
+                        $rekomendasi[$v->dtemuan->id_lhp][$v->id_temuan]['belum'][]=$v;
+                }
+            }
+        }
+
+        return $rekomendasi;
     }
 }

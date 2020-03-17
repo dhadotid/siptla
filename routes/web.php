@@ -37,6 +37,9 @@ Route::group(['middleware'=>'auth'],function(){
     Route::resource('rekanan','RekananController');
     Route::resource('level-resiko','LevelResikoController');
     Route::resource('pejabat-penandatangan','PejabatTandatanganController');
+    Route::resource('periode-review','PeriodeReviewController');
+    
+    Route::get('status-periode/{id}/{st}','PeriodeReviewController@ubah_status');
 
     Route::get('data-lhp/{tahun?}/{status_rekomendasi?}','DataTemuanController@index')->name('data-lhp.index');
     Route::get('semua-data-lhp/{tahun?}','DataTemuanController@index_semua')->name('data-lhp.index-semua');
@@ -82,6 +85,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('publish-rekomendasi-to-pic1/{idrekomendasi}','DataRekomendasiController@publish_rekomendasi_to_pic1');
     Route::get('list-rangkuman/{idrekomendasi}','DataRekomendasiController@list_rangkuman');
     Route::post('rangkuman-simpan','DataRekomendasiController@rangkuman_simpan');
+    Route::get('setujui-rekomendasi/{idrekom}','DataRekomendasiController@setujui_rekomendasi');
     
     
     Route::post('update-rincian','RincianSewaController@update_rincian');
@@ -106,6 +110,14 @@ Route::group(['middleware'=>'auth'],function(){
     Route::post('tindaklanjut-senior-simpan','AuditorSeniorController@tindaklanjut_senior_simpan');
 
     // END AUDITOR SENIOR
+    /* SUPER USER */
+
+    Route::get('data-tindaklanjut-su/{tahun?}/{rekom_id?}/{temuan_id?}','AuditorSeniorController@tindaklanjut_su_index');
+    Route::post('data-tindaklanjut-sulist','AuditorSeniorController@tindaklanjut_su_list');
+
+    Route::post('tindaklanjut-su-simpan','AuditorSeniorController@tindaklanjut_su_simpan');
+
+    // END SUPER USER
 
     Route::get('data-tindaklanjut/{tahun?}/{rekom_id?}/{temuan_id?}','TindakLanjutController@junior_index');
     Route::get('data-tindaklanjut-unitkerja/{tahun?}/{rekom_id?}/{temuan_id?}','TindakLanjutController@unitkerja_index');

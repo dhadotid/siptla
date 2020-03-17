@@ -15,7 +15,7 @@
                     <div class="row">
                         <div class="col-md-2 text-left">Tahun
                             <select name="tahun" id="tahun" class="form-control text-left" data-plugin="select2" onchange="getdata(this.value)" style="width:50%">
-                                @for ($i = date('Y'); $i >= (date('Y')-20); $i--)
+                                @for ($i = (date('Y')-20); $i <= (date('Y')); $i++)
                                     @if ($tahun==$i)
                                         <option value="{{$i}}" selected="selected"}}>{{$i}}</option>
                                     @else
@@ -36,7 +36,7 @@
             <hr class="widget-separator">
 			<div class="widget-body">
                 <div class="">
-                    <span class="widget-title">Data LHP</span>
+                    <span class="widget-title">Semua Data LHP</span>
                     
                     <div class="row" style="margin-top:10px;font-size:20px;">
                         <div class="col-md-12">
@@ -79,6 +79,7 @@
     </div>
 @endsection
 @section('footscript')
+
     <link rel="stylesheet" href="{{asset('theme/backend/libs/misc/datatables/datatables.min.css')}}"/>
     <link rel="stylesheet" href="{{asset('theme/backend/libs/bower/summernote/dist/summernote.css')}}"/>
     <link rel="stylesheet" href="{{asset('css/noty.css')}}"/>
@@ -93,10 +94,11 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        loaddata('{{$tahun}}','{{$statusrekom}}');
-        // loaddatasemua('{{$tahun}}');
+        loaddatasemua('{{$tahun}}');
         hidealert();
         $('.select').select2();
+        
+        
     </script>
     <style>
     /* .form-inline .btn
@@ -130,7 +132,7 @@
 @section('modal')
 {{-- Start Modal CRUD LHP --}}
     <div class="modal fade" id="modaltambah" tabindex="-1" role="dialog">
-		<div class="modal-dialog modal-lg">
+		<div class="modal-dialog">
 			<div class="modal-content">
                 <form action="{{ route('data-lhp.store') }}" method="POST" class="form-horizontal" id="formadd">
                     @csrf
@@ -139,11 +141,7 @@
                         <h4 class="modal-title">Tambah Data LHP </h4>
                     </div>
                     <div class="modal-body">
-                        @if (Auth::user()->level=='auditor-senior')
-                            @include('backend.pages.data-lhp.auditor-senior.add-lhp',$data)
-                        @else
-                            @include('backend.pages.data-lhp.auditor-junior.add-lhp',$data)
-                        @endif
+                        @include('backend.pages.data-lhp.auditor-junior.add-lhp',$data)
                     </div>
                     <div class="modal-footer">
                         <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>

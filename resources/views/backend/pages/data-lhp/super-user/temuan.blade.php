@@ -86,23 +86,16 @@
                                 <table class="table table-bordered" id="datatable-temuan" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
-                                            <th class="text-center primary" rowspan="2" style="width:15px;">#</th>
-                                            <th class="text-center primary" rowspan="2">Temuan</th>
+                                            <th class="text-center primary" style="width:15px;">#</th>
+                                            <th class="text-center primary">Nomor Temuan</th>
+                                            <th class="text-center primary">Temuan</th>
                                             {{-- <th class="text-center primary">Jenis Temuan</th>
                                             <th class="text-center primary">PIC Temuan</th>
                                             <th class="text-center primary">Nilai Temuan </th>
                                             <th class="text-center primary">Level Resiko</th> --}}
-                                            {{-- <th class="text-center primary">Rekomendasi</th> --}}
-                                            @foreach ($statusrekomendasi as $item)
-                                                <th class="text-center primary" rowspan="2">{{$item->rekomendasi}}</th>    
-                                            @endforeach
-                                            <th class="text-center primary" colspan="2">Jumlah Publish</th>
-                                            <th class="text-center primary" rowspan="2">Aksi</th>
+                                            <th class="text-center primary">Rekomendasi</th>
+                                            <th class="text-center primary">Aksi</th>
                                         
-                                        </tr>
-                                        <tr>
-                                            <th class="text-center primary">Setuju</th>
-                                            <th class="text-center primary">Belum</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -112,58 +105,36 @@
                                         @foreach ($temuan as $ky=>$item)
                                             <tr class="info text-dark">
                                                 <td class="text-center">{{$no}}</td>
+                                                <td class="text-left">{{$item->no_temuan}}</td>
                                                 <td class="text-left">{!!$item->temuan!!}</td>
                                                 {{-- <td class="text-center">{{isset($item->jenistemuan->temuan) ? $item->jenistemuan->temuan: '-'}}</td>
                                                 <td class="text-center">{{isset($item->picunit->nama_pic) ? $item->picunit->nama_pic: '-'}}</td>
                                                 <td class="text-right">{{number_format($item->nominal,2,',','.')}}</td>
                                                 <td class="text-center">{{isset($item->levelresiko->level_resiko) ? $item->levelresiko->level_resiko: '-'}}</td> --}}
-                                                @foreach ($statusrekomendasi as $vst)
-                                                    <td class="text-center">
-                                                        <span class="rekomendasi-detail" data-value="{{ $item->id.'_'.$vst->id }}">
-                                                            @if (isset($drekom[$item->temuan_id][$vst->id]))
-                                                                @if (count($drekom[$item->temuan_id][$vst->id])==0)
-                                                                    <span class="label label-rounded label-danger" style="font-size:13px !important;">
-                                                                        {{count($drekom[$item->temuan_id][$vst->id])}}
-                                                                    </span>
-                                                                @else
-                                                                    <a class="label label-rounded label-success" style="font-size:13px !important;text-decoration:underline" id="count_temuan_{{$item->temuan_id}}_{{$vst->id}}">
-                                                                        {{count($drekom[$item->temuan_id][$vst->id])}}
-                                                                    </a>
-                                                                @endif
-                                                            @else
-                                                                <span class="label label-rounded label-danger" style="font-size:13px !important;">
-                                                                    0
-                                                                </span>
-                                                            @endif
+                                                <td class="text-center">
+                                                    <div style="text-align:center">
+                                                        @php
+                                                            $jlhrekom=isset($rekomendasi[$item->temuan_id]) ? count($rekomendasi[$item->temuan_id]) : 0;
+                                                        @endphp
+                                                        <span class="rekomendasi-detail" data-value="{{ $item->id }}">
+                                                            <span id="div-jlh-rekom-{{ $item->id }}">
+                                                                <span style="cursor:pointer" class="label label-{{$jlhrekom==0 ? 'dark' : 'primary'}} fz-sm">{{$jlhrekom}}</span>
+                                                            </span>
+                                                            <span style="cursor:pointer" class="label label-success fz-sm">Rekomendasi</span>
                                                         </span>
-                                                    </td>
-                                                @endforeach
-                                                <td class="text-center">
-                                                    @if (isset($jlhsetujurekom[Auth::user()->id][$idlhp][$item->temuan_id]['setuju']))
-                                                        <span class="label label-success">{{count($jlhsetujurekom[Auth::user()->id][$idlhp][$item->temuan_id]['setuju'])}}</span>
-                                                    @else
-                                                        <span class="label label-danger">0</span>
-                                                    @endif
-                                                </td>
-                                                <td class="text-center">
-                                                    @if (isset($jlhsetujurekom[Auth::user()->id][$idlhp][$item->temuan_id]['belum']))
-                                                        <span class="label label-success">{{count($jlhsetujurekom[Auth::user()->id][$idlhp][$item->temuan_id]['belum'])}}</span>
-                                                    @else
-                                                        <span class="label label-danger">0</span>
-                                                    @endif
+                                                        <span style="cursor:pointer" class="label label-info fz-sm" data-toggle="modal" data-target="#modaltambahrekomendasi">
+                                                            <a data-toggle="tooltip" title="Tambah Rekomendasi" style="color:#fff" data-value="{{ $item->temuan_id }}" onclick="rekomadd('{{$item->temuan_id}}')"><i class="fa fa-plus-circle"></i></a>
+                                                        </span>
+                                                    </div>
                                                 </td>
                                                 <td class="text-align:center">
-                                                    <div style="text-align:center;width:80px;">
+                                                    <div style="text-align:center">
                                                         <div class="btn-group">
-                                                            <button type="button" class="btn btn-primary btn-xs" style="width:25px;"><i class="fa fa-bars"></i></button>
-                                                            <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="width:25px;">
+                                                            <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-bars"></i></button>
+                                                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
                                                                 <span class="caret"></span>
                                                             </button>
                                                             <ul class="dropdown-menu" role="menu">
-                                                                <li>
-                                                                    <a href="#" class="" onclick="rekomadd('{{$item->temuan_id}}')" data-toggle="modal" data-target="#modaltambahrekomendasi" data-value="{{$item->temuan_id}}"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Rekomendasi Temuan</a>
-                                                                    
-                                                                </li>
                                                                 <li>
                                                                     <a href="#" class="btn-detail-temuan" data-toggle="modal" data-target="#modaldetail" data-value="{{$item->temuan_id}}"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Temuan</a>
                                                                 </li>
@@ -207,7 +178,6 @@
     <script src="{{asset('js')}}/js.js"></script>
     <script src="{{asset('js')}}/temuan.js"></script>
     <script src="{{asset('js')}}/tindaklanjut.js"></script>
-    <script src="{{asset('js')}}/tindak-lanjut-senior.js"></script>
     <script src="{{asset('js')}}/jquery-ui.js"></script>
 	<script>
         $.ajaxSetup({
@@ -308,14 +278,10 @@
     {
         display:none;
     }
-    .select2-container
-    {
-        z-index:20000 !important;
-    }
     </style>
 @endsection
 
 @section('modal')
-    @include('backend.pages.data-lhp.auditor-senior.modal')
+    @include('backend.pages.data-lhp.auditor-junior.modal')
     @include('backend.pages.data-lhp.tindak-lanjut.modal')
 @endsection

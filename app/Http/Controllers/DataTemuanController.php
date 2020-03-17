@@ -47,6 +47,15 @@ class DataTemuanController extends Controller
                     ->with('pemeriksa',$pemeriksa)
                     ->with('jenisaudit',$jenisaudit);
         }
+        elseif(Auth::user()->level=='super-user')
+        {
+                return view('backend.pages.data-lhp.super-user.index')
+                    ->with('tahun',$thn)
+                    ->with('data',$data)
+                    ->with('statusrekom',$statusrekom)
+                    ->with('pemeriksa',$pemeriksa)
+                    ->with('jenisaudit',$jenisaudit);
+        }
         else
             return view('backend.pages.data-lhp.auditor-junior.index')
                     ->with('tahun',$thn)
@@ -68,6 +77,14 @@ class DataTemuanController extends Controller
         if(Auth::user()->level=='auditor-senior')
         {
             return view('backend.pages.data-lhp.auditor-senior.index-semua')
+                ->with('tahun',$thn)
+                ->with('data',$data)
+                ->with('pemeriksa',$pemeriksa)
+                ->with('jenisaudit',$jenisaudit);
+        }
+        elseif(Auth::user()->level=='super-user')
+        {
+            return view('backend.pages.data-lhp.super-user.index-semua')
                 ->with('tahun',$thn)
                 ->with('data',$data)
                 ->with('pemeriksa',$pemeriksa)
@@ -211,6 +228,21 @@ class DataTemuanController extends Controller
                 //                 ->join('data_rekomendasi','data_rekomendasi.id_temuan','=','data_temuan.id')
                 //                 ->where('data_rekomendasi.senior_user_id',Auth::user()->id)
                 //                 ->orderBy('daftar_lhp.tanggal_lhp','desc')->get();
+        }
+        elseif(Auth::user()->level=='super-user')
+        {
+            $data=DaftarTemuan::selectRaw('*,daftar_lhp.id as lhp_id')
+                    ->where('daftar_lhp.tahun_pemeriksa',$thn)
+                    ->with('dpemeriksa')
+                    ->with('djenisaudit')
+                    ->orderBy('tanggal_lhp','desc')
+                    ->get();
+
+            return view('backend.pages.data-lhp.super-user.data')
+                ->with('data',$data)
+                ->with('arraylhp',$arraylhp)
+                ->with('statusrekom',$statusrekom)
+                ->with('drekom',$drekom);
         }
        elseif(Auth::user()->level=='pic-unit')
         {
@@ -410,6 +442,18 @@ class DataTemuanController extends Controller
                     ->with('drekomendasi',$drekomendasi)
                     ->with('data',$data);
         }
+        elseif(Auth::user()->level=='super-user')
+        {
+        // return $drekomendasi;
+            return view('backend.pages.data-lhp.super-user.detail-lhp')
+                    ->with('temuan',$tm)
+                    ->with('offset',$offset)
+                    ->with('statusrekom',$statusrekom)
+                    ->with('jlhtemuan',$jlhtemuan)
+                    ->with('id',$id)
+                    ->with('drekomendasi',$drekomendasi)
+                    ->with('data',$data);
+        }
         else
         {
         // return $drekomendasi;
@@ -523,12 +567,30 @@ class DataTemuanController extends Controller
         // return $dtem;
         if($data)
         {
+            $jlhsetujurekom=$this->cekstrekomsenior();
+
             if(Auth::user()->level=='auditor-senior')
             {
                 return view('backend.pages.data-lhp.auditor-senior.temuan-new')
                     ->with('dt',$dt)
                     ->with('idlhp',$idlhp)
                     ->with('drekom',$drekom)
+                    ->with('jlhsetujurekom',$jlhsetujurekom)
+                    ->with('rekomendasi',$rekomendasi)
+                    ->with('senior',$senior)
+                    ->with('temuan',$temuan)
+                    ->with('jangkawaktu',$jangkawaktu)
+                    ->with('statusrekomendasi',$statusrekomendasi)
+                    ->with('statusrekom',$statusrekom)
+                    ->with('data',$data);
+            }
+            elseif(Auth::user()->level=='super-user')
+            {
+                return view('backend.pages.data-lhp.super-user.temuan-new')
+                    ->with('dt',$dt)
+                    ->with('idlhp',$idlhp)
+                    ->with('drekom',$drekom)
+                    ->with('jlhsetujurekom',$jlhsetujurekom)
                     ->with('rekomendasi',$rekomendasi)
                     ->with('senior',$senior)
                     ->with('temuan',$temuan)

@@ -1456,7 +1456,10 @@ class TindakLanjutController extends Controller
         {
             $dokumen[$v->id_tindak_lanjut_temuan]=$v;
         }
-        return view('backend.pages.data-lhp.auditor-junior.tindaklanjut-detail-form')
+
+        if(Auth::user()->level=='auditor-senior')
+        {
+            return view('backend.pages.data-lhp.tindak-lanjut.senior.tl.tindaklanjut-detail-form')
                 ->with('rekom',$rekom)
                 ->with('dokumen',$dokumen)
                 ->with('pic',$pic)
@@ -1464,6 +1467,18 @@ class TindakLanjutController extends Controller
                 ->with('pic2',$pic2)
                 ->with('status',$status)
                 ->with('id_rekomendasi',$idrekomendasi);
+        }
+        elseif(Auth::user()->level=='auditor-senior')
+        {
+            return view('backend.pages.data-lhp.auditor-junior.tindaklanjut-detail-form')
+                ->with('rekom',$rekom)
+                ->with('dokumen',$dokumen)
+                ->with('pic',$pic)
+                ->with('pic1',$pic1)
+                ->with('pic2',$pic2)
+                ->with('status',$status)
+                ->with('id_rekomendasi',$idrekomendasi);
+        }
     }
     public function detail_tindaklanjut_picunit1($idrekomendasi)
     {

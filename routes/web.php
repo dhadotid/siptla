@@ -98,7 +98,15 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('tindak-lanjut-hapus/{id}','TindakLanjutController@destroy');
     Route::get('data-tindak-lanjut/{rekom_id}/{idtemuan}','TindakLanjutController@index');
     Route::get('data-tindak-lanjut-unitkerja/{rekom_id}/{idtemuan}','TindakLanjutController@index_unitkerja');
-    
+    /* AUDITOR SENIOR */
+
+    Route::get('data-tindaklanjut-senior/{tahun?}/{rekom_id?}/{temuan_id?}','AuditorSeniorController@tindaklanjut_index');
+    Route::post('data-tindaklanjut-seniorlist','AuditorSeniorController@tindaklanjut_list');
+
+    Route::post('tindaklanjut-senior-simpan','AuditorSeniorController@tindaklanjut_senior_simpan');
+
+    // END AUDITOR SENIOR
+
     Route::get('data-tindaklanjut/{tahun?}/{rekom_id?}/{temuan_id?}','TindakLanjutController@junior_index');
     Route::get('data-tindaklanjut-unitkerja/{tahun?}/{rekom_id?}/{temuan_id?}','TindakLanjutController@unitkerja_index');
     Route::post('data-tindaklanjut-list','TindakLanjutController@junior_list');

@@ -47,7 +47,8 @@ function jenis_level()
             'auditor-junior'=>'Auditor Junior',
             'auditor-senior'=>'Auditor Senior',
             'kepala-spi'=>'Kepala SPI',
-            'pic-unit'=>'PIC Unit'
+            'pic-unit'=>'PIC Unit',
+            'super-user'=>'Super User'
         ];
     return $level;
 }

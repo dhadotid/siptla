@@ -153,7 +153,51 @@
                                     $no=1;
                                     $tem=$tgl=$aksi=$pic2=$tindak_lanjut=$rinc='';
                                     $user_pic=\App\Models\PICUnit::where('id_user',Auth::user()->id)->first();
-                                @endphp
+                               
+									$periode=\App\Models\PeriodeReview::first();
+									if($periode)
+									{
+										$tglmulai=$periode->tanggal_mulai;
+										$tglselesai=$periode->tanggal_selesai;
+                                        $id=$periode->id;
+                                        
+                                        if(date('d')>=$tglmulai && date('d')<=$tglselesai)
+                                        {
+                                            $st_period=1;
+                                            $class='text-success';
+                                        }
+                                        else
+                                        {
+                                            $st_period=0;
+                                            $class='text-danger';
+                                        }
+
+                                        if($periode->status==1)
+                                        {
+                                            $st_period=1;
+                                            $class='text-success';
+                                        }
+									}
+									else
+									{
+										$tanggal=periodereview();
+										$tglmulai=$tanggal['tanggal_mulai'];
+										$tglselesai=$tanggal['tanggal_selesai'];
+                                        $id=0;
+                                        if(date('d')>=$tglmulai && date('d')<=$tglselesai)
+                                        {
+                                            $st_period=1;
+                                            $class='text-success';
+                                        }
+                                        else
+                                        {
+                                            $st_period=0;
+                                            $class='text-danger';
+                                        }
+									}
+
+									
+								@endphp
                                 @foreach ($temuan as $idlhp=>$item)
                                     @php
                                         $norekom=$tglselesai=$aksi=$rincian=$rinc='';
@@ -320,14 +364,23 @@
                                                 }
                                                 else
                                                 {
-                                                    $tgl.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">
-                                                            <div class="col-md-12">
-                                                            <div class="input-group date" id="datetimepicker2" >
-                                                                <input type="text" data-plugin="datepicker" data-date-format="dd/mm/yyyy" class="form-control" name="tanggal_penyelesaian" id="tanggal_penyelesaian_'.$item->id_temuan.'_'.$v->id.'" value="'.date('d/m/Y').'" style="height:30px !important;width:90px !important;min-width:70px !important;font-size:11px; "/>
-                                                                <span class="input-group-addon bg-info text-white" style="cursor:pointer" onclick="settglpenyelesaian('.$item->id_temuan.','.$v->id.')"><i class="glyphicon glyphicon-ok-sign"></i> Set</span>
+                                                    if($st_period==1)
+                                                    {
+                                                        $tgl.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">
+                                                                <div class="col-md-12">
+                                                                <div class="input-group date" id="datetimepicker2" >
+                                                                    <input type="text" data-plugin="datepicker" data-date-format="dd/mm/yyyy" class="form-control" name="tanggal_penyelesaian" id="tanggal_penyelesaian_'.$item->id_temuan.'_'.$v->id.'" value="'.date('d/m/Y').'" style="height:30px !important;width:90px !important;min-width:70px !important;font-size:11px; "/>
+                                                                    <span class="input-group-addon bg-info text-white" style="cursor:pointer" onclick="settglpenyelesaian('.$item->id_temuan.','.$v->id.')"><i class="glyphicon glyphicon-ok-sign"></i> Set</span>
+                                                                </div>    
                                                             </div>    
-                                                        </div>    
-                                                    </div>';
+                                                        </div>';
+                                                    }
+                                                    else
+                                                    {
+                                                        $tgl.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;">
+                                                            <div class="col-md-12">Periode Review Bulan Berjalan Telah Berakhir</div>
+                                                        </div>';
+                                                    }
                                                 }
                                                 $tgl.='</div>';
                                                     
@@ -357,214 +410,227 @@
                                                         }
                                                     }
 
-                                                
-                                                if($v->publish_pic_2==0 && trim($v->pic_2_temuan_id)!='' && trim($v->pic_2_temuan_id)!=',')
+                                                if($st_period==1)
                                                 {
-                                                    if(in_array($user_pic->id,$listpic2))
+                                                    if($v->publish_pic_2==0 && trim($v->pic_2_temuan_id)!='' && trim($v->pic_2_temuan_id)!=',')
                                                     {
-                                                        $togl='';
-                                                    }
-                                                    else
-                                                    {
-                                                        $togl='data-toggle="tooltip" title="PIC 2 Belum Mengisi Tindak Lanjut"';
-                                                    }
-                                                    $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
-                                                            <div class="btn-group" style="'.$styleaksi.'" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
-                                                                <button '.$togl.' type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
-                                                                <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
-                                                                    <span class="caret"></span>
-                                                                </button>
-                                                                <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">';
-                                                    
-                                                    
                                                         if(in_array($user_pic->id,$listpic2))
                                                         {
+                                                            $togl='';
+                                                        }
+                                                        else
+                                                        {
+                                                            $togl='data-toggle="tooltip" title="PIC 2 Belum Mengisi Tindak Lanjut"';
+                                                        }
+                                                        $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
+                                                                <div class="btn-group" style="'.$styleaksi.'" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
+                                                                    <button '.$togl.' type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
+                                                                    <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
+                                                                        <span class="caret"></span>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">';
+                                                        
+                                                        
+                                                            if(in_array($user_pic->id,$listpic2))
+                                                            {
+                                                                // print_r($listpic2);
+                                                                $aksi.='<li>
+                                                                            <a href="#" class="btn-add" data-toggle="modal" data-target="#modaltambahtindaklanjut" data-value="'.$v->id_lhp.'__'.$item->id_temuan.'_0__'.$v->id.'_0'.'" style="font-size:11px;"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Tindak Lanjut</a>
+                                                                        </li>';
+                                                                $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
+                                                                if($jlhrincian!=0)
+                                                                {
+                                                                    $aksi.=' <li><a href="javascript:tambahrincian('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Tambah Rincian Tindak Lanjut</a></li>';
+                                                                }
+                                                                if($jlhtl!=0)
+                                                                {
+                                                                    $aksi.=' <li><a class="" href="javascript:publishpic2('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke PIC 1</a></li>';
+                                                                }
+                                                            }
+                                                            else
+                                                                $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
+
+                                                        if($v->rincian!='')
+                                                        {
+                                                            $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Update Rincian</a></li>';
+                                                        }
+                                                        $aksi.='</ul></div>
+                                                            </div>';
+                                                    }
+                                                    elseif($v->publish_pic_2==1 && trim($v->pic_2_temuan_id)!='')
+                                                    {
+                                                        
+                                                        if(in_array($user_pic->id,$listpic2))
+                                                        {
+                                                            $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
+                                                                <div data-toggle="tooltip" title="Data Rekomendasi Sudah Publish Ke PIC 1" class="btn-group" style="'.$styleaksi.'" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
+                                                                    <button type="button" class="btn btn-success btn-xs" style="height:28px;"><i class="fa fa-check"></i></button>
+                                                                    <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
+                                                                        <span class="caret"></span>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">';
                                                             // print_r($listpic2);
-                                                            $aksi.='<li>
-                                                                        <a href="#" class="btn-add" data-toggle="modal" data-target="#modaltambahtindaklanjut" data-value="'.$v->id_lhp.'__'.$item->id_temuan.'_0__'.$v->id.'_0'.'" style="font-size:11px;"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Tindak Lanjut</a>
-                                                                    </li>';
                                                             $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
                                                             if($jlhrincian!=0)
                                                             {
                                                                 $aksi.=' <li><a href="javascript:tambahrincian('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Tambah Rincian Tindak Lanjut</a></li>';
                                                             }
-                                                            if($jlhtl!=0)
-                                                            {
-                                                                $aksi.=' <li><a class="" href="javascript:publishpic2('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke PIC 1</a></li>';
-                                                            }
+                                                            
+                                                            $aksi.=' <li><a href="#" style="font-size:11px;"><i class="glyphicon glyphicon-check"></i> &nbsp;&nbsp;Sudah Publish Ke PIC 1</a></li>';     
+                                                        }
+                                                        elseif($v->publish_pic_1==1)
+                                                        {
+                                                            $icon='fa-check';
+                                                            $color='success';
+                                                            $toggle='data-toggle="tooltip" title="Data Rekomendasi Sudah Publish Ke Auditor"';
+                                                            $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
+                                                            <div  class="btn-group" style="'.$styleaksi.'" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
+                                                                <button '.$toggle.' type="button" class="btn btn-'.$color.' btn-xs" style="height:28px;"><i class="fa '.$icon.'"></i></button>
+                                                                <button type="button" class="btn btn-'.$color.' btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
+                                                                    <span class="caret"></span>
+                                                                </button>
+                                                                <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">
+                                                                ';
+                                                            $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
+
+                                                            $aksi.=' <li><a href="javascript:reviewtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-file"></i> &nbsp;&nbsp;Review & Rangkuman Tindak Lanjut</a></li>';
+                                                            $aksi.=' <li><a href="#" style="font-size:11px;"><i class="glyphicon glyphicon-check"></i> &nbsp;&nbsp;Sudah Publish Ke Auditor</a></li>';
+                                                                    
                                                         }
                                                         else
+                                                        {
+                                                            $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
+                                                                <div class="btn-group" style="'.$styleaksi.'" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
+                                                                    <button type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
+                                                                    <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
+                                                                        <span class="caret"></span>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">';
+
+                                                            $aksi.='<li>
+                                                                        <a href="#" class="btn-add" data-toggle="modal" data-target="#modaltambahtindaklanjut" data-value="'.$v->id_lhp.'__'.$item->id_temuan.'_0__'.$v->id.'_0'.'" style="font-size:11px;"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Tindak Lanjut</a>
+                                                                    </li>';
                                                             $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
 
-                                                    if($v->rincian!='')
-                                                    {
-                                                        $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Update Rincian</a></li>';
-                                                    }
-                                                    $aksi.='</ul></div>
-                                                        </div>';
-                                                }
-                                                elseif($v->publish_pic_2==1 && trim($v->pic_2_temuan_id)!='')
-                                                {
-                                                    
-                                                    if(in_array($user_pic->id,$listpic2))
-                                                    {
-                                                        $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
-                                                            <div data-toggle="tooltip" title="Data Rekomendasi Sudah Publish Ke PIC 1" class="btn-group" style="'.$styleaksi.'" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
-                                                                <button type="button" class="btn btn-success btn-xs" style="height:28px;"><i class="fa fa-check"></i></button>
-                                                                <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
-                                                                    <span class="caret"></span>
-                                                                </button>
-                                                                <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">';
-                                                        // print_r($listpic2);
-                                                        $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
-                                                        if($jlhrincian!=0)
-                                                        {
-                                                            $aksi.=' <li><a href="javascript:tambahrincian('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Tambah Rincian Tindak Lanjut</a></li>';
+                                                            $aksi.=' <li><a href="javascript:reviewtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-file"></i> &nbsp;&nbsp;Review & Rangkuman Tindak Lanjut</a></li>';
+                                                            if($jlhrincian!=0)
+                                                            {
+                                                                $aksi.=' <li><a href="javascript:tambahrincian('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Tambah Rincian Tindak Lanjut</a></li>';
+                                                            }
+                                                            if($v->rangkuman_rekomendasi!='')
+                                                            {
+                                                                $aksi.=' <li><a href="javascript:publishpic1('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Auditor</a></li>';
+                                                            }
                                                         }
                                                         
-                                                        $aksi.=' <li><a href="#" style="font-size:11px;"><i class="glyphicon glyphicon-check"></i> &nbsp;&nbsp;Sudah Publish Ke PIC 1</a></li>';     
+                                                        if($v->rincian!='')
+                                                        {
+                                                            $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Update Rincian</a></li>';
+                                                        }
+                                                        $aksi.='</ul></div>
+                                                            </div>';
                                                     }
-                                                    elseif($v->publish_pic_1==1)
-                                                    {
-                                                        $icon='fa-check';
-                                                        $color='success';
-                                                        $toggle='data-toggle="tooltip" title="Data Rekomendasi Sudah Publish Ke Auditor"';
+                                                    else{
+                                                        if($v->publish_pic_1==1)
+                                                        {
+                                                            $icon='fa-check';
+                                                            $color='success';
+                                                            $toggle='data-toggle="tooltip" title="Data Rekomendasi Sudah Publish Ke Auditor"';
+                                                        }
+                                                        else
+                                                        {
+                                                            $icon='fa-bars';
+                                                            $color='primary';
+                                                            $toggle='';
+                                                        }
                                                         $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
-                                                        <div  class="btn-group" style="'.$styleaksi.'" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
-                                                            <button '.$toggle.' type="button" class="btn btn-'.$color.' btn-xs" style="height:28px;"><i class="fa '.$icon.'"></i></button>
-                                                            <button type="button" class="btn btn-'.$color.' btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
-                                                                <span class="caret"></span>
-                                                            </button>
-                                                            <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">
-                                                               ';
-                                                         $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
-
-                                                        $aksi.=' <li><a href="javascript:reviewtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-file"></i> &nbsp;&nbsp;Review & Rangkuman Tindak Lanjut</a></li>';
-                                                        $aksi.=' <li><a href="#" style="font-size:11px;"><i class="glyphicon glyphicon-check"></i> &nbsp;&nbsp;Sudah Publish Ke Auditor</a></li>';
-                                                                
-                                                    }
-                                                    else
-                                                    {
-                                                        $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
-                                                            <div class="btn-group" style="'.$styleaksi.'" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
-                                                                <button type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
-                                                                <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
+                                                            <div  class="btn-group" style="'.$styleaksi.'" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
+                                                                <button '.$toggle.' type="button" class="btn btn-'.$color.' btn-xs" style="height:28px;"><i class="fa '.$icon.'"></i></button>
+                                                                <button type="button" class="btn btn-'.$color.' btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
                                                                     <span class="caret"></span>
                                                                 </button>
-                                                                <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">';
-
-                                                        $aksi.='<li>
-                                                                    <a href="#" class="btn-add" data-toggle="modal" data-target="#modaltambahtindaklanjut" data-value="'.$v->id_lhp.'__'.$item->id_temuan.'_0__'.$v->id.'_0'.'" style="font-size:11px;"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Tindak Lanjut</a>
-                                                                </li>';
-                                                        $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
-
-                                                        $aksi.=' <li><a href="javascript:reviewtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-file"></i> &nbsp;&nbsp;Review & Rangkuman Tindak Lanjut</a></li>';
-                                                        if($jlhrincian!=0)
-                                                        {
-                                                            $aksi.=' <li><a href="javascript:tambahrincian('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Tambah Rincian Tindak Lanjut</a></li>';
-                                                        }
-                                                        if($v->rangkuman_rekomendasi!='')
-                                                        {
-                                                            $aksi.=' <li><a href="javascript:publishpic1('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Auditor</a></li>';
-                                                        }
-                                                    }
-                                                    
-                                                    if($v->rincian!='')
-                                                    {
-                                                        $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Update Rincian</a></li>';
-                                                    }
-                                                    $aksi.='</ul></div>
-                                                        </div>';
-                                                }
-                                                else{
-                                                    if($v->publish_pic_1==1)
-                                                    {
-                                                        $icon='fa-check';
-                                                        $color='success';
-                                                        $toggle='data-toggle="tooltip" title="Data Rekomendasi Sudah Publish Ke Auditor"';
-                                                    }
-                                                    else
-                                                    {
-                                                        $icon='fa-bars';
-                                                        $color='primary';
-                                                        $toggle='';
-                                                    }
-                                                    $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
-                                                        <div  class="btn-group" style="'.$styleaksi.'" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
-                                                            <button '.$toggle.' type="button" class="btn btn-'.$color.' btn-xs" style="height:28px;"><i class="fa '.$icon.'"></i></button>
-                                                            <button type="button" class="btn btn-'.$color.' btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
-                                                                <span class="caret"></span>
-                                                            </button>
-                                                            <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">
-                                                               ';
-                                                        if($v->pic_1_temuan_id==$user_pic->id)
-                                                        {
-                                                            
-                                                            if($v->publish_pic_2==1)
+                                                                <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">
+                                                                ';
+                                                            if($v->pic_1_temuan_id==$user_pic->id)
                                                             {
-                                                                $aksi.=' <li><a href="javascript:reviewtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-file"></i> &nbsp;&nbsp;Review & Rangkuman Tindak Lanjut</a></li>';
-                                                                if($v->rangkuman_rekomendasi!='')
-                                                                {
-                                                                    $aksi.=' <li><a href="javascript:publishpic1('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Auditor</a></li>';
-                                                                }
-                                                            }
-
-                                                            if($v->publish_pic_1==0)
-                                                            {
-                                                                $aksi.='<li>
-                                                                    <a href="#" class="btn-add" data-toggle="modal" data-target="#modaltambahtindaklanjut" data-value="'.$v->id_lhp.'__'.$item->id_temuan.'_0__'.$v->id.'_0'.'" style="font-size:11px;"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Tindak Lanjut</a>
-                                                                </li>';
-                                                            }
-                                                            
-                                                            if(trim($v->pic_2_temuan_id)=='' || trim($v->pic_2_temuan_id)==',')
-                                                            {
-                                                                // $aksi.=' <li><a href="javascript:reviewtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-file"></i> &nbsp;&nbsp;Review & Rangkuman Tindak Lanjut</a></li>';
                                                                 
-
-                                                                if($v->publish_pic_1==1)
+                                                                if($v->publish_pic_2==1)
                                                                 {
-                                                                    $aksi.=' <li><a href="#" style="font-size:11px;"><i class="glyphicon glyphicon-check"></i> &nbsp;&nbsp;Sudah Publish Ke Auditor</a></li>';
-                                                                }
-                                                                else 
-                                                                {
-                                                                    // $aksi.='<li>
-                                                                    //     <a href="#" class="btn-add" data-toggle="modal" data-target="#modaltambahtindaklanjut" data-value="'.$v->id_lhp.'__'.$item->id_temuan.'_0__'.$v->id.'_0'.'" style="font-size:11px;"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Tindak Lanjut</a>
-                                                                    // </li>';
-                                                                     
-                                                                    $aksi.=' <li><a href="javascript:publishpic1('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Auditor</a></li>';
-                                                                    
-                                                                }
-                                                            }
-
-                                                            $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
-
-                                                            
-
-                                                            if(trim($v->pic_2_temuan_id)!='')
-                                                            {
-                                                                if($v->publish_pic_1==1)
-                                                                {
-                                                                    $aksi.=' <li><a href="#" style="font-size:11px;"><i class="glyphicon glyphicon-check"></i> &nbsp;&nbsp;Sudah Publish Ke Auditor</a></li>';
-                                                                }
-                                                                else
-                                                                {
+                                                                    $aksi.=' <li><a href="javascript:reviewtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-file"></i> &nbsp;&nbsp;Review & Rangkuman Tindak Lanjut</a></li>';
                                                                     if($v->rangkuman_rekomendasi!='')
                                                                     {
                                                                         $aksi.=' <li><a href="javascript:publishpic1('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Auditor</a></li>';
                                                                     }
                                                                 }
-                                                                // $aksi.='<li><a href="javascript:rangkumantindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Rangkuman Tindak Lanjut</a></li>';
-                                                            }
 
-                                                        }
-                                                        if($v->rincian!='')
-                                                        {
-                                                            $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Update Rincian</a></li>';
-                                                        }
-                                                        $aksi.='</ul>
-                                                        </div></div>';
+                                                                if($v->publish_pic_1==0)
+                                                                {
+                                                                    $aksi.='<li>
+                                                                        <a href="#" class="btn-add" data-toggle="modal" data-target="#modaltambahtindaklanjut" data-value="'.$v->id_lhp.'__'.$item->id_temuan.'_0__'.$v->id.'_0'.'" style="font-size:11px;"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Tindak Lanjut</a>
+                                                                    </li>';
+                                                                }
+                                                                
+                                                                if(trim($v->pic_2_temuan_id)=='' || trim($v->pic_2_temuan_id)==',')
+                                                                {
+                                                                    // $aksi.=' <li><a href="javascript:reviewtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-file"></i> &nbsp;&nbsp;Review & Rangkuman Tindak Lanjut</a></li>';
+                                                                    
+
+                                                                    if($v->publish_pic_1==1)
+                                                                    {
+                                                                        $aksi.=' <li><a href="#" style="font-size:11px;"><i class="glyphicon glyphicon-check"></i> &nbsp;&nbsp;Sudah Publish Ke Auditor</a></li>';
+                                                                    }
+                                                                    else 
+                                                                    {
+                                                                        // $aksi.='<li>
+                                                                        //     <a href="#" class="btn-add" data-toggle="modal" data-target="#modaltambahtindaklanjut" data-value="'.$v->id_lhp.'__'.$item->id_temuan.'_0__'.$v->id.'_0'.'" style="font-size:11px;"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Tindak Lanjut</a>
+                                                                        // </li>';
+                                                                        
+                                                                        $aksi.=' <li><a href="javascript:publishpic1('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Auditor</a></li>';
+                                                                        
+                                                                    }
+                                                                }
+
+                                                                $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
+
+                                                                
+
+                                                                if(trim($v->pic_2_temuan_id)!='')
+                                                                {
+                                                                    if($v->publish_pic_1==1)
+                                                                    {
+                                                                        $aksi.=' <li><a href="#" style="font-size:11px;"><i class="glyphicon glyphicon-check"></i> &nbsp;&nbsp;Sudah Publish Ke Auditor</a></li>';
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        if($v->rangkuman_rekomendasi!='')
+                                                                        {
+                                                                            $aksi.=' <li><a href="javascript:publishpic1('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Auditor</a></li>';
+                                                                        }
+                                                                    }
+                                                                    // $aksi.='<li><a href="javascript:rangkumantindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Rangkuman Tindak Lanjut</a></li>';
+                                                                }
+
+                                                            }
+                                                            if($v->rincian!='')
+                                                            {
+                                                                $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Update Rincian</a></li>';
+                                                            }
+                                                            $aksi.='</ul>
+                                                            </div></div>';
+                                                    }
                                                 }
-                                                
+                                                else
+                                                {
+                                                    $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
+                                                                <div class="btn-group">
+                                                                    <button data-toggle="tooltip" title="Periode Review bulan Berjalan Telah Berakhir" type="button" class="btn btn-default btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
+                                                                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
+                                                                        <span class="caret"></span>
+                                                                    </button>
+                                                                </div>
+                                                            </div>';
+                                                                
+                                                }
 
                                             }
                                         }

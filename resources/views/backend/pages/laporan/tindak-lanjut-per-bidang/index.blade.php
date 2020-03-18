@@ -29,25 +29,30 @@
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Pemeriksa</label>
                                         <div class="col-md-6">
-                                            <select class="select2 form-control" name="pemeriksa" id="pemeriksan"></select>
+                                            <select class="select2 form-control" name="pemeriksa" id="pemeriksan" onchange="getlhp(this.value)">
+                                                <option value="0">-Pilih-</option>
+                                                @foreach ($pemeriksa as $item)
+                                                    <option value="{{$item->id}}">{{$item->code}} - {{$item->pemeriksa}}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">No LHP</label>
-                                        <div class="col-md-6">
-                                            <select class="select2 form-control" name="no_lhp" id="no_lhp" multiple></select>
+                                        <div class="col-md-6" id="div-lhp">
+                                            <select class="select2 form-control" name="no_lhp" id="no_lhp"></select>
                                         </div>
                                     </div>
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Bidang</label>
                                         <div class="col-md-6">
-                                            <select class="select2 form-control" name="bidang" id="bidang" multiple></select>
+                                            <select class="select2 form-control" name="bidang" id="bidang"></select>
                                         </div>
                                     </div>
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Status Rekomendasi</label>
                                         <div class="col-md-6">
-                                            <select class="select2 form-control" name="status-rekomendasi" id="status-rekomendasi" multiple></select>
+                                            <select class="select2 form-control" name="status-rekomendasi" id="status-rekomendasi"></select>
                                         </div>
                                     </div>
                                     <div class="form-group" style="margin-bottom:5px;">
@@ -105,6 +110,14 @@
             $('#data').load(flagsUrl+'/laporan/tindaklanjut-per-bidang-data',function(){
                 $('#table').DataTable();
             });
+        }
+
+        function getlhp(idpemeriksa){
+            $('#div-lhp').load(flagsUrl+'/selectlhpbypemeriksa/'+idpemeriksa, function(){
+                $('.select2').select2({
+                    width:'100%'
+                });
+            })
         }
 	</script>
 	<style>

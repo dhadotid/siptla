@@ -289,4 +289,17 @@ class DaftarTemuanController extends Controller
             ->with('tahun',$daftar->tahun)
             ->with('pengawasan_id',$daftar->pengawasan_id);
     }
+
+    public function selectlhpbypemeriksa($idpemeriksa)
+    {
+        $lhp=DaftarTemuan::where('pemeriksa_id',$idpemeriksa)->orderBy('tanggal_lhp','desc')->get();
+        $select ='<select class="select2 form-control" name="no_lhp" id="no_lhp" onchange="loaddata()">';
+        $select.='<option value="0">-Semua-</option>';
+        foreach($lhp as $v)
+        {
+            $select.='<option value="'.$v->id.'">'.$v->no_lhp.'</option>';
+        }
+        $select.='</select>';
+        return $select;
+    }
 }

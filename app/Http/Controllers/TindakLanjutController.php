@@ -1187,6 +1187,7 @@ class TindakLanjutController extends Controller
         $rincian->id_tindak_lanjut=$request->idform;
         $rincian->save();
 
+        $id_rekomendasi=$rincian->id_rekomendasi;
         $path='-';
         if($request->hasFile('file_pendukung')){
             $file = $request->file('file_pendukung');
@@ -1204,7 +1205,7 @@ class TindakLanjutController extends Controller
             // $dokumen->path=$path;
             // $dokumen->save();
         }
-        $rekommm=DataRekomendasi::where('id',$request->id_rekomendasi)->with('dtemuan')->first();
+        $rekommm=DataRekomendasi::where('id',$id_rekomendasi)->with('dtemuan')->first();
         $user_pic=PICUnit::where('id_user',Auth::user()->id)->first();
         
         $insert=new TindakLanjutRincian;
@@ -1216,11 +1217,11 @@ class TindakLanjutController extends Controller
 
         if($user_pic)
         {
-            if($rekommm->pic_1_temuan_id==$user_pic->id)
-                $insert->pic_1_id = $rekom->pic_1_temuan_id;
+            // if($rekommm->pic_1_temuan_id==$user_pic->id)
+            //     $insert->pic_1_id = $rekommm->pic_1_temuan_id;
             
-            if($rekommm->pic_2_temuan_id==$user_pic->id)
-                $insert->pic_2_id = $rekom->pic_2_temuan_id;
+            // if($rekommm->pic_2_temuan_id==$user_pic->id)
+            //     $insert->pic_2_id = $rekommm->pic_2_temuan_id;
                 
                 // $insert->pic_1_id = $rekommm->pic_1_temuan_id;
                 // $insert->pic_2_id = $rekommm->pic_2_temuan_id;

@@ -33,6 +33,20 @@ function selisihhari($tgl1,$tgl2,$weekend=1)
     }    
     return $x;
 }
+function isInDate($date1,$date2)
+{
+    $today = date('Y-m-d');
+    $dToday=date('Y-m-d', strtotime($today));
+    //echo $paymentDate; // echos today! 
+    $date_1 = date('Y-m-d', strtotime($date1));
+    $date_2 = date('Y-m-d', strtotime($date2));
+
+    if (($dToday >= $date_1) && ($dToday <= $date_2)){
+        return true;
+    }else{
+        return false;  
+    }
+}
 function adddate($tgl,$add)
 {
     $tgl1 = $tgl;// pendefinisian tanggal awal

@@ -112,17 +112,22 @@ function closerightdiv()
     $('#modal-size').attr({ 'style': 'unset' });
 }
 
-function updaterincian_unitkerja(jenis, idtemuan, rekom_id) {
-    gettablerincian_unitkerja(jenis, idtemuan, rekom_id)
-    $('#close-btn').attr('style', 'display:inline');
-    $('#left-div').removeClass('col-md-12');
-    $('#left-div').addClass('col-md-6');
-    $('#right-div').removeClass('col-md-0');
-    $('#right-div').addClass('col-md-6');
-    $('#modal-size').attr({ 'style': 'width:90% !important' });
+function updaterincian_unitkerja(rekom_id,idtemuan,jenis) {
+    gettablerincian_unitkerja_lain(jenis, idtemuan, rekom_id)
+    $('#modalrincian').modal('show');
+    // $('#close-btn').attr('style', 'display:inline');
+    // $('#left-div').removeClass('col-md-12');
+    // $('#left-div').addClass('col-md-6');
+    // $('#right-div').removeClass('col-md-0');
+    // $('#right-div').addClass('col-md-6');
+    // $('#modal-size').attr({ 'style': 'width:90% !important' });
+    
 }
 function gettablerincian_unitkerja(jenis, idtemuan, idrekom) {
     $('#right-div').load(flagsUrl + '/load-table-rincian-unitkerja/' + jenis + '/' + idtemuan + '/' + idrekom);
+}
+function gettablerincian_unitkerja_lain(jenis, idtemuan, idrekom) {
+    $('#table-rincian').load(flagsUrl + '/load-table-rincian-unitkerja/' + jenis + '/' + idtemuan + '/' + idrekom);
 }
 function gettablerincian(jenis, idtemuan, idrekom) {
     $('#right-div').load(flagsUrl + '/load-table-rincian/' + jenis + '/' + idtemuan + '/' + idrekom);

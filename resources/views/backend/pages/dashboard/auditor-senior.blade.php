@@ -38,7 +38,8 @@
 										$id=0;
 									}
 
-									if(date('d')>=$tglmulai && date('d')<=$tglselesai)
+									// if(isInDate($tglmulai,$tglselesai))
+									if(date('d')<=$tglmulai && date('d')>=$tglselesai)
 									{
 										$st_period=1;
 										$class='text-success';

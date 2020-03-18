@@ -1102,107 +1102,155 @@ class LaporanController extends Controller
     {
         return view('backend.pages.laporan.tindak-lanjut-per-bidang.index');
     }
-    public function tindaklanjut_per_bidang_data()
+    public function tindaklanjut_per_bidang_data(Request $request)
     {
         return view('backend.pages.laporan.tindak-lanjut-per-bidang.data');
+    }
+    public function tindaklanjut_per_bidang_pdf(Request $request)
+    {
+        return view('backend.pages.laporan.tindak-lanjut-per-bidang.cetakpdf');
     }
     //-------------------------
     public function tindaklanjut_per_unitkerja()
     {
         return view('backend.pages.laporan.tindak-lanjut-per-unitkerja.index');
     }
-    public function tindaklanjut_per_unitkerja_data()
+    public function tindaklanjut_per_unitkerja_data(Request $request)
     {
         return view('backend.pages.laporan.tindak-lanjut-per-unitkerja.data');
+    }
+    public function tindaklanjut_per_unitkerja_pdf(Request $request)
+    {
+        return view('backend.pages.laporan.tindak-lanjut-per-unitkerja.cetakpdf');
     }
     //-------------------------
     public function tindak_lanjut()
     {
         return view('backend.pages.laporan.tindak-lanjut.index');
     }
-    public function tindak_lanjut_data()
+    public function tindak_lanjut_data(Request $request)
     {
         return view('backend.pages.laporan.tindak-lanjut.data');
+    }
+    public function tindak_lanjut_pdf(Request $request)
+    {
+        return view('backend.pages.laporan.tindak-lanjut.cetakpdf');
     }
     //-------------------------
     public function rekap_lhp()
     {
         return view('backend.pages.laporan.rekap-lhp.index');
     }
-    public function rekap_lhp_data()
+    public function rekap_lhp_data(Request $request)
     {
         return view('backend.pages.laporan.rekap-lhp.data');
+    }
+    public function rekap_lhp_pdf(Request $request)
+    {
+        return view('backend.pages.laporan.rekap-lhp.cetakpdf');
     }
     //-------------------------
     public function rekap_status_rekomendasi()
     {
         return view('backend.pages.laporan.rekap-status-rekomendasi.index');
     }
-    public function rekap_status_rekomendasi_data()
+    public function rekap_status_rekomendasi_data(Request $request)
     {
         return view('backend.pages.laporan.rekap-status-rekomendasi.data');
+    }
+    public function rekap_status_rekomendasi_pdf(Request $request)
+    {
+        return view('backend.pages.laporan.rekap-status-rekomendasi.cetakpdf');
     }
     //-------------------------
     public function rekap_status_rekomendasi_bidang()
     {
         return view('backend.pages.laporan.rekap-status-rekomendasi-bidang.index');
     }
-    public function rekap_status_rekomendasi_bidang_data()
+    public function rekap_status_rekomendasi_bidang_data(Request $request)
     {
         return view('backend.pages.laporan.rekap-status-rekomendasi-bidang.data');
+    }
+    public function rekap_status_rekomendasi_bidang_pdf(Request $request)
+    {
+        return view('backend.pages.laporan.rekap-status-rekomendasi-bidang.cetakpdf');
     }
     //-------------------------
     public function rekap_status_rekomendasi_unitkerja()
     {
         return view('backend.pages.laporan.rekap-status-rekomendasi-unitkerja.index');
     }
-    public function rekap_status_rekomendasi_unitkerja_data()
+    public function rekap_status_rekomendasi_unitkerja_data(Request $request)
     {
         return view('backend.pages.laporan.rekap-status-rekomendasi-unitkerja.data');
+    }
+    public function rekap_status_rekomendasi_unitkerja_pdf(Request $request)
+    {
+        return view('backend.pages.laporan.rekap-status-rekomendasi-unitkerja.cetakpdf');
     }
     //-------------------------
     public function rekap_jumlah_resiko_periode()
     {
         return view('backend.pages.laporan.rekap-jumlah-resiko-periode.index');
     }
-    public function rekap_jumlah_resiko_periode_data()
+    public function rekap_jumlah_resiko_periode_data(Request $request)
     {
         return view('backend.pages.laporan.rekap-jumlah-resiko-periode.data');
+    }
+    public function rekap_jumlah_resiko_periode_pdf(Request $request)
+    {
+        return view('backend.pages.laporan.rekap-jumlah-resiko-periode.cetakpdf');
     }
     //-------------------------
     public function rekap_rekomendasi()
     {
         return view('backend.pages.laporan.rekap-rekomendasi.index');
     }
-    public function rekap_rekomendasi_data()
+    public function rekap_rekomendasi_data(Request $request)
     {
         return view('backend.pages.laporan.rekap-rekomendasi.data');
+    }
+    public function rekap_rekomendasi_pdf(Request $request)
+    {
+        return view('backend.pages.laporan.rekap-rekomendasi.cetakpdf');
     }
     //-------------------------
     public function rekap_jumlah_resiko_bidang()
     {
         return view('backend.pages.laporan.rekap-resiko-per-bidang.index');
     }
-    public function rekap_jumlah_resiko_bidang_data()
+    public function rekap_jumlah_resiko_bidang_data(Request $request)
     {
         return view('backend.pages.laporan.rekap-resiko-per-bidang.data');
+    }
+    public function rekap_jumlah_resiko_bidang_pdf(Request $request)
+    {
+        return view('backend.pages.laporan.rekap-resiko-per-bidang.cetakpdf');
     }
     //-------------------------
     public function rekap_perhitungan_tekn_pertanggal()
     {
         return view('backend.pages.laporan.rekap-tekn-per-tanggal.index');
     }
-    public function rekap_perhitungan_tekn_pertanggal_data()
+    public function rekap_perhitungan_tekn_pertanggal_data(Request $request)
     {
         return view('backend.pages.laporan.rekap-tekn-per-tanggal.data');
+    }
+    public function rekap_perhitungan_tekn_pertanggal_pdf(Request $request)
+    {
+        return view('backend.pages.laporan.rekap-tekn-per-tanggal.cetakpdf');
     }
     //-------------------------
     public function rekap_perhitungan_tekn_status()
     {
         return view('backend.pages.laporan.rekap-tekn-per-status.index');
     }
-    public function rekap_perhitungan_tekn_status_data()
+    public function rekap_perhitungan_tekn_status_data(Request $request)
     {
         return view('backend.pages.laporan.rekap-tekn-per-status.data');
+    }
+    public function rekap_perhitungan_tekn_status_pdf(Request $request)
+    {
+        return view('backend.pages.laporan.rekap-tekn-per-status.cetakpdf');
     }
 }

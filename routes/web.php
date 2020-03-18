@@ -152,14 +152,18 @@ Route::group(['middleware'=>'auth'],function(){
     Route::post('tindaklanjut-junior-simpan','TindakLanjutController@tindaklanjut_junior_simpan');
     Route::post('simpan-monev-pic','TindakLanjutController@simpan_monev_pic');
     Route::get('detail-catatan/{id}','TindakLanjutController@detail_catatan');
+
+    Route::get('selectlhpbypemeriksa/{idpemeriksa}','DaftarTemuanController@selectlhpbypemeriksa');
 });
 
 Route::group(['prefix'=>'laporan','middleware'=>'auth'],function(){
     Route::get('temuan-per-bidang','LaporanController@temuan_per_bidang');
-    Route::get('temuan-per-bidang-data','LaporanController@temuan_per_bidang_data');
+    Route::post('temuan-per-bidang-data','LaporanController@temuan_per_bidang_data');
+    Route::post('temuan-per-bidang-pdf','LaporanController@temuan_per_bidang_pdf');
 
     Route::get('temuan-per-unitkerja','LaporanController@temuan_per_unitkerja');
-    Route::get('temuan-per-unitkerja-data','LaporanController@temuan_per_unitkerja_data');
+    Route::post('temuan-per-unitkerja-data','LaporanController@temuan_per_unitkerja_data');
+    Route::post('temuan-per-unitkerja-pdf','LaporanController@temuan_per_unitkerja_pdf');
 
     Route::get('temuan-per-lhp','LaporanController@temuan_per_lhp');
     Route::get('temuan-per-lhp-data','LaporanController@temuan_per_lhp_data');

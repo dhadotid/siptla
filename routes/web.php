@@ -166,10 +166,12 @@ Route::group(['prefix'=>'laporan','middleware'=>'auth'],function(){
     Route::post('temuan-per-unitkerja-pdf','LaporanController@temuan_per_unitkerja_pdf');
 
     Route::get('temuan-per-lhp','LaporanController@temuan_per_lhp');
-    Route::get('temuan-per-lhp-data','LaporanController@temuan_per_lhp_data');
+    Route::post('temuan-per-lhp-data','LaporanController@temuan_per_lhp_data');
+    Route::post('temuan-per-lhp-pdf','LaporanController@temuan_per_lhp_pdf');
 
     Route::get('tindaklanjut-per-lhp','LaporanController@tindaklanjut_per_lhp');
-    Route::get('tindaklanjut-per-lhp-data','LaporanController@tindaklanjut_per_lhp_data');
+    Route::post('tindaklanjut-per-lhp-data','LaporanController@tindaklanjut_per_lhp_data');
+    Route::post('tindaklanjut-per-lhp-pdf','LaporanController@tindaklanjut_per_lhp_pdf');
 
     Route::get('tindaklanjut-per-bidang','LaporanController@tindaklanjut_per_bidang');
     Route::get('tindaklanjut-per-bidang-data','LaporanController@tindaklanjut_per_bidang_data');

@@ -290,10 +290,15 @@ class DaftarTemuanController extends Controller
             ->with('pengawasan_id',$daftar->pengawasan_id);
     }
 
-    public function selectlhpbypemeriksa($idpemeriksa)
+    public function selectlhpbypemeriksa($idpemeriksa,$multiple=null)
     {
         $lhp=DaftarTemuan::where('pemeriksa_id',$idpemeriksa)->orderBy('tanggal_lhp','desc')->get();
-        $select ='<select class="select2 form-control" name="no_lhp" id="no_lhp" onchange="loaddata()">';
+
+        if($multiple!=null)
+            $select ='<select class="select2 form-control multiple" name="no_lhp" id="no_lhp" onchange="loaddata()" multiple="multiple">';
+        else
+            $select ='<select class="select2 form-control" name="no_lhp" id="no_lhp" onchange="loaddata()">';
+        
         $select.='<option value="0">-Semua-</option>';
         foreach($lhp as $v)
         {

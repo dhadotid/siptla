@@ -33,7 +33,7 @@ class PICUnitController extends Controller
        
         $rules = [
             'level_pic' => 'required',
-            'nama_pic' => 'equired',
+            'nama_pic' => 'required',
         ];
 
         $customMessages = [

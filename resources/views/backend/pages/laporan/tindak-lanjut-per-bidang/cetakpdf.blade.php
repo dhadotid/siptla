@@ -20,7 +20,7 @@
 				<th class="text-center" style="width:15px;" rowspan="2">#</th>
                 <th class="text-center" colspan="4">Temuan Pemeriksa</th>
                 <th class="text-center" colspan="4">Rekomendasi</th>
-                <th class="text-center" colspan="4">Tindak Lanjut</th>
+                <th class="text-center" colspan="3">Tindak Lanjut</th>
                 <th class="text-center" rowspan="2">Review SPI</th>
                 <th class="text-center" rowspan="2">Waktu Penyelesaian</th>
 				<th class="text-center" rowspan="2">Overdue</th>

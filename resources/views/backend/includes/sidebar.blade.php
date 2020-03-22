@@ -167,6 +167,8 @@
                 'tindaklanjut-per-bidang',
                 'tindaklanjut-per-unitkerja',
                 'tindak-lanjut',
+                'status-penyelesaian-rekomendasi',
+                'status-penyelesaian-rekomendasi-pemeriksa',
                 'rekap-lhp',
                 'rekap-status-rekomendasi',
                 'rekap-status-rekomendasi-bidang',
@@ -198,7 +200,13 @@
               <a href="{{url('laporan/tindaklanjut-per-unitkerja')}}"><span class="menu-text">Tindak Lanjut Per-Unit Kerja</span></a>
             </li>
             <li class="{{strpos($url,'tindak-lanjut')!==false ? 'active' : ''}}">
-              <a href="{{url('laporan/tindak-lanjut')}}"><span class="menu-text">Tindak Lanjut</span></a>
+              <a href="{{url('laporan/tindak-lanjut')}}"><span class="menu-text">Matriks Pemantauan Tindak Lanjut</span></a>
+            </li>
+            <li class="{{$url=='laporan/status-penyelesaian-rekomendasi' ? 'active' : ''}}">
+              <a href="{{url('laporan/status-penyelesaian-rekomendasi')}}"><span class="menu-text">Status Penyelesaian Rekomendasi</span></a>
+            </li>
+            <li class="{{$url=='laporan/status-penyelesaian-rekomendasi-pemeriksa' ? 'active' : ''}}">
+              <a href="{{url('laporan/status-penyelesaian-rekomendasi-pemeriksa')}}"><span class="menu-text">Status Penyelesaian Rekomendasi Pemeriksa</span></a>
             </li>
             <li class="{{strpos($url,'rekap-lhp')!==false ? 'active' : ''}}">
               <a href="{{url('laporan/rekap-lhp')}}"><span class="menu-text">Rekap LHP</span></a>

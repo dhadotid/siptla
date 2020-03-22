@@ -600,3 +600,67 @@ function publishkesenior(idrekomendasi)
         }
     });
 }
+
+function updaterincian_unitkerja(rekom_id, idtemuan, jenis) {
+    gettablerincian_unitkerja_lain(jenis, idtemuan, rekom_id)
+    $('#modalrincian').modal('show');
+    // $('#close-btn').attr('style', 'display:inline');
+    // $('#left-div').removeClass('col-md-12');
+    // $('#left-div').addClass('col-md-6');
+    // $('#right-div').removeClass('col-md-0');
+    // $('#right-div').addClass('col-md-6');
+    // $('#modal-size').attr({ 'style': 'width:90% !important' });
+
+}
+function gettablerincian_unitkerja_lain(jenis, idtemuan, idrekom) {
+    $('#table-rincian').load(flagsUrl + '/load-table-rincian-unitkerja/' + jenis + '/' + idtemuan + '/' + idrekom);
+}
+//---------------
+function listtindaklanjutrincian(idrincian, jenis) {
+    var idtl = $('#idformtindaklanjut').val();
+    $('#list-tindaklanjut-rincian').load(flagsUrl + '/list-tindaklanjut-rincian/' + idrincian + '/' + jenis + '/' + idtl, function () {
+        // $('#table').DataTable();
+    });
+    $('#listtindaklanjutrincian').modal('show');
+}
+function addtindaklanjutrincian(idrincian, jenis) {
+    var idform = $('#idformtindaklanjut').val();
+    // alert(idform)
+    $('#form-tindaklanjut-rincian').load(flagsUrl + '/form-tindaklanjut-rincian/' + idrincian + '/' + jenis, function () {
+        $('.nominal').on('keyup', function (e) {
+            $(this).val(format($(this).val()));
+        });
+        $('#idform').val(idform);
+    });
+    $('#addtindaklanjutrincian').modal('show');
+}
+function hapustindaklanjutrincian(idrincian, jenis, idtemuan, rekom_id) {
+    swal({
+        title: "Apakah Anda Yakin ?",
+        text: "Ingin Menghapus Data ini",
+        icon: "warning",
+        buttons: [
+            'Tidak!',
+            'Ya, Hapus'
+        ],
+        dangerMode: true,
+    }).then(function (isConfirm) {
+        if (isConfirm) {
+            $('#modalreview').modal('hide');
+            $.ajax({
+                url: flagsUrl + '/hapus-rincian/' + idrincian + '/' + jenis,
+                success: function (res) {
+                    swal({
+                        title: 'Berhasil!',
+                        text: 'Hapus Data Rincian Berhasil',
+                        icon: 'success'
+                    }).then(function () {
+                        gettablerincian_unitkerja(jenis, res.idtemuan, res.rekom_id)
+                    });
+                }
+            });
+        } else {
+
+        }
+    });
+}

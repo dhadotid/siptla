@@ -1,13 +1,13 @@
 @extends('backend.layouts.master')
 @section('title')
-    <title>Laporan Tindak Lanjut Per Bidang </title>
+    <title>LAPORAN STATUS PENYELESIAN REKOMENDASI PEMERIKSA</title>
 @endsection
 
 @section('content')
 	<div class="col-md-12">
 		<div class="widget">
 			<header class="widget-header">
-				<span class="widget-title">Laporan Tindak Lanjut Per Bidang </span>
+				<span class="widget-title">LAPORAN STATUS PENYELESIAN REKOMENDASI PEMERIKSA</span>
 			</header><!-- .widget-header -->
 			<hr class="widget-separator">
 			<div class="widget-body">
@@ -29,37 +29,11 @@
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Pemeriksa</label>
                                         <div class="col-md-6">
-                                            <select class="select2 form-control" name="pemeriksa" id="pemeriksan" onchange="loaddata()">
+                                            <select class="select2 form-control" name="pemeriksa" id="pemeriksan" onchange="loaddata();getlhp(this.value)">
                                                 <option value="0">-Pilih-</option>
                                                 @foreach ($pemeriksa as $item)
                                                     <option value="{{$item->id}}">{{$item->code}} - {{$item->pemeriksa}}</option>
                                                 @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    
-                                  
-                                    <div class="form-group" style="margin-bottom:5px;">
-                                        <label for="my-input" class="col-md-3">Unit Kerja</label>
-                                        <div class="col-md-6">
-                                            <select class="select2 form-control" name="unit_kerja" id="unit_kerja" onchange="loaddata()">
-                                                <option value="0">-Pilih-</option>
-                                                @foreach ($unitkerja as $item)
-                                                    <option value="{{$item->id}}">{{$item->nama_pic}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    
-                                  
-                                    <div class="form-group" style="margin-bottom:5px;">
-                                        <label for="my-input" class="col-md-3">Status Rekomendasi</label>
-                                        <div class="col-md-6">
-                                            <select class="select2 form-control" name="statusrekomendasi" id="statusrekomendasi" onchange="loaddata()">
-                                                <option value="0">-Pilih-</option>
-                                                    @foreach ($statusrekomendasi as $item)
-                                                        <option value="{{$item->id}}">{{$item->rekomendasi}}</option>
-                                                    @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -86,6 +60,36 @@
                                         </div>
                                     </div>
                                     
+                                    <div class="form-group" style="margin-bottom:5px;">
+                                        <label for="my-input" class="col-md-3">No LHP</label>
+                                        <div class="col-md-6" id="div-lhp">
+                                            <select class="select2 form-control" name="no_lhp" id="no_lhp"></select>
+                                        </div>
+                                    </div>
+                                   
+                                    <div class="form-group" style="margin-bottom:5px;">
+                                        <label for="my-input" class="col-md-3">Bidang</label>
+                                        <div class="col-md-6">
+                                            <select class="select2 form-control" name="bidang" id="bidang" multiple onchange="loaddata()">
+                                                <option value="0">-Pilih-</option>
+                                                @foreach ($bidang as $item)
+                                                    <option value="{{$item->id}}">{{$item->nama_bidang}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom:5px;">
+                                        <label for="my-input" class="col-md-3">Unit Kerja</label>
+                                        <div class="col-md-6">
+                                            <select class="select2 form-control" name="unit_kerja1" id="unit_kerja1" multiple onchange="loaddata()">
+                                                <option value="0">-Pilih-</option>
+                                                @foreach ($unitkerja as $item)
+                                                    <option value="{{$item->id}}">{{$item->nama_pic}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                   
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Pejabat Penanda Tangan</label>
                                         <div class="col-md-6">
@@ -126,15 +130,17 @@
         function loaddata()
         {
             var pemeriksa=$('#pemeriksan').val();
-            var statusrekomendasi=$('#statusrekomendasi').val();
+            var no_lhp=$('#no_lhp').val();
+            var level_resiko=$('#level-resiko').val();
+            var bidang=$('#bidang').val();
             var tanggal_awal=$('#tanggal_awal').val();
             var tanggal_akhir=$('#tanggal_akhir').val();
             var pejabat=$('#pejabat').val();
-            var unit_kerja=$('#unit_kerja').val();
+            var unitkerja1=$('#unit_kerja1').val();
 
             $.ajax({
-                url : flagsUrl+'/laporan/tindak-lanjut-data',
-                data : {unit_kerja:unit_kerja,pemeriksa: pemeriksa, tgl_awal: tanggal_awal, tgl_akhir: tanggal_akhir, statusrekomendasi: statusrekomendasi, pejabat:pejabat},
+                url : flagsUrl+'/laporan/status-penyelesaian-rekomendasi-pemeriksa-data',
+                data : {unitkerja1:unitkerja1,bidang:bidang,pemeriksa: pemeriksa, no_lhp:no_lhp, tgl_awal: tanggal_awal, tgl_akhir: tanggal_akhir, pejabat:pejabat},
                 type : 'POST',
                 success : function(res){
                     $('#data').html(res);
@@ -142,7 +148,13 @@
             });
            
         }
-       
+        function getlhp(idpemeriksa){
+            $('#div-lhp').load(flagsUrl+'/selectlhpbypemeriksa/'+idpemeriksa+'/multiple', function(){
+                $('.select2').select2({
+                    width:'100%'
+                });
+            })
+        }
         
 	</script>
 	<style>

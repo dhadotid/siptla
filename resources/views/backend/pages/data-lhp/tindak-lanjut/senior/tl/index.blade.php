@@ -362,7 +362,10 @@
                                                             
                                                                 $aksi.='<li><a href="javascript:publishkesuperuser('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Super User</a></li>';
                                                             
-
+                                                        if($v->rincian!='')
+                                                        {
+                                                            $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Lihat Rincian</a></li>';
+                                                        }
                                                         $aksi.='</ul>
                                                         </div></div>';
                                                     }
@@ -409,7 +412,10 @@
                                                                 }    
                                                             }
 
-
+                                                            if($v->rincian!='')
+                                                            {
+                                                                $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Lihat Rincian</a></li>';
+                                                            }
                                                             $aksi.='</ul>
                                                             </div></div>';
                                                         }
@@ -426,7 +432,10 @@
                                                                     <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">
                                                                     
                                                                     <li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
-
+                                                            if($v->rincian!='')
+                                                            {
+                                                                $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Lihat Rincian</a></li>';
+                                                            }
                                                             $aksi.='</ul>
                                                                 </div>
                                                             </div>';

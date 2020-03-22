@@ -11,6 +11,7 @@
                 <input type="hidden" name="tanggal_awal" value="{{$request->tgl_awal}}">
                 <input type="hidden" name="tanggal_akhir" value="{{$request->tgl_akhir}}">
                 <input type="hidden" name="pejabat" value="{{$request->pejabat}}">
+                <input type="hidden" name="bidang" value="{{$bidang}}">
                 <button type="submit" class="btn btn-xs btn-primary"><i class="fa fa-print"></i> Cetak Data</button>
             </form>
         </div>

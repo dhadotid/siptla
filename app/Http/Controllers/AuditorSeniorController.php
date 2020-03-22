@@ -56,7 +56,7 @@ class AuditorSeniorController extends Controller
                     ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
                     ->where('daftar_lhp.status_lhp','Publish LHP')
                     ->where('daftar_lhp.tahun_pemeriksa',$tahun)
-                    // ->where('data_rekomendasi.senior_user_id',Auth::user()->id)
+                    ->where('data_rekomendasi.senior_user_id',Auth::user()->id)
                     ->whereNull('data_rekomendasi.deleted_at')
                     ->orderBy('data_rekomendasi.nomor_rekomendasi')
                     ->get();

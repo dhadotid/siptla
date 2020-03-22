@@ -192,6 +192,18 @@ Route::group(['prefix'=>'laporan','middleware'=>'auth'],function(){
     Route::get('status-penyelesaian-rekomendasi-pemeriksa','LaporanController@status_penyelesaian_rekomendasi_pemeriksa');
     Route::post('status-penyelesaian-rekomendasi-pemeriksa-data','LaporanController@status_penyelesaian_rekomendasi_pemeriksa_data');
     Route::post('status-penyelesaian-rekomendasi-pemeriksa-pdf','LaporanController@status_penyelesaian_rekomendasi_pemeriksa_pdf');
+    
+    Route::get('status-penyelesaian-rekomendasi-bidang','LaporanController@status_penyelesaian_rekomendasi_bidang');
+    Route::post('status-penyelesaian-rekomendasi-bidang-data','LaporanController@status_penyelesaian_rekomendasi_bidang_data');
+    Route::post('status-penyelesaian-rekomendasi-bidang-pdf','LaporanController@status_penyelesaian_rekomendasi_bidang_pdf');
+   
+    Route::get('status-penyelesaian-rekomendasi-tahun','LaporanController@status_penyelesaian_rekomendasi_tahun');
+    Route::post('status-penyelesaian-rekomendasi-tahun-data','LaporanController@status_penyelesaian_rekomendasi_tahun_data');
+    Route::post('status-penyelesaian-rekomendasi-tahun-pdf','LaporanController@status_penyelesaian_rekomendasi_tahun_pdf');
+   
+    Route::get('status-penyelesaian-rekomendasi-unitkerja','LaporanController@status_penyelesaian_rekomendasi_unitkerja');
+    Route::post('status-penyelesaian-rekomendasi-unitkerja-data','LaporanController@status_penyelesaian_rekomendasi_unitkerja_data');
+    Route::post('status-penyelesaian-rekomendasi-unitkerja-pdf','LaporanController@status_penyelesaian_rekomendasi_unitkerja_pdf');
 
     Route::get('rekap-lhp','LaporanController@rekap_lhp');
     Route::get('rekap-lhp-data','LaporanController@rekap_lhp_data');

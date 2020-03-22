@@ -1,0 +1,12 @@
+- [ok] kolom pic1 dan pic2 pada detail lhp dibuat fix ukuran
+- [ok] temuan pada filter dibuat cukup 1 baris saja
+- [ok] rekomendasi pada filter di buat 1 baris saja
+- [ok] tambah pilihan all/semua
+- [ok] tidak perlu dibiru kalau kepanjangan
+- [ok] pic1 dan pic2 dimunculkan pada table tindak lanjut, baru tanggal penyelesaian
+- [ok] no. rekom => nomor
+- [ok] no. temuan => nomor
+- [ok] jumlah tindak lanjut muncul pada periode tertentu -> pada list data tindak lanjut
+- [ok] kendala datepicker setelah aktif di filter
+- [ok] action plan tindak lanjut hanya muncul sekali saja..me replace action plan lama 
+- [ok] dokumen pendukung bisa lebih dari 1 untuk setiap tindak lanjut

@@ -169,15 +169,9 @@
                 'tindak-lanjut',
                 'status-penyelesaian-rekomendasi',
                 'status-penyelesaian-rekomendasi-pemeriksa',
-                'rekap-lhp',
-                'rekap-status-rekomendasi',
-                'rekap-status-rekomendasi-bidang',
-                'rekap-status-rekomendasi-unitkerja',
-                'rekap-jumlah-resiko-periode',
-                'rekap-rekomendasi',
-                'rekap-jumlah-resiko-bidang',
-                'rekap-perhitungan-tekn-pertanggal',
-                'rekap-perhitungan-tekn-status'
+                'status-penyelesaian-rekomendasi-bidang',
+                'status-penyelesaian-rekomendasi-tahun',
+                'status-penyelesaian-rekomendasi-unitkerja'
               ];
           @endphp
           <ul class="submenu" style="{{in_array(str_replace('laporan/','',$url),$menulaporan) ? 'display:block' : ''}}">
@@ -208,7 +202,16 @@
             <li class="{{$url=='laporan/status-penyelesaian-rekomendasi-pemeriksa' ? 'active' : ''}}">
               <a href="{{url('laporan/status-penyelesaian-rekomendasi-pemeriksa')}}"><span class="menu-text">Status Penyelesaian Rekomendasi Pemeriksa</span></a>
             </li>
-            <li class="{{strpos($url,'rekap-lhp')!==false ? 'active' : ''}}">
+            <li class="{{$url=='laporan/status-penyelesaian-rekomendasi-bidang' ? 'active' : ''}}">
+              <a href="{{url('laporan/status-penyelesaian-rekomendasi-bidang')}}"><span class="menu-text">Status Penyelesaian Rekomendasi Bidang</span></a>
+            </li>
+            <li class="{{$url=='laporan/status-penyelesaian-rekomendasi-tahun' ? 'active' : ''}}">
+              <a href="{{url('laporan/status-penyelesaian-rekomendasi-tahun')}}"><span class="menu-text">Status Penyelesaian Rekomendasi Tahun</span></a>
+            </li>
+            <li class="{{$url=='laporan/status-penyelesaian-rekomendasi-unitkerja' ? 'active' : ''}}">
+              <a href="{{url('laporan/status-penyelesaian-rekomendasi-unitkerja')}}"><span class="menu-text">Status Penyelesaian Rekomendasi Unit Kerja</span></a>
+            </li>
+            {{-- <li class="{{strpos($url,'rekap-lhp')!==false ? 'active' : ''}}">
               <a href="{{url('laporan/rekap-lhp')}}"><span class="menu-text">Rekap LHP</span></a>
             </li>
             <li class="{{strpos($url,'rekap-status-rekomendasi')!==false ? 'active' : ''}}">
@@ -234,7 +237,7 @@
             </li>
             <li class="{{strpos($url,'rekap-perhitungan-tekn-status')!==false ? 'active' : ''}}">
               <a href="{{url('laporan/rekap-perhitungan-tekn-status')}}"><span class="menu-text">Rekap Perhitungan TEKN Per Status</span></a>
-            </li>
+            </li> --}}
 
           </ul>
         </li>

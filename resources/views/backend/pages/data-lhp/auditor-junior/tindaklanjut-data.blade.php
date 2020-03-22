@@ -74,7 +74,7 @@
                                         $aksi.='<div class="col-md-2">&nbsp;</div>';
                                         $aksi.='<div class="col-md-10">&nbsp;</div>';
                                         $aksi.='</div>';
-                                        if(isset($rekomendasi[$item->id_temuan]))
+                                         if(isset($rekomendasi[$item->id_temuan]))
                                         {
                                             foreach($rekomendasi[$item->id_temuan] as $k=>$v)
                                             {
@@ -211,13 +211,23 @@
                                                             <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">';
                                                             
                                                         if($v->published=='1')
+                                                        {
                                                             $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.',1)" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
+                                                            if($v->rincian!='')
+                                                                    {
+                                                                        $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Lihat Rincian</a></li>';
+                                                                    }
+                                                        }
                                                         else
                                                             $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
 
                                                             if($v->review_spi=='')
                                                             {
                                                                 $aksi.='<li><a disabled data-toggle="tooltip" title="Anda Belum Menambahkan Review/Catatan Monev Untuk Rekomendasi Ini" href="#" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Senior</a></li>';
+                                                                if($v->rincian!='')
+                                                                    {
+                                                                        $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Lihat Rincian</a></li>';
+                                                                    }
                                                             }
                                                             else
                                                             {
@@ -229,6 +239,10 @@
                                                                 {
                                                                     $aksi.='<li><a href="javascript:publishkesenior('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Senior</a></li>';
                                                                 }
+                                                                if($v->rincian!='')
+                                                                    {
+                                                                        $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Lihat Rincian</a></li>';
+                                                                    }
                                                             }    
 
                                                         $aksi.='</ul>
@@ -236,19 +250,75 @@
                                                     }
                                                     else
                                                     {
-                                                        $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
-                                                            <div class="btn-group">
-                                                                <button type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
-                                                                <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
+                                                        if($v->published=='1')
+                                                        {
+                                                            $icon='fa-check';
+                                                            $color='success';
+                                                            $toggle='data-toggle="tooltip" title="Data Rekomendasi Sudah Publish Ke Auditor Senior"';
+                                                            $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
+                                                                <div class="btn-group" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
+                                                                <button '.$toggle.' type="button" class="btn btn-'.$color.' btn-xs" style="height:28px;"><i class="fa '.$icon.'"></i></button>
+                                                                <button type="button" class="btn btn-'.$color.' btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
                                                                     <span class="caret"></span>
                                                                 </button>
-                                                                <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">
+                                                                <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">';
                                                                 
-                                                                <li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
+                                                            if($v->published=='1')
+                                                                $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.',1)" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
+                                                            else
+                                                                $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
 
-                                                        $aksi.='</ul>
-                                                            </div>
-                                                        </div>';
+                                                                if($v->review_spi=='')
+                                                                {
+                                                                    $aksi.='<li><a disabled data-toggle="tooltip" title="Anda Belum Menambahkan Review/Catatan Monev Untuk Rekomendasi Ini" href="#" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Senior</a></li>';
+                                                                    if($v->rincian!='')
+                                                                    {
+                                                                        $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Lihat Rincian</a></li>';
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    if($v->published=='1')
+                                                                    {
+                                                                        $aksi.='<li><a href="#" style="font-size:11px;"><i class="glyphicon glyphicon-ok"></i> &nbsp;&nbsp;Sudah Publish Ke Senior</a></li>';
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        $aksi.='<li><a href="javascript:publishkesenior('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Senior</a></li>';
+                                                                    }
+
+                                                                    if($v->rincian!='')
+                                                                    {
+                                                                        $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Lihat Rincian</a></li>';
+                                                                    }
+                                                                }    
+                                                            
+                                                            $aksi.='</ul>
+                                                            </div></div>';
+                                                        }
+                                                        else
+                                                        {
+
+                                                            
+                                                            $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
+                                                                <div class="btn-group">
+                                                                    <button type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
+                                                                    <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
+                                                                        <span class="caret"></span>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">
+                                                                    
+                                                                    <li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
+
+                                                                    if($v->rincian!='')
+                                                                    {
+                                                                        $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Lihat Rincian</a></li>';
+                                                                    }
+
+                                                            $aksi.='</ul>
+                                                                </div>
+                                                            </div>';
+                                                        }
                                                     }
                                             }
                                         }

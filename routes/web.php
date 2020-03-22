@@ -182,7 +182,16 @@ Route::group(['prefix'=>'laporan','middleware'=>'auth'],function(){
     Route::post('tindaklanjut-per-unitkerja-pdf','LaporanController@tindaklanjut_per_unitkerja_pdf');
 
     Route::get('tindak-lanjut','LaporanController@tindak_lanjut');
-    Route::get('tindak-lanjut-data','LaporanController@tindak_lanjut_data');
+    Route::post('tindak-lanjut-data','LaporanController@tindak_lanjut_data');
+    Route::post('tindak-lanjut-pdf','LaporanController@tindak_lanjut_pdf');
+    
+    Route::get('status-penyelesaian-rekomendasi','LaporanController@status_penyelesaian_rekomendasi');
+    Route::post('status-penyelesaian-rekomendasi-data','LaporanController@status_penyelesaian_rekomendasi_data');
+    Route::post('status-penyelesaian-rekomendasi-pdf','LaporanController@status_penyelesaian_rekomendasi_pdf');
+    
+    Route::get('status-penyelesaian-rekomendasi-pemeriksa','LaporanController@status_penyelesaian_rekomendasi_pemeriksa');
+    Route::post('status-penyelesaian-rekomendasi-pemeriksa-data','LaporanController@status_penyelesaian_rekomendasi_pemeriksa_data');
+    Route::post('status-penyelesaian-rekomendasi-pemeriksa-pdf','LaporanController@status_penyelesaian_rekomendasi_pemeriksa_pdf');
 
     Route::get('rekap-lhp','LaporanController@rekap_lhp');
     Route::get('rekap-lhp-data','LaporanController@rekap_lhp_data');

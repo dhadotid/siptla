@@ -1,43 +1,26 @@
-<div class="table-responsive">
-    <div class="row" style="margin-bottom:20px;">
-        <div class="col-md-8">&nbsp;</div>
-        <div class="col-md-1">&nbsp;</div>
-        <div class="col-md-1 text-right">
-            <form action="{{url('laporan/tindak-lanjut-pdf')}}" method="post" id="cetakpdf" target="_blank">
-                @csrf
-                <input type="hidden" name="pemeriksa" value="{{$request->pemeriksa}}">
-                <input type="hidden" name="unit_kerja" value="{{$unit_kerja}}">
-                <input type="hidden" name="statusrekomendasi" value="{{$request->statusrekomendasi}}">
-                <input type="hidden" name="tanggal_awal" value="{{$request->tgl_awal}}">
-                <input type="hidden" name="tanggal_akhir" value="{{$request->tgl_akhir}}">
-                <input type="hidden" name="pejabat" value="{{$request->pejabat}}">
-                <button type="submit" class="btn btn-xs btn-primary"><i class="fa fa-print"></i> Cetak Data</button>
-            </form>
-        </div>
-        <div class="col-md-1 text-right">
-            <form action="{{url('laporan/temuan-per-unitkerja-xls')}}" method="post" id="cetakxls" target="_blank">
-                @csrf
-                <button class="btn btn-xs btn-success" onclick="xls()"> <i class="fa fa-file-excel-o"></i> Export Ke Excel</button>
-            </form>
-        </div>
-    </div>
-    <div class="row" style="margin-bottom:20px;">
-        <div class="col-md-12 text-center">
-            <h5>
-                MATRIKS PEMANTAUAN TINDAK LANJUT <br>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Laporan Temuan Unit Kerja</title>
+</head>
+<body style="padding:0px; margin:0px;">
+    <div class="row" style="padding:0px; margin:0px;">
+            <div class="col-md-12 text-center" style="text-align:center">
+                <h5>
+                MATRIKS TABEL PEMANTAUAN TINDAK LANJUT <br>
                 PERIODE <span style="font-weight: bold;text-decoration:underline" id="span_tgl_awal">{{tgl_indo($tgl_awal)}}</span> s.d. <span style="font-weight: bold;text-decoration:underline" id="span_tgl_akhir">{{tgl_indo($tgl_akhir)}}</span> <br>
-            </h5>
+                   
+                </h5>
+            </div>
         </div>
-    </div>
-    <hr>
-	<table id="table" class="table table-striped table-bordered" cellspacing="0" style="width:150%">
-		<thead>
+        <table id="table" class="table table-striped table-bordered" cellspacing="0" width="100%" border="1">
+        <thead>
 			<tr class="primary">
 				<th class="text-center" style="width:15px;" rowspan="2">#</th>
                 <th class="text-center" colspan="2">LHP</th>
                 <th class="text-center" colspan="4">Temuan Pemeriksa</th>
                 <th class="text-center" colspan="4">Rekomendasi</th>
-                <th class="text-center" colspan="3">Tindak Lanjut</th>
+                <th class="text-center" colspan="2">Tindak Lanjut</th>
                 <th class="text-center" rowspan="2">Review SPI</th>
                 <th class="text-center" rowspan="2">Waktu Penyelesaian</th>
 				<th class="text-center" rowspan="2">Overdue</th>
@@ -55,7 +38,6 @@
                 <th class="text-center">Status<br>Rekomendasi</th>
                 <th class="text-center">Tindak Lanjut</th>
                 <th class="text-center">Nilai<br>Tindak Lanjut</th>
-                <th class="text-center">Dokumen<br>Pendukung</th>
             </tr>
         </thead>
         <tbody>
@@ -87,8 +69,7 @@
                     <td class="text-center">{{$item->st_rekom}}</td>
                     <td class="text-left"><ul>{!!$dtindaklanjut!!}</ul></td>
                     <td class="text-right"><ul>{!!$ntindaklanjut!!}</ul></td>
-                    <td class="text-center"><ul>{!!$doktindaklanjut!!}</ul></td>
-                    <td class="text-left"><div style="width:100px;">{!!$item->review_spi!!}</div></td>
+                    <td class="text-left"><div style="width:100px;">{!!$item->reviw_spi!!}</div></td>
                    
                     @if ($item->tanggal_penyelesaian=='')
                         <td class="text-center">-</td>
@@ -108,9 +89,24 @@
                 @endphp
             @endforeach
         </tbody>
-    </table>
-</div>
-<script>
-    $('#table').DataTable();
-    $('[data-toggle="tooltip"]').tooltip();
-</script>
+        </table>
+        <style>
+            th,td
+            {
+                font-size:10px;
+                padding:2px;
+            }
+            td{
+                vertical-align: top !important;
+            }
+            .text-right{
+                text-align:right;
+            }
+            .text-center{
+                text-align:center;
+            }
+            .text-left{
+                text-align:left;
+            }
+        </style>
+</body>

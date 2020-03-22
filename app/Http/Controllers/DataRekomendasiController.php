@@ -489,7 +489,12 @@ class DataRekomendasiController extends Controller
         $table='';
         if($jenis=='sewa')
         {
-            $rincian=RincianSewa::where('id_temuan',$idtemuan)->where('unit_kerja_id',$user_pic->id)->get();
+            if(Auth::user()->level=='pic-unit')
+                $rincian=RincianSewa::where('id_temuan',$idtemuan)->where('unit_kerja_id',$user_pic->id)->get();
+            else
+            {
+                $rincian=RincianSewa::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
+            }
             return view('backend.pages.data-lhp.rincian-table.table-sewa')
                     ->with('rincian',$rincian)
                     ->with('idtemuan',$idtemuan)
@@ -498,7 +503,13 @@ class DataRekomendasiController extends Controller
         }
         elseif($jenis=='uangmuka')
         {
-            $rincian=RincianUangMuka::where('id_temuan',$idtemuan)->where('unit_kerja_id',$user_pic->id)->get();
+            if(Auth::user()->level=='pic-unit')
+                $rincian=RincianUangMuka::where('id_temuan',$idtemuan)->where('unit_kerja_id',$user_pic->id)->get();
+            else
+            {
+                $rincian=RincianUangMuka::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
+            }
+            
             return view('backend.pages.data-lhp.rincian-table.table-uangmuka')
                     ->with('rincian',$rincian)
                     ->with('idtemuan',$idtemuan)
@@ -509,7 +520,13 @@ class DataRekomendasiController extends Controller
         }
         elseif($jenis=='listrik')
         {
-            $rincian=RincianListrik::where('id_temuan',$idtemuan)->where('unit_kerja_id',$user_pic->id)->get();
+            if(Auth::user()->level=='pic-unit')
+                $rincian=RincianListrik::where('id_temuan',$idtemuan)->where('unit_kerja_id',$user_pic->id)->get();
+            else
+            {
+                $rincian=RincianListrik::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
+            }
+            
             return view('backend.pages.data-lhp.rincian-table.table-listrik')
                     ->with('rincian',$rincian)
                     ->with('idtemuan',$idtemuan)
@@ -519,7 +536,13 @@ class DataRekomendasiController extends Controller
         }
         elseif($jenis=='piutang')
         {
-            $rincian=RincianPiutang::where('id_temuan',$idtemuan)->where('unit_kerja_id',$user_pic->id)->get();
+            if(Auth::user()->level=='pic-unit')
+                $rincian=RincianPiutang::where('id_temuan',$idtemuan)->where('unit_kerja_id',$user_pic->id)->get();
+            else
+            {
+                $rincian=RincianPiutang::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
+            }
+            
             return view('backend.pages.data-lhp.rincian-table.table-piutang')
                     ->with('rincian',$rincian)
                     ->with('idtemuan',$idtemuan)
@@ -529,7 +552,13 @@ class DataRekomendasiController extends Controller
         }
         elseif($jenis=='piutangkaryawan')
         {
-            $rincian=RincianPiutangKaryawan::where('id_temuan',$idtemuan)->where('unit_kerja_id',$user_pic->id)->get();
+            if(Auth::user()->level=='pic-unit')
+                $rincian=RincianPiutangKaryawan::where('id_temuan',$idtemuan)->where('unit_kerja_id',$user_pic->id)->get();
+            else
+            {
+                $rincian=RincianPiutangKaryawan::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
+            }
+            
             return view('backend.pages.data-lhp.rincian-table.table-piutangkaryawan')
                     ->with('rincian',$rincian)
                     ->with('idtemuan',$idtemuan)
@@ -539,7 +568,13 @@ class DataRekomendasiController extends Controller
         }
         elseif($jenis=='hutangtitipan')
         {
-            $rincian=RincianHutangTitipan::where('id_temuan',$idtemuan)->where('unit_kerja_id',$user_pic->id)->get();
+            if(Auth::user()->level=='pic-unit')
+                $rincian=RincianHutangTitipan::where('id_temuan',$idtemuan)->where('unit_kerja_id',$user_pic->id)->get();
+            else
+            {
+                $rincian=RincianHutangTitipan::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
+            }
+            
             return view('backend.pages.data-lhp.rincian-table.table-hutangtitipan')
                     ->with('rincian',$rincian)
                     ->with('idtemuan',$idtemuan)
@@ -549,7 +584,13 @@ class DataRekomendasiController extends Controller
         }
         elseif($jenis=='penutupanrekening')
         {
-            $rincian=RincianPenutupanRekening::where('id_temuan',$idtemuan)->where('unit_kerja_id',$user_pic->id)->get();
+            if(Auth::user()->level=='pic-unit')
+                $rincian=RincianPenutupanRekening::where('id_temuan',$idtemuan)->where('unit_kerja_id',$user_pic->id)->get();
+            else
+            {
+                $rincian=RincianPenutupanRekening::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
+            }
+            
             return view('backend.pages.data-lhp.rincian-table.table-penutupanrekening')
                     ->with('rincian',$rincian)
                     ->with('idtemuan',$idtemuan)
@@ -560,7 +601,13 @@ class DataRekomendasiController extends Controller
         }
         elseif($jenis=='umum')
         {
-            $rincian=RincianUmum::where('id_temuan',$idtemuan)->where('unit_kerja_id',$user_pic->id)->get();
+            if(Auth::user()->level=='pic-unit')
+                $rincian=RincianUmum::where('id_temuan',$idtemuan)->where('unit_kerja_id',$user_pic->id)->get();
+            else
+            {
+                $rincian=RincianUmum::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
+            }
+            
             return view('backend.pages.data-lhp.rincian-table.table-umum')
                     ->with('rincian',$rincian)
                     ->with('idtemuan',$idtemuan)

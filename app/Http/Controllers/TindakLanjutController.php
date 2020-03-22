@@ -1469,7 +1469,7 @@ class TindakLanjutController extends Controller
                 ->with('status',$status)
                 ->with('id_rekomendasi',$idrekomendasi);
         }
-        elseif(Auth::user()->level=='auditor-senior')
+        elseif(Auth::user()->level=='auditor-junior')
         {
             return view('backend.pages.data-lhp.auditor-junior.tindaklanjut-detail-form')
                 ->with('rekom',$rekom)

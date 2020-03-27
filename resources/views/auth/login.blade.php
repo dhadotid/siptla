@@ -43,7 +43,8 @@
 						<strong>Peringatan! </strong>
 						<span>{!!Session::get('error')!!}</span>
 					</div>
-				@endif
+                @endif
+                
                 <form method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}">
                 @csrf
                     <div class="form-group">

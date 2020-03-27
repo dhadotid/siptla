@@ -129,7 +129,7 @@
 @endsection
 @section('modal')
 {{-- Start Modal CRUD LHP --}}
-    <div class="modal fade" id="modaltambah" tabindex="-1" role="dialog">
+    <div class="modal fade" id="modaltambah" role="dialog">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
                 <form action="{{ route('data-lhp.store') }}" method="POST" class="form-horizontal" id="formadd">
@@ -149,7 +149,7 @@
 			</div>
 		</div>
 	</div>  
-    <div class="modal fade" id="modalubah" tabindex="-1" role="dialog">
+    <div class="modal fade" id="modalubah" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <form method="POST" class="form-horizontal" id="formubah">

@@ -22,7 +22,7 @@ function loaddata(tahun,statusrekom=null) {
                     $('#edit_jenis_audit').val(res.jenis_audit_id);
                         $('#edit_jenis_audit').select2().trigger('change');
                     $('.edit_status_lhp').val(res.status_lhp);
-                        $('.edit_status_lhp').select2().trigger('change');
+                        // $('.edit_status_lhp').select2().trigger('change');
                     $('#edit_flag_status_lhp').val(res.create_flag);
                 }
             })

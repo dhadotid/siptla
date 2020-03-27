@@ -146,6 +146,15 @@ function datauserpic($data)
     }
     return $user;
 }
+function bataswaktu()
+{
+    $bataswaktu=[
+        'sudah-masuk-batas-waktu-penyelesaian' => 'Budah Masuk Batas Waktu Penyelesaian',
+        'melewati-batas-waktu-penyelesaian' => 'Melewati Batas Waktu Penyelesaian',
+        'belum-masuk-batas-waktu-penyelesaian' => 'Belum Masuk Batas Waktu Penyelesaian'
+    ];
+    return $bataswaktu;
+}
 function status_lhp()
 {
     $status=array('Create oleh Unit Kerja','Belum direview SPI','Sedang direview SPI','Sudah direview SPI','Sudah dipublish oleh SPI');
@@ -189,7 +198,13 @@ function cekcolor($color)
 }
 
 function random_color_part() {
-    return str_pad( dechex( mt_rand( 0, 255 ) ), 2, '0', STR_PAD_LEFT);
+
+    return str_pad( dechex( mt_rand( 80, 255 ) ), 2, '0', STR_PAD_LEFT);
+    // $str = '';
+    // for($i = 0 ; $i < 3 ; $i++) {
+    //     $str .= dechex( rand(170 , 255) );
+    // }
+    // return $str;
 }
 
 function random_color() {

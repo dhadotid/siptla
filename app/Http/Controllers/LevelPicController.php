@@ -9,7 +9,7 @@ class LevelPicController extends Controller
 {
     public function index()
     {
-        $levelpic=LevelPIC::where('flag',1)->orderBy('nama_level')->get();
+        $levelpic=LevelPIC::orderBy('nama_level')->get();
         return view('backend.pages.level-pic.index')
             ->with('levelpic',$levelpic);
     }

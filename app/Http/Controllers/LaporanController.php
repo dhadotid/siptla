@@ -2980,7 +2980,7 @@ class LaporanController extends Controller
         $pdf = PDF::loadView('backend.pages.laporan.status-penyelesaian-rekomendasi-tahun.cetakpdf', $data)->setPaper('a4', 'landscape');
         return $pdf->download('laporan-status-penyelesaian-rekomendasi-tahun.pdf');
     }
-     //-------------------------
+    //-------------------------
     public function status_penyelesaian_rekomendasi_unitkerja()
     {
         $pemeriksa=Pemeriksa::orderBy('pemeriksa')->get();
@@ -3264,5 +3264,568 @@ class LaporanController extends Controller
 
         $pdf = PDF::loadView('backend.pages.laporan.status-penyelesaian-rekomendasi-unitkerja.cetakpdf', $data)->setPaper('a4', 'landscape');
         return $pdf->download('laporan-status-penyelesaian-rekomendasi-unitkerja.pdf');
+    }
+
+    //--------------------------
+
+    public function rekomendasi_overdue_unitkerja()
+    {
+        $pemeriksa=Pemeriksa::orderBy('pemeriksa')->get();
+        $levelresiko=LevelResiko::orderBy('level_resiko')->get();
+        $bidang=Bidang::orderBy('nama_bidang')->get();
+        $pejabat=PejabatTandaTangan::all();
+        $unitkerja=PICUnit::all();
+        return view('backend.pages.laporan.rekomendasi-overdue-unitkerja.index')
+                ->with('pemeriksa',$pemeriksa)
+                ->with('bidang',$bidang)
+                ->with('unitkerja',$unitkerja)
+                ->with('pejabat',$pejabat)
+                ->with('levelresiko',$levelresiko);
+    }
+    public function rekomendasi_overdue_unitkerja_data(Request $request)
+    {
+        list($tg1,$bl1,$th1)=explode('/',$request->tgl_awal);
+        list($tg2,$bl2,$th2)=explode('/',$request->tgl_akhir);
+
+        $tgl_awal = $th1.'-'.$bl1.'-'.$tg1;
+        $tgl_akhir = $th2.'-'.$bl2.'-'.$tg2;
+        $pemeriksa = $request->pemeriksa;
+        $no_lhp = $request->no_lhp;
+        $bidang = $request->bidang;
+        $dbidang=$unitkerja='';
+        $pejabat=PejabatTandaTangan::find($request->pejabat);
+        // $nbidang=Bidang::find($bidang);
+        $wh=array();
+       
+        $statusrekom=[2,3];
+        $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+                                    ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                                    ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                                    ->join('pemeriksa','daftar_lhp.pemeriksa_id','=','pemeriksa.id')
+                                    ->join('level_resiko','data_temuan.level_resiko_id','=','level_resiko.id')
+                                    ->whereBetween('daftar_lhp.tanggal_lhp', [$tgl_awal, $tgl_akhir])
+                                    ->where('daftar_lhp.status_lhp','Publish LHP')
+                                    ->whereNull('data_rekomendasi.deleted_at')
+                                    ->whereIn('data_rekomendasi.status_rekomendasi_id',$statusrekom)
+                                    ->where('data_rekomendasi.tanggal_penyelesaian','<',date('Y-m-d'));
+                                    
+        if($request->pemeriksa!='' && $request->pemeriksa!=0)
+        {
+            $alldata->where('daftar_lhp.pemeriksa_id',$request->pemeriksa);
+            // if($request->pemeriksa!=0)
+            //     $wh['daftar_lhp.pemeriksa_id']=$request->pemeriksa;
+        }
+
+        if($request->no_lhp!='' && $request->no_lhp!=0)
+        {
+            $alldata->where('daftar_lhp.id',$no_lhp);
+            // $no_lhp=implode(',',$request->no_lhp);
+        }
+        
+        $unitkerja=$request->unitkerja;
+        if($request->unitkerja!='' && $request->unitkerja!=0)
+        {
+            $alldata->where(function($query) use ($unitkerja){
+                            $query->where('data_rekomendasi.pic_1_temuan_id', $unitkerja);
+                            $query->orWhere('data_rekomendasi.pic_2_temuan_id','like', "%$unitkerja%,");
+                        });
+
+        }
+       
+
+        $all=$alldata->get();
+        $unit=array();
+        $pic_unit=array();
+
+        if($bidang!='')
+        {
+            $dbidang=$bidang;
+            $picunit=PICUnit::where('bidang',$bidang)->get();
+        
+            
+            foreach($picunit as $k=>$v)
+            {
+                $pic_unit[$v->id]=$v->id;
+            }
+        }
+        
+        if(count($pic_unit)!=0)
+        {
+            $alldata->whereIn('data_rekomendasi.pic_1_temuan_id',$pic_unit);
+        }
+        
+        $all=$alldata->get();
+        // return $all;
+        $lhp=$temuan=$rekomendasi=$jlh_by_status=array();
+        
+        foreach($all as $k=>$v)
+        {
+            if(count($pic_unit)!=0)
+            {
+                if($v->pic_2_temuan_id!='' && $v->pic_2_temuan_id!=',')
+                {
+                    $picunit2=explode(',',$v->pic_2_temuan_id);
+                    foreach($picunit2 as $kp=>$vp)
+                    {
+                        if($vp!='')
+                        {
+                            // if(array_intersect($picunit2,$pic_unit))
+                            if(in_array($vp,$pic_unit))
+                            {
+                                $lhp[$v->id_lhp]=$v;
+                                $temuan[$v->id_lhp][$v->id_temuan]=$v;
+                                $rekomendasi[$v->id_rekom]=$v;
+                                // $rekomendasi[$v->id_rekom][]=$v;
+                                $jlh_by_status[$v->id_rekom][$v->level_resiko_id][]=$v->level_resiko_id;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                $lhp[$v->id_lhp]=$v;
+                $temuan[$v->id_lhp][$v->id_temuan]=$v;
+                $rekomendasi[$v->id_rekom]=$v;
+                // $rekomendasi[$v->id_rekom][]=$v;
+                $jlh_by_status[$v->id_rekom][$v->level_resiko_id][]=$v->level_resiko_id;
+            }
+        }
+        $bid=Bidang::all();
+        $nbid=array();
+        foreach($bid as $k=>$v)
+        {
+            $nbid[$v->id]=$v;
+        }
+        $dpicunit=PICUnit::all();
+        $dp=array();
+        foreach($dpicunit as $kpic=>$vpic)
+        {
+            $dp[$vpic->id]=$vpic;
+        }
+
+        // return $rekomendasi;
+        return view('backend.pages.laporan.rekomendasi-overdue-unitkerja.data')
+                    ->with('pic_unit',$pic_unit)
+                    ->with('nbid',$nbid)
+                    ->with('dp',$dp)
+                    ->with('unitkerja',$unitkerja)
+                    ->with('dbidang',$dbidang)
+                    ->with('alldata',$alldata)
+                    ->with('no_lhp',$no_lhp)
+                    ->with('request',$request)
+                    ->with('lhp',$lhp)
+                    ->with('jlh_by_status',$jlh_by_status)
+                    ->with('unit',$unit)
+                    ->with('bidang',$bidang)
+                    ->with('tgl_awal',$tgl_awal)
+                    ->with('tgl_akhir',$tgl_akhir)
+                    ->with('pejabat',$pejabat)
+                    ->with('temuan',$temuan)
+                    ->with('no_lhp',$no_lhp)
+                    ->with('rekomendasi',$rekomendasi);
+    }
+    public function rekomendasi_overdue_unitkerja_pdf(Request $request)
+    {
+        list($tg1,$bl1,$th1)=explode('/',$request->tanggal_awal);
+        list($tg2,$bl2,$th2)=explode('/',$request->tanggal_akhir);
+        
+        $tgl_awal = $th1.'-'.$bl1.'-'.$tg1;
+        $tgl_akhir = $th2.'-'.$bl2.'-'.$tg2;
+        $pemeriksa = $request->pemeriksa;
+        $no_lhp = $request->no_lhp;
+        // $no_lhp = explode(',',$request->no_lhp);
+        $level_resiko = $request->level_resiko;
+        $bidang = $request->bidang;
+        $pejabat=PejabatTandaTangan::find($request->pejabat);
+        $statusrekom=StatusRekomendasi::all();
+        $wh=array();
+        $nbidang=Bidang::find($bidang);
+        // return $bidang;
+       if($request->pemeriksa!='')
+        {
+            if($request->pemeriksa!=0)
+                $wh['daftar_lhp.pemeriksa_id']=$request->pemeriksa;
+        }
+        
+        // return $wh;
+        $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+                                    ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                                    ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                                    ->join('pemeriksa','daftar_lhp.pemeriksa_id','=','pemeriksa.id')
+                                    ->join('level_resiko','data_temuan.level_resiko_id','=','level_resiko.id')
+                                    ->whereBetween('daftar_lhp.tanggal_lhp', [$tgl_awal, $tgl_akhir])
+                                    ->where('daftar_lhp.status_lhp','Publish LHP')
+                                    ->where($wh)
+                                    ->whereNull('data_rekomendasi.deleted_at');
+                                    
+        if($request->no_lhp!='' && $request->no_lhp!='0')
+        {
+            $alldata->where('daftar_lhp.id',$no_lhp);
+            // $no_lhp=implode(',',$request->no_lhp);
+        }
+        
+        $unitkerja=$request->unitkerja;
+        if($request->unitkerja!='' && $request->unitkerja!='0')
+        {
+            $alldata->where(function($query) use ($unitkerja){
+                            $query->where('data_rekomendasi.pic_1_temuan_id', $unitkerja);
+                            $query->orWhere('data_rekomendasi.pic_2_temuan_id','like', "%$unitkerja%,");
+                        });
+
+            
+        }
+       
+
+        $all=$alldata->get();
+        $npemeriksa=Pemeriksa::find($pemeriksa);
+        $unit=array();
+        $pic_unit=array();
+
+        if($bidang!='')
+        {
+            // $dbidang=implode(',',$bidang);
+            $dbidang=$bidang;
+            $picunit=PICUnit::where('bidang',$bidang)->get();
+        
+            
+            foreach($picunit as $k=>$v)
+            {
+                $pic_unit[$v->id]=$v->id;
+            }
+        }
+        
+        if(count($pic_unit)!=0)
+        {
+            $alldata->whereIn('data_rekomendasi.pic_1_temuan_id',$pic_unit);
+            // return $pic_unit;
+        }
+        
+        $all=$alldata->get();
+        // return $all;
+        $lhp=$temuan=$rekomendasi=$jlh_by_status=array();
+        
+        foreach($all as $k=>$v)
+        {
+            if(count($pic_unit)!=0)
+            {
+                if($v->pic_2_temuan_id!='' && $v->pic_2_temuan_id!=',')
+                {
+                    $picunit2=explode(',',$v->pic_2_temuan_id);
+                    if(array_intersect($picunit2,$pic_unit))
+                    {
+                        $lhp[$v->id_lhp]=$v;
+                        $temuan[$v->id_lhp][$v->id_temuan]=$v;
+                        $rekomendasi[$v->id_rekom]=$v;
+                        $jlh_by_status[$v->id_lhp][$v->status_rekomendasi_id][]=$v->status_rekomendasi_id;
+                    }
+                }
+            }
+            else
+            {
+                $lhp[$v->id_lhp]=$v;
+                $temuan[$v->id_lhp][$v->id_temuan]=$v;
+                $rekomendasi[$v->id_rekom]=$v;
+                $jlh_by_status[$v->id_lhp][$v->status_rekomendasi_id][]=$v->status_rekomendasi_id;
+            }
+            // $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
+        }
+        $statusrekom=StatusRekomendasi::all();
+        // return $lhp;
+        $bid=Bidang::all();
+        $nbid=array();
+        foreach($bid as $k=>$v)
+        {
+            $nbid[$v->id]=$v;
+        }
+        
+        $data['nbid']=$nbid;
+        $data['pic_unit']=$pic_unit;
+        $data['alldata']=$alldata;
+        $data['npemeriksa']=$npemeriksa;
+        $data['request']=$request;
+        $data['lhp']=$lhp;
+        $data['unit']=$unit;
+        $data['bidang']=$bidang;
+        $data['tgl_awal']=$tgl_awal;
+        $data['tgl_akhir']=$tgl_akhir;
+        $data['jlh_by_status']=$jlh_by_status;
+        $data['pejabat']=$pejabat;
+        $data['temuan']=$temuan;
+        $data['no_lhp']=$no_lhp;
+        $data['statusrekom']=$statusrekom;
+        $data['rekomendasi']=$rekomendasi;
+
+        $pdf = PDF::loadView('backend.pages.laporan.rekomendasi-overdue-unitkerja.cetakpdf', $data)->setPaper('a4', 'landscape');
+        return $pdf->download('laporan-rekomendasi-overdue-unitkerja.pdf');
+    }
+
+    //--------------------------
+
+    public function laporan_rekomendasi_overdue()
+    {
+        $pemeriksa=Pemeriksa::orderBy('pemeriksa')->get();
+        $levelresiko=LevelResiko::orderBy('level_resiko')->get();
+        $bidang=Bidang::orderBy('nama_bidang')->get();
+        $pejabat=PejabatTandaTangan::all();
+        $unitkerja=PICUnit::all();
+        return view('backend.pages.laporan.laporan-rekomendasi-overdue.index')
+                ->with('pemeriksa',$pemeriksa)
+                ->with('bidang',$bidang)
+                ->with('unitkerja',$unitkerja)
+                ->with('pejabat',$pejabat)
+                ->with('levelresiko',$levelresiko);
+    }
+    public function laporan_rekomendasi_overdue_data(Request $request)
+    {
+        list($tg1,$bl1,$th1)=explode('/',$request->tgl_awal);
+        list($tg2,$bl2,$th2)=explode('/',$request->tgl_akhir);
+
+        $tgl_awal = $th1.'-'.$bl1.'-'.$tg1;
+        $tgl_akhir = $th2.'-'.$bl2.'-'.$tg2;
+        $pemeriksa = $request->pemeriksa;
+        $no_lhp = $request->no_lhp;
+        $bidang = $request->bidang;
+        $dbidang=$unitkerja='';
+        $pejabat=PejabatTandaTangan::find($request->pejabat);
+        // $nbidang=Bidang::find($bidang);
+        $wh=array();
+       
+        $statusrekom=[2,3];
+        $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+                                    ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                                    ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                                    ->join('pemeriksa','daftar_lhp.pemeriksa_id','=','pemeriksa.id')
+                                    ->join('level_resiko','data_temuan.level_resiko_id','=','level_resiko.id')
+                                    ->whereBetween('daftar_lhp.tanggal_lhp', [$tgl_awal, $tgl_akhir])
+                                    ->where('daftar_lhp.status_lhp','Publish LHP')
+                                    ->whereNull('data_rekomendasi.deleted_at')
+                                    ->whereIn('data_rekomendasi.status_rekomendasi_id',$statusrekom)
+                                    ->where('data_rekomendasi.tanggal_penyelesaian','<',date('Y-m-d'));
+                                    
+        if($request->pemeriksa!='' && $request->pemeriksa!=0)
+        {
+            $alldata->where('daftar_lhp.pemeriksa_id',$request->pemeriksa);
+            // if($request->pemeriksa!=0)
+            //     $wh['daftar_lhp.pemeriksa_id']=$request->pemeriksa;
+        }
+
+        if($request->no_lhp!='' && $request->no_lhp!=0)
+        {
+            $alldata->where('daftar_lhp.id',$no_lhp);
+            // $no_lhp=implode(',',$request->no_lhp);
+        }
+        
+        $unitkerja=$request->unitkerja;
+        if($request->unitkerja!='' && $request->unitkerja!=0)
+        {
+            $alldata->where(function($query) use ($unitkerja){
+                            $query->where('data_rekomendasi.pic_1_temuan_id', $unitkerja);
+                            $query->orWhere('data_rekomendasi.pic_2_temuan_id','like', "%$unitkerja%,");
+                        });
+
+        }
+       
+
+        $all=$alldata->get();
+        $unit=array();
+        $pic_unit=array();
+
+        if($bidang!='')
+        {
+            $dbidang=$bidang;
+            $picunit=PICUnit::where('bidang',$bidang)->get();
+        
+            
+            foreach($picunit as $k=>$v)
+            {
+                $pic_unit[$v->id]=$v->id;
+            }
+        }
+        
+        if(count($pic_unit)!=0)
+        {
+            $alldata->whereIn('data_rekomendasi.pic_1_temuan_id',$pic_unit);
+        }
+        
+        $all=$alldata->get();
+        // return $all;
+        $lhp=$temuan=$rekomendasi=$jlh_by_status=array();
+        
+        foreach($all as $k=>$v)
+        {
+            if(count($pic_unit)!=0)
+            {
+                if($v->pic_2_temuan_id!='' && $v->pic_2_temuan_id!=',')
+                {
+                    $picunit2=explode(',',$v->pic_2_temuan_id);
+                    if(array_intersect($picunit2,$pic_unit))
+                    {
+                        $lhp[$v->id_lhp]=$v;
+                        $temuan[$v->id_lhp][$v->id_temuan]=$v;
+                        $rekomendasi[$v->id_rekom]=$v;
+                        $jlh_by_status[$v->id_lhp][$v->status_rekomendasi_id][]=$v->status_rekomendasi_id;
+                    }
+                }
+            }
+            else
+            {
+                $lhp[$v->id_lhp]=$v;
+                $temuan[$v->id_lhp][$v->id_temuan]=$v;
+                $rekomendasi[$v->id_rekom]=$v;
+                $jlh_by_status[$v->id_lhp][$v->status_rekomendasi_id][]=$v->status_rekomendasi_id;
+            }
+        }
+        return view('backend.pages.laporan.laporan-rekomendasi-overdue.data')
+                    ->with('pic_unit',$pic_unit)
+                    ->with('unitkerja',$unitkerja)
+                    ->with('dbidang',$dbidang)
+                    ->with('alldata',$alldata)
+                    ->with('no_lhp',$no_lhp)
+                    ->with('request',$request)
+                    ->with('lhp',$lhp)
+                    ->with('jlh_by_status',$jlh_by_status)
+                    ->with('unit',$unit)
+                    ->with('bidang',$bidang)
+                    ->with('tgl_awal',$tgl_awal)
+                    ->with('tgl_akhir',$tgl_akhir)
+                    ->with('pejabat',$pejabat)
+                    ->with('temuan',$temuan)
+                    ->with('no_lhp',$no_lhp)
+                    ->with('rekomendasi',$rekomendasi);
+    }
+    
+    public function laporan_rekomendasi_overdue_pdf(Request $request)
+    {
+        list($tg1,$bl1,$th1)=explode('/',$request->tanggal_awal);
+        list($tg2,$bl2,$th2)=explode('/',$request->tanggal_akhir);
+        
+        $tgl_awal = $th1.'-'.$bl1.'-'.$tg1;
+        $tgl_akhir = $th2.'-'.$bl2.'-'.$tg2;
+        $pemeriksa = $request->pemeriksa;
+        $no_lhp = $request->no_lhp;
+        // $no_lhp = explode(',',$request->no_lhp);
+        $level_resiko = $request->level_resiko;
+        $bidang = $request->bidang;
+        $tampilkannilai = $request->tampilkannilai;
+        $tampilkanwaktupenyelesaian = $request->tampilkanwaktupenyelesaian;
+        $pejabat=PejabatTandaTangan::find($request->pejabat);
+        $statusrekom=StatusRekomendasi::all();
+        $wh=array();
+        $nbidang=Bidang::find($bidang);
+        // return $bidang;
+       if($request->pemeriksa!='')
+        {
+            if($request->pemeriksa!=0)
+                $wh['daftar_lhp.pemeriksa_id']=$request->pemeriksa;
+        }
+        
+        // return $wh;
+        $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+                                    ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                                    ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                                    ->join('pemeriksa','daftar_lhp.pemeriksa_id','=','pemeriksa.id')
+                                    ->join('level_resiko','data_temuan.level_resiko_id','=','level_resiko.id')
+                                    ->whereBetween('daftar_lhp.tanggal_lhp', [$tgl_awal, $tgl_akhir])
+                                    ->where('daftar_lhp.status_lhp','Publish LHP')
+                                    ->where($wh)
+                                    ->whereNull('data_rekomendasi.deleted_at');
+                                    
+        if($request->no_lhp!='' && $request->no_lhp!='0')
+        {
+            $alldata->where('daftar_lhp.id',$no_lhp);
+            // $no_lhp=implode(',',$request->no_lhp);
+        }
+        
+        $unitkerja=$request->unitkerja;
+        if($request->unitkerja!='' && $request->unitkerja!='0')
+        {
+            $alldata->where(function($query) use ($unitkerja){
+                            $query->where('data_rekomendasi.pic_1_temuan_id', $unitkerja);
+                            $query->orWhere('data_rekomendasi.pic_2_temuan_id','like', "%$unitkerja%,");
+                        });
+
+            
+        }
+       
+
+        $all=$alldata->get();
+        $npemeriksa=Pemeriksa::find($pemeriksa);
+        $unit=array();
+        $pic_unit=array();
+
+        if($bidang!='')
+        {
+            // $dbidang=implode(',',$bidang);
+            $dbidang=$bidang;
+            $picunit=PICUnit::where('bidang',$bidang)->get();
+        
+            
+            foreach($picunit as $k=>$v)
+            {
+                $pic_unit[$v->id]=$v->id;
+            }
+        }
+        
+        if(count($pic_unit)!=0)
+        {
+            $alldata->whereIn('data_rekomendasi.pic_1_temuan_id',$pic_unit);
+            // return $pic_unit;
+        }
+        
+        $all=$alldata->get();
+        // return $all;
+        $lhp=$temuan=$rekomendasi=$jlh_by_status=array();
+        
+        foreach($all as $k=>$v)
+        {
+            if(count($pic_unit)!=0)
+            {
+                if($v->pic_2_temuan_id!='' && $v->pic_2_temuan_id!=',')
+                {
+                    $picunit2=explode(',',$v->pic_2_temuan_id);
+                    if(array_intersect($picunit2,$pic_unit))
+                    {
+                        $lhp[$v->id_lhp]=$v;
+                        $temuan[$v->id_lhp][$v->id_temuan]=$v;
+                        $rekomendasi[$v->id_rekom]=$v;
+                        $jlh_by_status[$v->id_lhp][$v->status_rekomendasi_id][]=$v->status_rekomendasi_id;
+                    }
+                }
+            }
+            else
+            {
+                $lhp[$v->id_lhp]=$v;
+                $temuan[$v->id_lhp][$v->id_temuan]=$v;
+                $rekomendasi[$v->id_rekom]=$v;
+                $jlh_by_status[$v->id_lhp][$v->status_rekomendasi_id][]=$v->status_rekomendasi_id;
+            }
+            // $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
+        }
+        $statusrekom=StatusRekomendasi::all();
+        // return $lhp;
+        $dunitkerja=PICUnit::find($unitkerja);
+        $nbidang=Bidang::find($bidang);
+        $data['dunitkerja']=$dunitkerja;
+        $data['nbidang']=$nbidang;
+        $data['pic_unit']=$pic_unit;
+        $data['alldata']=$alldata;
+        $data['npemeriksa']=$npemeriksa;
+        $data['request']=$request;
+        $data['nbidang']=$nbidang;
+        $data['lhp']=$lhp;
+        $data['unit']=$unit;
+        $data['bidang']=$bidang;
+        $data['tgl_awal']=$tgl_awal;
+        $data['tgl_akhir']=$tgl_akhir;
+        $data['jlh_by_status']=$jlh_by_status;
+        $data['pejabat']=$pejabat;
+        $data['temuan']=$temuan;
+        $data['no_lhp']=$no_lhp;
+        $data['statusrekom']=$statusrekom;
+        $data['rekomendasi']=$rekomendasi;
+
+        $pdf = PDF::loadView('backend.pages.laporan.laporan-rekomendasi-overdue.cetakpdf', $data)->setPaper('a4', 'landscape');
+        return $pdf->download('laporan-rekomendasi-overdue.pdf');
     }
 }

@@ -181,7 +181,7 @@ class DashboardController extends Controller
             //Status Rekomendasi
             $status=StatusRekomendasi::get();
             $data_rekom=DataRekomendasi::with('dtemuan')->get();
-            $rekomendasi=$rekom=$colorrekom=array();
+            $rekomendasi=$rekom=$colorrekom=$overdue=array();
             // return $data_rekom;
 
             foreach($data_rekom as $k=>$v)
@@ -189,11 +189,32 @@ class DashboardController extends Controller
                 if(isset($v->dtemuan->temuan))
                 {
                     // return $v->dtemuan->totemuan;
-                    list($th,$bl,$tg)=explode('-',$v->dtemuan->totemuan->tanggal_lhp);
-                    if($th==$thn)
+                    if($v->dtemuan->totemuan->user_input_id==Auth::user()->id)
                     {
-                        if(in_array($v->dtemuan->id_lhp,$arraylhp))
-                            $rekomendasi[$v->status_rekomendasi_id][]=$v;
+                        list($th,$bl,$tg)=explode('-',$v->dtemuan->totemuan->tanggal_lhp);
+                        if($th==$thn)
+                        {
+                            if(in_array($v->dtemuan->id_lhp,$arraylhp))
+                                $rekomendasi[$v->status_rekomendasi_id][]=$v;
+
+                            if($v->tanggal_penyelesaian!='')
+                            {
+                                $tgl_penyelsaian=$v->tanggal_penyelesaian;
+                                $now=date('Y-m-d');
+                                if($now==$tgl_penyelsaian)
+                                {
+                                    $overdue['sudah-masuk-batas-waktu-penyelesaian'][]=$v;
+                                }
+                                elseif($now>$tgl_penyelsaian)
+                                {
+                                    $overdue['melewati-batas-waktu-penyelesaian'][]=$v;
+                                }
+                                elseif($now<$tgl_penyelsaian)
+                                {
+                                    $overdue['belum-masuk-batas-waktu-penyelesaian'][]=$v;
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -208,12 +229,25 @@ class DashboardController extends Controller
             }
             $color['colorrekom']=$colorrekom;
             $color['colorlhp']=$colorlhp;
-            // return $dlhp;
+            // return $overdue;
+            $doverdue=array();
+            // return $rekomendasi;
+            $bataswaktu=bataswaktu();
+            foreach($bataswaktu as $k=>$v)
+            {
+                $doverdue['labels'][]=$bataswaktu[$k];
+                $doverdue['datasets'][0]['data'][]=isset($overdue[$k]) ? count($overdue[$k]) : 0;
+                $doverdue['datasets'][0]['backgroundColor'][]=$colorbataswaktu[($k)]=generate_color_one();
+            }
+            $color['colorbataswaktu']=$colorbataswaktu;
+            // return $doverdue;
             return view('backend.pages.dashboard.auditor-junior')
                     // ->with('lhp',$lhp)
                     ->with('dtl',$dtl)
                     ->with('status',$status)
                     ->with('dstatus',$dstatus)
+                    ->with('overdue',$overdue)
+                    ->with('doverdue',$doverdue)
                     ->with('rekom',$rekom)
                     ->with('color',$color)
                     ->with('tahun',$thn)
@@ -271,7 +305,7 @@ class DashboardController extends Controller
             //Status Rekomendasi
             $status=StatusRekomendasi::get();
             $data_rekom=DataRekomendasi::with('dtemuan')->get();
-            $rekomendasi=$rekom=$colorrekom=array();
+            $rekomendasi=$rekom=$colorrekom=$overdue=array();
             // return $data_rekom;
 
             foreach($data_rekom as $k=>$v)
@@ -284,6 +318,24 @@ class DashboardController extends Controller
                     {
                         if(in_array($v->dtemuan->id_lhp,$arraylhp))
                             $rekomendasi[$v->status_rekomendasi_id][]=$v;
+
+                        if($v->tanggal_penyelesaian!='')
+                        {
+                            $tgl_penyelsaian=$v->tanggal_penyelesaian;
+                            $now=date('Y-m-d');
+                            if($now==$tgl_penyelsaian)
+                            {
+                                $overdue['sudah-masuk-batas-waktu-penyelesaian'][]=$v;
+                            }
+                            elseif($now>$tgl_penyelsaian)
+                            {
+                                $overdue['melewati-batas-waktu-penyelesaian'][]=$v;
+                            }
+                            elseif($now<$tgl_penyelsaian)
+                            {
+                                $overdue['belum-masuk-batas-waktu-penyelesaian'][]=$v;
+                            }
+                        }
                     }
                 }
             }
@@ -298,12 +350,25 @@ class DashboardController extends Controller
             }
             $color['colorrekom']=$colorrekom;
             $color['colorlhp']=$colorlhp;
-            // return $dlhp;
+            
+            $doverdue=array();
+            // return $rekomendasi;
+            $bataswaktu=bataswaktu();
+            foreach($overdue as $k=>$v)
+            {
+                $doverdue['labels'][]=$bataswaktu[$k];
+                $doverdue['datasets'][0]['data'][]=isset($bataswaktu[$k]) ? count($bataswaktu[$k]) : 0;
+                $doverdue['datasets'][0]['backgroundColor'][]=$colorbataswaktu[($k)]=generate_color_one();
+            }
+            $color['colorbataswaktu']=$colorbataswaktu;
+            // return $doverdue;
             return view('backend.pages.dashboard.auditor-senior')
                     // ->with('lhp',$lhp)
                     ->with('dtl',$dtl)
                     ->with('status',$status)
+                    ->with('overdue',$overdue)
                     ->with('dstatus',$dstatus)
+                    ->with('doverdue',$doverdue)
                     ->with('rekom',$rekom)
                     ->with('color',$color)
                     ->with('tahun',$thn)

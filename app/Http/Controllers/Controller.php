@@ -8,6 +8,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Models\TindakLanjutTemuan;
 use App\Models\DataRekomendasi;
+use App\Models\Notifikasi;
 use Auth;
 class Controller extends BaseController
 {
@@ -86,5 +87,29 @@ class Controller extends BaseController
         }
 
         return $rekomendasi;
+    }
+
+    public function sendnotif(&$data)
+    {
+        $dari=$data['dari'];
+        $kepada=$data['kepada'];
+        $pesan=$data['pesan'];
+
+        $new=new Notifikasi;
+        $new->dari = $dari;
+        $new->kepada = $kepada;
+        $new->pesan = $pesan;
+        $c=$new->save();
+        
+        return $c;
+    }
+    
+    public function kirimemail(&$data)
+    {
+        $dari=$data['dari'];
+        $kepada=$data['kepada'];
+        $pesan=$data['pesan'];
+        $email=$data['email'];
+
     }
 }

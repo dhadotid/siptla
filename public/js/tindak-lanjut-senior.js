@@ -600,6 +600,45 @@ function publishkesenior(idrekomendasi)
         }
     });
 }
+function publishkesuperuser(idrekomendasi)
+{
+    swal({
+        title: "Apakah Anda Yakin ?",
+        text: "Ingin Mempublish Rekomendasi Ini ?",
+        icon: "warning",
+        buttons: [
+            'Tidak!',
+            'Ya, Publish'
+        ],
+        dangerMode: true,
+    }).then(function (isConfirm) {
+        if (isConfirm) {
+            $.ajax({
+                url: flagsUrl + '/publish-rekomendasi-to-auditor-senior/' + idrekomendasi,
+                success: function (res) {
+                    if (res == 1) {
+                        swal({
+                            title: 'Berhasil!',
+                            text: 'Publish Rekomendasi Berhasil',
+                            icon: 'success'
+                        }).then(function () {
+                            location.href = flagsUrl + '/data-tindaklanjut/' + $('#tahun').val()
+                        });
+                    }
+                    else {
+                        swal({
+                            title: 'Gagal!',
+                            text: 'Publish Rekomendasi Tidak Berhasil',
+                            icon: 'error'
+                        })
+                    }
+                }
+            });
+        } else {
+
+        }
+    });
+}
 
 function updaterincian_unitkerja(rekom_id, idtemuan, jenis) {
     gettablerincian_unitkerja_lain(jenis, idtemuan, rekom_id)

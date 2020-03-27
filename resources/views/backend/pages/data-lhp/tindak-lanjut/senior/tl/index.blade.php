@@ -360,7 +360,7 @@
                                                             
                                                                 // $aksi.='<li><a disabled data-toggle="tooltip" title="Anda Belum Menambahkan Review/Catatan Monev Untuk Rekomendasi Ini" href="#" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Senior</a></li>';
                                                             
-                                                                $aksi.='<li><a href="javascript:publishkesuperuser('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Super User</a></li>';
+                                                                $aksi.='<li><a href="javascript:publishkesuperuser('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Rekomendasi</a></li>';
                                                             
                                                         if($v->rincian!='')
                                                         {
@@ -377,7 +377,7 @@
                                                             {
                                                                 $icon='fa-check';
                                                                 $color='success';
-                                                                $toggle='data-toggle="tooltip" title="Data Rekomendasi Sudah Di Publish ke Super User"';
+                                                                $toggle='data-toggle="tooltip" title="Data Rekomendasi Sudah Di Publish"';
                                                             }
                                                             else
                                                             {
@@ -396,7 +396,7 @@
                                                             if($v->rekom_publish=='1')
                                                             {
                                                                 $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.',1)" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>
-                                                                <li><a href="#" style="font-size:11px;"><i class="glyphicon glyphicon-check"></i> &nbsp;&nbsp;Sudah Publish Ke Super User</a></li>';
+                                                                <li><a href="#" style="font-size:11px;"><i class="glyphicon glyphicon-check"></i> &nbsp;&nbsp;Sudah Publish</a></li>';
                                                             }
                                                             else
                                                             {
@@ -404,11 +404,11 @@
                                                                 
                                                                 if($v->review_spi=='')
                                                                 {
-                                                                    $aksi.='<li><a disabled data-toggle="tooltip" title="Anda Belum Menambahkan Review/Catatan Monev Untuk Rekomendasi Ini" href="#" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Senior</a></li>';
+                                                                    $aksi.='<li><a disabled data-toggle="tooltip" title="Anda Belum Menambahkan Review/Catatan Monev Untuk Rekomendasi Ini" href="#" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Rekomendasi</a></li>';
                                                                 }
                                                                 else
                                                                 {
-                                                                    $aksi.='<li><a href="javascript:publishkesuperuser('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Super User</a></li>';
+                                                                    $aksi.='<li><a href="javascript:publishkesuperuser('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Rekomendasi</a></li>';
                                                                 }    
                                                             }
 

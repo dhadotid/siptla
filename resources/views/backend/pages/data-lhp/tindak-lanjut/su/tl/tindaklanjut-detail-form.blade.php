@@ -275,7 +275,7 @@
                                     </h4>
                                 @elseif ($rekom->rekom_publish==1)
                                     <h4 style="margin:0px;padding:0px;margin-bottom:10px;">Review SPI
-                                    &nbsp;<span class="text-info"><i>(Sudah DI Publish Ke Super User)</i></span>
+                                    &nbsp;<span class="text-info"><i>(Sudah DI Publish)</i></span>
                                     </h4>
                                 @else
                                     <h4 style="margin:0px;padding:0px;margin-bottom:10px;">Review SPI</h4>

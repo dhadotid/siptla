@@ -15,8 +15,10 @@ Route::get('/', function () {
     return redirect('login');
 });
 
-Route::group(['middleware'=>'auth'],function(){
+Route::group(['middleware'=>['auth','checkstatus']],function(){
     Route::get('/dashboard/{tahun?}', 'DashboardController@index');
+    Route::get('/profil', 'UsersController@profil')->name('pengguna.profil');
+    Route::post('/simpan-profil/{id}', 'UsersController@simpan_profil')->name('pengguna.simpan-profil');
 
     Route::resource('pic-unit','PICUnitController');
     Route::resource('level-pic','LevelPicController');
@@ -83,6 +85,7 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('publish-rekomendasi-to-auditor-junior/{idrekomendasi}','DataRekomendasiController@publish_rekomendasi_to_auditor_junior');
     Route::get('publish-rekomendasi-to-auditor-senior/{idrekomendasi}','DataRekomendasiController@publish_rekomendasi_to_auditor_senior');
     Route::get('publish-rekomendasi-to-pic1/{idrekomendasi}','DataRekomendasiController@publish_rekomendasi_to_pic1');
+    Route::get('publish-rekomendasi/{idrekomendasi}','DataRekomendasiController@publish_rekomendasi');
     Route::get('list-rangkuman/{idrekomendasi}','DataRekomendasiController@list_rangkuman');
     Route::post('rangkuman-simpan','DataRekomendasiController@rangkuman_simpan');
     Route::get('setujui-rekomendasi/{idrekom}','DataRekomendasiController@setujui_rekomendasi');
@@ -205,32 +208,15 @@ Route::group(['prefix'=>'laporan','middleware'=>'auth'],function(){
     Route::post('status-penyelesaian-rekomendasi-unitkerja-data','LaporanController@status_penyelesaian_rekomendasi_unitkerja_data');
     Route::post('status-penyelesaian-rekomendasi-unitkerja-pdf','LaporanController@status_penyelesaian_rekomendasi_unitkerja_pdf');
 
-    Route::get('rekap-lhp','LaporanController@rekap_lhp');
-    Route::get('rekap-lhp-data','LaporanController@rekap_lhp_data');
-
-    Route::get('rekap-status-rekomendasi','LaporanController@rekap_status_rekomendasi');
-    Route::get('rekap-status-rekomendasi-data','LaporanController@rekap_status_rekomendasi_data');
+    Route::get('rekomendasi-overdue-unitkerja','LaporanController@rekomendasi_overdue_unitkerja');
+    Route::post('rekomendasi-overdue-unitkerja-data','LaporanController@rekomendasi_overdue_unitkerja_data');
+    Route::post('rekomendasi-overdue-unitkerja-pdf','LaporanController@rekomendasi_overdue_unitkerja_pdf');
     
-    Route::get('rekap-status-rekomendasi-bidang','LaporanController@rekap_status_rekomendasi_bidang');
-    Route::get('rekap-status-rekomendasi-bidang-data','LaporanController@rekap_status_rekomendasi_bidang_data');
+    Route::get('laporan-rekomendasi-overdue','LaporanController@laporan_rekomendasi_overdue');
+    Route::post('laporan-rekomendasi-overdue-data','LaporanController@laporan_rekomendasi_overdue_data');
+    Route::post('laporan-rekomendasi-overdue-pdf','LaporanController@laporan_rekomendasi_overdue_pdf');
 
-    Route::get('rekap-status-rekomendasi-unitkerja','LaporanController@rekap_status_rekomendasi_unitkerja');
-    Route::get('rekap-status-rekomendasi-unitkerja-data','LaporanController@rekap_status_rekomendasi_unitkerja_data');
-
-    Route::get('rekap-jumlah-resiko-periode','LaporanController@rekap_jumlah_resiko_periode');
-    Route::get('rekap-jumlah-resiko-periode-data','LaporanController@rekap_jumlah_resiko_periode_data');
-
-    Route::get('rekap-rekomendasi','LaporanController@rekap_rekomendasi');
-    Route::get('rekap-rekomendasi-data','LaporanController@rekap_rekomendasi_data');
-    
-    Route::get('rekap-jumlah-resiko-bidang','LaporanController@rekap_jumlah_resiko_bidang');
-    Route::get('rekap-jumlah-resiko-bidang-data','LaporanController@rekap_jumlah_resiko_bidang_data');
-
-    Route::get('rekap-perhitungan-tekn-pertanggal','LaporanController@rekap_perhitungan_tekn_pertanggal');
-    Route::get('rekap-perhitungan-tekn-pertanggal-data','LaporanController@rekap_perhitungan_tekn_pertanggal_data');
-
-    Route::get('rekap-perhitungan-tekn-status','LaporanController@rekap_perhitungan_tekn_status');
-    Route::get('rekap-perhitungan-tekn-status-data','LaporanController@rekap_perhitungan_tekn_status_data');
+   
 });
 
 // DATA LHP

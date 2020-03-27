@@ -99,7 +99,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
 									<label>Jenis Level</label>
-                                    <select name="level" class="form-control select2" onchange="editjenis(this.value)" id="level">
+                                    <select class="form-control" id="level-edit" disabled>
                                         <option value="">-- Pilih Level --</option>
                                         @php
 											foreach($jenislevel as $k=>$v)
@@ -110,7 +110,8 @@
 													echo '<option value="'.$k.'">'.$v.'</option>';	
 											}
 										@endphp
-                                    </select>
+									</select>
+									<input type="hidden" name="level" id="level">
                                 </div>
                                 <div class="form-group" id="edit-name-txt" style="">
 									<label>Nama Pengguna</label>
@@ -118,7 +119,7 @@
                                 </div>
                                 <div class="form-group" id="edit-name-pic" style="display:none">
 									<label>PIC Unit</label>
-                                    <select name="name_pic" class="form-control select2" id="name_pic">
+                                    <select name="" class="form-control" id="pic-edit" disabled>
                                         <option value="">-- Pilih PIC Unit --</option>
                                         @php
 											foreach($picunit as $k=>$v)
@@ -126,7 +127,8 @@
 												echo '<option value="'.$v->id.'__'.$v->nama_pic.'">'.$v->nama_pic.'</option>';	
 											}
 										@endphp
-                                    </select>
+									</select>
+									<input type="hidden" name="name_pic" id="name_pic">
                                 </div>
                                 <div class="form-group">
 									<label>Email</label>
@@ -300,13 +302,15 @@
                 success: function(res) {
 					$('#form-update').attr('action', "{{ url('pengguna') }}/"+id)
 					$('#name').val(res.name)
-					$('#name_pic').val(res.name)
+					$('#name_pic').val(res.picunit)
+					$('#pic-edit').val(res.picunit)
 					$('#nip').val(res.nip)
 					$('#email').val(res.email)
 					$('#telepon').val(res.telepon)
 					$('#password').val(res.password)
 					$('#password_confirmation').val(res.password)
 					$('#level').val(res.level)
+					$('#level-edit').val(res.level)
 					$('#flag').val(res.flag)
 					if(res.level=='pic-unit')
 					{

@@ -42,7 +42,7 @@
 							</select>
 						</div>
 						
-						<div class="form-group" id="" style="">
+						{{-- <div class="form-group" id="" style="">
 							<label>Pivot User</label>
 							<select name="" class="form-control select2">
 								<option value="">-- Pilih --</option>
@@ -50,7 +50,7 @@
 									<option value="{{$item->id}}">{{$item->name}}</option>
 								@endforeach
 							</select>
-						</div>
+						</div> --}}
 						
 						<div class="form-group">
 							<label>Nama PIC</label>
@@ -107,7 +107,7 @@
 								@endforeach
 							</select>
 						</div>
-                       <div class="form-group" id="" style="">
+                       {{-- <div class="form-group" id="" style="">
 							<label>Pivot User</label>
 							<select name="id_user" class="form-control select2">
 								<option value="">-- Pilih --</option>
@@ -115,7 +115,7 @@
 									<option value="{{$item->id}}">{{$item->name}}</option>
 								@endforeach
 							</select>
-						</div>
+						</div> --}}
 						<div class="form-group">
 							<label>Nama PIC</label>
 							<input type="text" name="nama_pic" class="form-control" placeholder="Nama PIC" id="nama_pic"/>

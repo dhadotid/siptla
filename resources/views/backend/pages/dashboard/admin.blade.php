@@ -41,7 +41,7 @@
 					<div class="pull-left">
 						<small class="text-color">Rekapitulasi Jumlah PIC Unit ({{isset($datalevelpic['labels']) ? count($datalevelpic['labels']) : 0}})</small>
 					</div>
-					<canvas id="chart1" style="width:100%" height="400"></canvas>
+					<canvas id="chart1" style="width:100%;margin-top:80px;" height="300"></canvas>
 					<div class='cell'>
 						<ul>
 							
@@ -61,7 +61,7 @@
 					<div class="pull-left">
 						<small class="text-color">Rekapitulasi Pengguna ({{isset($dpengguna['labels']) ? count($dpengguna['labels']) : 0}})</small>
 					</div>
-					<canvas id="chart2" style="width:100%" height="400"></canvas>
+					<canvas id="chart2" style="width:100%;margin-top:80px;" height="300"></canvas>
 					<div class='cell'>
 						<ul>
 							@foreach ($dpengguna['labels'] as $idx=>$item)
@@ -82,7 +82,7 @@
 					<div class="pull-left">
 						<small class="text-color">Rekapitulasi Jumlah Pemeriksa ({{$pemeriksa->count()}})</small>
 					</div>
-					<canvas id="chart3" style="width:100%" height="400"></canvas>
+					<canvas id="chart3" style="width:100%;margin-top:80px;" height="300"></canvas>
 					<div class='cell'>
 						<ul>
 							@foreach ($dpemeriksa['labels'] as $idx=>$item)
@@ -114,7 +114,7 @@
 		Chart.defaults.global.defaultFontSize = 18;
 		var oilData = <?php echo json_encode($datalevelpic);?>;
 		var pieChart = new Chart(oilCanvas, {
-			type: 'pie',
+			type: 'doughnut',
 			data: oilData,
 			options: {
 				legend: {
@@ -129,7 +129,7 @@
 		var oilCanvas = document.getElementById("chart2");
 		var oilData = <?php echo json_encode($dpengguna);?>;
 		var pieChart = new Chart(oilCanvas, {
-			type: 'pie',
+			type: 'doughnut',
 			data: oilData,
 			options: {
 				legend: {
@@ -144,7 +144,7 @@
 		var jlhpemeriksa = document.getElementById("chart3");
 		var datapemeriksa = <?php echo json_encode($dpemeriksa);?>;
 		var pieChart = new Chart(jlhpemeriksa, {
-			type: 'pie',
+			type: 'doughnut',
 			data: datapemeriksa,
 			options: {
 				legend: {
@@ -169,6 +169,7 @@
 	.cell
 	{
 		width:100%;
+		margin-top:50px;
 		/* float:left; */
 	}
 	.cell li

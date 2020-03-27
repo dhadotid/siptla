@@ -8,6 +8,7 @@ use App\Models\PivotUserDinas;
 use App\Models\PICUnit;
 use App\User;
 use Validator;
+use Auth;
 class UsersController extends Controller
 {
     /**
@@ -71,7 +72,21 @@ class UsersController extends Controller
 
     public function edit($id)
     {
-        return User::where('id',$id)->first();
+        $user=User::where('id',$id)->first();
+        $pisunit=PICUnit::where('id_user',$id)->first();
+        $data['name']=$user->name;
+        $data['nip']=$user->nip;
+        $data['email']=$user->email;
+        $data['telepon']=$user->telepon;
+        $data['level']=$user->level;
+        $data['flag']=$user->flag;
+        $data['created_at']=$user->created_at;
+        $data['updated_at']=$user->updated_at;
+        $data['deleted_at']=$user->deleted_at;
+        $data['pic_unit_id']=$user->pic_unit_id;
+        $data['nama_pic']=$pisunit->nama_pic;
+        $data['picunit']=$pisunit->id.'__'.$pisunit->nama_pic;
+        return $data;
     }
 
     public function update(Request $request, $id)
@@ -149,5 +164,37 @@ class UsersController extends Controller
 
         return redirect()->route('pengguna.index')
             ->with('success', 'Anda telah menghapus data pengguna.');
+    }
+
+    public function profil()
+    {
+        $iduser=Auth::user()->id;
+        $user=User::find($iduser);
+        $picunit=PICUnit::where('id_user',$iduser)->with('levelpic')->orderBy('nama_pic')->first();
+        return view('backend.pages.user.profil')
+                ->with('iduser',$iduser)
+                ->with('user',$user)
+                ->with('picunit',$picunit);
+    }
+    public function simpan_profil(Request $request,$id)
+    {
+        $iduser=Auth::user()->id;
+        $user=User::find($iduser);
+        $user->name=$request->name;
+        $user->email=$request->email;
+        $user->telepon=$request->telepon;
+
+        if($request->password!='')
+        {
+            $user->password=bcrypt($request->password);
+        }
+
+        $s=$user->save();
+        if($s)
+            return redirect()->route('pengguna.profil')
+            ->with('success', 'Anda telah mengubah data pengguna.');
+        else
+            return redirect()->route('pengguna.profil')
+            ->with('error', 'Mengubah data pengguna tidak berhasil.');
     }
 }

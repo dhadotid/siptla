@@ -45,7 +45,7 @@
 					<div class="pull-left">
 						<small class="text-color">Statistik Rekomendasi ({{isset($rekom['datasets'][0]['data']) ? count($rekom['datasets'][0]['data']) : 0}})</small>
 					</div>
-					<canvas id="chart1" style="width:100%" height="400"></canvas>
+					<canvas id="chart1" style="width:100%;margin-top:80px;" height="300"></canvas>
 					<div class='cell'>
 						<ul>
 							@foreach ($rekom['labels'] as $idx=>$item)
@@ -71,9 +71,10 @@
 			<div class="col-md-4 col-sm-4">
 				<div class="widget p-md clearfix"  style="height:650px !important;">
 					<div class="pull-left">
-						<small class="text-color">Monitoring Review SPI ({{isset($dtl['datasets'][0]['data']) ? count($dtl['datasets'][0]['data']) : 0}})</small>
+						{{-- <small class="text-color">Monitoring Review SPI ({{isset($dtl['datasets'][0]['data']) ? count($dtl['datasets'][0]['data']) : 0}})</small> --}}
+						<small class="text-color">Monitoring Review SPI ({{count(status_lhp_key())}})</small>
 					</div>
-					<canvas id="chart2" style="width:100%" height="400"></canvas>
+					<canvas id="chart2" style="width:100%;margin-top:80px;" height="300"></canvas>
 					<div class='cell'>
 						<ul>
 							@if (isset($dtl['labels']))
@@ -97,7 +98,7 @@
 								@foreach ($dstatus as $item)
 									@if(!in_array(str_slug($item),$dst))
 										<li>
-											<div class="box" style="background: {{generate_color_one()}}"></div> 
+											<div class="box" style="background: #fff"></div> 
 											<a href="#">{{$item}} (0)</a>
 										</li>
 									@endif
@@ -105,7 +106,7 @@
 							@else	
 								@foreach (status_lhp() as $item)
 									<li>
-										<div class="box" style="background: {{generate_color_one()}}"></div> 
+										<div class="box" style="background: #fff"></div> 
 										<a href="#">{{$item}} (0)</a>
 									</li>
 								@endforeach
@@ -118,12 +119,37 @@
 			<div class="col-md-4 col-sm-4">
 				<div class="widget p-md clearfix " style="height:650px !important;">
 					<div class="pull-left">
-						<small class="text-color">Overdue Review (7)</small>
+						<small class="text-color">Overdue Review ({{count(bataswaktu())}})</small>
 					</div>
-					<canvas id="chart3" style="width:100%" height="400"></canvas>
+					<canvas id="chart3" style="width:100%;margin-top:80px;" height="300"></canvas>
 					<div class='cell'>
 						<ul>
+							@if (isset($doverdue['labels']))
+								@php
+									$dstatus=$dst=bataswaktu();
+								@endphp
+								@foreach ($doverdue['labels'] as $idx=>$item)
+									@php
+										if(isset($color['colorbataswaktu'][str_slug($item)]))
+											$warna=$color['colorbataswaktu'][str_slug($item)];
+										else
+											$warna='#ffffff';
+
+									@endphp
+									<li><div class="box" style="background: {{$warna}}"></div> 
+										<a href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}">{{$item}} ({{isset($doverdue['datasets'][0]['data'][$idx]) ? $doverdue['datasets'][0]['data'][$idx] : 0}})</a>
+									</li>
+								@endforeach
+
 							
+							@else	
+								@foreach (bataswaktu() as $item)
+									<li>
+										<div class="box" style="background: {{generate_color_one()}}"></div> 
+										<a href="#">{{$item}} (0)</a>
+									</li>
+								@endforeach
+							@endif
 							
 						</ul>
 					</div>
@@ -173,21 +199,7 @@
 		});
 		//---------------
 		var oilCanvas = document.getElementById("chart3");
-		var oilData = {
-			labels: [
-				"Saudi Arabia",
-				"Russia",
-				"Iraq",
-				"United Arab Emirates",
-				"Canada"
-			],
-			datasets: [
-				{
-					data: [133.3, 86.2, 52.2, 51.2, 50.2],
-					backgroundColor: <?php echo json_encode($color);?>
-				}]
-			
-		};
+		var oilData = <?php echo json_encode($doverdue);?>;
 		var pieChart = new Chart(oilCanvas, {
 			type: 'pie',
 			data: oilData,
@@ -213,6 +225,7 @@
 	.cell
 	{
 		width:100%;
+		margin-top:50px;
 		/* float:left; */
 	}
 	.cell li

@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title')
-    <title>Data Kode Temuan</title>
+    <title>Data Jenis Temuan</title>
 @endsection
 @section('modal')
 	<div class="modal fade" id="modaltambah" tabindex="-1" role="dialog">
@@ -8,7 +8,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title">Tambah Data Kode Temuan</h4>
+					<h4 class="modal-title">Tambah Data Jenis Temuan</h4>
 				</div>
 				<div class="modal-body">
 					<form action="{{ route('jenis-temuan.store') }}" method="POST">
@@ -43,7 +43,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title">Ubah Data Kode Temuan</h4>
+					<h4 class="modal-title">Ubah Data Jenis Temuan</h4>
 				</div>
 				<div class="modal-body">
 					<form id="form-update" method="POST">
@@ -79,7 +79,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title">Konfirmasi Hapus Data Kode Temuan</h4>
+					<h4 class="modal-title">Konfirmasi Hapus Data Jenis Temuan</h4>
 				</div>
 				<div class="modal-body">
 					<h5>Apakah anda yakin akan menghapus data ini?</h5>
@@ -101,7 +101,7 @@
 	<div class="col-md-12">
 		<div class="widget">
 			<header class="widget-header">
-				<span class="widget-title">Data Kode Temuan</span>
+				<span class="widget-title">Data Jenis Temuan</span>
 				@if (Auth::user()->level=='0')
 					<a href="" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#modaltambah">+ Tambah Data</a>
 				@endif

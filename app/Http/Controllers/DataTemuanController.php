@@ -194,7 +194,8 @@ class DataTemuanController extends Controller
             foreach($datarekom as $k=>$v)
             {
                 $drekom[$v->id_temuan][]=$v;
-                $arraylhp[$v->dtemuan->id_lhp]=$v->dtemuan->id_lhp;
+                if(isset($v->dtemuan->id_lhp))
+                    $arraylhp[$v->dtemuan->id_lhp]=$v->dtemuan->id_lhp;
             }
         }
 
@@ -544,8 +545,36 @@ class DataTemuanController extends Controller
         $dt['jangkawaktu']=$jangkawaktu=JangkaWaktu::orderBy('jangka_waktu')->get();
         $dt['statusrekomendasi']=$statusrekomendasi=StatusRekomendasi::orderBy('rekomendasi')->get();
 
-        
-        $temuan=DataTemuan::selectRaw('*,data_temuan.id as temuan_id')->with('jenistemuan')->with('picunit')->with('levelresiko')->where('id_lhp',$idlhp)->get();
+        $rekom=DataRekomendasi::with('jenistemuan')->with('picunit1')->with('picunit2')->with('jangkawaktu')->with('statusrekomendasi')->get();
+        $rekomendasi=$drekom=$arraytemuanid=array();
+        foreach($rekom as $k=>$v)
+        {
+            $rekomendasi[$v->id_temuan][]=$v;
+                
+            if($statusrekom!=null)
+            {
+                if($v->status_rekomendasi_id==$statusrekom)
+                {
+                    $arraytemuanid[$v->id_temuan]=$v->id_temuan;
+                    $drekom[$v->id_temuan][$v->status_rekomendasi_id][]=$v;
+                }
+            }
+            else
+                $drekom[$v->id_temuan][$v->status_rekomendasi_id][]=$v;
+        }
+        // return $arraytemuanid;
+        if(count($arraytemuanid)!=0)
+        {
+            $temuan=DataTemuan::selectRaw('*,data_temuan.id as temuan_id')
+                            ->with('jenistemuan')
+                            ->with('picunit')
+                            ->with('levelresiko')
+                            ->where('id_lhp',$idlhp)
+                            ->whereIn('data_temuan.id',$arraytemuanid)
+                            ->get();
+        }
+        else
+            $temuan=DataTemuan::selectRaw('*,data_temuan.id as temuan_id')->with('jenistemuan')->with('picunit')->with('levelresiko')->where('id_lhp',$idlhp)->get();
         
         $dtem=array();
         foreach($temuan as $ktem=>$vtem)
@@ -553,13 +582,8 @@ class DataTemuanController extends Controller
             $dtem[$vtem->temuan_id]=$vtem;
         }
    
-        $rekom=DataRekomendasi::with('jenistemuan')->with('picunit1')->with('picunit2')->with('jangkawaktu')->with('statusrekomendasi')->get();
-        $rekomendasi=$drekom=array();
-        foreach($rekom as $k=>$v)
-        {
-            $rekomendasi[$v->id_temuan][]=$v;
-            $drekom[$v->id_temuan][$v->status_rekomendasi_id][]=$v;
-        }
+        
+
         $dt['rekomendasi']=$rekomendasi;
         $dt['temuan']=$dtem;
 

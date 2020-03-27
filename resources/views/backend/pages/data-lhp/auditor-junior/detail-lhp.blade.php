@@ -2,7 +2,7 @@
     <fieldset class="col-md-6">    	
         <legend>Data LHP</legend>
         
-        <div class="panel panel-default">
+        <div class="panel panel-default" style="height:300px;">
             <div class="panel-body">
                 <div class="form-group">
                     <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nomor LHP:</label>
@@ -19,7 +19,7 @@
                 <div class="form-group">
                     <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Judul LHP:</label>
                     <div class="col-sm-8">
-                        <input type="text" style="font-weight:bold;" class="form-control custom-input" placeholder="Judul LHP" id="detail_judul_lhp" value="{{$data->judul_lhp}}" readonly>
+                        <textarea style="font-weight:bold;" class="form-control custom-input" placeholder="Judul LHP" id="detail_judul_lhp" readonly>{{$data->judul_lhp}}</textarea>
                     </div>
                 </div>
                 <div class="form-group">
@@ -59,7 +59,7 @@
     <fieldset class="col-md-6">    	
         <legend>Data Temuan</legend>
         
-        <div class="panel panel-default">
+        <div class="panel panel-default" style="height:300px;">
             <div class="panel-body">
                 <div class="form-group">
                     <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nomor Temuan:</label>
@@ -133,9 +133,9 @@
                     <th class="text-center">No</th>
                     <th class="text-center">Rekomendasi</th>
                     <th class="text-center">Nilai Rekomendasi</th>
-                    <th class="text-center">PIC 1</th>
-                    <th class="text-center">PIC 2</th>
-                    <th class="text-center">Status Rekomendasi</th>
+                    <th class="text-center" style="width:200px;">PIC 1</th>
+                    <th class="text-center" style="width:200px;">PIC 2</th>
+                    <th class="text-center" style="width:150px">Status Rekomendasi</th>
                 </tr>
             </thead>
             <tbody>
@@ -149,9 +149,16 @@
                                 <td class="text-center">{{$no}}</td>
                                 <td class="text-left">{{$item->rekomendasi}}</td>
                                 <td class="text-right">{{number_format($item->nominal_rekomendasi,2,',','.')}}</td>
-                                <td class="text-center">{{isset($item->picunit1->nama_pic) ? $item->picunit1->nama_pic : '' }}</td>
-                                <td class="text-center">{{isset($item->picunit2->nama_pic) ? $item->picunit2->nama_pic : '' }}</td>
-                                <td class="text-center">{{isset($item->statusrekomendasi->rekomendasi) ? $item->statusrekomendasi->rekomendasi : ''}}</td>
+                                <td class="text-center">{{isset($item->picunit1->nama_pic) ? $item->picunit1->nama_pic : '-' }}</td>
+                                <td class="text-center">{{isset($item->picunit2->nama_pic) ? $item->picunit2->nama_pic : '-' }}</td>
+                                <td class="text-center">
+                                    @php
+                                        $statusrekomm=(isset($item->statusrekomendasi->rekomendasi) ? singkatanstatus($item->statusrekomendasi->rekomendasi) : '');
+                                    @endphp
+                                        
+                                    <span class="label label-{{warnasingkatanstatus($statusrekomm)}}">{{isset($item->statusrekomendasi->rekomendasi) ? $item->statusrekomendasi->rekomendasi : ''}}</span>
+                                    
+                                </td>
                             </tr>
                             @php
                                 $no++;
@@ -162,9 +169,15 @@
                             <td class="text-center">{{$no}}</td>
                             <td class="text-left">{{$item->rekomendasi}}</td>
                             <td class="text-right">{{number_format($item->nominal_rekomendasi,2,',','.')}}</td>
-                            <td class="text-center">{{isset($item->picunit1->nama_pic) ? $item->picunit1->nama_pic : ''}}</td>
-                            <td class="text-center">{{isset($item->picunit2->nama_pic) ? $item->picunit2->nama_pic : ''}}</td>
-                            <td class="text-center">{{isset($item->statusrekomendasi->rekomendasi) ? $item->statusrekomendasi->rekomendasi : ''}}</td>
+                            <td class="text-center">{{isset($item->picunit1->nama_pic) ? $item->picunit1->nama_pic : '-'}}</td>
+                            <td class="text-center">{{isset($item->picunit2->nama_pic) ? $item->picunit2->nama_pic : '-'}}</td>
+                            <td class="text-center">
+                                @php
+                                    $statusrekomm=(isset($item->statusrekomendasi->rekomendasi) ? singkatanstatus($item->statusrekomendasi->rekomendasi) : '');
+                                @endphp
+                                
+                                <span class="label label-{{warnasingkatanstatus($statusrekomm)}}">{{isset($item->statusrekomendasi->rekomendasi) ? $item->statusrekomendasi->rekomendasi : ''}}</span>
+                            </td>
                         </tr>
                         @php
                             $no++;

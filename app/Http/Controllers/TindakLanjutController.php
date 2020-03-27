@@ -139,6 +139,10 @@ class TindakLanjutController extends Controller
         $statusrekom=($request->statusrekom ? $request->statusrekom : -1);
         $pemeriksa=($request->pemeriksa ? $request->pemeriksa : -1);
 
+        $keybataswaktu='';
+        if(isset($request->keybataswaktu))
+            $keybataswaktu=$request->keybataswaktu;
+
         $t_awal=$th_awal.'-'.$bl_awal.'-'.$tg_awal;
         $t_akhir=$th_akhir.'-'.$bl_akhir.'-'.$tg_akhir;
 
@@ -218,10 +222,51 @@ class TindakLanjutController extends Controller
         $lhp=$temuan=$rekomendasi=$arrayrekomid=array();
         foreach($alldata as $k=>$v)
         {
-            $lhp[$v->id_lhp]=$v;
-            $temuan[$v->id_temuan]=$v;
-            $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
-            $arrayrekomid[$v->id_rekom]=$v->id_rekom;
+            if($keybataswaktu!='')
+            {
+                if($v->tanggal_penyelesaian!='')
+                {
+                    $tgl_penyelsaian=$v->tanggal_penyelesaian;
+                    if($keybataswaktu=='sudah-masuk-batas-waktu-penyelesaian')
+                    {
+                        if($now==$tgl_penyelsaian)
+                        {
+                            $lhp[$v->id_lhp]=$v;
+                            $temuan[$v->id_temuan]=$v;
+                            $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
+                            $arrayrekomid[$v->id_rekom]=$v->id_rekom;
+                        }
+                    }
+                    if($keybataswaktu=='melewati-batas-waktu-penyelesaian')
+                    {
+                        if($now>$tgl_penyelsaian)
+                        {
+                            $lhp[$v->id_lhp]=$v;
+                            $temuan[$v->id_temuan]=$v;
+                            $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
+                            $arrayrekomid[$v->id_rekom]=$v->id_rekom;
+                        }
+                    }
+                    if($keybataswaktu=='belum-masuk-batas-waktu-penyelesaian')
+                    {
+                        if($now<$tgl_penyelsaian)
+                        {
+                            $lhp[$v->id_lhp]=$v;
+                            $temuan[$v->id_temuan]=$v;
+                            $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
+                            $arrayrekomid[$v->id_rekom]=$v->id_rekom;
+                        }
+                    }
+
+                }
+            }
+            else
+            {
+                $lhp[$v->id_lhp]=$v;
+                $temuan[$v->id_temuan]=$v;
+                $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
+                $arrayrekomid[$v->id_rekom]=$v->id_rekom;
+            }
         }
 
         $get_tl=TindakLanjutTemuan::whereIn('rekomendasi_id',$arrayrekomid)->get();
@@ -238,6 +283,7 @@ class TindakLanjutController extends Controller
                 ->with('jumlahtl',$jlhtl)
                 ->with('rekomid',$rekomid)
                 ->with('gettindaklanjut',$tindaklanjut)
+                ->with('keybataswaktu',$keybataswaktu)
                 ->with('temuanid',$temuan_id)
                 ->with('alldata',$alldata)
                 ->with('pic',$pic)
@@ -283,8 +329,14 @@ class TindakLanjutController extends Controller
         //                 ->with('temuan',$temuan);
     }
 
-    public function junior_index($tahun=null,$rekomid=null,$temuanid=null)
+    public function junior_index(Request $request,$tahun=null,$rekomid=null,$temuanid=null)
     {
+        // return $request->all();
+        $keybataswaktu='';
+        if(isset($request->key))
+            $keybataswaktu=$request->key;
+
+        // return $keybataswaktu;
         $tahun=($tahun==null ? date('Y') : $tahun);
         $rekomid=($rekomid==null ? -1 : $rekomid);
         $temuanid=($temuanid==null ? -1 : $temuanid);
@@ -335,12 +387,54 @@ class TindakLanjutController extends Controller
         
 
         $lhp=$temuan=$rekomendasi=$arrayrekomid=array();
+        $now=date('Y-m-d');
         foreach($alldata as $k=>$v)
         {
-            $lhp[$v->id_lhp]=$v;
-            $temuan[$v->id_temuan]=$v;
-            $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
-            $arrayrekomid[$v->id_rekom]=$v->id_rekom;
+            if($keybataswaktu!='')
+            {
+                if($v->tanggal_penyelesaian!='')
+                {
+                    $tgl_penyelsaian=$v->tanggal_penyelesaian;
+                    if($keybataswaktu=='sudah-masuk-batas-waktu-penyelesaian')
+                    {
+                        if($now==$tgl_penyelsaian)
+                        {
+                            $lhp[$v->id_lhp]=$v;
+                            $temuan[$v->id_temuan]=$v;
+                            $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
+                            $arrayrekomid[$v->id_rekom]=$v->id_rekom;
+                        }
+                    }
+                    if($keybataswaktu=='melewati-batas-waktu-penyelesaian')
+                    {
+                        if($now>$tgl_penyelsaian)
+                        {
+                            $lhp[$v->id_lhp]=$v;
+                            $temuan[$v->id_temuan]=$v;
+                            $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
+                            $arrayrekomid[$v->id_rekom]=$v->id_rekom;
+                        }
+                    }
+                    if($keybataswaktu=='belum-masuk-batas-waktu-penyelesaian')
+                    {
+                        if($now<$tgl_penyelsaian)
+                        {
+                            $lhp[$v->id_lhp]=$v;
+                            $temuan[$v->id_temuan]=$v;
+                            $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
+                            $arrayrekomid[$v->id_rekom]=$v->id_rekom;
+                        }
+                    }
+
+                }
+            }
+            else
+            {
+                $lhp[$v->id_lhp]=$v;
+                $temuan[$v->id_temuan]=$v;
+                $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
+                $arrayrekomid[$v->id_rekom]=$v->id_rekom;
+            }
         }
 
         $get_tl=TindakLanjutTemuan::whereIn('rekomendasi_id',$arrayrekomid)->get();
@@ -357,6 +451,7 @@ class TindakLanjutController extends Controller
                 ->with('jumlahtl',$jlhtl)
                 ->with('rekomid',$rekomid)
                 ->with('gettindaklanjut',$tindaklanjut)
+                ->with('keybataswaktu',$keybataswaktu)
                 ->with('temuanid',$temuanid)
                 ->with('alldata',$alldata)
                 ->with('pic',$pic)
@@ -891,6 +986,8 @@ class TindakLanjutController extends Controller
         $tindaklanjut->rincian = $request->jenis;
         $tindaklanjut->action_plan = $request->action_plan;
         $tindaklanjut->tgl_tindaklanjut = $request->tgl_tindak_lanjut;
+        $tindaklanjut->status_tindak_lanjut = str_slug('Create oleh Unit Kerja');
+        $tindaklanjut->create_oleh_pic_unit = 1;
         if($user_pic)
         {
             if($rekom->pic_1_temuan_id==$user_pic->id)

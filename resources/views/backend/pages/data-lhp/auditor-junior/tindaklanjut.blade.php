@@ -110,6 +110,7 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <input type="hidden" name="keybataswaktu" id="keybataswaktu" value='{{$keybataswaktu}}'>
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Status Rekomendasi</label>
                                         <div class="col-md-9" id="select-status-rekom">
@@ -314,9 +315,18 @@
                                                 $tgl.='<div style="height:80px;"  id="tgl_penyelesaian_'.$item->id_temuan.'_'.$v->id.'">';
                                                 if($v->tanggal_penyelesaian!='')
                                                 {
-                                                    $tgl.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">
-                                                            <div class="col-md-12"><span class="label label-info"><i class="fa fa-calendar"></i> '.tgl_indo($v->tanggal_penyelesaian).'</span></div>
-                                                        </div>';
+                                                    if($v->tanggal_penyelesaian<date('Y-m-d'))
+                                                    {
+                                                        $tgl.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">
+                                                                <div class="col-md-12"><span class="label label-danger" data-toggle="tooltip" data-title="Rekomendasi Sudah Melebihi Batas Waktu Penyelesaian" title="Rekomendasi Sudah Melebihi Batas Waktu Penyelesaian"><i class="fa fa-calendar"></i> '.tgl_indo($v->tanggal_penyelesaian).'</span></div>
+                                                            </div>';
+                                                    }
+                                                    else
+                                                    {
+                                                        $tgl.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">
+                                                                <div class="col-md-12"><span class="label label-info"><i class="fa fa-calendar"></i> '.tgl_indo($v->tanggal_penyelesaian).'</span></div>
+                                                            </div>';
+                                                    }
                                                     // $tglselesai.='<li style="height:32px;">'.tgl_indo($val->tanggal_penyelesaian).'</li>';
                                                 }
                                                 else
@@ -533,10 +543,11 @@
             var no_temuan=$('#no_temuan').val();
             var no_rekomendasi=$('#no_rekomendasi').val();
             var status_rekomendasi=$('#status_rekomendasi').val();
+            var keybataswaktu=$('#keybataswaktu').val();
             
             $.ajax({
                 url : '{{url("/")}}/data-tindaklanjut-list',
-                data : { tahun : '{{$tahun}}',pemeriksa: pemeriksa, no_lhp:no_lhp, tgl_awal: tanggal_awal, tgl_akhir: tanggal_akhir, rekomid: no_rekomendasi, temuan_id: no_temuan, statusrekom: status_rekomendasi},
+                data : { keybataswaktu:keybataswaktu, tahun : '{{$tahun}}',pemeriksa: pemeriksa, no_lhp:no_lhp, tgl_awal: tanggal_awal, tgl_akhir: tanggal_akhir, rekomid: no_rekomendasi, temuan_id: no_temuan, statusrekom: status_rekomendasi},
                 type : 'POST',
                 success : function(res){
                     $('#data').html(res);

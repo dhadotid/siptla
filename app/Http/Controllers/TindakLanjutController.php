@@ -574,9 +574,17 @@ class TindakLanjutController extends Controller
             $st[$v->id]=$v;
         }
 
+        $tlrincian=TindakLanjutRincian::whereIn('id_rekomendasi',$arrayrekomid)->get();
+        $rinc=array();
+        foreach($tlrincian as $k=>$v)
+        {
+            $rinc[$v->id_rekomendasi][]=$v;
+        }
+        
         // return $tindaklanjut;
         return view('backend.pages.data-lhp.pic-unit.tindaklanjut')
                 ->with('jumlahtl',$jlhtl)
+                ->with('jumlahrincian',$rinc)
                 ->with('rincian',$rincian)
                 ->with('strekom',$st)
                 ->with('tahun',$tahun)
@@ -785,9 +793,17 @@ class TindakLanjutController extends Controller
             $st[$v->id]=$v;
         }
  
+        $tlrincian=TindakLanjutRincian::whereIn('id_rekomendasi',$arrayrekomid)->get();
+        $rinc=array();
+        foreach($tlrincian as $k=>$v)
+        {
+            $rinc[$v->id_rekomendasi][]=$v;
+        }
+        
         return view('backend.pages.data-lhp.pic-unit.tindaklanjut-list')
                 ->with('jumlahtl',$jlhtl)
                 ->with('tahun',$tahun)
+                ->with('jlhrincian',$rinc)
                 ->with('rekomid',$rekomid)
                 ->with('strekom',$st)
                 ->with('temuanid',$temuanid)
@@ -986,7 +1002,7 @@ class TindakLanjutController extends Controller
         $tindaklanjut->rincian = $request->jenis;
         $tindaklanjut->action_plan = $request->action_plan;
         $tindaklanjut->tgl_tindaklanjut = $request->tgl_tindak_lanjut;
-        $tindaklanjut->status_tindak_lanjut = str_slug('Create oleh Unit Kerja');
+        $tindaklanjut->status_tindaklanjut = str_slug('Create oleh Unit Kerja');
         $tindaklanjut->create_oleh_pic_unit = 1;
         if($user_pic)
         {
@@ -1217,6 +1233,22 @@ class TindakLanjutController extends Controller
                     ->with('rincian',$rincian)
                     ->with('jenis',$jenis);
     }
+    public function list_rincian_rekomendasi($idrekomendasi,$jenis)
+    {
+        
+        $unitkerja=PICUnit::where('id_user',Auth::user()->id)->first();
+
+        $rinciantindaklanjut=TindakLanjutRincian::where('id_rekomendasi',$idrekomendasi)
+                // ->where('unit_kerja_id',($unitkerja ? $unitkerja->id : 0))
+                ->get();
+
+        return view('backend.pages.data-lhp.rincian-table.table-rincian')
+                    // ->with('idrincian',$idrincian)
+                    ->with('unitkerja',$unitkerja)
+                    ->with('rinciantindaklanjut',$rinciantindaklanjut)
+                    // ->with('rincian',$rincian)
+                    ->with('jenis',$jenis);
+    }
 
     public function hapus_rincian_jenis($idrincian,$jenis)
     {
@@ -1311,6 +1343,7 @@ class TindakLanjutController extends Controller
         $insert->unit_kerja_id = $rincian->unit_kerja_id;
         $insert->id_tindak_lanjut = $request->idform;
         $insert->dokumen_pendukung = $path;
+        $insert->jenis = $request->jenis;
 
         if($user_pic)
         {
@@ -1326,7 +1359,17 @@ class TindakLanjutController extends Controller
 
         if($jenis=='kontribusi' || $jenis=='sewa' || $jenis=='listrik' || $jenis=='piutang' || $jenis=='piutangkaryawan' || $jenis=='hutangtitipan')
         {
-            $insert->jenis = $request->jenis;
+            $insert->tindak_lanjut_rincian = $request->tindak_lanjut;
+            $insert->nilai = str_replace('.','',$request->nilai);
+            $insert->tanggal = $request->tanggal;
+            $insert->jenis_setoran = $request->jenis_setoran;
+            $insert->bank_tujuan = $request->bank_tujuan;
+            $insert->no_referensi = $request->no_ref;
+            $insert->jenis_rekening = $request->jenis_rekening;
+        }
+
+        if($jenis=='uangmuka')
+        {
             $insert->tindak_lanjut_rincian = $request->tindak_lanjut;
             $insert->nilai = str_replace('.','',$request->nilai);
             $insert->tanggal = $request->tanggal;
@@ -1820,5 +1863,11 @@ class TindakLanjutController extends Controller
     {
         $cat=CatatanMonev::find($id);
         return $cat->catatan_monev;
+    }
+
+    public function jumlah_rincian($temuan_id,$rekom_id)
+    {
+        $tindaklanjut=TindakLanjutRincian::where('id_temuan',$temuan_id)->where('id_rekomendasi',$rekom_id)->get();
+        return $tindaklanjut->count();
     }
 }

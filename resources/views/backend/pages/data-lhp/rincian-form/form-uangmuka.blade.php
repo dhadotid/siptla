@@ -28,7 +28,7 @@
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nomor Invoice:
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control"  class="form-control"  name="no_invoice"  placeholder="Nomor PKS" id="no_invoice">
+                <input type="text" class="form-control"  class="form-control"  name="no_invoice"  placeholder="Nomor Invoice" id="no_invoice">
             </div>
         </div>
         <div class="form-group">

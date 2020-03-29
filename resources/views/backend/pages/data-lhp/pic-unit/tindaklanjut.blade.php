@@ -303,12 +303,14 @@
                                                 $jlhrincian=0;
                                                 if($v->rincian!='')
                                                 {
-                                                    if(isset($rincian[$v->rincian][$v->id_rekomendasi]))
+                                                    // if(isset($rincian[$v->rincian][$v->id_rekomendasi]))
+                                                    if(isset($jumlahrincian[$v->id_rekom]))
                                                     {
                                                         $rinc.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">';
-                                                        $rinc.='<div class="col-md-12 text-center" style="margin-top:5px;"><span class="label label-info fz-sm">'.count($rincian[$v->rincian][$v->id_rekomendasi]).'</i></div>';
+                                                        $rinc.='<div class="col-md-12 text-center" style="margin-top:5px;"><span class="label label-primary fz-sm" id="jlh-rincian-'.$v->id_rekom.'" style="cursor:pointer" onclick="listrincianrekomendasi('.$v->id_rekom.',\''.$v->rincian.'\')">'.count($jumlahrincian[$v->id_rekom]).'</i></div>';
                                                         $rinc.='</div>';
-                                                        $jlhrincian=count($rincian[$v->rincian][$v->id_rekomendasi]);
+                                                        // $jlhrincian=count($rincian[$v->rincian][$v->id_rekomendasi]);
+                                                        $jlhrincian=count($jumlahrincian[$v->id_rekom]);
                                                     }
                                                     else
                                                     {
@@ -440,7 +442,7 @@
                                                                 $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
                                                                 if($jlhrincian!=0)
                                                                 {
-                                                                    $aksi.=' <li><a href="javascript:tambahrincian('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Tambah Rincian Tindak Lanjut</a></li>';
+                                                                    // $aksi.=' <li><a href="javascript:tambahrincian('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Tambah Rincian Tindak Lanjut</a></li>';
                                                                 }
                                                                 if($jlhtl!=0)
                                                                 {
@@ -473,7 +475,7 @@
                                                             $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
                                                             if($jlhrincian!=0)
                                                             {
-                                                                $aksi.=' <li><a href="javascript:tambahrincian('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Tambah Rincian Tindak Lanjut</a></li>';
+                                                                // $aksi.=' <li><a href="javascript:tambahrincian('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Tambah Rincian Tindak Lanjut</a></li>';
                                                             }
                                                             
                                                             $aksi.=' <li><a href="#" style="font-size:11px;"><i class="glyphicon glyphicon-check"></i> &nbsp;&nbsp;Sudah Publish Ke PIC 1</a></li>';     

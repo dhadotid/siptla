@@ -5,6 +5,7 @@
             $penutupanrekening=['Nama Bank','Nomor Rekening','Nama Rekening','Jenis Rekening','Saldo Akhir','Dokumen Pendukung'];
             $umum=['Unit Kerja','Keterangan','Jumlah Rekomendasi (Rp)','Dokumen Pendukung'];
             $sewa=['tindak_lanjut_rincian'=>'Tindak Lanjut Rincian','nilai'=>'Nilai (Rp)','tanggal'=>'Tanggal Bayar','jenis_setoran'=>'Jenis Setoran','bank_tujuan'=>'Bank Tujuan','no_referensi'=>'No. Ref','jenis_rekening'=>'Jenis Rekening','dokumen_pendukung'=>'Dokumen Pendukung '];
+            $uangmuka=['tindak_lanjut_rincian'=>'Tindak Lanjut Rincian','nilai'=>'Nilai (Rp)','tanggal'=>'Tanggal Bayar','jenis_setoran'=>'Jenis Setoran','bank_tujuan'=>'Bank Tujuan','no_referensi'=>'No. Ref','jenis_rekening'=>'Jenis Rekening','dokumen_pendukung'=>'Dokumen Pendukung '];
             $listrik=$piutang=$piutangkaryawan=$hutangtitipan=['tanggal'=>'Tanggal Bayar','nilai'=>'Jumlah Pembayaran (Rp)','dokumen_pendukung'=>'Dokumen Pendukung '];
         @endphp
         <tr class="inverse">

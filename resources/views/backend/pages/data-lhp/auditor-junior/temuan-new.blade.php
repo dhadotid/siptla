@@ -106,7 +106,9 @@
                                         @endphp
                                         @foreach ($temuan as $ky=>$item)
                                             <tr class="info text-dark">
-                                                <td class="text-center">{{$no}}</td>
+                                                <td class="text-center">
+                                                    <div style="text-align:center;width:50px;">{{$no}}</div>
+                                                </td>
                                                 <td class="text-left">{!!$item->temuan!!}</td>
                                                 {{-- <td class="text-center">{{isset($item->jenistemuan->temuan) ? $item->jenistemuan->temuan: '-'}}</td>
                                                 <td class="text-center">{{isset($item->picunit->nama_pic) ? $item->picunit->nama_pic: '-'}}</td>
@@ -114,27 +116,29 @@
                                                 <td class="text-center">{{isset($item->levelresiko->level_resiko) ? $item->levelresiko->level_resiko: '-'}}</td> --}}
                                                 @foreach ($statusrekomendasi as $vst)
                                                     <td class="text-center">
-                                                        <span class="rekomendasi-detail" data-value="{{ $item->id.'_'.$vst->id }}">
-                                                            @if (isset($drekom[$item->temuan_id][$vst->id]))
-                                                                @if (count($drekom[$item->temuan_id][$vst->id])==0)
-                                                                    <span class="label label-rounded label-danger" style="font-size:13px !important;">
-                                                                        {{count($drekom[$item->temuan_id][$vst->id])}}
-                                                                    </span>
+                                                        <div style="width:100px;">
+                                                            <span class="rekomendasi-detail" data-value="{{ $item->id.'_'.$vst->id }}">
+                                                                @if (isset($drekom[$item->temuan_id][$vst->id]))
+                                                                    @if (count($drekom[$item->temuan_id][$vst->id])==0)
+                                                                        <span class="label label-rounded label-danger" style="font-size:13px !important;">
+                                                                            {{count($drekom[$item->temuan_id][$vst->id])}}
+                                                                        </span>
+                                                                    @else
+                                                                        <a class="label label-rounded label-success" style="font-size:13px !important;text-decoration:underline" id="count_temuan_{{$item->temuan_id}}_{{$vst->id}}">
+                                                                            {{count($drekom[$item->temuan_id][$vst->id])}}
+                                                                        </a>
+                                                                    @endif
                                                                 @else
-                                                                    <a class="label label-rounded label-success" style="font-size:13px !important;text-decoration:underline" id="count_temuan_{{$item->temuan_id}}_{{$vst->id}}">
-                                                                        {{count($drekom[$item->temuan_id][$vst->id])}}
-                                                                    </a>
+                                                                    <span class="label label-rounded label-danger" style="font-size:13px !important;">
+                                                                        0
+                                                                    </span>
                                                                 @endif
-                                                            @else
-                                                                <span class="label label-rounded label-danger" style="font-size:13px !important;">
-                                                                    0
-                                                                </span>
-                                                            @endif
-                                                        </span>
+                                                            </span>
+                                                        </div>
                                                     </td>
                                                 @endforeach
                                                 <td class="text-align:center">
-                                                    <div style="text-align:center;width:80px;">
+                                                    
                                                         <div class="btn-group">
                                                             <button type="button" class="btn btn-primary btn-xs" style="width:25px;"><i class="fa fa-bars"></i></button>
                                                             <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="width:25px;">

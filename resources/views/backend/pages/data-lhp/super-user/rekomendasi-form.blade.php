@@ -88,7 +88,7 @@
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Rincian Tindak Lanjut :
             </label>
             <div class="col-sm-9">
-                <select name="rincian_tl" class="form-control" disabled id="rincian_tl" data-plugin="select2" onchange="pilihrincian(this.value)">
+                <select name="rincian_tl" class="form-control" disabled id="rincian_tl" data-plugin="select2" onchange="pilihrincianold(this.value)">
                     <option value="">-- Pilih --</option>
                     @foreach (rinciantindaklanjut() as $key=>$item)
                             <option value="{{$key}}">{{$item}}</option>

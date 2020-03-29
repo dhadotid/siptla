@@ -52,19 +52,25 @@
             </div>
         </div>
         <div class="form-group" style="margin-bottom:10px;">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Tunjuk Senior Auditor :
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Kirim ke Auditor Senior :
             </label>
             <div class="col-sm-9">
-                <select name="senior_auditor" class="form-control" id="{{$act}}_senior_auditor" data-plugin="select2">
-                    <option value="">-- Pilih --</option>
-                    @foreach ($senior as $key=>$item)
-                        @if (Auth::user()->id==$item->id)
-                            <option value="{{$item->id}}" selected="selected">{{$item->name}}</option>
-                        @else
-                            <option value="{{$item->id}}">{{$item->name}}</option>
-                        @endif
-                    @endforeach
-                </select>
+                @if (Auth::user()->level=='auditor-senior')
+                    <input type="text" class="form-control" readonly value="{{Auth::user()->name}}">
+                    <input type="hidden" readonly value="3" name="senior_auditor" value="{{Auth::user()->id}}">
+                @else
+                    
+                    <select name="senior_auditor" class="form-control" id="{{$act}}_senior_auditor" data-plugin="select2">
+                        <option value="">-- Pilih --</option>
+                        @foreach ($senior as $key=>$item)
+                            @if (Auth::user()->id==$item->id)
+                                <option value="{{$item->id}}" selected="selected">{{$item->name}}</option>
+                            @else
+                                <option value="{{$item->id}}">{{$item->name}}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                @endif
             </div>
         </div>
         <div class="form-group" style="margin-bottom:10px;">
@@ -88,7 +94,7 @@
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Rincian Tindak Lanjut :
             </label>
             <div class="col-sm-9">
-                <select name="rincian_tl" class="form-control" disabled id="rincian_tl" data-plugin="select2" onchange="pilihrincian(this.value)">
+                <select name="rincian_tl" class="form-control" disabled id="rincian_tl" data-plugin="select2" onchange="pilihrincianold(this.value)">
                     <option value="">-- Pilih --</option>
                     @foreach (rinciantindaklanjut() as $key=>$item)
                             <option value="{{$key}}">{{$item}}</option>
@@ -154,24 +160,30 @@
                 <br><small style="font-size:9px;color:red;font-style:italic">*wajib diisi</small>
             </label>
             <div class="col-sm-9">
-                <select name="status_rekomendasi" class="form-control status_rekom" id="{{$act}}_status_rekomendasi" data-plugin="select2" readonly> 
-                    {{-- <option value="">-- Pilih --</option> --}}
-                        @if ($act=='add')
-                             @foreach ($statusrekomendasi as $item)
-                                    @if ($item->id==3)
-                                        <option value="{{$item->id}}" selected="selected">{{$item->rekomendasi}}</option>
-                                    @endif
-                            @endforeach
-                        @else
-                            @foreach ($statusrekomendasi as $item)
-                                    @if ($item->id==2)
-                                        <option value="{{$item->id}}" selected="selected">{{$item->rekomendasi}}</option>
-                                    @else
-                                        <option value="{{$item->id}}">{{$item->rekomendasi}}</option>
-                                    @endif
-                            @endforeach
-                        @endif
-                </select>
+                @if ($act=='add')
+                    <input type="text" class="form-control" readonly value="Belum Ditindaklanjuti (BTL)">
+                    <input type="hidden" readonly value="3" name="status_rekomendasi">
+
+                @else                    
+                    <select name="status_rekomendasi" class="form-control status_rekom" id="{{$act}}_status_rekomendasi" data-plugin="select2" readonly> 
+                        {{-- <option value="">-- Pilih --</option> --}}
+                            @if ($act=='add')
+                                @foreach ($statusrekomendasi as $item)
+                                        @if ($item->id==3)
+                                            <option value="{{$item->id}}" selected="selected">{{$item->rekomendasi}}</option>
+                                        @endif
+                                @endforeach
+                            @else
+                                @foreach ($statusrekomendasi as $item)
+                                        @if ($item->id==2)
+                                            <option value="{{$item->id}}" selected="selected">{{$item->rekomendasi}}</option>
+                                        @else
+                                            <option value="{{$item->id}}">{{$item->rekomendasi}}</option>
+                                        @endif
+                                @endforeach
+                            @endif
+                    </select>
+                @endif
             </div>
         </div>
        {{-- <div class="form-group" style="margin-bottom:10px;">

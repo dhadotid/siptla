@@ -19,7 +19,7 @@ class AddStatusTindakLanjut extends Migration
             $table->integer('sedang_direview_spi')->nullable()->default(0);
             $table->integer('sudah_direview_spi')->nullable()->default(0);
             $table->integer('sudah_dipublish_spi')->nullable()->default(0);
-            $table->integer('status_tindaklanjut')->nullable();
+            $table->string('status_tindaklanjut')->nullable();
         });
     }
 

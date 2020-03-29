@@ -6,7 +6,7 @@
             <th class="text-center" style="width:120px;">Tanggal<br>Tindak Lanjut</th>
             {{-- <th class="text-center" >Rencana<br>Tindak Lanjut</th> --}}
             <th class="text-center" style="width:80px;">Dokumen<br>Pendukung</th>
-            <th class="text-center" style="width:70px;">Rincian</th>
+            {{-- <th class="text-center" style="width:110px;">Rincian</th> --}}
             <th class="text-center" style="width:75px;">Catatan</th>
             <th class="text-center" style="width:70px;">Aksi</th>
         </tr>
@@ -54,7 +54,7 @@
                             -
                         @endif
                     </td>
-                    <td class="text-center">
+                    {{-- <td class="text-center">
                         @if (isset($tindaklanjut_rincian[$item->id]))
                             @if (count($tindaklanjut_rincian[$item->id])==0)
                                 @if (isset($item->drekomendasi->rincian))
@@ -84,7 +84,7 @@
                                 @endif
                         @endif
                         
-                    </td>
+                    </td> --}}
                     <td class="text-center" style="width:75px;">
                         @if ($catatan->count()!=0)
                             <div class="btn-group">

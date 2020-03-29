@@ -21,9 +21,9 @@
             <td class="text-center">{{$v->unit_kerja}}</td>
             <td class="text-center">{{$v->mitra}}</td>
             <td class="text-center">{{$v->no_pks}}</td>
-            <td class="text-center">{{date('d/m/Y',strtotime($v->tgl_pks))}}</td>
+            <td class="text-center">{{($v->tgl_pks!='' ? date('d/m/Y',strtotime($v->tgl_pks)) : '')}}</td>
             <td class="text-center">{{rupiah($v->nilai_pekerjaan)}}</td>
-            <td class="text-center">{{date('d/m/Y',strtotime($v->masa_berlaku))}}</td>
+            <td class="text-center">{{($v->masa_berlaku!='' ? date('d/m/Y',strtotime($v->masa_berlaku)) : '')}}</td>
             <td class="text-center" style="width:90px;">
                 <a href="javascript:addtindaklanjutrincian({{$v->id}},'sewa')" class="btn-delete btn btn-xs btn-info"><i class="glyphicon glyphicon-plus"></i></a>&nbsp;
                 <a href="javascript:listtindaklanjutrincian({{$v->id}},'sewa')" class="btn-edit btn btn-xs btn-success"><i class="glyphicon glyphicon-list"></i></a>

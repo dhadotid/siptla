@@ -130,7 +130,9 @@ function gettablerincian_unitkerja_lain(jenis, idtemuan, idrekom) {
     $('#table-rincian').load(flagsUrl + '/load-table-rincian-unitkerja/' + jenis + '/' + idtemuan + '/' + idrekom);
 }
 function gettablerincian(jenis, idtemuan, idrekom) {
-    $('#right-div').load(flagsUrl + '/load-table-rincian/' + jenis + '/' + idtemuan + '/' + idrekom);
+    $('#right-div').load(flagsUrl + '/load-table-rincian/' + jenis + '/' + idtemuan + '/' + idrekom, function () {
+        $('#table-tl-rincian').DataTable();
+    });
 }
 
 function rekomaddnew(idtemuan) {
@@ -617,6 +619,12 @@ function listtindaklanjutrincian(idrincian,jenis){
     });
     $('#listtindaklanjutrincian').modal('show');
 }
+function listrincianrekomendasi(idrekomendasi,jenis){
+    $('#list-tindaklanjut-rincian').load(flagsUrl + '/list-rincian-rekomendasi/' + idrekomendasi + '/' + jenis, function () {
+        // $('#table').DataTable();
+    });
+    $('#listtindaklanjutrincian').modal('show');
+}
 function addtindaklanjutrincian(idrincian,jenis){
     var idform = $('#idformtindaklanjut').val();
     // alert(idform)
@@ -695,6 +703,7 @@ $('#form_tindaklanjut_rincian').on('submit', function (event) {
             }).then(function () {
                 
                 gettablerincian_unitkerja(res.jenis, res.temuan_id, res.rekomendasi_id) 
+                $('#jlh-rincian-' + res.rekomendasi_id).load(flagsUrl + '/jumlah-rincian/' + res.temuan_id+'/'+res.rekomendasi_id);
             });
             
         }

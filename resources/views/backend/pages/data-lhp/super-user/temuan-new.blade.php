@@ -102,12 +102,13 @@
                                         </tr>
                                         <tr>
                                             <th class="text-center primary">Setuju</th>
-                                            <th class="text-center primary">Belum</th>
+                                            <th class="text-center primary" style="border-right: 1px solid #fff;">Belum</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @php
                                             $no=1;
+                                            $jlhrekomendasi=0;
                                         @endphp
                                         @foreach ($temuan as $ky=>$item)
                                             <tr class="info text-dark">
@@ -130,6 +131,9 @@
                                                                         {{count($drekom[$item->temuan_id][$vst->id])}}
                                                                     </a>
                                                                 @endif
+                                                                @php
+                                                                    $jlhrekomendasi=1;
+                                                                @endphp
                                                             @else
                                                                 <span class="label label-rounded label-danger" style="font-size:13px !important;">
                                                                     0
@@ -167,12 +171,16 @@
                                                                 <li>
                                                                     <a href="#" class="btn-detail-temuan" data-toggle="modal" data-target="#modaldetail" data-value="{{$item->temuan_id}}"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Temuan</a>
                                                                 </li>
+                                                                @if ($data->publish_flag==0)
                                                                 <li>
                                                                     <a href="#" class="btn-edit-temuan" data-toggle="modal" data-target="#modalubah" data-value="{{ $item->temuan_id }}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit Temuan</a>
                                                                 </li>
+                                                                @endif
+                                                                @if ($jlhrekomendasi==0)
                                                                 <li>
                                                                     <a class="btn-delete-temuan" data-toggle="modal" data-target="#modalhapus" data-value="{{ $item->id }}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus Temuan</a>
                                                                 </li>
+                                                                @endif
                                                             </ul>
                                                         </div>
                                                     </div>

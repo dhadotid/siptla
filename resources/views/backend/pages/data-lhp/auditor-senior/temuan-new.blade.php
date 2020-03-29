@@ -94,66 +94,72 @@
                                             <th class="text-center primary">Level Resiko</th> --}}
                                             {{-- <th class="text-center primary">Rekomendasi</th> --}}
                                             @foreach ($statusrekomendasi as $item)
-                                                <th class="text-center primary" rowspan="2">{{$item->rekomendasi}}</th>    
+                                                <th class="text-center primary" rowspan="2">
+                                                    <div style="width:65px;">{{$item->rekomendasi}}</div>
+                                                </th>    
                                             @endforeach
-                                            <th class="text-center primary" colspan="2">Jumlah Publish</th>
+                                            <th class="text-center primary" colspan="2" style="width:60px;">Jumlah Publish</th>
                                             <th class="text-center primary" rowspan="2">Aksi</th>
                                         
                                         </tr>
                                         <tr>
                                             <th class="text-center primary">Setuju</th>
-                                            <th class="text-center primary">Belum</th>
+                                            <th class="text-center primary" style="border-right: 1px solid #fff;">Belum</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @php
                                             $no=1;
+                                            $jlhrekomendasi=0;
                                         @endphp
                                         @foreach ($temuan as $ky=>$item)
                                             <tr class="info text-dark">
-                                                <td class="text-center">{{$no}}</td>
+                                                <td><div style="text-align:center;width:15px;">{{$no}}</div></td>
                                                 <td class="text-left">{!!$item->temuan!!}</td>
                                                 {{-- <td class="text-center">{{isset($item->jenistemuan->temuan) ? $item->jenistemuan->temuan: '-'}}</td>
                                                 <td class="text-center">{{isset($item->picunit->nama_pic) ? $item->picunit->nama_pic: '-'}}</td>
                                                 <td class="text-right">{{number_format($item->nominal,2,',','.')}}</td>
                                                 <td class="text-center">{{isset($item->levelresiko->level_resiko) ? $item->levelresiko->level_resiko: '-'}}</td> --}}
                                                 @foreach ($statusrekomendasi as $vst)
-                                                    <td class="text-center">
-                                                        <span class="rekomendasi-detail" data-value="{{ $item->id.'_'.$vst->id }}">
-                                                            @if (isset($drekom[$item->temuan_id][$vst->id]))
-                                                                @if (count($drekom[$item->temuan_id][$vst->id])==0)
-                                                                    <span class="label label-rounded label-danger" style="font-size:13px !important;">
-                                                                        {{count($drekom[$item->temuan_id][$vst->id])}}
-                                                                    </span>
+                                                    <td class="text-center" style="width:65px">
+                                                            <span class="rekomendasi-detail" data-value="{{ $item->id.'_'.$vst->id }}">
+                                                                @if (isset($drekom[$item->temuan_id][$vst->id]))
+                                                                    @if (count($drekom[$item->temuan_id][$vst->id])==0)
+                                                                        <span class="label label-rounded label-danger" style="font-size:13px !important;">
+                                                                            {{count($drekom[$item->temuan_id][$vst->id])}}
+                                                                        </span>
+                                                                    @else
+                                                                        <a class="label label-rounded label-success" style="font-size:13px !important;text-decoration:underline" id="count_temuan_{{$item->temuan_id}}_{{$vst->id}}">
+                                                                            {{count($drekom[$item->temuan_id][$vst->id])}}
+                                                                        </a>
+                                                                    @endif
+                                                                    @php
+                                                                        $jlhrekomendasi=1;
+                                                                    @endphp
                                                                 @else
-                                                                    <a class="label label-rounded label-success" style="font-size:13px !important;text-decoration:underline" id="count_temuan_{{$item->temuan_id}}_{{$vst->id}}">
-                                                                        {{count($drekom[$item->temuan_id][$vst->id])}}
-                                                                    </a>
+                                                                    <span class="label label-rounded label-danger" style="font-size:13px !important;">
+                                                                        0
+                                                                    </span>
                                                                 @endif
-                                                            @else
-                                                                <span class="label label-rounded label-danger" style="font-size:13px !important;">
-                                                                    0
-                                                                </span>
-                                                            @endif
-                                                        </span>
+                                                            </span>
                                                     </td>
                                                 @endforeach
-                                                <td class="text-center">
-                                                    @if (isset($jlhsetujurekom[Auth::user()->id][$idlhp][$item->temuan_id]['setuju']))
-                                                        <span class="label label-success">{{count($jlhsetujurekom[Auth::user()->id][$idlhp][$item->temuan_id]['setuju'])}}</span>
-                                                    @else
-                                                        <span class="label label-danger">0</span>
-                                                    @endif
+                                                <td class="text-center" style="width:30px">
+                                                        @if (isset($jlhsetujurekom[Auth::user()->id][$idlhp][$item->temuan_id]['setuju']))
+                                                            <span class="label label-success" style="font-size:13px !important;">{{count($jlhsetujurekom[Auth::user()->id][$idlhp][$item->temuan_id]['setuju'])}}</span>
+                                                        @else
+                                                            <span class="label label-danger" style="font-size:13px !important;">0</span>
+                                                        @endif
                                                 </td>
-                                                <td class="text-center">
-                                                    @if (isset($jlhsetujurekom[Auth::user()->id][$idlhp][$item->temuan_id]['belum']))
-                                                        <span class="label label-success">{{count($jlhsetujurekom[Auth::user()->id][$idlhp][$item->temuan_id]['belum'])}}</span>
-                                                    @else
-                                                        <span class="label label-danger">0</span>
-                                                    @endif
+                                                <td class="text-center" style="width:30px">
+                                                        @if (isset($jlhsetujurekom[Auth::user()->id][$idlhp][$item->temuan_id]['belum']))
+                                                            <span class="label label-success" style="font-size:13px !important;">{{count($jlhsetujurekom[Auth::user()->id][$idlhp][$item->temuan_id]['belum'])}}</span>
+                                                        @else
+                                                            <span class="label label-danger" style="font-size:13px !important;">0</span>
+                                                        @endif
                                                 </td>
-                                                <td class="text-align:center">
-                                                    <div style="text-align:center;width:80px;">
+                                                <td class="text-align:center" style="width:50px;">
+                                                    <div style="text-align:center;">
                                                         <div class="btn-group">
                                                             <button type="button" class="btn btn-primary btn-xs" style="width:25px;"><i class="fa fa-bars"></i></button>
                                                             <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="width:25px;">
@@ -167,12 +173,17 @@
                                                                 <li>
                                                                     <a href="#" class="btn-detail-temuan" data-toggle="modal" data-target="#modaldetail" data-value="{{$item->temuan_id}}"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Temuan</a>
                                                                 </li>
-                                                                <li>
-                                                                    <a href="#" class="btn-edit-temuan" data-toggle="modal" data-target="#modalubah" data-value="{{ $item->temuan_id }}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit Temuan</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="btn-delete-temuan" data-toggle="modal" data-target="#modalhapus" data-value="{{ $item->id }}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus Temuan</a>
-                                                                </li>
+                                                                @if ($data->publish_flag==0)
+                                                                    <li>
+                                                                        <a href="#" class="btn-edit-temuan" data-toggle="modal" data-target="#modalubah" data-value="{{ $item->temuan_id }}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit Temuan</a>
+                                                                    </li>
+                                                                @endif
+                                                                @if ($jlhrekomendasi==0)
+                                                                    
+                                                                    <li>
+                                                                        <a class="btn-delete-temuan" data-toggle="modal" data-target="#modalhapus" data-value="{{ $item->id }}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus Temuan</a>
+                                                                    </li>
+                                                                @endif
                                                             </ul>
                                                         </div>
                                                     </div>

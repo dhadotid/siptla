@@ -233,6 +233,7 @@ class DashboardController extends Controller
             $doverdue=array();
             // return $rekomendasi;
             $bataswaktu=bataswaktu();
+            $colorbataswaktu=array();
             foreach($bataswaktu as $k=>$v)
             {
                 $doverdue['labels'][]=$bataswaktu[$k];
@@ -352,12 +353,13 @@ class DashboardController extends Controller
             $color['colorlhp']=$colorlhp;
             
             $doverdue=array();
+            $colorbataswaktu=array();
             // return $rekomendasi;
             $bataswaktu=bataswaktu();
             foreach($overdue as $k=>$v)
             {
                 $doverdue['labels'][]=$bataswaktu[$k];
-                $doverdue['datasets'][0]['data'][]=isset($bataswaktu[$k]) ? count($bataswaktu[$k]) : 0;
+                $doverdue['datasets'][0]['data'][]=isset($overdue[$k]) ? count($overdue[$k]) : 0;
                 $doverdue['datasets'][0]['backgroundColor'][]=$colorbataswaktu[($k)]=generate_color_one();
             }
             $color['colorbataswaktu']=$colorbataswaktu;

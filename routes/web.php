@@ -105,6 +105,8 @@ Route::group(['middleware'=>['auth','checkstatus']],function(){
     Route::get('tindak-lanjut-hapus/{id}','TindakLanjutController@destroy');
     Route::get('data-tindak-lanjut/{rekom_id}/{idtemuan}','TindakLanjutController@index');
     Route::get('data-tindak-lanjut-unitkerja/{rekom_id}/{idtemuan}','TindakLanjutController@index_unitkerja');
+
+    Route::get('jumlah-rincian/{temuan_id}/{rekom_id}','TindakLanjutController@jumlah_rincian');
     /* AUDITOR SENIOR */
 
     Route::get('data-tindaklanjut-senior/{tahun?}/{rekom_id?}/{temuan_id?}','AuditorSeniorController@tindaklanjut_index');
@@ -139,6 +141,7 @@ Route::group(['middleware'=>['auth','checkstatus']],function(){
     
     Route::get('form-tindaklanjut-rincian/{idrincian}/{jenis}','TindakLanjutController@form_tindaklanjut_rincian');
     Route::get('list-tindaklanjut-rincian/{idrincian}/{jenis}/{idtl?}','TindakLanjutController@list_tindaklanjut_rincian');
+    Route::get('list-rincian-rekomendasi/{idrekomendasi}/{jenis}','TindakLanjutController@list_rincian_rekomendasi');
     Route::get('hapus-rincian/{idrincian}/{jenis}','TindakLanjutController@hapus_rincian_jenis');
     Route::post('simpan-tindaklanjut-rincian','TindakLanjutController@simpan_tindaklanjut_rincian');
     

@@ -62,6 +62,18 @@
                 </select>
             </div>
         </div>
+        {{-- <div class="form-group" style="margin-bottom:10px;">
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Kirim ke Auditor Junior :
+            </label>
+            <div class="col-sm-9">
+                <select name="senior_auditor" class="form-control" id="{{$act}}_junior_auditor" data-plugin="select2">
+                    <option value="">-- Pilih --</option>
+                    @foreach ($junior as $key=>$item)
+                            <option value="{{$item->id}}">{{$item->name}}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div> --}}
         <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">PIC Temuan:
                 <br><small style="font-size:9px;color:red;font-style:italic">*wajib diisi</small>

@@ -544,7 +544,7 @@ class DataTemuanController extends Controller
         $dt['levelresiko']=LevelResiko::orderBy('level_resiko')->get();
         $dt['jangkawaktu']=$jangkawaktu=JangkaWaktu::orderBy('jangka_waktu')->get();
         $dt['statusrekomendasi']=$statusrekomendasi=StatusRekomendasi::orderBy('rekomendasi')->get();
-
+        
         $rekom=DataRekomendasi::with('jenistemuan')->with('picunit1')->with('picunit2')->with('jangkawaktu')->with('statusrekomendasi')->get();
         $rekomendasi=$drekom=$arraytemuanid=array();
         foreach($rekom as $k=>$v)
@@ -595,6 +595,7 @@ class DataTemuanController extends Controller
 
             if(Auth::user()->level=='auditor-senior')
             {
+                $junior=User::where('level','auditor-junior')->get();
                 return view('backend.pages.data-lhp.auditor-senior.temuan-new')
                     ->with('dt',$dt)
                     ->with('idlhp',$idlhp)
@@ -602,6 +603,7 @@ class DataTemuanController extends Controller
                     ->with('jlhsetujurekom',$jlhsetujurekom)
                     ->with('rekomendasi',$rekomendasi)
                     ->with('senior',$senior)
+                    ->with('junior',$junior)
                     ->with('temuan',$temuan)
                     ->with('jangkawaktu',$jangkawaktu)
                     ->with('statusrekomendasi',$statusrekomendasi)
@@ -687,17 +689,34 @@ class DataTemuanController extends Controller
 
         Validator::make($request->all(),$rules,$customMessages)->validate();
 
-        $insert=new DataTemuan;
-        $insert->id_lhp=$idlhp;
-        $insert->no_lhp=$request->nomor_lhp;
-        $insert->no_temuan=$request->nomor_temuan;
-        // $insert->temuan=str_replace("\n","<br>",$request->temuan);
-        $insert->temuan=$request->temuan;
-        $insert->jenis_temuan_id=$request->jenis_temuan;
-        $insert->pic_temuan_id=$request->pic_temuan;
-        $insert->level_resiko_id=$request->level_resiko;
-        $insert->nominal=str_replace('.','',$request->nominal);
-        $insert->save();
+        if(Auth::user()->level=='auditor-senior')
+        {
+            $insert=new DataTemuan;
+            $insert->id_lhp=$idlhp;
+            $insert->no_lhp=$request->nomor_lhp;
+            $insert->no_temuan=$request->nomor_temuan;
+            // $insert->temuan=str_replace("\n","<br>",$request->temuan);
+            $insert->temuan=$request->temuan;
+            $insert->jenis_temuan_id=$request->jenis_temuan;
+            $insert->pic_temuan_id=$request->pic_temuan;
+            $insert->level_resiko_id=$request->level_resiko;
+            $insert->nominal=str_replace('.','',$request->nominal);
+            $insert->save();
+        }
+        else
+        {
+            $insert=new DataTemuan;
+            $insert->id_lhp=$idlhp;
+            $insert->no_lhp=$request->nomor_lhp;
+            $insert->no_temuan=$request->nomor_temuan;
+            // $insert->temuan=str_replace("\n","<br>",$request->temuan);
+            $insert->temuan=$request->temuan;
+            $insert->jenis_temuan_id=$request->jenis_temuan;
+            $insert->pic_temuan_id=$request->pic_temuan;
+            $insert->level_resiko_id=$request->level_resiko;
+            $insert->nominal=str_replace('.','',$request->nominal);
+            $insert->save();
+        }
         // return $request->all();
         return redirect('data-temuan-lhp/'.$idlhp)
             ->with('success', 'Anda telah memasukkan data temuan baru.');

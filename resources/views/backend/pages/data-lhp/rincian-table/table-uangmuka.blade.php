@@ -36,8 +36,11 @@
             @if (isset($idtl))
                 <input type="hidden" id="idformtindaklanjut" name="idformtindaklanjut" value="{{$idtl}}">
             @endif
-                <tr >
-                            <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut('uangmuka','{{$idtemuan}}','{{$idrekomendasi}}',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
-                </tr>
+            @if (Auth::user()->level!='pic-unit')
+                
+            <tr>
+                <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut('uangmuka','{{$idtemuan}}','{{$idrekomendasi}}',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
+            </tr>
+            @endif
             </tbody>
             </table>

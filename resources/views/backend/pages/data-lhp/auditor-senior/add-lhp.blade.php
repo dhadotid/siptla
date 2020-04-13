@@ -1,11 +1,11 @@
 <div class="row">
     <div class="col-md-12">
-        <div class="form-group">
+        {{-- <div class="form-group">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nomor LHP:</label>
             <div class="col-sm-8">
                 <input type="text" class="form-control" name="nomor_lhp" placeholder="Nomor LHP" id="nomor_lhp">
             </div>
-        </div>
+        </div> --}}
         <div class="form-group">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Pemeriksa:</label>
             <div class="col-sm-8">

@@ -70,7 +70,7 @@
                   <li class="{{strpos($url,'level-resiko')!==false ? 'active open' : ''}}"><a href="{{url('level-resiko')}}"><span class="menu-text">Level Resiko</span></a></li>
                   <li class="{{strpos($url,'pejabat-penandatangan')!==false ? 'active open' : ''}}"><a href="{{url('pejabat-penandatangan')}}"><span class="menu-text">Pejabat Penanda Tangan</span></a></li>
                   
-                  <li class="{{strpos($url,'data-lhp')!==false ? 'active open' : ''}}"><a href="{{url('data-lhp')}}"><span class="menu-text">Data LHP</span></a></li> 
+                  {{-- <li class="{{strpos($url,'data-lhp')!==false ? 'active open' : ''}}"><a href="{{url('data-lhp')}}"><span class="menu-text">Data LHP</span></a></li>  --}}
                   {{-- <li class="{{$url=='level-pengguna' ? 'active open' : ''}}"><a href="{{url('level-pengguna')}}"><span class="menu-text">Data Level Pengguna</span></a></li>  --}}
                   <li class="{{strpos($url,'pengguna')!==false ? 'active open' : ''}}"><a href="{{url('pengguna')}}"><span class="menu-text">Data Pengguna</span></a></li> 
               @endif

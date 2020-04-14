@@ -318,10 +318,10 @@ class DataRekomendasiController extends Controller
                         {
                             $table.='<a class="label label-danger fz-sm" href="javascript:update_rincian('.$v->rekom_id.','.$idtemuan.')"><i class="fa fa-check"></i> Rincian : '.ucwords($v->rincian).'</a> &nbsp;<br>';
                         }
-                        else
-                        {
-                            $table.='<a class="label label-success fz-sm" href="javascript:update_rincian('.$v->rekom_id.','.$idtemuan.')"><i class="fa fa-link"></i> Update Rincian</a> &nbsp;<br>';
-                        }
+                        // else
+                        // {
+                        //     $table.='<a class="label label-success fz-sm" href="javascript:update_rincian('.$v->rekom_id.','.$idtemuan.')"><i class="fa fa-link"></i> Update Rincian</a> &nbsp;<br>';
+                        // }
                         //<a style="color:#fff" href="javascript:formtindaklanjut('.$v->rekom_id.',-1)" class="label label-info fz-sm" data-value="0"><i class="fa fa-plus-circle"></i>&nbsp;Tambah Rincian</a>
                 $table.='</div>
                 </li>';

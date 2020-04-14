@@ -160,10 +160,13 @@ class DataRekomendasiController extends Controller
                 elseif($v->status_rekomendasi_id==4)
                     $status='danger';
 
-                $table.='<li style="margin-bottom:10px;padding:10px 0;border-bottom:1px solid #bbb;">
+                $table.='<li style="margin-bottom:10px;padding:10px 0;border-bottom:1px solid #bbb;">';
+                if (Auth::user()->level != 'pic-unit') {
+                    $table.='
                     <a href="javascript:hapusrekomendasi(\''.$v->id_temuan.'\',\''.$v->id.'\')" class="btn btn-danger btn-xs pull-right"><i class="fa fa-trash"></i> Hapus Rekomendasi</a>
-                    <a href="javascript:rekomedit(\''.$v->id_temuan.'\',\''.$v->id.'\')" class="btn btn-info btn-xs pull-right"><i class="fa fa-edit"></i> Edit Rekomendasi</a>
-                    
+                    <a href="javascript:rekomedit(\''.$v->id_temuan.'\',\''.$v->id.'\')" class="btn btn-info btn-xs pull-right"><i class="fa fa-edit"></i> Edit Rekomendasi</a>';
+                }
+                $table.='
                     <u>Nilai Rekomendasi :</u><br><h5><span class="text-primary">Rp.'.number_format($v->nominal_rekomendasi,2,',','.').'</span></h5>
                     <br>
                     <u>Rekomendasi : </u><br><h4>'.$v->rekomendasi.'</h4><br>
@@ -290,7 +293,7 @@ class DataRekomendasiController extends Controller
 
                 $table.='<li style="margin-bottom:10px;padding:10px 0;border-bottom:1px solid #bbb;">';
 
-                if($v->senior_publish!=1)
+                if($v->senior_publish!=1 && Auth::user()->level != 'pic-unit')
                 {
                     $table.='<a href="javascript:hapusrekomendasi(\''.$v->id_temuan.'\',\''.$v->id.'\')" class="btn btn-danger btn-xs pull-right"><i class="fa fa-trash"></i> Hapus Rekomendasi</a>
                     <a href="javascript:rekomedit(\''.$v->id_temuan.'\',\''.$v->id.'\')" class="btn btn-info btn-xs pull-right"><i class="fa fa-edit"></i> Edit Rekomendasi</a>';

@@ -222,7 +222,7 @@ function toArray($data,$colm)
 }
 function rinciantindaklanjut()
 {
-    $rincian=['Sewa','Uang Muka','Listrik','Piutang','Piutang Karyawan','Hutang Titipan','Penutupan Rekening','Umum'];
+    $rincian=['Sewa','Uang Muka','Listrik','Piutang','Piutang Karyawan','Hutang Titipan','Penutupan Rekening','Umum','Kontribusi','Non Setoran','PKS'];
     $drinc=array();
     foreach($rincian as $k=>$v)
     {

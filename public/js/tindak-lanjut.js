@@ -243,14 +243,14 @@ function validasiformsewa() {
         notif('error', 'Unit Kerja Belum Dipilih');
     else if (mitra.val() == '')
         notif('error', 'Nama Mitra Belum Diisi');
-    else if (no_pks.val() == '')
-        notif('error', 'Nomor PKS Belum Diisi');
-    else if (tgl_pks.val() == '')
-        notif('error', 'Tanggal PKS Belum Dipilih');
+    // else if (no_pks.val() == '')
+    //     notif('error', 'Nomor PKS Belum Diisi');
+    // else if (tgl_pks.val() == '')
+    //     notif('error', 'Tanggal PKS Belum Dipilih');
     else if (nilai_perjanjian.val() == '')
         notif('error', 'Nilai Pekerjaan Belum Diisi');
-    else if (masa_berlaku.val() == '')
-        notif('error', 'Masa Berlaku Belum Dipilih');
+    // else if (masa_berlaku.val() == '')
+    //     notif('error', 'Masa Berlaku Belum Dipilih');
     else {
         //formrinciansewa
         $.ajax({

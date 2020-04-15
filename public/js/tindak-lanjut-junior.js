@@ -235,10 +235,10 @@ function validasiformuangmuka() {
 
     if (unit_kerja.val() == '')
         notif('error', 'Unit Kerja Belum Dipilih');
-    else if (no_invoice.val() == '')
-        notif('error', 'Nomor Invoice Belum Diisi');
-    else if (tgl_pum.val() == '')
-        notif('error', 'Tanggal PUM Belum Dipilih');
+    // else if (no_invoice.val() == '')
+    //     notif('error', 'Nomor Invoice Belum Diisi');
+    // else if (tgl_pum.val() == '')
+    //     notif('error', 'Tanggal PUM Belum Dipilih');
     else if (jumlah_um.val() == '')
         notif('error', 'Jumlah UM Belum Diisi');
     else {

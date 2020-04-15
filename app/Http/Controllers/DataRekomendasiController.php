@@ -314,7 +314,7 @@ class DataRekomendasiController extends Controller
                     <div style="margin-top:10px;">
                         <a class="label label-primary fz-sm" href="javascript:detailtljunior('.$v->rekom_id.')">'.(isset($tl[$v->rekom_id]) ? count($tl[$v->rekom_id]) : 0).'&nbsp;Tindak Lanjut</a> &nbsp;&nbsp;';
 
-                        if($v->rincian!='')
+                        if($v->rincian!='' && Auth::user()->level != 'pic-unit')
                         {
                             $table.='<a class="label label-danger fz-sm" href="javascript:update_rincian('.$v->rekom_id.','.$idtemuan.')"><i class="fa fa-check"></i> Rincian : '.ucwords($v->rincian).'</a> &nbsp;<br>';
                         }
@@ -637,7 +637,7 @@ class DataRekomendasiController extends Controller
         if($jenis=='sewa')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Pembayaran Sewa</h3><table class="table table-bordered " id="table-tl-rincian">';
+            $table='<h3 class="text-center">Rincian Nilai Pembayaran Sewa</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -647,8 +647,8 @@ class DataRekomendasiController extends Controller
                     <th class="text-center">Tgl. PKS</th>
                     <th class="text-center">Nilai Pekerjaan</th>
                     <th class="text-center">Masa Berlaku</th>';
-                    // $table.='
-                    // <th class="text-center">Aksi</th>';
+                    $table.='
+                    <th class="text-center">Aksi</th>';
                 $table.='</tr>';
             $table.='</thead><tbody>';
 
@@ -665,10 +665,11 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.($v->tgl_pks != '' ? date('d/m/Y',strtotime($v->tgl_pks)) : '-').'</td>
                     <td class="text-center">'.rupiah($v->nilai_pekerjaan).'</td>
                     <td class="text-center">'.($v->masa_berlaku != '' ? date('d/m/Y',strtotime($v->masa_berlaku)) : '-').'</td>';
-                    // $table.='
-                    // <td class="text-center">
-                    //     <a href="javascript:hapusrincian('.$v->id.',\'sewa\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
-                    // </td>';
+                    $table.='
+                    <td class="text-center">
+                        <a href="javascript:editrincian('.$v->id.',\'sewa\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:hapusrincian('.$v->id.',\'sewa\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                    </td>';
                 $table.='</tr>';
                 $no++;
                 $totalnilai+=$v->nilai_pekerjaan;
@@ -676,28 +677,28 @@ class DataRekomendasiController extends Controller
             }
             $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
 
-            // if(Auth::user()->level=='pic-unit')
-            // {
-            //     $table.='<tr >
-            //                 <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
-            //             </tr>';
-            // }
-            // else
-            // {
-            //     if($view==null)
-            //     {
-            //         $table.='<tr >
-            //                 <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
-            //             </tr>';
-            //     }
-            // }
+            if(Auth::user()->level=='pic-unit')
+            {
+                $table.='<tr >
+                            <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
+                        </tr>';
+            }
+            else
+            {
+                if($view==null)
+                {
+                    $table.='<tr >
+                            <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
+                        </tr>';
+                }
+            }
             $table.='</tbody>';
             $table.='</table>';
         }
         elseif($jenis=='uangmuka')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Uang Muka</h3><table class="table table-bordered" style="width:100%" id="table-tl-rincian">';
+            $table='<h3 class="text-center">Rincian Nilai Uang Muka</h3><table class="table table-bordered" style="width:100%" id="table-tl-rincian-'.$idrekomendasi.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -706,8 +707,8 @@ class DataRekomendasiController extends Controller
                     <th class="text-center">Tanggal PUM</th>
                     <th class="text-center">Jumlah UM</th>
                     <th class="text-center">Keterangan</th>';
-                    // $table.='
-                    // <th class="text-center">Aksi</th>';
+                    $table.='
+                    <th class="text-center">Aksi</th>';
                 $table.='</tr>';
             $table.='</thead><tbody>';
 
@@ -723,13 +724,13 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.($v->tgl_pum != '' ? date('d/m/Y',strtotime($v->tgl_pum)) : '-').'</td>
                     <td class="text-center">'.number_format($v->jumlah_pum,0,',','.').'</td>
                     <td class="text-center">'.$v->keterangan.'</td>';
-                    // $table.='
-                    // <td class="text-center">
-                    //     <div style="width:80px;">
-                    //         <a href="javascript:editrincian('.$v->id.',\'uangmuka\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
-                    //         <a href="javascript:hapusrincian('.$v->id.',\'uangmuka\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
-                    //     </div>
-                    // </td>';
+                    $table.='
+                    <td class="text-center">
+                        <div style="width:80px;">
+                            <a href="javascript:editrincian('.$v->id.',\'uangmuka\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                            <a href="javascript:hapusrincian('.$v->id.',\'uangmuka\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                        </div>
+                    </td>';
                 $table.='</tr>';
                 $no++;
                 $totalnilai+=$v->jumlah_pum;
@@ -740,22 +741,22 @@ class DataRekomendasiController extends Controller
             
             $table.='</tbody>';
             $table.='</table>';
-            // if(Auth::user()->level=='pic-unit')
-            // {
-            //     $table.='<div class="text-center"><a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></div>';
-            // }
-            // else
-            // {
-            //     if($view==null)
-            //     {
-            //         $table.='<div class="text-center"><a href="#" onclick="addtindaklanjut(\'uangmuka\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></div>';
-            //     }
-            // }
+            if(Auth::user()->level=='pic-unit')
+            {
+                $table.='<div class="text-center"><a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></div>';
+            }
+            else
+            {
+                if($view==null)
+                {
+                    $table.='<div class="text-center"><a href="#" onclick="addtindaklanjut(\'uangmuka\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></div>';
+                }
+            }
         }
         elseif($jenis=='listrik')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Pembayaran Listrik</h3><table class="table table-bordered " id="table-tl-rincian">';
+            $table='<h3 class="text-center">Rincian Nilai Pembayaran Listrik</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -764,8 +765,8 @@ class DataRekomendasiController extends Controller
                     <th class="text-center">Tanggal Invoice</th>
                     <th class="text-center">Tagihan</th>
                     <th class="text-center">Keterangan</th>';
-                    // $table.='
-                    // <th class="text-center">Aksi</th>';
+                    $table.='
+                    <th class="text-center">Aksi</th>';
                 $table.='</tr>';
             $table.='</thead><tbody>';
 
@@ -781,47 +782,47 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.date('d/m/Y',strtotime($v->tgl_invoice)).'</td>
                     <td class="text-center">'.number_format($v->tagihan,0,',','.').'</td>
                     <td class="text-center">'.$v->keterangan.'</td>';
-                    // $table.='
-                    // <td class="text-center">
-                    //     <a href="javascript:hapusrincian('.$v->id.',\'listrik\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
-                    // </td>';
+                    $table.='
+                    <td class="text-center">
+                        <a href="javascript:hapusrincian('.$v->id.',\'listrik\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                    </td>';
                 $table.='</tr>';
                 $no++;
 
                 $totalnilai+=$v->tagihan;
             }
             $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
-            // if(Auth::user()->level=='pic-unit')
-            // {
-            //     $table.='<tr >
-            //                 <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
-            //             </tr>';
-            // }
-            // else
-            // {
-            //     if($view==null)
-            //     {
-            //         $table.='<tr >
-            //             <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'listrik\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle" ></i> Tambah Rincian</a></td>
-            //         </tr>';
-            //     }
+            if(Auth::user()->level=='pic-unit')
+            {
+                $table.='<tr >
+                            <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
+                        </tr>';
+            }
+            else
+            {
+                if($view==null)
+                {
+                    $table.='<tr >
+                        <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'listrik\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle" ></i> Tambah Rincian</a></td>
+                    </tr>';
+                }
         
-            // }
+            }
             $table.='</tbody>';
             $table.='</table>';
         }
         elseif($jenis=='piutang')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Pembayaran Piutang</h3><table class="table table-bordered " id="table-tl-rincian">';
+            $table='<h3 class="text-center">Rincian Nilai Pembayaran Piutang</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
                     <th class="text-center">Unit Kerja</th>
                     <th class="text-center">Pelanggan</th>
                     <th class="text-center">Jumlah Tagihan</th>';
-                    // $table.='
-                    // <th class="text-center">Aksi</th>';
+                    $table.='
+                    <th class="text-center">Aksi</th>';
                 $table.='</tr>';
             $table.='</thead><tbody>';
 
@@ -835,10 +836,10 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.$v->unit_kerja.'</td>
                     <td class="text-center">'.$v->pelanggan.'</td>
                     <td class="text-center">'.number_format($v->tagihan,0,',','.').'</td>';
-                    // $table.='
-                    // <td class="text-center">
-                    //     <a href="javascript:hapusrincian('.$v->id.',\'piutang\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
-                    // </td>';
+                    $table.='
+                    <td class="text-center">
+                        <a href="javascript:hapusrincian('.$v->id.',\'piutang\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                    </td>';
                 $table.='</tr>';
                 $no++;
 
@@ -846,36 +847,36 @@ class DataRekomendasiController extends Controller
             }
             $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
             
-            // if(Auth::user()->level=='pic-unit')
-            // {
-            //     $table.='<tr >
-            //                 <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
-            //             </tr>';
-            // }
-            // else
-            // {
-            //     if($view==null)
-            //     {
-            //         $table.='<tr >
-            //             <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'piutang\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
-            //         </tr>';
-            //     }
-            // }
+            if(Auth::user()->level=='pic-unit')
+            {
+                $table.='<tr >
+                            <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
+                        </tr>';
+            }
+            else
+            {
+                if($view==null)
+                {
+                    $table.='<tr >
+                        <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'piutang\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
+                    </tr>';
+                }
+            }
             $table.='</tbody>';
             $table.='</table>';
         }
         elseif($jenis=='piutangkaryawan')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Pembayaran Piutang Karyawan</h3><table class="table table-bordered " id="table-tl-rincian">';
+            $table='<h3 class="text-center">Rincian Nilai Pembayaran Piutang Karyawan</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
                     <th class="text-center">Unit Kerja</th>
                     <th class="text-center">Karyawan</th>
                     <th class="text-center">Jumlah Pinjaman</th>';
-                    // $table.='
-                    // <th class="text-center">Aksi</th>';
+                    $table.='
+                    <th class="text-center">Aksi</th>';
                 $table.='</tr>';
             $table.='</thead><tbody>';
 
@@ -889,10 +890,10 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.$v->unit_kerja.'</td>
                     <td class="text-center">'.$v->karyawan.'</td>
                     <td class="text-center">'.number_format($v->pinjaman,0,',','.').'</td>';
-                    // $table.='
-                    // <td class="text-center">
-                    //     <a href="javascript:hapusrincian('.$v->id.',\'piutangkaryawan\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
-                    // </td>';
+                    $table.='
+                    <td class="text-center">
+                        <a href="javascript:hapusrincian('.$v->id.',\'piutangkaryawan\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                    </td>';
                 $table.='</tr>';
                 $no++;
 
@@ -900,28 +901,28 @@ class DataRekomendasiController extends Controller
             }
             $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
 
-            // if(Auth::user()->level=='pic-unit')
-            // {
-            //     $table.='<tr >
-            //                 <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
-            //             </tr>';
-            // }
-            // else
-            // {
-            //     if($view==null)
-            //     {
-            //         $table.='<tr >
-            //             <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'piutangkaryawan\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
-            //         </tr>';
-            //     }
-            // }
+            if(Auth::user()->level=='pic-unit')
+            {
+                $table.='<tr >
+                            <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
+                        </tr>';
+            }
+            else
+            {
+                if($view==null)
+                {
+                    $table.='<tr >
+                        <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'piutangkaryawan\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
+                    </tr>';
+                }
+            }
             $table.='</tbody>';
             $table.='</table>';
         }
         elseif($jenis=='hutangtitipan')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Hutang Titipan</h3><table class="table table-bordered " id="table-tl-rincian">';
+            $table='<h3 class="text-center">Rincian Nilai Hutang Titipan</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -930,8 +931,8 @@ class DataRekomendasiController extends Controller
                     <th class="text-center">Keterangan</th>
                     <th class="text-center">Saldo Hutang Titipan (Rp)</th>
                     <th class="text-center">Sisa Yang Harus Disetor (Rp)</th>';
-                    // $table.='
-                    // <th class="text-center">Aksi</th>';
+                    $table.='
+                    <th class="text-center">Aksi</th>';
                 $table.='</tr>';
             $table.='</thead><tbody>';
 
@@ -947,10 +948,10 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.$v->keterangan.'</td>
                     <td class="text-center">'.number_format($v->saldo_hutang,0,',','.').'</td>
                     <td class="text-center">'.number_format($v->sisa_setor,0,',','.').'</td>';
-                    // $table.='
-                    // <td class="text-center">
-                    //     <a href="javascript:hapusrincian('.$v->id.',\'hutangtitipan\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
-                    // </td>';
+                    $table.='
+                    <td class="text-center">
+                        <a href="javascript:hapusrincian('.$v->id.',\'hutangtitipan\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                    </td>';
                 $table.='</tr>';
                 $no++;
 
@@ -958,28 +959,28 @@ class DataRekomendasiController extends Controller
             }
             $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
 
-            // if(Auth::user()->level=='pic-unit')
-            // {
-            //     $table.='<tr >
-            //                 <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
-            //             </tr>';
-            // }
-            // else
-            // {
-            //     if($view==null)
-            //     {
-            //         $table.='<tr >
-            //             <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'hutangtitipan\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
-            //         </tr>';
-            //     }
-            // }
+            if(Auth::user()->level=='pic-unit')
+            {
+                $table.='<tr >
+                            <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
+                        </tr>';
+            }
+            else
+            {
+                if($view==null)
+                {
+                    $table.='<tr >
+                        <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'hutangtitipan\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
+                    </tr>';
+                }
+            }
             $table.='</tbody>';
             $table.='</table>';
         }
         elseif($jenis=='penutupanrekening')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Penutupan Rekening</h3><table class="table table-bordered " id="table-tl-rincian">';
+            $table='<h3 class="text-center">Rincian Nilai Penutupan Rekening</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -989,8 +990,8 @@ class DataRekomendasiController extends Controller
                     <th class="text-center">Nama Rekening</th>
                     <th class="text-center">Jenis Rekening</th>
                     <th class="text-center">Saldo Akhir</th>';
-                    // $table.='
-                    // <th class="text-center">Aksi</th>';
+                    $table.='
+                    <th class="text-center">Aksi</th>';
                 $table.='</tr>';
             $table.='</thead><tbody>';
 
@@ -1007,10 +1008,10 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.$v->nama_rekening.'</td>
                     <td class="text-center">'.$v->jenis_rekening.'</td>
                     <td class="text-center">'.number_format($v->saldo_akhir,0,',','.').'</td>';
-                    // $table.='
-                    // <td class="text-center">
-                    //     <a href="javascript:hapusrincian('.$v->id.',\'penutupanrekening\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
-                    // </td>';
+                    $table.='
+                    <td class="text-center">
+                        <a href="javascript:hapusrincian('.$v->id.',\'penutupanrekening\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                    </td>';
                 $table.='</tr>';
                 $no++;
 
@@ -1018,36 +1019,36 @@ class DataRekomendasiController extends Controller
             }
             $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
 
-            // if(Auth::user()->level=='pic-unit')
-            // {
-            //     $table.='<tr >
-            //                 <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
-            //             </tr>';
-            // }
-            // else
-            // {
-            //     if($view==null)
-            //     {
-            //         $table.='<tr >
-            //             <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'penutupanrekening\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
-            //         </tr>';
-            //     }
-            // }
+            if(Auth::user()->level=='pic-unit')
+            {
+                $table.='<tr >
+                            <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
+                        </tr>';
+            }
+            else
+            {
+                if($view==null)
+                {
+                    $table.='<tr >
+                        <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'penutupanrekening\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
+                    </tr>';
+                }
+            }
             $table.='</tbody>';
             $table.='</table>';
         }
         elseif($jenis=='umum')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Umum</h3><table class="table table-bordered " id="table-tl-rincian">';
+            $table='<h3 class="text-center">Rincian Nilai Umum</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
                     <th class="text-center">Unit Kerja</th>
                     <th class="text-center">Keterangan</th>
                     <th class="text-center">Jumlah Rekomendasi</th>';
-                    // $table.='
-                    // <th class="text-center">Aksi</th>';
+                    $table.='
+                    <th class="text-center">Aksi</th>';
                 $table.='</tr>';
             $table.='</thead><tbody>';
 
@@ -1061,10 +1062,10 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.$v->unit_kerja.'</td>
                     <td class="text-center">'.$v->keterangan.'</td>
                     <td class="text-center">'.number_format($v->jumlah_rekomendasi,0,',','.').'</td>';
-                    // $table.='
-                    // <td class="text-center">
-                    //     <a href="javascript:hapusrincian('.$v->id.',\'umum\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
-                    // </td>';
+                    $table.='
+                    <td class="text-center">
+                        <a href="javascript:hapusrincian('.$v->id.',\'umum\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                    </td>';
                 $table.='</tr>';
                 $no++;
 
@@ -1072,21 +1073,21 @@ class DataRekomendasiController extends Controller
             }
             $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
 
-            // if(Auth::user()->level=='pic-unit')
-            // {
-            //     $table.='<tr >
-            //                 <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
-            //             </tr>';
-            // }
-            // else
-            // {
-            //     if($view==null)
-            //     {
-            //         $table.='<tr >
-            //             <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'umum\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
-            //         </tr>';
-            //     }
-            // }
+            if(Auth::user()->level=='pic-unit')
+            {
+                $table.='<tr >
+                            <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
+                        </tr>';
+            }
+            else
+            {
+                if($view==null)
+                {
+                    $table.='<tr >
+                        <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'umum\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
+                    </tr>';
+                }
+            }
             $table.='</tbody>';
             $table.='</table>';
         }
@@ -1142,7 +1143,7 @@ class DataRekomendasiController extends Controller
         if($jenis=='sewa')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Pembayaran Sewa</h3><table class="table table-bordered " id="table-tl-rincian">';
+            $table='<h3 class="text-center">Rincian Nilai Pembayaran Sewa</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekom.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -1176,7 +1177,7 @@ class DataRekomendasiController extends Controller
         elseif($jenis=='uangmuka')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Uang Muka</h3><table class="table table-bordered " id="table-tl-rincian">';
+            $table='<h3 class="text-center">Rincian Nilai Uang Muka</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekom.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -1208,7 +1209,7 @@ class DataRekomendasiController extends Controller
         elseif($jenis=='listrik')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Pembayaran Listrik</h3><table class="table table-bordered " id="table-tl-rincian">';
+            $table='<h3 class="text-center">Rincian Nilai Pembayaran Listrik</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekom.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -1241,7 +1242,7 @@ class DataRekomendasiController extends Controller
         elseif($jenis=='piutang')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Pembayaran Piutang</h3><table class="table table-bordered " id="table-tl-rincian">';
+            $table='<h3 class="text-center">Rincian Nilai Pembayaran Piutang</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekom.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -1269,7 +1270,7 @@ class DataRekomendasiController extends Controller
         elseif($jenis=='piutangkaryawan')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Pembayaran Piutang Karyawan</h3><table class="table table-bordered " id="table-tl-rincian">';
+            $table='<h3 class="text-center">Rincian Nilai Pembayaran Piutang Karyawan</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekom.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -1297,7 +1298,7 @@ class DataRekomendasiController extends Controller
         elseif($jenis=='hutangtitipan')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Hutang Titipan</h3><table class="table table-bordered " id="table-tl-rincian">';
+            $table='<h3 class="text-center">Rincian Nilai Hutang Titipan</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekom.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -1330,7 +1331,7 @@ class DataRekomendasiController extends Controller
         elseif($jenis=='penutupanrekening')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Penutupan Rekening</h3><table class="table table-bordered " id="table-tl-rincian">';
+            $table='<h3 class="text-center">Rincian Nilai Penutupan Rekening</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekom.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -1365,7 +1366,7 @@ class DataRekomendasiController extends Controller
         elseif($jenis=='umum')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Umum</h3><table class="table table-bordered " id="table-tl-rincian">';
+            $table='<h3 class="text-center">Rincian Nilai Umum</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekom.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>

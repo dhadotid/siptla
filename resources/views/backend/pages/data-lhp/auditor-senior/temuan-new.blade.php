@@ -87,7 +87,7 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center primary" rowspan="2" style="width:15px;">#</th>
-                                            <th class="text-center primary" rowspan="2">Temuan</th>
+                                            <th class="text-center primary" rowspan="2" style="width:50%">Temuan</th>
                                             {{-- <th class="text-center primary">Jenis Temuan</th>
                                             <th class="text-center primary">PIC Temuan</th>
                                             <th class="text-center primary">Nilai Temuan </th>
@@ -95,10 +95,10 @@
                                             {{-- <th class="text-center primary">Rekomendasi</th> --}}
                                             @foreach ($statusrekomendasi as $item)
                                                 <th class="text-center primary" rowspan="2">
-                                                    <div style="width:65px;">{{$item->rekomendasi}}</div>
+                                                    <div>{{$item->rekomendasi}}</div>
                                                 </th>    
                                             @endforeach
-                                            <th class="text-center primary" colspan="2" style="width:60px;">Jumlah Publish</th>
+                                            <th class="text-center primary" colspan="2">Jumlah Publish</th>
                                             <th class="text-center primary" rowspan="2">Aksi</th>
                                         
                                         </tr>

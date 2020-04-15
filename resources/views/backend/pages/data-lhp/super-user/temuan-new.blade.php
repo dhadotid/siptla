@@ -87,7 +87,7 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center primary" rowspan="2" style="width:15px;">#</th>
-                                            <th class="text-center primary" rowspan="2">Temuan</th>
+                                            <th class="text-center primary" rowspan="2" style="width:50%">Temuan</th>
                                             {{-- <th class="text-center primary">Jenis Temuan</th>
                                             <th class="text-center primary">PIC Temuan</th>
                                             <th class="text-center primary">Nilai Temuan </th>

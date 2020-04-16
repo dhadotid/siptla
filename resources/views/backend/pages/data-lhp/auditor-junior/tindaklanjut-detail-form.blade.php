@@ -299,7 +299,7 @@
                             <label for="exampleTextInput1" class="col-sm-2 control-label text-right">Status Rekomendasi :
                             </label>
                             <div class="col-sm-3">
-                                <select name="status_rekomendasi" {{($rekom->published=='1' ? 'disabled' : '')}}  class="form-control" data-plugin="select2" id="status_rekomendasi">
+                                <select name="status_rekomendasi" disabled  class="form-control" data-plugin="select2" id="status_rekomendasi">
                                     <option value="">-- Pilih --</option>
                                     @foreach ($status as $key=>$item)
                                         @if ($item->id==$rekom->status_rekomendasi_id)

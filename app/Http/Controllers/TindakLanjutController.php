@@ -1622,7 +1622,8 @@ class TindakLanjutController extends Controller
         }
         elseif(Auth::user()->level=='super-user')
         {
-            return view('backend.pages.data-lhp.super-user.tindaklanjut-detail-form')
+            // return view('backend.pages.data-lhp.super-user.tindaklanjut-detail-form')
+            return view('backend.pages.data-lhp.tindak-lanjut.senior.tl.tindaklanjut-detail-form')
                 ->with('rekom',$rekom)
                 ->with('dokumen',$dokumen)
                 ->with('pic',$pic)

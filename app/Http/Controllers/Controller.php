@@ -133,9 +133,8 @@ class Controller extends BaseController
                     $request->idlhp = $value->id;
                     $request->judul = 'Reminder LHP';
                     $request->days  = '+3 days';
+                    $this->sendEmail($request);
                 }
-
-                $this->sendEmail($request);
             }
         }
         catch (Exception $e){

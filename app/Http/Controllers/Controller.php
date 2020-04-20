@@ -121,12 +121,34 @@ class Controller extends BaseController
         $email=$data['email'];
     }
 
+    public function reminder()
+    {
+        try {
+            $request    = new Request();
+            $datalhp    = DaftarTemuan::all();
 
+            foreach ($datalhp as $key => $value) {
+                if (strtotime(date('Y-m-d')) == strtotime(date('Y-m-d', strtotime('+7 days', strtotime($value->tanggal_publish))))) {
+                    $request->type  = 'reminder_7';
+                    $request->idlhp = $value->id;
+                    $request->judul = 'Reminder LHP';
+                    $request->days  = '+3 days';
+                }
+
+                $this->sendEmail($request);
+            }
+
+            return response(['status' => true, 'message' => 'Berhasil terkirim']);
+        }
+        catch (Exception $e){
+            return response(['status' => false, 'errors' => $e->getMessage()]);
+        }
+    }
 
     public function sendEmail(Request $request)
     {
         try{
-            if ($request->type == 'publish_lhp') {
+            // if ($request->type == 'publish_lhp') {
                 $data       = [];
                 $datalhp    = DaftarTemuan::find($request->idlhp);
                 $datatemuan = DataTemuan::where('id_lhp', $request->idlhp);
@@ -154,7 +176,7 @@ class Controller extends BaseController
                         'pem'   => $pemeriksa,
                         'jmltem'=> $jml_temuan,
                         'jmlrek'=> $jml_rekom,
-                        'tgl'   => date('j F Y', strtotime('+10 days')),
+                        'tgl'   => date('j F Y', strtotime($request->days ?? '+10 days', strtotime($datalhp->tanggal_publish))),
                     ];
     
                     $body   = [
@@ -169,7 +191,7 @@ class Controller extends BaseController
                         $message->to($request->email);
                     });
                 }
-            }
+            // }
             return response(['status' => true, 'message' => 'Berhasil terkirim']);
         }
         catch (Exception $e){

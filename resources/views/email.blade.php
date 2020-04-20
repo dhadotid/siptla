@@ -275,8 +275,16 @@
     </style>
 </head>
 {{-- @include('content') --}}
-@if ($type == 'publish_lhp')
-@include('publish_lhp')    
-@endif
+{{-- @switch($type)
+    @case('publish_lhp')
+        @include('publish_lhp')
+        @break
+    @case('reminder_7')
+        @include('reminder_7')
+        @break
+    @default
+        
+@endswitch --}}
+@include($type)
 </body>
 </html>

@@ -241,4 +241,4 @@ Route::get('read-pdf/{dir1}/{dir2}/{filename}', 'Controller@read_pdf')->name('ho
 Route::get('read-file/{dir1}/{dir2}/{filename}', 'Controller@read_pdf')->name('home');
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
-Route::post('/send_email', 'EmailController@sendEmail');
+Route::post('/send_email', 'Controller@sendEmail');

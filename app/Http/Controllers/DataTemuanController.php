@@ -807,13 +807,13 @@ class DataTemuanController extends Controller
     public function publish_lhp($idlhp)
     {
         $temuan=DaftarTemuan::where('id',$idlhp)->first();
-        $temuan->status_lhp='Publish LHP';
-        $temuan->publish_flag=1;
+        $temuan->status_lhp         = 'Publish LHP';
+        $temuan->publish_flag       = 1;
+        $temuan->tanggal_publish    = date('Y-m-d');
         $temuan->save();
 
         $request        = new Request();
         $request->judul = 'Publish LHP';
-        $request->email = 'fathan.qoriba95@gmail.com';
         $request->type  = 'publish_lhp';
         $request->idlhp = $idlhp;
 

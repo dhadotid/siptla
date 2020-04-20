@@ -810,5 +810,13 @@ class DataTemuanController extends Controller
         $temuan->status_lhp='Publish LHP';
         $temuan->publish_flag=1;
         $temuan->save();
+
+        $request        = new Request();
+        $request->judul = 'Publish LHP';
+        $request->email = 'fathan.qoriba95@gmail.com';
+        $request->type  = 'publish_lhp';
+        $request->idlhp = $idlhp;
+
+        $this->sendEmail($request);
     }
 }

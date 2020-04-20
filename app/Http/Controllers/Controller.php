@@ -2,14 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DaftarTemuan;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Models\TindakLanjutTemuan;
 use App\Models\DataRekomendasi;
+use App\Models\DataTemuan;
 use App\Models\Notifikasi;
+use App\Models\Pemeriksa;
+use App\Models\PICUnit;
+use App\User;
 use Auth;
+use Exception;
+use Illuminate\Support\Facades\Mail;
+use Symfony\Component\HttpFoundation\Request;
+
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -110,6 +119,61 @@ class Controller extends BaseController
         $kepada=$data['kepada'];
         $pesan=$data['pesan'];
         $email=$data['email'];
+    }
 
+
+
+    public function sendEmail(Request $request)
+    {
+        try{
+            if ($request->type == 'publish_lhp') {
+                $data       = [];
+                $datalhp    = DaftarTemuan::find($request->idlhp);
+                $datatemuan = DataTemuan::where('id_lhp', $request->idlhp);
+                $getTemuan  = $datatemuan->get();
+                $ids_temuan = [];
+                $pemeriksa  = Pemeriksa::find($datalhp->pemeriksa_id);
+    
+                foreach ($getTemuan as $key => $value) {
+                    $ids_temuan[]    = $value->id;
+                }
+    
+                $datarekom  = DataRekomendasi::whereIn('id_temuan', $ids_temuan);
+                $jml_temuan = $datatemuan->count();
+                $jml_rekom  = $datarekom->count();
+
+                foreach ($getTemuan as $key => $value) {
+                    $pic    = PICUnit::find($value->pic_temuan_id);
+                    $user   = User::find($pic->id_user);
+
+                    $request->email = $user->email;
+
+                    $data   = [
+                        'pic'   => $pic->nama_pic,
+                        'lhp'   => $datalhp,
+                        'pem'   => $pemeriksa,
+                        'jmltem'=> $jml_temuan,
+                        'jmlrek'=> $jml_rekom,
+                        'tgl'   => date('j F Y', strtotime('+10 days')),
+                    ];
+    
+                    $body   = [
+                        'type'  => $request->type,
+                        'data'  => $data,
+                    ];
+        
+                    Mail::send('email', $body, function ($message) use ($request)
+                    {
+                        $message->subject($request->judul);
+                        $message->from('donotreply@gmail.com', 'SIPTLA');
+                        $message->to($request->email);
+                    });
+                }
+            }
+            return response(['status' => true, 'message' => 'Berhasil terkirim']);
+        }
+        catch (Exception $e){
+            return response(['status' => false, 'errors' => $e->getMessage()]);
+        }
     }
 }

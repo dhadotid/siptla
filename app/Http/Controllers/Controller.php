@@ -137,8 +137,6 @@ class Controller extends BaseController
 
                 $this->sendEmail($request);
             }
-
-            return response(['status' => true, 'message' => 'Berhasil terkirim']);
         }
         catch (Exception $e){
             return response(['status' => false, 'errors' => $e->getMessage()]);

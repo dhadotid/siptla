@@ -12,6 +12,7 @@ use App\Models\DataRekomendasi;
 use App\Models\DataTemuan;
 use App\Models\Notifikasi;
 use App\Models\Pemeriksa;
+use App\Models\PeriodeReview;
 use App\Models\PICUnit;
 use App\User;
 use Auth;
@@ -136,6 +137,38 @@ class Controller extends BaseController
                     $this->sendEmail($request);
                 }
             }
+
+            $periode    = PeriodeReview::where('status', 1)->first();
+            $datarekom  = DataRekomendasi::all();
+            $datapic    = PICUnit::all();
+
+            foreach ($datapic as $key => $value) {
+                $bss[$value->id]    = 0;
+                $bdl[$value->id]    = 0;
+            }
+
+            foreach ($datarekom as $key => $value) {
+                if (($value->status_rekomendasi_id == 2 || $value->status_rekomendasi_id == 3) && 
+                    $value->id_temuan == 138 && 
+                    strtotime(date('Y-m-d')) == strtotime(date('Y-m-d', strtotime('-3 days', strtotime(date('Y-m-'.$periode->tanggal_selesai)))))) {
+                    if ($value->status_rekomendasi_id == 2) {$bss[$value->pic_1_temuan_id]++;}
+                    if ($value->status_rekomendasi_id == 3) {$bdl[$value->pic_1_temuan_id]++;}
+                }
+            }
+
+            foreach ($datarekom as $key => $value) {
+                if (($value->status_rekomendasi_id == 2 || $value->status_rekomendasi_id == 3) && 
+                    $value->id_temuan == 138 && 
+                    strtotime(date('Y-m-d')) == strtotime(date('Y-m-d', strtotime('-3 days', strtotime(date('Y-m-'.$periode->tanggal_selesai)))))) {
+                    $request->type  = 'reminder_3';
+                    $request->judul = 'Reminder LHP';
+                    $request->idrek = $value->id;
+                    $request->idtem = $value->id_temuan;
+                    $request->bss   = $bss[$value->pic_1_temuan_id];
+                    $request->bdl   = $bdl[$value->pic_1_temuan_id];
+                    $this->sendEmail($request);
+                }
+            }
         }
         catch (Exception $e){
             return response(['status' => false, 'errors' => $e->getMessage()]);
@@ -145,7 +178,7 @@ class Controller extends BaseController
     public function sendEmail(Request $request)
     {
         try{
-            // if ($request->type == 'publish_lhp') {
+            if ($request->type == 'publish_lhp' || $request->type == 'reminder_7') {
                 $data       = [];
                 $datalhp    = DaftarTemuan::find($request->idlhp);
                 $datatemuan = DataTemuan::where('id_lhp', $request->idlhp);
@@ -188,7 +221,34 @@ class Controller extends BaseController
                         $message->to($request->email);
                     });
                 }
-            // }
+            }
+            elseif ($request->type == 'reminder_3') {
+                $rekom  = DataRekomendasi::find($request->idrek);
+                $pic    = PICUnit::find($rekom->pic_1_temuan_id);
+                $user   = User::find($pic->id_user);
+
+                $request->email = $user->email;
+
+                $data   = [
+                    'pic'   => $pic->nama_pic,
+                    'jmlrek'=> $rekom->count(),
+                    'tgl'   => date('j F Y', strtotime($request->days ?? '+3 days')),
+                    'bss'   => $request->bss,
+                    'bdl'   => $request->bdl,
+                ];
+
+                $body   = [
+                    'type'  => $request->type,
+                    'data'  => $data,
+                ];
+    
+                Mail::send('email', $body, function ($message) use ($request)
+                {
+                    $message->subject($request->judul);
+                    $message->from('donotreply@gmail.com', 'SIPTLA');
+                    $message->to($request->email);
+                });
+            }
             return response(['status' => true, 'message' => 'Berhasil terkirim']);
         }
         catch (Exception $e){

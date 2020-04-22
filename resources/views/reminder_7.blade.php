@@ -10,6 +10,7 @@ e)	Untuk dapat mengaktifkan, Unit kerja agar mengirimkan Nota Dinas kepada SPI d
 Untuk itu, kami harapkan Bapak/Ibu dapat segera mengisi target waktu penyelesaian dan rencana penyelesaian tersebut. <br>
 Jika Bapak/Ibu memiliki pertanyaan, dapat menghubungi tim SPI. <br>
 <br>
+<br>
 Terima Kasih. <br>
 Salam, <br>
 Kepala SPI <br>

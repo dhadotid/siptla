@@ -244,3 +244,4 @@ Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 Route::post('/send_email', 'Controller@sendEmail');
 Route::get('/reminder_7', 'Controller@reminder_7');
 Route::get('/reminder_3', 'Controller@reminder_3');
+Route::get('/reminder_overdue', 'Controller@reminder_overdue');

@@ -1,7 +1,7 @@
 Yth. Pimpinan Fakultas/Unit Kerja <br>
-….. (disi otomatis sesuai PIC Unit Kerja, unit kerja yang menerima adalah unit kerja yang memiliki rekomendasi yang akan overdue dalam waktu 7 hari lagi) <br>
+{{$data['pic']}} <br>
 <br>
-Kami informasikan bahwa rekomendasi di Unit Kerja Bapak/ibu yang akan overdue dalam waktu 7 hari kedepan atau tanggal ….. adalah sebanyak …. rekomendasi yang terdiri dari rekomendasi dengan level risiko tinggi sebanyak …. rekomendasi, level risiko menengah sebanyak … rekomendasi dan level risiko rendah sebanyak …. rekomendasi. <br>
+Kami informasikan bahwa rekomendasi di Unit Kerja Bapak/ibu yang akan overdue dalam waktu 7 hari kedepan atau tanggal {{$data['tgl']}} adalah sebanyak {{$data['jml']}} rekomendasi yang terdiri dari rekomendasi dengan level risiko tinggi sebanyak {{$data['tin']}} rekomendasi, level risiko menengah sebanyak {{$data['sed']}} rekomendasi dan level risiko rendah sebanyak {{$data['ren']}} rekomendasi. <br>
 Kami harapkan Bapak/Ibu dapat segera menindaklanjuti rekomendasi tersebut. <br>
 Jika Bapak/Ibu memiliki pertanyaan, dapat menghubungi tim SPI. <br>
 <br>

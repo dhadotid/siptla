@@ -184,6 +184,51 @@ class Controller extends BaseController
         }
     }
 
+    public function reminder_overdue()
+    {
+        try {
+            $request    = new Request();
+            $datarekom  = DataRekomendasi::all();
+            $datapic    = PICUnit::all();
+
+            foreach ($datapic as $key => $value) {
+                $rekjumlah[$value->id]  = 0;
+                $rektinggi[$value->id]  = 0;
+                $reksedang[$value->id]  = 0;
+                $rekrendah[$value->id]  = 0;
+            }
+
+            foreach ($datarekom as $key => $value) {
+                if (strtotime(date('Y-m-d')) == strtotime(date('Y-m-d', strtotime('-7 days', strtotime($value->tanggal_penyelesaian))))) {
+                    $rekjumlah[$value->pic_1_temuan_id]++;
+                    $temuan = DataTemuan::find($value->id_temuan);
+                    if ($temuan->level_resiko_id == 4) {$rektinggi[$value->pic_1_temuan_id]++;}
+                    if ($temuan->level_resiko_id == 3) {$reksedang[$value->pic_1_temuan_id]++;}
+                    if ($temuan->level_resiko_id == 2) {$rekrendah[$value->pic_1_temuan_id]++;}
+                }
+            }
+
+            foreach ($datarekom as $key => $value) {
+                if (strtotime(date('Y-m-d')) == strtotime(date('Y-m-d', strtotime('-7 days', strtotime($value->tanggal_penyelesaian))))) {
+                    $request->type  = 'reminder_overdue';
+                    $request->judul = 'Reminder LHP';
+                    $request->idrek = $value->id;
+                    $request->days  = '+7 days';
+
+                    $request->jml   = $rekjumlah[$value->pic_1_temuan_id];
+                    $request->tin   = $rektinggi[$value->pic_1_temuan_id];
+                    $request->sed   = $reksedang[$value->pic_1_temuan_id];
+                    $request->ren   = $rekrendah[$value->pic_1_temuan_id];
+
+                    $this->sendEmail($request);
+                }
+            }
+        }
+        catch (Exception $e){
+            return response(['status' => false, 'errors' => $e->getMessage()]);
+        }
+    }
+
     public function sendEmail(Request $request)
     {
         try{
@@ -231,7 +276,7 @@ class Controller extends BaseController
                     });
                 }
             }
-            elseif ($request->type == 'reminder_3') {
+            elseif ($request->type == 'reminder_3' || $request->type == 'reminder_overdue') {
                 $rekom  = DataRekomendasi::find($request->idrek);
                 $pic    = PICUnit::find($rekom->pic_1_temuan_id);
                 $user   = User::find($pic->id_user);
@@ -240,10 +285,13 @@ class Controller extends BaseController
 
                 $data   = [
                     'pic'   => $pic->nama_pic,
-                    'jmlrek'=> $rekom->count(),
                     'tgl'   => date('j F Y', strtotime($request->days ?? '+3 days')),
-                    'bss'   => $request->bss,
-                    'bdl'   => $request->bdl,
+                    'bss'   => $request->bss ?? 0,
+                    'bdl'   => $request->bdl ?? 0,
+                    'jml'   => $request->jml ?? 0,
+                    'tin'   => $request->tin ?? 0,
+                    'sed'   => $request->sed ?? 0,
+                    'ren'   => $request->ren ?? 0,
                 ];
 
                 $body   = [

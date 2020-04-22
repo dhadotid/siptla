@@ -122,7 +122,7 @@ class Controller extends BaseController
         $email=$data['email'];
     }
 
-    public function reminder()
+    public function reminder_7()
     {
         try {
             $request    = new Request();
@@ -137,7 +137,16 @@ class Controller extends BaseController
                     $this->sendEmail($request);
                 }
             }
+        }
+        catch (Exception $e){
+            return response(['status' => false, 'errors' => $e->getMessage()]);
+        }
+    }
 
+    public function reminder_3()
+    {
+        try {
+            $request    = new Request();
             $periode    = PeriodeReview::where('status', 1)->first();
             $datarekom  = DataRekomendasi::all();
             $datapic    = PICUnit::all();

@@ -229,6 +229,32 @@ class Controller extends BaseController
         }
     }
 
+    public function reminder_junior()
+    {
+        try {
+            $request    = new Request();
+            $periode    = PeriodeReview::where('status', 1)->first();
+            $datarekom  = DataRekomendasi::all();
+            $datapic    = PICUnit::all();
+
+            foreach ($datarekom as $key => $value) {
+                if ($value->review_spi == null && 
+                    $value->id_temuan == 138 && 
+                    strtotime(date('Y-m-d')) == strtotime(date('Y-m-d', strtotime('+2 days', strtotime(date('Y-m-'.$periode->tanggal_selesai)))))) {
+                    $request->type  = 'reminder_junior';
+                    $request->judul = 'Reminder Junior';
+                    $request->idrek = $value->id;
+                    $request->idtem = $value->id_temuan;
+
+                    $this->sendEmail($request);
+                }
+            }
+        }
+        catch (Exception $e){
+            return response(['status' => false, 'errors' => $e->getMessage()]);
+        }
+    }
+
     public function sendEmail(Request $request)
     {
         try{
@@ -292,6 +318,33 @@ class Controller extends BaseController
                     'tin'   => $request->tin ?? 0,
                     'sed'   => $request->sed ?? 0,
                     'ren'   => $request->ren ?? 0,
+                ];
+
+                $body   = [
+                    'type'  => $request->type,
+                    'data'  => $data,
+                ];
+    
+                Mail::send('email', $body, function ($message) use ($request)
+                {
+                    $message->subject($request->judul);
+                    $message->from('donotreply@gmail.com', 'SIPTLA');
+                    $message->to($request->email);
+                });
+            }
+            elseif ($request->type == 'reminder_junior') {
+                $rekom  = DataRekomendasi::find($request->idrek);
+                $temuan = DataTemuan::find($request->idtem);
+                $lhp    = DaftarTemuan::find($temuan->id_lhp);
+                $junior = User::find($lhp->user_input_id);
+
+                $request->email = $junior->email;
+
+                $data   = [
+                    'pic'   => $junior->name,
+                    'rek'   => $rekom->nomor_rekomendasi,
+                    'tem'   => $temuan->no_temuan,
+                    'lhp'   => $lhp->no_lhp,
                 ];
 
                 $body   = [

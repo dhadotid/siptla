@@ -245,3 +245,4 @@ Route::post('/send_email', 'Controller@sendEmail');
 Route::get('/reminder_7', 'Controller@reminder_7');
 Route::get('/reminder_3', 'Controller@reminder_3');
 Route::get('/reminder_overdue', 'Controller@reminder_overdue');
+Route::get('/reminder_junior', 'Controller@reminder_junior');

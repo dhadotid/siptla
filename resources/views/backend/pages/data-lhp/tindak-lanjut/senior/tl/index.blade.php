@@ -352,15 +352,11 @@
                                                             </button>
                                                             <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">';
                                                             
-                                                        if($v->rekom_publish=='1')
-                                                            $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.',1)" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
-                                                        else
-                                                            $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
+                                                        $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.',1)" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
 
-                                                            
-                                                                // $aksi.='<li><a disabled data-toggle="tooltip" title="Anda Belum Menambahkan Review/Catatan Monev Untuk Rekomendasi Ini" href="#" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Senior</a></li>';
-                                                            
-                                                                $aksi.='<li><a href="javascript:publishkesuperuser('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Rekomendasi</a></li>';
+                                                        if(!$v->rekom_publish)
+                                                            // $aksi.='<li><a disabled data-toggle="tooltip" title="Anda Belum Menambahkan Review/Catatan Monev Untuk Rekomendasi Ini" href="#" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Senior</a></li>';
+                                                            $aksi.='<li><a href="javascript:publishkesuperuser('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Rekomendasi</a></li>';
                                                             
                                                         if($v->rincian!='')
                                                         {

@@ -44,7 +44,7 @@ class JenisAuditController extends Controller
     public function update(Request $request,$id)
     {
          $rules = [
-            'jenis_audit' => 'required|unique:jenis_audit,jenis_audit',
+            'jenis_audit' => 'required|unique:jenis_audit,jenis_audit,'.$id,
         ];
 
         $customMessages = [

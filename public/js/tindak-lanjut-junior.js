@@ -156,14 +156,14 @@ function validasiformsewa() {
         notif('error', 'Unit Kerja Belum Dipilih');
     else if (mitra.val() == '')
         notif('error', 'Nama Mitra Belum Diisi');
-    else if (no_pks.val() == '')
-        notif('error', 'Nomor PKS Belum Diisi');
-    else if (tgl_pks.val() == '')
-        notif('error', 'Tanggal PKS Belum Dipilih');
+    // else if (no_pks.val() == '')
+    //     notif('error', 'Nomor PKS Belum Diisi');
+    // else if (tgl_pks.val() == '')
+    //     notif('error', 'Tanggal PKS Belum Dipilih');
     else if (nilai_perjanjian.val() == '')
         notif('error', 'Nilai Pekerjaan Belum Diisi');
-    else if (masa_berlaku.val() == '')
-        notif('error', 'Masa Berlaku Belum Dipilih');
+    // else if (masa_berlaku.val() == '')
+    //     notif('error', 'Masa Berlaku Belum Dipilih');
     else {
         //formrinciansewa
         var totalnilai = parseFloat($('#total_nilai').val())
@@ -235,10 +235,10 @@ function validasiformuangmuka() {
 
     if (unit_kerja.val() == '')
         notif('error', 'Unit Kerja Belum Dipilih');
-    else if (no_invoice.val() == '')
-        notif('error', 'Nomor Invoice Belum Diisi');
-    else if (tgl_pum.val() == '')
-        notif('error', 'Tanggal PUM Belum Dipilih');
+    // else if (no_invoice.val() == '')
+    //     notif('error', 'Nomor Invoice Belum Diisi');
+    // else if (tgl_pum.val() == '')
+    //     notif('error', 'Tanggal PUM Belum Dipilih');
     else if (jumlah_um.val() == '')
         notif('error', 'Jumlah UM Belum Diisi');
     else {

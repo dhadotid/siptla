@@ -476,7 +476,7 @@ class DataTemuanController extends Controller
         list($tgl,$bln,$thn)=explode('/',$request->tanggal_lhp);
 
         $insert=new DaftarTemuan;
-        $insert->no_lhp = $request->nomor_lhp;
+        $insert->no_lhp = $request->kode_lhp;
         $insert->kode_lhp = $request->kode_lhp;
         $insert->judul_lhp = $request->judul_lhp;
         $insert->pemeriksa_id = $idpem;
@@ -504,7 +504,7 @@ class DataTemuanController extends Controller
         list($tgl,$bln,$thn)=explode('/',$request->tanggal_lhp);
 
         $update=DaftarTemuan::find($idlhp);
-        $update->no_lhp = $request->nomor_lhp;
+        $update->no_lhp = $request->kode_lhp;
         $update->kode_lhp = $request->kode_lhp;
         $update->judul_lhp = $request->judul_lhp;
         $update->pemeriksa_id = $idpem;
@@ -807,8 +807,16 @@ class DataTemuanController extends Controller
     public function publish_lhp($idlhp)
     {
         $temuan=DaftarTemuan::where('id',$idlhp)->first();
-        $temuan->status_lhp='Publish LHP';
-        $temuan->publish_flag=1;
+        $temuan->status_lhp         = 'Publish LHP';
+        $temuan->publish_flag       = 1;
+        $temuan->tanggal_publish    = date('Y-m-d');
         $temuan->save();
+
+        $request        = new Request();
+        $request->judul = 'Publish LHP';
+        $request->type  = 'publish_lhp';
+        $request->idlhp = $idlhp;
+
+        $this->sendEmail($request);
     }
 }

@@ -2,14 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DaftarTemuan;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Models\TindakLanjutTemuan;
 use App\Models\DataRekomendasi;
+use App\Models\DataTemuan;
 use App\Models\Notifikasi;
+use App\Models\Pemeriksa;
+use App\Models\PeriodeReview;
+use App\Models\PICUnit;
+use App\User;
 use Auth;
+use Exception;
+use Illuminate\Support\Facades\Mail;
+use Symfony\Component\HttpFoundation\Request;
+
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -110,6 +120,196 @@ class Controller extends BaseController
         $kepada=$data['kepada'];
         $pesan=$data['pesan'];
         $email=$data['email'];
+    }
 
+    public function reminder_7()
+    {
+        try {
+            $request    = new Request();
+            $datalhp    = DaftarTemuan::all();
+
+            foreach ($datalhp as $key => $value) {
+                if (strtotime(date('Y-m-d')) == strtotime(date('Y-m-d', strtotime('+7 days', strtotime($value->tanggal_publish))))) {
+                    $request->type  = 'reminder_7';
+                    $request->idlhp = $value->id;
+                    $request->judul = 'Reminder LHP';
+                    $request->days  = '+3 days';
+                    $this->sendEmail($request);
+                }
+            }
+        }
+        catch (Exception $e){
+            return response(['status' => false, 'errors' => $e->getMessage()]);
+        }
+    }
+
+    public function reminder_3()
+    {
+        try {
+            $request    = new Request();
+            $periode    = PeriodeReview::where('status', 1)->first();
+            $datarekom  = DataRekomendasi::all();
+            $datapic    = PICUnit::all();
+
+            foreach ($datapic as $key => $value) {
+                $bss[$value->id]    = 0;
+                $bdl[$value->id]    = 0;
+            }
+
+            foreach ($datarekom as $key => $value) {
+                if (($value->status_rekomendasi_id == 2 || $value->status_rekomendasi_id == 3) && 
+                    $value->id_temuan == 138 && 
+                    strtotime(date('Y-m-d')) == strtotime(date('Y-m-d', strtotime('-3 days', strtotime(date('Y-m-'.$periode->tanggal_selesai)))))) {
+                    if ($value->status_rekomendasi_id == 2) {$bss[$value->pic_1_temuan_id]++;}
+                    if ($value->status_rekomendasi_id == 3) {$bdl[$value->pic_1_temuan_id]++;}
+                }
+            }
+
+            foreach ($datarekom as $key => $value) {
+                if (($value->status_rekomendasi_id == 2 || $value->status_rekomendasi_id == 3) && 
+                    $value->id_temuan == 138 && 
+                    strtotime(date('Y-m-d')) == strtotime(date('Y-m-d', strtotime('-3 days', strtotime(date('Y-m-'.$periode->tanggal_selesai)))))) {
+                    $request->type  = 'reminder_3';
+                    $request->judul = 'Reminder LHP';
+                    $request->idrek = $value->id;
+                    $request->idtem = $value->id_temuan;
+                    $request->bss   = $bss[$value->pic_1_temuan_id];
+                    $request->bdl   = $bdl[$value->pic_1_temuan_id];
+                    $this->sendEmail($request);
+                }
+            }
+        }
+        catch (Exception $e){
+            return response(['status' => false, 'errors' => $e->getMessage()]);
+        }
+    }
+
+    public function reminder_overdue()
+    {
+        try {
+            $request    = new Request();
+            $datarekom  = DataRekomendasi::all();
+            $datapic    = PICUnit::all();
+
+            foreach ($datapic as $key => $value) {
+                $rekjumlah[$value->id]  = 0;
+                $rektinggi[$value->id]  = 0;
+                $reksedang[$value->id]  = 0;
+                $rekrendah[$value->id]  = 0;
+            }
+
+            foreach ($datarekom as $key => $value) {
+                if (strtotime(date('Y-m-d')) == strtotime(date('Y-m-d', strtotime('-7 days', strtotime($value->tanggal_penyelesaian))))) {
+                    $rekjumlah[$value->pic_1_temuan_id]++;
+                    $temuan = DataTemuan::find($value->id_temuan);
+                    if ($temuan->level_resiko_id == 4) {$rektinggi[$value->pic_1_temuan_id]++;}
+                    if ($temuan->level_resiko_id == 3) {$reksedang[$value->pic_1_temuan_id]++;}
+                    if ($temuan->level_resiko_id == 2) {$rekrendah[$value->pic_1_temuan_id]++;}
+                }
+            }
+
+            foreach ($datarekom as $key => $value) {
+                if (strtotime(date('Y-m-d')) == strtotime(date('Y-m-d', strtotime('-7 days', strtotime($value->tanggal_penyelesaian))))) {
+                    $request->type  = 'reminder_overdue';
+                    $request->judul = 'Reminder LHP';
+                    $request->idrek = $value->id;
+                    $request->days  = '+7 days';
+
+                    $request->jml   = $rekjumlah[$value->pic_1_temuan_id];
+                    $request->tin   = $rektinggi[$value->pic_1_temuan_id];
+                    $request->sed   = $reksedang[$value->pic_1_temuan_id];
+                    $request->ren   = $rekrendah[$value->pic_1_temuan_id];
+
+                    $this->sendEmail($request);
+                }
+            }
+        }
+        catch (Exception $e){
+            return response(['status' => false, 'errors' => $e->getMessage()]);
+        }
+    }
+
+    public function sendEmail(Request $request)
+    {
+        try{
+            if ($request->type == 'publish_lhp' || $request->type == 'reminder_7') {
+                $data       = [];
+                $datalhp    = DaftarTemuan::find($request->idlhp);
+                $datatemuan = DataTemuan::where('id_lhp', $request->idlhp);
+                $getTemuan  = $datatemuan->get();
+                $ids_temuan = [];
+                $pemeriksa  = Pemeriksa::find($datalhp->pemeriksa_id);
+    
+                foreach ($getTemuan as $key => $value) {
+                    $ids_temuan[]    = $value->id;
+                }
+    
+                $datarekom  = DataRekomendasi::whereIn('id_temuan', $ids_temuan);
+                $jml_temuan = $datatemuan->count();
+                $jml_rekom  = $datarekom->count();
+
+                foreach ($getTemuan as $key => $value) {
+                    $pic    = PICUnit::find($value->pic_temuan_id);
+                    $user   = User::find($pic->id_user);
+
+                    $request->email = $user->email;
+
+                    $data   = [
+                        'pic'   => $pic->nama_pic,
+                        'lhp'   => $datalhp,
+                        'pem'   => $pemeriksa,
+                        'jmltem'=> $jml_temuan,
+                        'jmlrek'=> $jml_rekom,
+                        'tgl'   => date('j F Y', strtotime($request->days ?? '+10 days', strtotime($datalhp->tanggal_publish))),
+                    ];
+    
+                    $body   = [
+                        'type'  => $request->type,
+                        'data'  => $data,
+                    ];
+        
+                    Mail::send('email', $body, function ($message) use ($request)
+                    {
+                        $message->subject($request->judul);
+                        $message->from('donotreply@gmail.com', 'SIPTLA');
+                        $message->to($request->email);
+                    });
+                }
+            }
+            elseif ($request->type == 'reminder_3' || $request->type == 'reminder_overdue') {
+                $rekom  = DataRekomendasi::find($request->idrek);
+                $pic    = PICUnit::find($rekom->pic_1_temuan_id);
+                $user   = User::find($pic->id_user);
+
+                $request->email = $user->email;
+
+                $data   = [
+                    'pic'   => $pic->nama_pic,
+                    'tgl'   => date('j F Y', strtotime($request->days ?? '+3 days')),
+                    'bss'   => $request->bss ?? 0,
+                    'bdl'   => $request->bdl ?? 0,
+                    'jml'   => $request->jml ?? 0,
+                    'tin'   => $request->tin ?? 0,
+                    'sed'   => $request->sed ?? 0,
+                    'ren'   => $request->ren ?? 0,
+                ];
+
+                $body   = [
+                    'type'  => $request->type,
+                    'data'  => $data,
+                ];
+    
+                Mail::send('email', $body, function ($message) use ($request)
+                {
+                    $message->subject($request->judul);
+                    $message->from('donotreply@gmail.com', 'SIPTLA');
+                    $message->to($request->email);
+                });
+            }
+            return response(['status' => true, 'message' => 'Berhasil terkirim']);
+        }
+        catch (Exception $e){
+            return response(['status' => false, 'errors' => $e->getMessage()]);
+        }
     }
 }

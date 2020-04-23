@@ -71,12 +71,12 @@
                                                     </li>
                                                 @endif    
                                             @endif
-                                            <li>
+                                            {{-- <li>
                                                 <a href="#" class="btn-edit" data-toggle="modal" data-target="#modalubah" data-value="{{$item->lhp_id}}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit LHP</a>
                                             </li>
                                             <li>
                                                 <a href="#" class="btn-delete" data-toggle="modal" data-target="#modalhapus" data-value="{{$item->lhp_id}}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus LHP</a>
-                                            </li>
+                                            </li> --}}
                                         </ul>
                                     </div>
                                 </td>
@@ -136,12 +136,12 @@
                                                 </li>
                                             @endif    
                                         @endif
-                                        <li>
+                                        {{-- <li>
                                             <a href="#" class="btn-edit" data-toggle="modal" data-target="#modalubah" data-value="{{$item->lhp_id}}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit LHP</a>
                                         </li>
                                         <li>
                                             <a href="#" class="btn-delete" data-toggle="modal" data-target="#modalhapus" data-value="{{$item->lhp_id}}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus LHP</a>
-                                        </li>
+                                        </li> --}}
                                     </ul>
                                 </div>
                             </td>

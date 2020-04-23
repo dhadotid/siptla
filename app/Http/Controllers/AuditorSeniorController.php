@@ -420,7 +420,7 @@ class AuditorSeniorController extends Controller
                 ->with('pemeriksa',$pemeriksa)
                 ->with('temuan',$temuan);
     }
-    public function tindaklanjut_su_simpan()
+    public function tindaklanjut_su_simpan(Request $request)
     {
         $tahun=$request->tahun;
         $rekom=DataRekomendasi::find($request->idrekomendasi);

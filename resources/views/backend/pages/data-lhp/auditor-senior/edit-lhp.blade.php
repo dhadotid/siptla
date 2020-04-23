@@ -3,7 +3,7 @@
         <div class="form-group">
             <label for="exampleTextInput1" class="col-sm-4 control-label text-right">Nomor LHP:</label>
             <div class="col-sm-8">
-                <input type="text" class="form-control" name="nomor_lhp" placeholder="Nomor LHP" id="edit_nomor_lhp">
+                <input type="text" class="form-control" name="nomor_lhp" placeholder="Nomor LHP" id="edit_nomor_lhp" readonly>
             </div>
         </div>
         <div class="form-group">

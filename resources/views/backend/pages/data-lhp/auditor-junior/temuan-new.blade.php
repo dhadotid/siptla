@@ -47,7 +47,9 @@
                         <div class="col-md-7">&nbsp;</div>
                          <div class="col-md-3 text-right">
                              <a href="{{ URL::previous() }}" class="btn btn-sm btn-primary">< Kembali </a>&nbsp;
+                             @if (Auth::user()->level != 'pic-unit')
                              <a href="" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#modaltambah">+ Tambah Data</a>
+                             @endif
                         </div>
                     </div>
                     
@@ -87,7 +89,7 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center primary" style="width:15px;">#</th>
-                                            <th class="text-center primary">Temuan</th>
+                                            <th class="text-center primary" style="width:50%">Temuan</th>
                                             {{-- <th class="text-center primary">Jenis Temuan</th>
                                             <th class="text-center primary">PIC Temuan</th>
                                             <th class="text-center primary">Nilai Temuan </th>
@@ -152,12 +154,14 @@
                                                                 <li>
                                                                     <a href="#" class="btn-detail-temuan" data-toggle="modal" data-target="#modaldetail" data-value="{{$item->temuan_id}}"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Temuan</a>
                                                                 </li>
+                                                                @if (Auth::user()->level != 'pic-unit')
                                                                 <li>
                                                                     <a href="#" class="btn-edit-temuan" data-toggle="modal" data-target="#modalubah" data-value="{{ $item->temuan_id }}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit Temuan</a>
                                                                 </li>
                                                                 <li>
                                                                     <a class="btn-delete-temuan" data-toggle="modal" data-target="#modalhapus" data-value="{{ $item->id }}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus Temuan</a>
                                                                 </li>
+                                                                @endif
                                                             </ul>
                                                         </div>
                                                     </div>

@@ -44,7 +44,7 @@ class LevelPicController extends Controller
     public function update(Request $request,$id)
     {
          $rules = [
-            'nama_level' => 'required|unique:level_pic,nama_level',
+            'nama_level' => 'required|unique:level_pic,nama_level,'.$id,
         ];
 
         $customMessages = [

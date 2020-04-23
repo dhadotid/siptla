@@ -34,9 +34,11 @@
             @endif
   
             <input type="hidden" id="total_nilai" value="{{$totalnilai}}">
+            @if (Auth::user()->level != 'pic-unit')
                     <tr >
                         <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut('umum','{{$idtemuan}}','{{$idrekomendasi}}',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
                     </tr>
+            @endif
                 
             </tbody>
             </table>

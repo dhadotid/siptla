@@ -158,7 +158,6 @@ class Controller extends BaseController
 
             foreach ($datarekom as $key => $value) {
                 if (($value->status_rekomendasi_id == 2 || $value->status_rekomendasi_id == 3) && 
-                    $value->id_temuan == 138 && 
                     strtotime(date('Y-m-d')) == strtotime(date('Y-m-d', strtotime('-3 days', strtotime(date('Y-m-'.$periode->tanggal_selesai)))))) {
                     if ($value->status_rekomendasi_id == 2) {$bss[$value->pic_1_temuan_id]++;}
                     if ($value->status_rekomendasi_id == 3) {$bdl[$value->pic_1_temuan_id]++;}
@@ -167,7 +166,6 @@ class Controller extends BaseController
 
             foreach ($datarekom as $key => $value) {
                 if (($value->status_rekomendasi_id == 2 || $value->status_rekomendasi_id == 3) && 
-                    $value->id_temuan == 138 && 
                     strtotime(date('Y-m-d')) == strtotime(date('Y-m-d', strtotime('-3 days', strtotime(date('Y-m-'.$periode->tanggal_selesai)))))) {
                     $request->type  = 'reminder_3';
                     $request->judul = 'Reminder LHP';
@@ -238,7 +236,6 @@ class Controller extends BaseController
 
             foreach ($datarekom as $key => $value) {
                 if ($value->review_spi == null && 
-                    $value->id_temuan == 138 && 
                     strtotime(date('Y-m-d')) == strtotime(date('Y-m-d', strtotime('+2 days', strtotime(date('Y-m-'.$periode->tanggal_selesai)))))) {
                     $request->type  = 'reminder_junior';
                     $request->judul = 'Reminder Junior';

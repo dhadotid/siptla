@@ -218,10 +218,15 @@ class DataTemuanController extends Controller
                     ->orderBy('tanggal_lhp','desc')
                     ->get();
 
+            foreach ($data as $key => $value) {
+                $count[$value->lhp_id]  = DataTemuan::where('id_lhp', $value->lhp_id)->count();
+            }
+
             return view('backend.pages.data-lhp.auditor-senior.data')
                 ->with('data',$data)
                 ->with('arraylhp',$arraylhp)
                 ->with('statusrekom',$statusrekom)
+                ->with('count',$count)
                 ->with('drekom',$drekom);
                 // $data=DaftarTemuan::selectRaw('*,data_rekomendasi.id as idrekom')->join('pemeriksa','pemeriksa.id','=','daftar_lhp.pemeriksa_id')
                 //                 ->join('jenis_audit','jenis_audit.id','=','daftar_lhp.jenis_audit_id')
@@ -239,13 +244,18 @@ class DataTemuanController extends Controller
                     ->orderBy('tanggal_lhp','desc')
                     ->get();
 
+            foreach ($data as $key => $value) {
+                $count[$value->lhp_id]  = DataTemuan::where('id_lhp', $value->lhp_id)->count();
+            }
+
             return view('backend.pages.data-lhp.super-user.data')
                 ->with('data',$data)
                 ->with('arraylhp',$arraylhp)
                 ->with('statusrekom',$statusrekom)
+                ->with('count',$count)
                 ->with('drekom',$drekom);
         }
-       elseif(Auth::user()->level=='pic-unit')
+        elseif(Auth::user()->level=='pic-unit')
         {
             $data=DaftarTemuan::selectRaw('*,daftar_lhp.id as lhp_id')
                     ->where('daftar_lhp.tahun_pemeriksa',$thn)
@@ -299,10 +309,16 @@ class DataTemuanController extends Controller
                     ->orderBy('tanggal_lhp','desc')->get();
         }
         // return $statusrekom;
+
+        foreach ($data as $key => $value) {
+            $count[$value->lhp_id]  = DataTemuan::where('id_lhp', $value->lhp_id)->count();
+        }
+
         return view('backend.pages.data-lhp.auditor-junior.data')
                 ->with('data',$data)
                 ->with('arraylhp',$arraylhp)
                 ->with('statusrekom',$statusrekom)
+                ->with('count',$count)
                 ->with('drekom',$drekom);
     }
     public function semua_data_lhp($tahun=null)

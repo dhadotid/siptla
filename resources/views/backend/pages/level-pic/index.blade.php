@@ -98,7 +98,9 @@
 		<div class="widget">
 			<header class="widget-header">
 				<span class="widget-title">Data Level PIC Unit</span>
+				@if (Auth::user()->level=='0')
 				<a href="" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#modaltambah">+ Tambah Data</a>
+				@endif
 			</header><!-- .widget-header -->
 			<hr class="widget-separator">
 			<div class="widget-body">
@@ -130,7 +132,9 @@
 								<th class="text-center" style="width:15px;">#</th>
 								<th class="text-center">Level PIC Unit</th>
 								<th class="text-center">Flag</th>
+								@if (Auth::user()->level=='0')
 								<th class="text-center">Aksi</th>
+								@endif
 							
 							</tr>
 						</thead>
@@ -146,6 +150,7 @@
                                             <span class="label label-danger">Tidak Aktif</span>
                                         @endif
                                     </td>
+									@if (Auth::user()->level=='0')
 									<td class="text-center">
 										<a class="btn btn-xs btn-warning btn-edit" data-toggle="modal" data-target="#modalubah" data-value="{{ $opd->id }}" style="height:24px !important;">
 											<i class="fa fa-edit"></i>
@@ -154,6 +159,7 @@
 											<i class="fa fa-trash"></i>
 										</a>
 									</td>
+									@endif
 								</tr>
 						@endforeach
 						</tbody>

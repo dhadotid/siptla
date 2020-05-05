@@ -98,7 +98,7 @@
                                                     <div>{{$item->rekomendasi}}</div>
                                                 </th>    
                                             @endforeach
-                                            <th class="text-center primary" colspan="2">Jumlah Publish</th>
+                                            <th class="text-center primary" colspan="2">Jumlah Rekomendasi</th>
                                             <th class="text-center primary" rowspan="2">Aksi</th>
                                         
                                         </tr>

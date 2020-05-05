@@ -175,7 +175,7 @@
                                                                     </li>
                                                                     @if ($jlhrekomendasi==0)
                                                                         <li>
-                                                                            <a class="btn-delete-temuan" data-toggle="modal" data-target="#modalhapus" data-value="{{ $item->id }}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus Temuan</a>
+                                                                            <a class="btn-delete-temuan" data-toggle="modal" data-target="{{isset($drekom[$item->temuan_id]) ? '#' : '#modalhapus'}}" data-value="{{ $item->id }}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus Temuan</a>
                                                                         </li>
                                                                     @endif
                                                                 @endif

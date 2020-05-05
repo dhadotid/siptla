@@ -156,7 +156,7 @@
                                                                             <a href="#" class="btn-edit-temuan" data-toggle="modal" data-target="#modalubah" data-value="{{ $item->temuan_id }}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit Temuan</a>
                                                                         </li>
                                                                         <li>
-                                                                            <a class="btn-delete-temuan" data-toggle="modal" data-target="#modalhapus" data-value="{{ $item->id }}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus Temuan</a>
+                                                                            <a class="btn-delete-temuan" data-toggle="modal" data-target="{{isset($drekom[$item->temuan_id]) ? '#' : '#modalhapus'}}" data-value="{{ $item->id }}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus Temuan</a>
                                                                         </li>
                                                                     @endif
                                                                 @endif

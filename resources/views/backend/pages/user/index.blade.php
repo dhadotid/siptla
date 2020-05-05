@@ -195,7 +195,9 @@
 			<header class="widget-header">
 				<span class="widget-title">Data Pengguna</span>
 				
+				@if (Auth::user()->level=='0')
 				<a href="" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#modaltambah">+ Tambah Data</a><br><br>
+				@endif
 				@if ($level!=null)
 					<select name="sel-level" class="form-control" style="width:300px;float:right;" onchange="location.href='{{url('pengguna')}}/'+this.value">
 						@foreach ($jenislevel as $item)
@@ -242,7 +244,9 @@
 								<th>Telp</th>
 								<th>Jenis Level</th>
 								<th>Flag</th>
+								@if (Auth::user()->level=='0')
 								<th>Aksi</th>
+								@endif
 							</tr>
 						</thead>
 						<tbody>
@@ -269,6 +273,7 @@
                                             <span class="label label-danger">Tidak Aktif</span>
                                         @endif
                                     </td>
+									@if (Auth::user()->level=='0')
 									<td>
 										<a class="btn btn-xs btn-warning btn-edit" data-toggle="modal" data-target="#modalubah" data-value="{{ $us->id }}" style="height:24px !important;">
 											<i class="fa fa-edit"></i>
@@ -277,6 +282,7 @@
 											<i class="fa fa-trash"></i>
 										</a>
 									</td>
+									@endif
 								</tr>
 						@endforeach
 						</tbody>

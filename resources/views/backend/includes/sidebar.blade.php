@@ -86,6 +86,7 @@
                   <li class="{{strpos($url,'level-resiko')!==false ? 'active open' : ''}}"><a href="{{url('level-resiko')}}"><span class="menu-text">Level Resiko</span></a></li>
                   {{-- <li class="{{strpos($url,'pejabat-penandatangan')!==false ? 'active open' : ''}}"><a href="{{url('pejabat-penandatangan')}}"><span class="menu-text">Pejabat Penanda Tangan</span></a></li> --}}
                   <li class="{{strpos($url,'periode-review')!==false ? 'active open' : ''}}"><a href="{{url('periode-review')}}"><span class="menu-text">Periode Review</span></a></li> 
+                  <li class="{{strpos($url,'pengguna')!==false ? 'active open' : ''}}"><a href="{{url('pengguna')}}"><span class="menu-text">Data Pengguna</span></a></li> 
               @endif
             </ul>
           </li>

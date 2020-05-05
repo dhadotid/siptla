@@ -25,9 +25,9 @@
                             </select>
                         </div>
                         <div class="col-md-8">&nbsp;</div>
-                         <div class="col-md-2 text-right">
+                         {{-- <div class="col-md-2 text-right">
                             <a href="" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#modaltambah">+ Tambah Data</a>
-                        </div>
+                        </div> --}}
                     </div>
                     
                 {{-- @endif --}}

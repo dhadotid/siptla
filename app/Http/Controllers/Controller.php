@@ -122,6 +122,25 @@ class Controller extends BaseController
         $email=$data['email'];
     }
 
+    /**
+     * @param int $number
+     * @return string
+     */
+    function numberToRomanRepresentation($number) {
+        $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
+        $returnValue = '';
+        while ($number > 0) {
+            foreach ($map as $roman => $int) {
+                if($number >= $int) {
+                    $number -= $int;
+                    $returnValue .= $roman;
+                    break;
+                }
+            }
+        }
+        return $returnValue;
+    }
+
     public function reminder_7()
     {
         try {
@@ -275,6 +294,54 @@ class Controller extends BaseController
         }
     }
 
+    public function notifikasi_triwulan()
+    {
+        try {
+            $request    = new Request();
+            $datarekom  = DataRekomendasi::all();
+            $datapic    = PICUnit::all();
+            $tri        = ['01', '04', '07', '10'];
+            $wulan      = date('m');
+
+            foreach ($datapic as $key => $value) {
+                $summ[$wulan][$value->id]   = 0;
+                $done[$wulan][$value->id]   = 0;
+            }
+
+            foreach ($datarekom as $key => $value) {
+                foreach ($tri as $k => $v) {
+                    if ($wulan == $v && $k != 0 &&
+                        strtotime($value->created_at) >= strtotime('first day of -3 months') &&
+                        strtotime($value->created_at) <= strtotime('last day of -1 months')) {
+                        $summ[$wulan][$value->pic_1_temuan_id]++;
+
+                        if ($value->status_rekomendasi_id == 1) {$done[$wulan][$value->pic_1_temuan_id]++;}
+                    }
+                }
+            }
+
+            foreach ($datapic as $key => $value) {
+                foreach ($tri as $k => $v) {
+                    if ($wulan == $v && $k != 0 &&
+                        date('d') == '01' &&
+                        $done[$wulan][$value->id] != 0) {
+                        $request->type  = 'notifikasi_triwulan';
+                        $request->judul = 'Notifikasi Triwulan';
+                        $request->idusr = $value->id_user;
+                        $request->roman = $this->numberToRomanRepresentation($k);
+                        $request->done  = $done[$wulan][$value->id];
+                        $request->summ  = $summ[$wulan][$value->id];
+
+                        $this->sendEmail($request);
+                    }
+                }
+            }
+        }
+        catch (Exception $e){
+            return response(['status' => false, 'errors' => $e->getMessage()]);
+        }
+    }
+
     public function sendEmail(Request $request)
     {
         try{
@@ -372,6 +439,30 @@ class Controller extends BaseController
                     'data'  => $data,
                 ];
     
+                Mail::send('email', $body, function ($message) use ($request)
+                {
+                    $message->subject($request->judul);
+                    $message->from('donotreply@gmail.com', 'SIPTLA');
+                    $message->to($request->email);
+                });
+            }
+            elseif ($request->type == 'notifikasi_triwulan') {
+                $user   = User::find($request->idusr);
+
+                $request->email = $user->email;
+
+                $data   = [
+                    'pic'   => $user->name,
+                    'rom'   => $request->roman,
+                    'thn'   => date('Y'),
+                    'per'   => ($request->done / $request->summ) * 100,
+                ];
+
+                $body   = [
+                    'type'  => $request->type,
+                    'data'  => $data,
+                ];
+
                 Mail::send('email', $body, function ($message) use ($request)
                 {
                     $message->subject($request->judul);

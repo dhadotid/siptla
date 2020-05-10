@@ -98,7 +98,7 @@
                                                     <div>{{$item->rekomendasi}}</div>
                                                 </th>    
                                             @endforeach
-                                            <th class="text-center primary" colspan="2">Jumlah Publish</th>
+                                            <th class="text-center primary" colspan="2">Jumlah Rekomendasi</th>
                                             <th class="text-center primary" rowspan="2">Aksi</th>
                                         
                                         </tr>
@@ -166,24 +166,22 @@
                                                                 <span class="caret"></span>
                                                             </button>
                                                             <ul class="dropdown-menu" role="menu">
-                                                                <li>
-                                                                    <a href="#" class="" onclick="rekomadd('{{$item->temuan_id}}')" data-toggle="modal" data-target="#modaltambahrekomendasi" data-value="{{$item->temuan_id}}"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Rekomendasi Temuan</a>
-                                                                    
-                                                                </li>
-                                                                <li>
-                                                                    <a href="#" class="btn-detail-temuan" data-toggle="modal" data-target="#modaldetail" data-value="{{$item->temuan_id}}"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Temuan</a>
-                                                                </li>
-                                                                @if ($data->publish_flag==0)
+                                                                @if (! $data->publish_flag)
+                                                                    <li>
+                                                                        <a href="#" class="" onclick="rekomadd('{{$item->temuan_id}}')" data-toggle="modal" data-target="#modaltambahrekomendasi" data-value="{{$item->temuan_id}}"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Rekomendasi Temuan</a>
+                                                                    </li>
                                                                     <li>
                                                                         <a href="#" class="btn-edit-temuan" data-toggle="modal" data-target="#modalubah" data-value="{{ $item->temuan_id }}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit Temuan</a>
                                                                     </li>
+                                                                    @if ($jlhrekomendasi==0)
+                                                                        <li>
+                                                                            <a class="btn-delete-temuan" data-toggle="modal" data-target="{{isset($drekom[$item->temuan_id]) ? '#' : '#modalhapus'}}" data-value="{{ $item->id }}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus Temuan</a>
+                                                                        </li>
+                                                                    @endif
                                                                 @endif
-                                                                @if ($jlhrekomendasi==0)
-                                                                    
-                                                                    <li>
-                                                                        <a class="btn-delete-temuan" data-toggle="modal" data-target="#modalhapus" data-value="{{ $item->id }}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus Temuan</a>
-                                                                    </li>
-                                                                @endif
+                                                                <li>
+                                                                    <a href="#" class="btn-detail-temuan" data-toggle="modal" data-target="#modaldetail" data-value="{{$item->temuan_id}}"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Temuan</a>
+                                                                </li>
                                                             </ul>
                                                         </div>
                                                     </div>

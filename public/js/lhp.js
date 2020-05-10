@@ -109,6 +109,7 @@ function generatekodelhp(val) {
         url: flagsUrl + '/data-lhp-cek-kode/' + val,
         success: function (res) {
             $('#kode_lhp').val(res);
+            $('#nomor_lhp').val(res);
         }
     })
 }

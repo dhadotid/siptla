@@ -1,11 +1,11 @@
 <div class="row">
     <div class="col-md-12">
-        {{-- <div class="form-group">
+        <div class="form-group">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nomor LHP:</label>
             <div class="col-sm-8">
                 <input type="text" class="form-control" name="nomor_lhp" placeholder="Nomor LHP" id="nomor_lhp">
             </div>
-        </div> --}}
+        </div>
         <div class="form-group">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Pemeriksa:</label>
             <div class="col-sm-8">
@@ -68,13 +68,8 @@
             </div>
         </div>
         @if (Auth::user()->level=='auditor-junior')            
-            <div class="form-group">
-                <label for="datetimepicker2" class="col-sm-3 control-label text-right">Status LHP</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control"  name="status_lhp" placeholder="Status LHP" id="status_lhp" value="Create LHP" readonly>
-                    <input type="hidden" class="form-control"  name="flag_status_lhp" placeholder="Status LHP" id="flag_status_lhp" value="1">
-                </div>
-            </div>
+            <input type="hidden" class="form-control"  name="status_lhp" placeholder="Status LHP" id="status_lhp" value="Create LHP">
+            <input type="hidden" class="form-control"  name="flag_status_lhp" placeholder="Status LHP" id="flag_status_lhp" value="1">
         @else
             <div class="form-group">
                 <label for="datetimepicker2" class="col-sm-3 control-label text-right">Status LHP</label>

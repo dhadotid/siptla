@@ -171,7 +171,7 @@
 		Chart.defaults.global.defaultFontSize = 18;
 		var oilData = <?php echo json_encode($rekom);?>;
 		var pieChart = new Chart(oilCanvas, {
-			type: 'pie',
+			type: 'doughnut',
 			data: oilData,
 			options: {
 				legend: {
@@ -186,7 +186,7 @@
 		var oilCanvas = document.getElementById("chart2");
 		var oilData = <?php echo json_encode($dtl);?>;
 		var pieChart = new Chart(oilCanvas, {
-			type: 'pie',
+			type: 'doughnut',
 			data: oilData,
 			options: {
 				legend: {
@@ -201,7 +201,7 @@
 		var oilCanvas = document.getElementById("chart3");
 		var oilData = <?php echo json_encode($doverdue);?>;
 		var pieChart = new Chart(oilCanvas, {
-			type: 'pie',
+			type: 'doughnut',
 			data: oilData,
 			options: {
 				legend: {

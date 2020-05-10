@@ -88,7 +88,7 @@
 							@foreach ($dpemeriksa['labels'] as $idx=>$item)
 								<li>
 									<div class="box" style="background: {{isset($color['colorpemeriksa'][$idx]) ? $color['colorpemeriksa'][$idx] : '#ffffff'}}"></div> 
-									<a href="{{url('pengguna/'.str_slug($item))}}">
+									<a href="{{url('pemeriksa')}}">
 										{{$item}} ({{isset($dpemeriksa['datasets'][0]['data'][$idx]) ? $dpemeriksa['datasets'][0]['data'][$idx]: 0}})
 									</a>
 								</li>

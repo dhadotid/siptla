@@ -38,6 +38,7 @@
                 <tr class="primary">
                     <th class="text-center">No</th>
                     <th class="text-center">Review</th>
+                    <th class="text-center" style="width:200px">Auditor Senior</th>
                     @if (Auth::user()->level=='auditor-senior')
                         <th class="text-center">Aksi</th>
                     @endif
@@ -48,21 +49,23 @@
                     <tr>
                         <td class="text-center">{{$key+1}}</td>
                         <td class="text-left">{!!$item->review!!}</td>
-                        <td class="text-center">
+                        <td class="text-left">{!!$item->reviewer->name!!}</td>
                         @if (Auth::user()->level=='auditor-senior')
-                            @if ($data->status_lhp=='Review LHP')
+                            <td class="text-center">
+                                @if ($data->status_lhp=='Review LHP')
                                     <a style="height:unset !important;" class="btn btn-xs btn-primary rounded" onclick="editformreviewlhp({{$idlhp}},{{$item->review_id}})">
                                         <div class="tooltipcss"><i class="glyphicon glyphicon-edit"></i>
                                             <span class="tooltiptext">Edit</span>
-                                        </div></a>
+                                        </div>
+                                    </a>
                                     <a style="height:unset !important;" class="btn btn-xs btn-danger rounded btn-delete-rekomendasi" onclick="hapusrekomendasi({{$idlhp}},{{$item->review_id}})">
                                         <div class="tooltipcss"><i class="glyphicon glyphicon-trash"></i>
                                             <span class="tooltiptext">Hapus</span>
-                                        </div></a>
-                                
+                                        </div>
+                                    </a>
                                 @endif
-                            @endif
-                        </td>
+                            </td>
+                        @endif
                     </tr>
                 @endforeach
             </tbody>

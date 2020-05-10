@@ -72,7 +72,12 @@ function validasirekom(act) {
                     updatejlhrekomendasi(idtemuan, res.status_rekomendasi_id);
                     setTimeout(function(){
                         // reloadtable('temuan_' + idtemuan, idtemuan)
-                        $('#modaltambahrekomendasi').modal('show');
+                        // $('#modaltambahrekomendasi').modal('show');
+                        swal("Berhasil", "Data Rekomendasi Berhasil Di Tambah", "success").then(
+                            function() {
+                                location.reload();
+                            }
+                        );
                     },1000);
                 }
             });

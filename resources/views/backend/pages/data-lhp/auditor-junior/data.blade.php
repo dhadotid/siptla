@@ -90,12 +90,14 @@
                                                 </li>
                                             @endif    
                                         @endif
-                                        <li>
-                                            <a href="#" class="btn-edit" data-toggle="modal" data-target="#modalubah" data-value="{{$item->lhp_id}}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit LHP</a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="btn-delete" data-toggle="modal" data-target="#modalhapus" data-value="{{$item->lhp_id}}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus LHP</a>
-                                        </li>
+                                        @if ($item->status_lhp!='Publish LHP')
+                                            <li>
+                                                <a href="#" class="btn-edit" data-toggle="modal" data-target="#modalubah" data-value="{{$item->lhp_id}}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit LHP</a>
+                                            </li>
+                                            <li>
+                                            <a href="#" class="btn-delete" data-toggle="modal" data-target="{{$count[$item->lhp_id]==0 ? '#modalhapus' : '#'}}" data-value="{{$item->lhp_id}}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus LHP {{count($drekom)}}</a>
+                                            </li>
+                                        @endif
                                     </ul>
                                 </div>
                             </td>
@@ -177,12 +179,14 @@
                                             </li>
                                         @endif    
                                     @endif
-                                    <li>
-                                        <a href="#" class="btn-edit" data-toggle="modal" data-target="#modalubah" data-value="{{$item->lhp_id}}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit LHP</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="btn-delete" data-toggle="modal" data-target="#modalhapus" data-value="{{$item->lhp_id}}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus LHP</a>
-                                    </li>
+                                    @if ($item->status_lhp!='Publish LHP')
+                                        <li>
+                                            <a href="#" class="btn-edit" data-toggle="modal" data-target="#modalubah" data-value="{{$item->lhp_id}}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit LHP</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="btn-delete" data-toggle="modal" data-target="{{$count[$item->lhp_id]==0 ? '#modalhapus' : '#'}}" data-value="{{$item->lhp_id}}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus LHP</a>
+                                        </li>
+                                    @endif
                                 </ul>
                             </div>
                         </td>

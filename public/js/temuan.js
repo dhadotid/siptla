@@ -508,7 +508,9 @@ function pilihrincianold(val)
 function gettablerincianold(jenis, idtemuan, idrekom)
 {
     $('#right-div').load(flagsUrl+'/load-table-rincian/'+jenis+'/'+idtemuan+'/'+idrekom,function(){
-        $('#table-tl-rincian').DataTable();
+        $('#table-tl-rincian-'+idrekom).DataTable( {
+            responsive: true
+        } );
     });
 }
 
@@ -631,9 +633,9 @@ function validasiformsewa()
     else if (tgl_pks.val() == '')
         notif('error', 'Tanggal PKS Belum Dipilih');
     else if (nilai_perjanjian.val() == '')
-        notif('error', 'Nilai Pekerjaan Belum Diisi');
+        notif('error', 'Nilai Rekomendasi Belum Diisi');
     else if (masa_berlaku.val() == '')
-        notif('error', 'Masa Berlaku Belum Dipilih');
+        notif('error', 'Masa Kontrak Belum Dipilih');
     else {
         //formrinciansewa
         var totalnilai = parseFloat($('#total_nilai').val())
@@ -1191,7 +1193,7 @@ function validasiumum() {
     else if (keterangan.val() == '')
         notif('error', 'Keterangan Belum Diisi');
     else if (jumlah_rekomendasi.val() == '')
-        notif('error', 'Jumlah Rekomendasi Belum Diisi');
+        notif('error', 'Nilai Rekomendasi (Rp) Belum Diisi');
     else {
         var totalnilai = parseFloat($('#total_nilai').val())
         var nilairekom = $('input.nilai_rekomendasi').val()

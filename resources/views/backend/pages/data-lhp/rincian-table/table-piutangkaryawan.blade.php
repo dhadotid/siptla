@@ -1,4 +1,4 @@
-<h3 class="text-center">Rincian Nilai Pembayaran Piutang Karyawan</h3><table class="table table-bordered" id="table-rincian">
+<h3 class="text-center">Rincian Nilai Setoran – Piutang Karyawan</h3><table class="table table-bordered" id="table-rincian">
             <thead>
                 <tr class="inverse">
                     <th class="text-center">No</th>

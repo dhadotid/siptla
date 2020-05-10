@@ -51,14 +51,14 @@
             </div>
         </div>
         <div class="form-group" style="margin-bottom:10px;">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nilai Pekerjaan:
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nilai Rekomendasi:
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control nominal"  class="form-control"  name="nilai_perjanjian"  placeholder="Nilai Pekerjaan" id="nilai_perjanjian">
+                <input type="text" class="form-control nominal"  class="form-control"  name="nilai_perjanjian"  placeholder="Nilai Rekomendasi" id="nilai_perjanjian">
             </div>
         </div>
         <div class="form-group">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Masa Berlaku
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Masa Kontrak
             </label>
             <div class="col-md-7">
                 <div class='input-group date' id='datetimepicker_masa_berlaku'>

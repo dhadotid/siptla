@@ -17,10 +17,10 @@
         <input type="hidden" name="idrincian" value="{{$idrincian}}">
        
         <div class="form-group" style="margin-bottom:10px;">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Jumlah Rekomendasi:
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nilai Rekomendasi (Rp):
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control nominal"  class="form-control"  name="jumlah_rekomendasi"  placeholder="Jumlah Rekomendasi" id="jumlah_rekomendasi">
+                <input type="text" class="form-control nominal"  class="form-control"  name="jumlah_rekomendasi"  placeholder="Nilai Rekomendasi (Rp)" id="jumlah_rekomendasi">
             </div>
         </div>   
         

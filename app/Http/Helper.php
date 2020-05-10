@@ -222,11 +222,38 @@ function toArray($data,$colm)
 }
 function rinciantindaklanjut()
 {
-    $rincian=['Sewa','Uang Muka','Listrik','Piutang','Piutang Karyawan','Hutang Titipan','Penutupan Rekening','Umum','Kontribusi','Non Setoran','PKS'];
+    // $rincian=['Sewa','Uang Muka','Listrik','Piutang','Piutang Karyawan','Hutang Titipan','Penutupan Rekening','Umum','Kontribusi','Non Setoran','PKS'];
+    //yang belum diambil -> 'Uang Muka', Kontribusi, Non Setoran, PKS
+    $rincian=[
+            'Setoran - Pengembalian Sisa Uang Muka','Setoran - Piutang Karyawan','Setoran - Biaya Listrik','Setoran - Umum',
+            'Setoran - Kontribusi','Setoran - Piutang','Setoran - Pembayaran Sewa','Non Setoran',
+            'Non Setoran - Penutupan Rekening','Non Setoran - Pertanggungjawaban Uang Muka', 'Non Setoran - Perjanjian Kerjasama',
+            'Non Setoran - Umum', 'Non Setoran - Hutang Titipan'
+        ];
     $drinc=array();
     foreach($rincian as $k=>$v)
     {
-        $drinc[str_replace('-','',str_slug($v))]=$v;
+        //Kenapa ada if disini? karna jika merubah id keseluruhan, maka akan perlu perubahan di banyak if dalamnya. 
+        //Sehingga disini dibuat if untuk mempercepat.
+        //Karna deadlinenya hanya 2 hari :'(
+        if($v == 'Setoran - Pembayaran Sewa'){
+            $drinc['sewa']=$v;
+        }else if($v == 'Setoran - Biaya Listrik'){
+            $drinc['listrik']=$v;
+        }else if($v == 'Setoran - Piutang'){
+            $drinc['piutang']=$v;
+        }else if($v == 'Setoran - Piutang Karyawan'){
+            $drinc['piutangkaryawan']=$v;
+        }else if($v == 'Non Setoran - Hutang Titipan'){
+            $drinc['hutangtitipan']=$v;
+        }else if($v == 'Non Setoran - Penutupan Rekening'){
+            $drinc['penutupanrekening']=$v;
+        }else if($v == 'Setoran - Umum'){
+            $drinc['umum']=$v;
+        }
+        else{
+            $drinc[str_replace('-','',str_slug($v))]=$v;
+        }
     }
     return $drinc;
 }

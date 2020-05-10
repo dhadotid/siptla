@@ -161,9 +161,9 @@ function validasiformsewa() {
     // else if (tgl_pks.val() == '')
     //     notif('error', 'Tanggal PKS Belum Dipilih');
     else if (nilai_perjanjian.val() == '')
-        notif('error', 'Nilai Pekerjaan Belum Diisi');
+        notif('error', 'Nilai Rekomendasi Belum Diisi');
     // else if (masa_berlaku.val() == '')
-    //     notif('error', 'Masa Berlaku Belum Dipilih');
+    //     notif('error', 'Masa Kontrak Belum Dipilih');
     else {
         //formrinciansewa
         $.ajax({
@@ -472,7 +472,7 @@ function validasiumum() {
     else if (keterangan.val() == '')
         notif('error', 'Keterangan Belum Diisi');
     else if (jumlah_rekomendasi.val() == '')
-        notif('error', 'Jumlah Rekomendasi Belum Diisi');
+        notif('error', 'Nilai Rekomendasi (Rp) Belum Diisi');
     else {
         //formrinciansewa
         $.ajax({

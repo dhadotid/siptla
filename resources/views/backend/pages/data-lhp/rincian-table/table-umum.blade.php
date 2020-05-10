@@ -1,10 +1,10 @@
-<h3 class="text-center">Rincian Nilai Umum</h3><table class="table table-bordered"  id="table-rincian">
+<h3 class="text-center">Rincian Nilai Setoran - Umum</h3><table class="table table-bordered"  id="table-rincian">
             <thead>
                 <tr class="inverse">
                     <th class="text-center">No</th>
                     <th class="text-center">Unit Kerja</th>
                     <th class="text-center">Keterangan</th>
-                    <th class="text-center">Jumlah Rekomendasi</th>
+                    <th class="text-center">Nilai Rekomendasi (Rp)</th>
                     <th class="text-center">Aksi</th>
                 </tr>
             </thead><tbody>

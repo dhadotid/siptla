@@ -1,4 +1,4 @@
-<h3 class="text-center">Rincian Nilai Pembayaran Sewa</h3><table class="table table-bordered" id="table-rincian">
+<h3 class="text-center">Rincian Nilai Setoran – Sewa</h3><table class="table table-bordered" id="table-rincian">
     <thead>
         <tr class="inverse">
             <th class="text-center">No</th>
@@ -6,8 +6,8 @@
             <th class="text-center">Mitra</th>
             <th class="text-center">No. PKS</th>
             <th class="text-center">Tgl. PKS</th>
-            <th class="text-center">Nilai Pekerjaan</th>
-            <th class="text-center">Masa Berlaku</th>
+            <th class="text-center">Nilai Rekomendasi</th>
+            <th class="text-center">Masa Kontrak</th>
             <th class="text-center">Aksi</th>
         </tr>
     </thead><tbody>

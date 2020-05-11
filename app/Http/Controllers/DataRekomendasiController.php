@@ -15,8 +15,13 @@ use App\Models\RincianPiutangKaryawan;
 use App\Models\RincianHutangTitipan;
 use App\Models\RincianPenutupanRekening;
 use App\Models\RincianUmum;
+use App\Models\RincianKontribusi;
 use App\Models\TindakLanjutTemuan;
 use App\Models\DokumenTindakLanjut;
+use App\Models\RincianNonSetoranPerpanjanganPerjanjianKerjasama;
+use App\Models\RincianNonSetoran;
+use App\Models\RincianNonSetoranUmum;
+use App\Models\RincianNonSetoranPertanggungjawabanUangMuka;
 use Auth;
 class DataRekomendasiController extends Controller
 {
@@ -110,6 +115,10 @@ class DataRekomendasiController extends Controller
                 $tl=RincianPenutupanRekening::where('id_rekomendasi',$rekomid_tl)->where('id_temuan',$request->id_temuan)->get();
             elseif($rinciantl=='umum')
                 $tl=RincianUmum::where('id_rekomendasi',$rekomid_tl)->where('id_temuan',$request->id_temuan)->get();
+            elseif($rinciantl=='kontribusi')
+                $tl=RincianKontribusi::where('id_rekomendasi',$rekomid_tl)->where('id_temuan',$request->id_temuan)->get();
+            elseif($rinciantl=='nonsetoranperjanjiankerjasama')
+                $tl=RincianNonSetoranPerpanjanganPerjanjianKerjasama::where('id_rekomendasi',$rekomid_tl)->where('id_temuan',$request->id_temuan)->get();
 
             foreach($tl as $k=>$v)
             {
@@ -629,6 +638,33 @@ class DataRekomendasiController extends Controller
                     ->with('jenis',$jenis)
                     ->with('idrekomendasi',$idrekomendasi);
         }
+        elseif($jenis=='kontribusi'){
+            if(Auth::user()->level=='pic-unit')
+                $rincian=RincianKontribusi::where('id_temuan',$idtemuan)->where('unit_kerja_id',$user_pic->id)->get();
+            else
+            {
+                $rincian=RincianKontribusi::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
+            }
+            
+            return view('backend.pages.data-lhp.rincian-table.table-kontribusi')
+                    ->with('rincian',$rincian)
+                    ->with('idtemuan',$idtemuan)
+                    ->with('jenis',$jenis)
+                    ->with('idrekomendasi',$idrekomendasi);
+        }elseif($jenis=='nonsetoranperjanjiankerjasama'){
+            if(Auth::user()->level=='pic-unit')
+                $rincian=RincianNonSetoranPerpanjanganPerjanjianKerjasama::where('id_temuan',$idtemuan)->where('unit_kerja_id',$user_pic->id)->get();
+            else
+            {
+                $rincian=RincianNonSetoranPerpanjanganPerjanjianKerjasama::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
+            }
+            
+            return view('backend.pages.data-lhp.rincian-table.table-nonsetoranperjanjiankerjasama')
+                    ->with('rincian',$rincian)
+                    ->with('idtemuan',$idtemuan)
+                    ->with('jenis',$jenis)
+                    ->with('idrekomendasi',$idrekomendasi);
+        }
     }
     public function load_tabel_rincian($jenis,$idtemuan=null,$statusrekomendasi=null,$view=null)
     {
@@ -685,7 +721,10 @@ class DataRekomendasiController extends Controller
                 // $table.='<tr >
                 //             <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
                 //         </tr>';
-                $table.='<a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>';
+                $table.='
+                <div style="text-align: center">
+                <a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                </div>';
             }
             else
             {
@@ -694,7 +733,10 @@ class DataRekomendasiController extends Controller
                     // $table.='<tr >
                     //         <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
                     //     </tr>';
-                    $table.='<a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>';
+                    $table.='
+                    <div style="text-align: center">
+                    <a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                    </div>';
                 }
             }
         }
@@ -746,13 +788,19 @@ class DataRekomendasiController extends Controller
             $table.='</table>';
             if(Auth::user()->level=='pic-unit')
             {
-                $table.='<div class="text-center"><a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></div>';
+                $table.='
+                <div style="text-align: center">
+                <div class="text-center"><a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></div>
+                </div>';
             }
             else
             {
                 if($view==null)
                 {
-                    $table.='<div class="text-center"><a href="#" onclick="addtindaklanjut(\'uangmuka\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></div>';
+                    $table.='
+                    <div style="text-align: center">
+                    <div class="text-center"><a href="#" onclick="addtindaklanjut(\'uangmuka\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></div>
+                    </div>';
                 }
             }
         }
@@ -799,13 +847,19 @@ class DataRekomendasiController extends Controller
             $table.='</table>';
             if(Auth::user()->level=='pic-unit')
             {
-                $table.='<a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>';
+                $table.='
+                <div style="text-align: center">
+                <a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                </div>';
             }
             else
             {
                 if($view==null)
                 {
-                    $table.='<a href="#" onclick="addtindaklanjut(\'listrik\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle" ></i> Tambah Rincian</a>';
+                    $table.='
+                    <div style="text-align: center">
+                    <a href="#" onclick="addtindaklanjut(\'listrik\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle" ></i> Tambah Rincian</a>
+                    </div>';
                 }
         
             }
@@ -851,13 +905,19 @@ class DataRekomendasiController extends Controller
 
             if(Auth::user()->level=='pic-unit')
             {
-                $table.='<a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>';
+                $table.='
+                <div style="text-align: center">
+                <a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                </div>';
             }
             else
             {
                 if($view==null)
                 {
-                    $table.='<a href="#" onclick="addtindaklanjut(\'piutang\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>';
+                    $table.='
+                    <div style="text-align: center">
+                    <a href="#" onclick="addtindaklanjut(\'piutang\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                    </div>';
                 }
             }
         }
@@ -902,13 +962,19 @@ class DataRekomendasiController extends Controller
 
             if(Auth::user()->level=='pic-unit')
             {
-                $table.='<a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>';
+                $table.='
+                <div style="text-align: center">
+                <a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                </div>';
             }
             else
             {
                 if($view==null)
                 {
-                    $table.='<a href="#" onclick="addtindaklanjut(\'piutangkaryawan\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>';
+                    $table.='
+                    <div style="text-align: center">
+                    <a href="#" onclick="addtindaklanjut(\'piutangkaryawan\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                    </div>';
                 }
             }
         }
@@ -957,13 +1023,19 @@ class DataRekomendasiController extends Controller
 
             if(Auth::user()->level=='pic-unit')
             {
-                $table.='<a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>';
+                $table.='
+                <div style="text-align: center">
+                <a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                </div>';
             }
             else
             {
                 if($view==null)
                 {
-                    $table.='<a href="#" onclick="addtindaklanjut(\'hutangtitipan\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>';
+                    $table.='
+                    <div style="text-align: center">
+                    <a href="#" onclick="addtindaklanjut(\'hutangtitipan\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                    </div>';
                 }
             }
         }
@@ -1013,13 +1085,19 @@ class DataRekomendasiController extends Controller
             $table.='</table>';
             if(Auth::user()->level=='pic-unit')
             {
-                $table.='<a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>';
+                $table.='
+                <div style="text-align: center">
+                <a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                </div>';
             }
             else
             {
                 if($view==null)
                 {
-                    $table.='<a href="#" onclick="addtindaklanjut(\'penutupanrekening\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>';
+                    $table.='
+                    <div style="text-align: center">
+                    <a href="#" onclick="addtindaklanjut(\'penutupanrekening\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                    </div>';
                 }
             }
         }
@@ -1063,13 +1141,293 @@ class DataRekomendasiController extends Controller
 
             if(Auth::user()->level=='pic-unit')
             {
-                $table.='<a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>';
+                $table.='
+                <div style="text-align: center">
+                <a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                </div>';
             }
             else
             {
                 if($view==null)
                 {
-                    $table.='<a href="#" onclick="addtindaklanjut(\'umum\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>';
+                    $table.='
+                    <div style="text-align: center">
+                    <a href="#" onclick="addtindaklanjut(\'umum\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                    </div>';
+                }
+            }
+        }else if ($jenis=='kontribusi'){
+            $table='<h3 class="text-center">Rincian Nilai Setoran - Kontribusi</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
+            $table.='<thead>';
+                $table.='<tr class="inverse">
+                    <th class="text-center">No</th>
+                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Tahun</th>
+                    <th class="text-center">Keterangan</th>
+                    <th class="text-center">Rekomendasi Kontribusi</th>';
+                    $table.='
+                    <th class="text-center">Aksi</th>';
+                $table.='</tr>';
+            $table.='</thead><tbody>';
+
+            $rincian=RincianKontribusi::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
+            $no=1;
+            $totalnilai=0;
+            foreach($rincian as $k=>$v)
+            {
+                $table.='<tr>
+                    <td class="text-center">'.$no.'</td>
+                    <td class="text-center">'.$v->unit_kerja.'</td>
+                    <td class="text-center">'.$v->tahun.'</td>
+                    <td class="text-center">'.$v->keterangan.'</td>
+                    <td class="text-center">'.number_format($v->nilai_penerimaan,0,',','.').'</td>';
+                    $table.='
+                    <td class="text-center">
+                        <a href="javascript:hapusrincian('.$v->id.',\'kontribusi\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                    </td>';
+                $table.='</tr>';
+                $no++;
+
+                $totalnilai+=$v->nilai_penerimaan;
+            }
+            $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
+            $table.='</tbody>';
+            $table.='</table>';
+
+            if(Auth::user()->level=='pic-unit')
+            {
+                $table.='
+                <div style="text-align: center">
+                <a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                </div>';
+            }
+            else
+            {
+                if($view==null)
+                {
+                    $table.='
+                    <div style="text-align: center">
+                    <a href="#" onclick="addtindaklanjut(\'kontribusi\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                    </div>';
+                }
+            }
+        }else if($jenis == 'nonsetoranperjanjiankerjasama'){
+            $table='<h3 class="text-center">Rincian Nilai Non Setoran – Perjanjian Kerjasama</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
+            $table.='<thead>';
+                $table.='<tr class="inverse">
+                    <th class="text-center">No</th>
+                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">No. PKS</th>
+                    <th class="text-center">Tanggal PKS</th>
+                    <th class="text-center">Periode</th>
+                    <th class="text-center">Keterangan</th>';
+                    $table.='
+                    <th class="text-center">Aksi</th>';
+                $table.='</tr>';
+            $table.='</thead><tbody>';
+
+            $rincian=RincianNonSetoranPerpanjanganPerjanjianKerjasama::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
+            $no=1;
+            $totalnilai=0;
+            foreach($rincian as $k=>$v)
+            {
+                $table.='<tr>
+                <td class="text-center">'.$no.'</td>
+                <td class="text-center">'.$v->unit_kerja.'</td>
+                <td class="text-center">'.$v->no_pks.'</td>
+                <td class="text-center">'.($v->tgl_pks != '' ? date('d/m/Y',strtotime($v->tgl_pks)) : '-').'</td>
+                <td class="text-center">'.($v->masa_berlaku != '' ? date('d/m/Y',strtotime($v->masa_berlaku)) : '-').'</td>
+                <td class="text-center">'.$v->keterangan.'</td>';
+                // <td class="text-center">'.rupiah($v->nilai_pekerjaan).'</td>
+                    $table.='
+                    <td class="text-center">
+                        <a href="javascript:hapusrincian('.$v->id.',\'nonsetoranperjanjiankerjasama\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                    </td>';
+                $table.='</tr>';
+                $no++;
+
+                $totalnilai+=$v->nilai_pekerjaan;
+            }
+            $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
+            $table.='</tbody>';
+            $table.='</table>';
+
+            if(Auth::user()->level=='pic-unit')
+            {
+                $table.='
+                <div style="text-align: center">
+                <a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                </div>';
+            }
+            else
+            {
+                if($view==null)
+                {
+                    $table.='
+                    <div style="text-align: center">
+                    <a href="#" onclick="addtindaklanjut(\'nonsetoranperjanjiankerjasama\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                    </div>';
+                }
+            }
+        }elseif($jenis=='nonsetoran'){
+            $table='<h3 class="text-center">Rincian Nilai Non Setoran</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
+            $table.='<thead>';
+                $table.='<tr class="inverse">
+                    <th class="text-center">No</th>
+                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Keterangan</th>
+                    <th class="text-center">Nilai Rekomendasi (Rp)</th>';
+                    $table.='
+                    <th class="text-center">Aksi</th>';
+                $table.='</tr>';
+            $table.='</thead><tbody>';
+
+            $rincian=RincianNonSetoran::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
+            $no=1;
+            $totalnilai=0;
+            foreach($rincian as $k=>$v)
+            {
+                $table.='<tr>
+                    <td class="text-center">'.$no.'</td>
+                    <td class="text-center">'.$v->unit_kerja.'</td>
+                    <td class="text-center">'.$v->keterangan.'</td>
+                    <td class="text-center">'.number_format($v->nilai_rekomendasi,0,',','.').'</td>';
+                    $table.='
+                    <td class="text-center">
+                        <a href="javascript:hapusrincian('.$v->id.',\'nonsetoran\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                    </td>';
+                $table.='</tr>';
+                $no++;
+
+                $totalnilai+=$v->nilai_rekomendasi;
+            }
+            $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
+            $table.='</tbody>';
+            $table.='</table>';
+
+            if(Auth::user()->level=='pic-unit')
+            {
+                $table.='
+                <div style="text-align: center">
+                <a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                </div>';
+            }
+            else
+            {
+                if($view==null)
+                {
+                    $table.='
+                    <div style="text-align: center">
+                    <a href="#" onclick="addtindaklanjut(\'nonsetoran\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                    </div>';
+                }
+            }
+        }elseif($jenis=='nonsetoranumum'){
+            $table='<h3 class="text-center">Rincian Nilai Non Setoran - Umum</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
+            $table.='<thead>';
+                $table.='<tr class="inverse">
+                    <th class="text-center">No</th>
+                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Keterangan</th>';
+                    $table.='
+                    <th class="text-center">Aksi</th>';
+                $table.='</tr>';
+            $table.='</thead><tbody>';
+
+            $rincian=RincianNonSetoranUmum::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
+            $no=1;
+            $totalnilai=0;
+            foreach($rincian as $k=>$v)
+            {
+                $table.='<tr>
+                    <td class="text-center">'.$no.'</td>
+                    <td class="text-center">'.$v->unit_kerja.'</td>
+                    <td class="text-center">'.$v->keterangan.'</td>';
+                    $table.='
+                    <td class="text-center">
+                        <a href="javascript:hapusrincian('.$v->id.',\'nonsetoranumum\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                    </td>';
+                $table.='</tr>';
+                $no++;
+
+                $totalnilai+=$v->nilai_rekomendasi;
+            }
+            $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
+            $table.='</tbody>';
+            $table.='</table>';
+
+            if(Auth::user()->level=='pic-unit')
+            {
+                $table.='
+                <div style="text-align: center">
+                <a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                </div>';
+            }
+            else
+            {
+                if($view==null)
+                {
+                    $table.='
+                    <div style="text-align: center">
+                    <a href="#" onclick="addtindaklanjut(\'nonsetoranumum\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                    </div>';
+                }
+            }
+        }elseif($jenis=='nonsetoranpertanggungjawabanuangmuka'){
+            $table='<h3 class="text-center">Rincian Nilai Non Setoran - Pertanggungjawaban Uang Muka</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
+            $table.='<thead>';
+                $table.='<tr class="inverse">
+                    <th class="text-center">No</th>
+                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">No. Invoice</th>
+                    <th class="text-center">Tanggal UM</th>
+                    <th class="text-center">Keterangan</th>
+                    <th class="text-center">Jumlah UM (Rp)</th>';
+                    $table.='
+                    <th class="text-center">Aksi</th>';
+                $table.='</tr>';
+            $table.='</thead><tbody>';
+
+            $rincian=RincianNonSetoranPertanggungjawabanUangMuka::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
+            $no=1;
+            $totalnilai=0;
+            foreach($rincian as $k=>$v)
+            {
+                $table.='<tr>
+                    <td class="text-center">'.$no.'</td>
+                    <td class="text-center">'.$v->unit_kerja.'</td>
+                    <td class="text-center">'.$v->no_invoice.'</td>
+                    <td class="text-center">'.$v->tgl_um.'</td>
+                    <td class="text-center">'.$v->keterangan.'</td>
+                    <td class="text-center">'.number_format($v->jumlah_um,0,',','.').'</td>';
+                    $table.='
+                    <td class="text-center">
+                        <a href="javascript:hapusrincian('.$v->id.',\'nonsetoranpertanggungjawabanuangmuka\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                    </td>';
+                $table.='</tr>';
+                $no++;
+
+                $totalnilai+=$v->jumlah_um;
+            }
+            $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
+            $table.='</tbody>';
+            $table.='</table>';
+
+            if(Auth::user()->level=='pic-unit')
+            {
+                $table.='
+                <div style="text-align: center">
+                <a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                </div>';
+            }
+            else
+            {
+                if($view==null)
+                {
+                    $table.='
+                    <div style="text-align: center">
+                    <a href="#" onclick="addtindaklanjut(\'nonsetoranpertanggungjawabanuangmuka\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                    </div>';
                 }
             }
         }
@@ -1370,6 +1728,144 @@ class DataRekomendasiController extends Controller
                 </tr>';
                 $no++;
             }
+            $table.='</tbody>';
+            $table.='</table>';
+        }elseif($jenis=='kontribusi'){
+            $table='<h3 class="text-center">Rincian Nilai Setoran - Kontribusi</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekom.'">';
+            $table.='<thead>';
+                $table.='<tr class="inverse">
+                    <th class="text-center">No</th>
+                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Tahun</th>
+                    <th class="text-center">Keterangan</th>
+                    <th class="text-center">Rekomendasi Kontribusi</th>
+                    <th class="Aksi">Aksi</th>
+                </tr>';
+            $table.='</thead><tbody>';
+
+            $rincian=RincianKontribusi::where('id_rekomendasi',$idrekom)->where('id_temuan',$idtemuan)->get();
+            $no=1;
+            foreach($rincian as $k=>$v)
+            {
+                $table.='<tr>
+                    <td class="text-center">'.$no.'</td>
+                    <td class="text-center">'.$v->unit_kerja.'</td>
+                    <td class="text-center">'.$v->tahun.'</td>
+                    <td class="text-center">'.$v->keterangan.'</td>
+                    <td class="text-center">'.number_format($v->nilai_penerimaan,0,',','.').'</td>
+                </tr>';
+                $no++;
+            }
+            $table.='</tbody>';
+            $table.='</table>';
+        }elseif($jenis=='nonsetoranperjanjiankerjasama'){
+            $table='<h3 class="text-center">Rincian Nilai Setoran – Sewa</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekom.'">';
+            $table.='<thead>';
+                $table.='<tr class="inverse">
+                    <th class="text-center">No</th>
+                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">No. PKS</th>
+                    <th class="text-center">Tgl. PKS</th>
+                    <th class="text-center">Periode</th>
+                    <th class="text-center">Keterangan</th>
+                </tr>';
+            $table.='</thead><tbody>';
+
+            $rincian=RincianNonSetoranPerpanjanganPerjanjianKerjasama::where('id_rekomendasi',$idrekom)->where('id_temuan',$idtemuan)->get();
+            $no=1;
+            foreach($rincian as $k=>$v)
+            {
+                $table.='<tr>
+                    <td class="text-center">'.$no.'</td>
+                    <td class="text-center">'.$v->unit_kerja.'</td>
+                    <td class="text-center">'.$v->no_pks.'</td>
+                    <td class="text-center">'.date('d/m/Y',strtotime($v->tgl_pks)).'</td>
+                    <td class="text-center">'.date('d/m/Y',strtotime($v->masa_berlaku)).'</td>
+                    <td class="text-center">'.$v->keterangan.'</td>
+                </tr>';
+                $no++;
+                // <td class="text-center">'.rupiah($v->nilai_pekerjaan).'</td>
+            }
+            $table.='</tbody>';
+            $table.='</table>';
+        }
+        elseif($jenis=='nonsetoran'){
+            $table='<h3 class="text-center">Rincian Nilai Non Setoran</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekom.'">';
+            $table.='<thead>';
+                $table.='<tr class="inverse">
+                    <th class="text-center">No</th>
+                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Keterangan</th>
+                    <th class="text-center">Nilai Rekomendasi (Rp)</th>';
+                $table.='</tr>';
+            $table.='</thead><tbody>';
+
+            $rincian=RincianNonSetoran::where('id_rekomendasi',$idrekom)->where('id_temuan',$idtemuan)->get();
+            $no=1;
+            foreach($rincian as $k=>$v)
+            {
+                $table.='<tr>
+                    <td class="text-center">'.$no.'</td>
+                    <td class="text-center">'.$v->unit_kerja.'</td>
+                    <td class="text-center">'.$v->keterangan.'</td>
+                    <td class="text-center">'.number_format($v->nilai_rekomendasi,0,',','.').'</td>';
+                $table.='</tr>';
+                $no++;
+            }
+            $table.='</tbody>';
+            $table.='</table>';
+        }elseif($jenis=='nonsetoranumum'){
+            $table='<h3 class="text-center">Rincian Nilai Non Setoran - Umum</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekom.'">';
+            $table.='<thead>';
+                $table.='<tr class="inverse">
+                    <th class="text-center">No</th>
+                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Keterangan</th>';
+                $table.='</tr>';
+            $table.='</thead><tbody>';
+
+            $rincian=RincianNonSetoranUmum::where('id_rekomendasi',$idrekom)->where('id_temuan',$idtemuan)->get();
+            $no=1;
+            foreach($rincian as $k=>$v)
+            {
+                $table.='<tr>
+                    <td class="text-center">'.$no.'</td>
+                    <td class="text-center">'.$v->unit_kerja.'</td>
+                    <td class="text-center">'.$v->keterangan.'</td>';
+                $table.='</tr>';
+                $no++;
+            }
+            $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
+            $table.='</tbody>';
+            $table.='</table>';
+        }elseif($jenis=='nonsetoranpertanggungjawabanuangmuka'){
+            $table='<h3 class="text-center">Rincian Nilai Non Setoran - Pertanggungjawaban Uang Muka</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekom.'">';
+            $table.='<thead>';
+                $table.='<tr class="inverse">
+                    <th class="text-center">No</th>
+                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">No. Invoice</th>
+                    <th class="text-center">Tanggal UM</th>
+                    <th class="text-center">Keterangan</th>
+                    <th class="text-center">Jumlah UM (Rp)</th>';
+                $table.='</tr>';
+            $table.='</thead><tbody>';
+
+            $rincian=RincianNonSetoranPertanggungjawabanUangMuka::where('id_rekomendasi',$idrekom)->where('id_temuan',$idtemuan)->get();
+            $no=1;
+            foreach($rincian as $k=>$v)
+            {
+                $table.='<tr>
+                    <td class="text-center">'.$no.'</td>
+                    <td class="text-center">'.$v->unit_kerja.'</td>
+                    <td class="text-center">'.$v->no_invoice.'</td>
+                    <td class="text-center">'.$v->tgl_um.'</td>
+                    <td class="text-center">'.$v->keterangan.'</td>
+                    <td class="text-center">'.number_format($v->jumlah_um,0,',','.').'</td>';
+                $table.='</tr>';
+                $no++;
+            }
+            $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
             $table.='</tbody>';
             $table.='</table>';
         }

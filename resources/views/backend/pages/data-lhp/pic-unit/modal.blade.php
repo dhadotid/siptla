@@ -228,6 +228,50 @@
 		</div>
 	</div>  
 {{-- END Modal Rincian Umum--}}
+{{-- Modal Rincian Umum--}}
+ <div class="modal fade" id="modalrinciankontribusi"  role="dialog" style="z-index:10000 !important;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+                <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrinciankontribusi">
+                    @csrf
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Rincian Nilai Setoran - Kontribusi</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="form-rincian-kontribusi"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
+                        <input type="button" onclick="validasikontribusi()" class="btn btn-success" value="Simpan">
+                    </div>
+				</form>
+			</div>
+		</div>
+	</div>  
+{{-- END Modal Rincian Umum--}}
+{{-- Modal Rincian Umum--}}
+ <div class="modal fade" id="modalrinciannonsetoranperjanjiankerjasama"  role="dialog" style="z-index:10000 !important;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+                <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrinciannonsetoranperjanjiankerjasama">
+                    @csrf
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Rincian Nilai Non Setoran – Perpanjangan Perjanjian Kerjasama</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="form-rincian-nonsetoranperjanjiankerjasama"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
+                        <input type="button" onclick="validasinonsetoranperjanjiankerjasama()" class="btn btn-success" value="Simpan">
+                    </div>
+				</form>
+			</div>
+		</div>
+	</div>  
+{{-- END Modal Rincian Umum--}}
 {{-- Modal Rincian--}}
  <div class="modal fade" id="modalrincian" role="dialog">
 		<div class="modal-dialog modal-lg">
@@ -342,4 +386,74 @@
 		</div>
 	</div>  
 {{-- END Modal Rincian--}}
+
+{{-- Modal Rincian Umum--}}
+ <div class="modal fade" id="modalrinciannonsetoran"  role="dialog" style="z-index:10000 !important;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+                <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrinciannonsetoran">
+                    @csrf
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Rincian Nilai Non Setoran</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="form-rincian-modalrinciannonsetoran"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
+                        <input type="button" onclick="validasinonsetoran()" class="btn btn-success" value="Simpan">
+                    </div>
+				</form>
+			</div>
+		</div>
+	</div>  
+{{-- END Modal Rincian Umum--}}
+
+{{-- Modal Rincian Umum--}}
+ <div class="modal fade" id="modalrinciannonsetoranumum"  role="dialog" style="z-index:10000 !important;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+                <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrinciannonsetoranumum">
+                    @csrf
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Rincian Nilai Non Setoran - Umum</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="form-rincian-modalrinciannonsetoranumum"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
+                        <input type="button" onclick="validasinonsetoranumum()" class="btn btn-success" value="Simpan">
+                    </div>
+				</form>
+			</div>
+		</div>
+	</div>  
+{{-- END Modal Rincian Umum--}}
+
+{{-- Modal Rincian Umum--}}
+ <div class="modal fade" id="modalrinciannonsetoranpertanggungjawabanuangmuka"  role="dialog" style="z-index:10000 !important;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+                <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrinciannonsetoranpertanggungjawabanuangmuka">
+                    @csrf
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Rincian Nilai Non Setoran - Pertanggungjawaban Uang Muka</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="form-rincian-modalrinciannonsetoranpertanggungjawabanuangmuka"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
+                        <input type="button" onclick="validasinonsetoranpertanggungjawabanuangmuka()" class="btn btn-success" value="Simpan">
+                    </div>
+				</form>
+			</div>
+		</div>
+	</div>  
+{{-- END Modal Rincian Umum--}}
+
 

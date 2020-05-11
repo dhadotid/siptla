@@ -13,7 +13,12 @@ use App\Models\RincianHutangTitipan;
 use App\Models\PICUnit;
 use App\Models\RincianPenutupanRekening;
 use App\Models\RincianUmum;
+use App\Models\RincianKontribusi;
 use App\Models\TindakLanjutTemuan;
+use App\Models\RincianNonSetoranPerpanjanganPerjanjianKerjasama;
+use App\Models\RincianNonSetoran;
+use App\Models\RincianNonSetoranUmum;
+use App\Models\RincianNonSetoranRincianNonSetoranPertanggungjawabanUangMuka;
 use Auth;
 class RincianSewaController extends Controller
 {
@@ -130,6 +135,56 @@ class RincianSewaController extends Controller
                 ->with('pic',$pic)
                 ->with('jenis',$jenis);
         }
+        else if($jenis=='kontribusi'){
+            return view('backend.pages.data-lhp.rincian-form.form-kontribusi')
+                ->with('jenis',$jenis)
+                ->with('idtemuan',$idtemuan)
+                ->with('idrekomendasi',$idrekomendasi)
+                ->with('idform',$idrekomendasi)
+                ->with('id',$id)
+                ->with('pic',$pic)
+                ->with('jenis',$jenis);
+        }
+        else if($jenis=='nonsetoranperjanjiankerjasama'){
+            return view('backend.pages.data-lhp.rincian-form.form-nonsetoranperjanjiankerjasama')
+                ->with('jenis',$jenis)
+                ->with('idtemuan',$idtemuan)
+                ->with('idrekomendasi',$idrekomendasi)
+                ->with('idform',$idrekomendasi)
+                ->with('id',$id)
+                ->with('pic',$pic)
+                ->with('jenis',$jenis);
+        }
+        else if($jenis=='nonsetoran'){
+            return view('backend.pages.data-lhp.rincian-form.form-nonsetoran')
+                ->with('jenis',$jenis)
+                ->with('idtemuan',$idtemuan)
+                ->with('idrekomendasi',$idrekomendasi)
+                ->with('idform',$idrekomendasi)
+                ->with('id',$id)
+                ->with('pic',$pic)
+                ->with('jenis',$jenis);
+        }
+        else if($jenis=='nonsetoranumum'){
+            return view('backend.pages.data-lhp.rincian-form.form-nonsetoranumum')
+                ->with('jenis',$jenis)
+                ->with('idtemuan',$idtemuan)
+                ->with('idrekomendasi',$idrekomendasi)
+                ->with('idform',$idrekomendasi)
+                ->with('id',$id)
+                ->with('pic',$pic)
+                ->with('jenis',$jenis);
+        }
+        else if($jenis=='nonsetoranpertanggungjawabanuangmuka'){
+            return view('backend.pages.data-lhp.rincian-form.form-nonsetoranpertanggungjawabanuangmuka')
+                ->with('jenis',$jenis)
+                ->with('idtemuan',$idtemuan)
+                ->with('idrekomendasi',$idrekomendasi)
+                ->with('idform',$idrekomendasi)
+                ->with('id',$id)
+                ->with('pic',$pic)
+                ->with('jenis',$jenis);
+        }
     }
     public function form_rincian2($jenis,$idtemuan,$idrekomendasi,$id=-1)
     {
@@ -238,6 +293,52 @@ class RincianSewaController extends Controller
                 ->with('id',$id)
                 ->with('pic',$pic)
                 ->with('jenis',$jenis);
+        }
+        else if($jenis=='kontribusi'){
+            return view('backend.pages.data-lhp.rincian-form.form-kontribusi')
+                ->with('jenis',$jenis)
+                ->with('idtemuan',$idtemuan)
+                ->with('idrekomendasi',$idrekomendasi)
+                ->with('idform',$idrekomendasi)
+                ->with('id',$id)
+                ->with('pic',$pic)
+                ->with('jenis',$jenis);
+        }else if($jenis=='nonsetoranperjanjiankerjasama'){
+            return view('backend.pages.data-lhp.rincian-form.form-nonsetoranperjanjiankerjasama')
+            ->with('jenis',$jenis)
+            ->with('idtemuan',$idtemuan)
+            ->with('idrekomendasi',$idrekomendasi)
+            ->with('idform',$idrekomendasi)
+            ->with('id',$id)
+            ->with('pic',$pic)
+            ->with('jenis',$jenis);
+        }elseif($jenis=='nonsetoran'){
+            return view('backend.pages.data-lhp.rincian-form.form-nonsetoran')
+            ->with('jenis',$jenis)
+            ->with('idtemuan',$idtemuan)
+            ->with('idrekomendasi',$idrekomendasi)
+            ->with('idform',$idrekomendasi)
+            ->with('id',$id)
+            ->with('pic',$pic)
+            ->with('jenis',$jenis);
+        }elseif($jenis=='nonsetoranumum'){
+            return view('backend.pages.data-lhp.rincian-form.form-nonsetoranumum')
+            ->with('jenis',$jenis)
+            ->with('idtemuan',$idtemuan)
+            ->with('idrekomendasi',$idrekomendasi)
+            ->with('idform',$idrekomendasi)
+            ->with('id',$id)
+            ->with('pic',$pic)
+            ->with('jenis',$jenis);
+        }elseif($jenis=='nonsetoranpertanggungjawabanuangmuka'){
+            return view('backend.pages.data-lhp.rincian-form.form-nonsetoranpertanggungjawabanuangmuka')
+            ->with('jenis',$jenis)
+            ->with('idtemuan',$idtemuan)
+            ->with('idrekomendasi',$idrekomendasi)
+            ->with('idform',$idrekomendasi)
+            ->with('id',$id)
+            ->with('pic',$pic)
+            ->with('jenis',$jenis);
         }
     }
 
@@ -431,6 +532,79 @@ class RincianSewaController extends Controller
 
                 return $request->all();
             }
+            elseif($request->jenis=='kontribusi')
+            {
+                list($idunitkerja,$namaunitkerja)=explode('__',$request->unit_kerja);
+                $simpan=new RincianKontribusi;
+                $simpan->id_tindak_lanjut=$idtindaklanjut;
+                $simpan->id_temuan=$request->idtemuan;
+                $simpan->id_rekomendasi=$request->idform;
+                $simpan->unit_kerja_id=$idunitkerja;
+                $simpan->unit_kerja=$namaunitkerja;
+                $simpan->keterangan = $request->keterangan;
+                $simpan->tahun = $request->tahun;
+                // $simpan->nilai_penerimaan = str_replace(array(',','.'),'',$request->jumlah_rekomendasi);
+                $simpan->nilai_penerimaan = $request->jumlah_rekomendasi;
+                $save=$simpan->save();
+
+                return $request->all();
+            }elseif($request->jenis=='nonsetoranperjanjiankerjasama'){
+                list($idunitkerja,$namaunitkerja)=explode('__',$request->unit_kerja);
+                $simpan=new RincianNonSetoranPerpanjanganPerjanjianKerjasama;
+                $simpan->id_tindak_lanjut=$idtindaklanjut;
+                $simpan->id_temuan=$request->idtemuan;
+                $simpan->id_rekomendasi=$request->idform;
+                $simpan->unit_kerja_id=$idunitkerja;
+                $simpan->unit_kerja=$namaunitkerja;
+                $simpan->no_pks=$request->no_pks;
+                $simpan->tgl_pks=$request->tgl_pks;
+                $simpan->keterangan = $request->keterangan;
+                $simpan->masa_berlaku=$request->masa_berlaku;
+                $save=$simpan->save();
+                
+                return $request->all();
+            }elseif($request->jenis=='nonsetoran'){
+                list($idunitkerja,$namaunitkerja)=explode('__',$request->unit_kerja);
+                $simpan=new RincianNonSetoran;
+                $simpan->id_tindak_lanjut=$idtindaklanjut;
+                $simpan->id_temuan=$request->idtemuan;
+                $simpan->id_rekomendasi=$request->idform;
+                $simpan->unit_kerja_id=$idunitkerja;
+                $simpan->unit_kerja=$namaunitkerja;
+                $simpan->keterangan=$request->keterangan;
+                $simpan->jumlah_rekomendasi = $request->jumlah_rekomendasi;
+                $save=$simpan->save();
+                
+                return $request->all();
+            }elseif($request->jenis=='nonsetoranumum'){
+                list($idunitkerja,$namaunitkerja)=explode('__',$request->unit_kerja);
+                $simpan=new RincianNonSetoranUmum;
+                $simpan->id_tindak_lanjut=$idtindaklanjut;
+                $simpan->id_temuan=$request->idtemuan;
+                $simpan->id_rekomendasi=$request->idform;
+                $simpan->unit_kerja_id=$idunitkerja;
+                $simpan->unit_kerja=$namaunitkerja;
+                $simpan->keterangan=$request->keterangan;
+                $simpan->jumlah_rekomendasi = $request->jumlah_rekomendasi;
+                $save=$simpan->save();
+                
+                return $request->all();
+            }elseif($request->jenis=='nonsetoranpertanggungjawabanuangmuka'){
+                list($idunitkerja,$namaunitkerja)=explode('__',$request->unit_kerja);
+                $simpan=new RincianNonSetoranPertanggungjawabanUangMuka;
+                $simpan->id_tindak_lanjut=$idtindaklanjut;
+                $simpan->id_temuan=$request->idtemuan;
+                $simpan->id_rekomendasi=$request->idform;
+                $simpan->unit_kerja_id=$idunitkerja;
+                $simpan->unit_kerja=$namaunitkerja;
+                $simpan->no_invoice = $request->no_invoice;
+                $simpan->tgl_pum = $request->tgl_pum;
+                $simpan->jumlah_pum = str_replace(array(',','.'),'',$request->jumlah_um);
+                $simpan->keterangan = $request->keterangan;
+                $save=$simpan->save();
+
+                return $request->all();
+            }
             // if($save)
             //     return 1;
             // else
@@ -456,6 +630,16 @@ class RincianSewaController extends Controller
             $data=RincianPenutupanRekening::find($id);
         elseif($jenis=='umum')
             $data=RincianUmum::find($id);
+        else if($jenis=='kontribusi')
+            $data=RincianKontribusi::find($id);
+        else if($jenis=='nonsetoranperjanjiankerjasama')
+            $data=RincianNonSetoranPerpanjanganPerjanjianKerjasama::find($id);
+        elseif($jenis=='nonsetoran')
+            $data=RincianNonSetoran::find($id);
+        elseif($jenis=='nonsetoranumum')
+            $data=RincianNonSetoranUmum::find($id);
+        elseif($jenis=='nonsetoranpertanggungjawabanuangmuka')
+            $data=RincianNonSetoranPertanggungjawabanUangMuka::find($id);
 
         $dt['jenis']=$data->jenis;
         $dt['idtemuan']=$data->id_temuan;

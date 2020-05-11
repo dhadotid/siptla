@@ -137,7 +137,211 @@ function addtindaklanjut(jenis, idtemuan, idrekom, id) {
         });
         $('#modalrincianumum').modal('show')
     }
+    else if (jenis == 'kontribusi') {
+        $('#form-rincian-kontribusi').load(flagsUrl + '/form-rincian/' + jenis + '/' + idtemuan + '/' + idrekom+'/'+id+'/'+pic1+'/'+pic2,function(){
+            $('#unit_kerja').select2()
+            $('.nominal').on('keyup', function (e) {
+                $(this).val(format($(this).val()));
+            });
+        });
+        $('#modalrinciankontribusi').modal('show')
+    }
+    else if(jenis == 'nonsetoranperjanjiankerjasama'){
+        $('#form-rincian-nonsetoranperjanjiankerjasama').load(flagsUrl + '/form-rincian/' + jenis + '/' + idtemuan + '/' + idrekom+'/'+id+'/'+pic1+'/'+pic2,function(){
+            $('#unit_kerja').select2()
+            $('.nominal').on('keyup', function (e) {
+                $(this).val(format($(this).val()));
+            });
+        });
+        $('#modalrinciannonsetoranperjanjiankerjasama').modal('show')
+    }
+    else if(jenis == 'nonsetoran'){
+        $('#formrinciannonsetoran').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
+        $('#form-rincian-modalrinciannonsetoran').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id, function () {
+            $('#unit_kerja').select2()
+            $('.nominal').on('keyup', function (e) {
+                $(this).val(format($(this).val()));
+            });
+        });
+        $('#modalrinciannonsetoran').modal('show')
+    }
+    else if(jenis == 'nonsetoranumum'){
+        $('#formrinciannonsetoranumum').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
+        $('#form-rincian-modalrinciannonsetoranumum').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id, function () {
+            $('#unit_kerja').select2()
+            $('.nominal').on('keyup', function (e) {
+                $(this).val(format($(this).val()));
+            });
+        });
+        $('#modalrinciannonsetoranumum').modal('show')
+    }
+    else if(jenis == 'nonsetoranpertanggungjawabanuangmuka'){
+        $('#formrinciannonsetoranpertanggungjawabanuangmuka').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
+        $('#form-rincian-modalrinciannonsetoranpertanggungjawabanuangmuka').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id, function () {
+            $('#unit_kerja').select2()
+            $('.nominal').on('keyup', function (e) {
+                $(this).val(format($(this).val()));
+            });
+        });
+        $('#modalrinciannonsetoranpertanggungjawabanuangmuka').modal('show')
+    }
 }
+
+function validasinonsetoran(){
+    var unit_kerja = $('#unit_kerja');
+    var keterangan = $('#keterangan');
+    var nilai_perjanjian = $('#jumlah_rekomendasi');
+
+    if(unit_kerja.val() == '')
+        notif('error', 'Unit Kerja Belum Dipilih');
+    else if(keterangan.val() == '')
+        notif('error', 'Keterangan belum diisi');
+    else if(nilai_perjanjian.val() == '')
+        notif('error', 'Nilai Rekomendasi Belum Diisi');
+    else {
+        $.ajax({
+            url: flagsUrl + '/form-rincian-simpan',
+            data: $('#formrinciannonsetoran').serialize(),
+            type: 'POST',
+            datatype: 'JSON',
+            success: function (res) {
+                if (res) {
+                    // $('#formrinciansewa').reset();
+                    $('#formrinciannonsetoran').trigger("reset");
+                    $('#modalrinciannonsetoran').modal('hide');
+                    // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
+                    notif('success', 'Data Rincian Berhasil Di Simpan');
+                    gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
+                    $('#tombol-add-rincian').attr('style', 'display:inline !important');
+                    setTimeout(function () {
+                        $('#modalrinciannonsetoran').modal('show');
+                    }, 1500)
+                }
+                else
+                    notif('error', 'Data Rincian Gagal Disimpan');
+            }
+        });
+    }
+}
+
+function validasinonsetoranumum(){
+    var unit_kerja = $('#unit_kerja');
+    var keterangan = $('#keterangan');
+
+    if(unit_kerja.val() == '')
+        notif('error', 'Unit Kerja Belum Dipilih');
+    else if(keterangan.val() == '')
+        notif('error', 'Keterangan belum diisi');
+    else {
+        $.ajax({
+            url: flagsUrl + '/form-rincian-simpan',
+            data: $('#formrinciannonsetoranumum').serialize(),
+            type: 'POST',
+            datatype: 'JSON',
+            success: function (res) {
+                if (res) {
+                    // $('#formrinciansewa').reset();
+                    $('#formrinciannonsetoranumum').trigger("reset");
+                    $('#modalrinciannonsetoranumum').modal('hide');
+                    // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
+                    notif('success', 'Data Rincian Berhasil Di Simpan');
+                    gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
+                    $('#tombol-add-rincian').attr('style', 'display:inline !important');
+                    setTimeout(function () {
+                        $('#modalrinciannonsetoranumum').modal('show');
+                    }, 1500)
+                }
+                else
+                    notif('error', 'Data Rincian Gagal Disimpan');
+            }
+        });
+    }
+}
+
+function validasinonsetoranpertanggungjawabanuangmuka(){
+    var unit_kerja = $('#unit_kerja');
+    var keterangan = $('#keterangan');
+    var no_invoice = $('#no_invoice');
+    var tgl_um = $('#tgl_um');
+
+    if(unit_kerja.val() == '')
+        notif('error', 'Unit Kerja Belum Dipilih');
+    else if(no_invoice.val() == '')
+        notif('error', 'No Invoice belum diisi');
+    else if(keterangan.val() == '')
+        notif('error', 'Keterangan belum diisi');
+    else if(tgl_um.val()=='')
+        notif('error', 'Tanggal uang muka belum diisi');
+    else{
+        $.ajax({
+            url: flagsUrl + '/form-rincian-simpan',
+            data: $('#formrinciannonsetoranpertanggungjawabanuangmuka').serialize(),
+            type: 'POST',
+            datatype: 'JSON',
+            success: function (res) {
+                if (res) {
+                    // $('#formrinciansewa').reset();
+                    $('#formrinciannonsetoranpertanggungjawabanuangmuka').trigger("reset");
+                    $('#modalrinciannonsetoranpertanggungjawabanuangmuka').modal('hide');
+                    // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
+                    notif('success', 'Data Rincian Berhasil Di Simpan');
+                    gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
+                    $('#tombol-add-rincian').attr('style', 'display:inline !important');
+                    setTimeout(function () {
+                        $('#modalrinciannonsetoranpertanggungjawabanuangmuka').modal('show');
+                    }, 1500)
+                }
+                else
+                    notif('error', 'Data Rincian Gagal Disimpan');
+            }
+        });
+    }
+}
+
+function validasinonsetoranperjanjiankerjasama(){
+    var unit_kerja = $('#unit_kerja');
+    var no_pks = $('#no_pks');
+    var tgl_pks = $('#tgl_pks');
+    var masa_berlaku = $('#masa_berlaku');
+    var keterangan = $('#keterangan');
+    
+    if (unit_kerja.val() == '')
+        notif('error', 'Unit Kerja Belum Dipilih');
+    else if (no_pks.val() == '')
+        notif('error', 'Nomor PKS Belum Diisi');
+    else if (tgl_pks.val() == '')
+        notif('error', 'Tanggal PKS Belum Dipilih');
+    else if (masa_berlaku.val() == '')
+        notif('error', 'Masa Kontrak Belum Dipilih');
+    else if(keterangan.val() == '')
+        notif('error', 'Keterangan belum diisi');
+    else {
+        $.ajax({
+            url: flagsUrl + '/form-rincian-simpan',
+            data: $('#formrinciannonsetoranperjanjiankerjasama').serialize(),
+            type: 'POST',
+            datatype: 'JSON',
+            success: function (res) {
+                if (res) {
+                    // $('#formrinciansewa').reset();
+                    $('#formrinciannonsetoranperjanjiankerjasama').trigger("reset");
+                    $('#modalrinciannonsetoranperjanjiankerjasama').modal('hide');
+                    // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
+                    notif('success', 'Data Rincian Berhasil Di Simpan');
+                    gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
+                    $('#tombol-add-rincian').attr('style', 'display:inline !important');
+                    setTimeout(function () {
+                        $('#modalrinciannonsetoranperjanjiankerjasama').modal('show');
+                    }, 1500)
+                }
+                else
+                    notif('error', 'Data Rincian Gagal Disimpan');
+                    console.log(res);
+            }
+        });
+    }
+}
+
 function validasiformsewa() {
     var idlhp = $('#idlhp').val();
     var unit_kerja = $('#unit_kerja');
@@ -499,6 +703,88 @@ function validasiumum() {
         });
     }
 }
+
+function validasikontribusi() {
+    var unit_kerja = $('#unit_kerja');
+    var keterangan = $('#keterangan');
+    var jumlah_rekomendasi = $('#jumlah_rekomendasi');
+    var tahun = $('#tahun');
+    // var totalnilai = parseFloat(($('#total_nilai').val()).replace(/./g,''));
+    // var nilairekom = parseFloat(($('input.nilai_rekomendasi').val()).replace(/./g,''));
+
+    if (unit_kerja.val() == '')
+        notif('error', 'Unit Kerja Belum Dipilih');
+    else if (keterangan.val() == '')
+        notif('error', 'Keterangan Belum Diisi');
+    else if (jumlah_rekomendasi.val() == '')
+        notif('error', 'Nilai Rekomendasi (Rp) Belum Diisi');
+    else if (tahun.val() == '')
+        notif('error', 'Tahun belum diisi');
+    else {
+        var totalnilai = parseFloat($('#total_nilai').val())
+        var nilairekom = $('input.nilai_rekomendasi').val()
+        nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
+        var nil = parseFloat(jumlah_rekomendasi.val().replace(/\./g, ""));
+        if (totalnilai != 0) {
+            // alert((totalnilai + nil) +'--'+nilairekom)
+            if ((totalnilai + nil) > nilairekom) {
+                notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
+
+            }
+            else {
+        //formrinciansewa
+                $.ajax({
+                    url: flagsUrl + '/form-rincian-simpan',
+                    data: $('#formrinciankontribusi').serialize(),
+                    type: 'POST',
+                    datatype: 'JSON',
+                    success: function (res) {
+                        if (res) {
+                            // $('#formrinciansewa').reset();
+                            $('#formrinciankontribusi').trigger("reset");
+                            $('#modalrinciankontribusi').modal('hide');
+                            // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
+                            notif('success', 'Data Rincian Berhasil Di Simpan');
+                            gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
+                            setTimeout(function () {
+                                $('#modalrinciankontribusi').modal('show');
+                            }, 1500)
+                        }
+                        else
+                            notif('error', 'Data Rincian Gagal Disimpan');
+                    }
+                });
+            }
+        }
+        else if (nil > nilairekom) {
+            notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
+        }
+        else {
+            $.ajax({
+                url: flagsUrl + '/form-rincian-simpan',
+                data: $('#formrincianuangmuka').serialize(),
+                type: 'POST',
+                datatype: 'JSON',
+                success: function (res) {
+                    if (res) {
+                        // $('#formrinciansewa').reset();
+                        $('#formrincianuangmuka').trigger("reset");
+                        $('#modalrincianuangmuka').modal('hide');
+                        // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
+                        notif('success', 'Data Rincian Berhasil Di Simpan');
+                        gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
+                        setTimeout(function () {
+                            $('#modalrincianuangmuka').modal('show');
+                        }, 1500)
+                    }
+                    else
+                        notif('error', 'Data Rincian Gagal Disimpan');
+                }
+            });
+        }
+    }
+}
+
 function hapusrincian(id, jenis) {
     swal({
         title: "Apakah Anda Yakin",

@@ -223,7 +223,8 @@ function toArray($data,$colm)
 function rinciantindaklanjut()
 {
     // $rincian=['Sewa','Uang Muka','Listrik','Piutang','Piutang Karyawan','Hutang Titipan','Penutupan Rekening','Umum','Kontribusi','Non Setoran','PKS'];
-    //yang belum diambil -> 'Uang Muka', Kontribusi, Non Setoran, PKS
+    //yang belum diambil -> Non Setoran, PKS
+    //yang belum bisa nambah rincian -> kontribusi
     $rincian=[
             'Setoran - Pengembalian Sisa Uang Muka','Setoran - Piutang Karyawan','Setoran - Biaya Listrik','Setoran - Umum',
             'Setoran - Kontribusi','Setoran - Piutang','Setoran - Pembayaran Sewa','Non Setoran',
@@ -250,6 +251,10 @@ function rinciantindaklanjut()
             $drinc['penutupanrekening']=$v;
         }else if($v == 'Setoran - Umum'){
             $drinc['umum']=$v;
+        }else if($v == 'Setoran - Kontribusi'){
+            $drinc['kontribusi']=$v;
+        }else if($v == 'Setoran - Pengembalian Sisa Uang Muka'){
+            $drinc['uangmuka']=$v;
         }
         else{
             $drinc[str_replace('-','',str_slug($v))]=$v;

@@ -1,0 +1,52 @@
+<div class="row">
+    <div class="col-md-12" style="margin-top:10px;">
+        <div class="form-group" style="margin-bottom:10px;">
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Unit Kerja :
+            </label>
+            <div class="col-sm-9">
+                <select name="unit_kerja" class="form-control" id="unit_kerja" data-plugin="select2">
+                    {{-- <option value="">-- Pilih --</option> --}}
+                    @foreach ($pic as $key=>$item)
+                            <option value="{{$item->id}}__{{$item->nama_pic}}">{{$item->nama_pic}}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <input type="hidden" name="jenis" value="{{$jenis}}">
+        <input type="hidden" name="idform" id="idform">
+        <input type="hidden" name="idrincian" value="{{$idrincian}}">
+        {{-- <div class="form-group" style="margin-bottom:10px;">
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Tindak Lanjut</small>
+            </label>
+            <div class="col-sm-7">
+                <textarea class="form-control"  name="tindak_lanjut" placeholder="Tindak Lanjut" id="tindak_lanjuttxt"></textarea>
+            </div>
+        </div>    --}}
+        <div class="form-group" style="margin-bottom:10px;">
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nomor Invoice:
+            </label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control"  class="form-control"  name="no_invoice"  placeholder="Nomor Invoice" id="no_invoice">
+            </div>
+        </div>
+        <div class="form-group">
+           <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Tanggal UM</small>
+            </label>
+            <div class="col-md-7">
+                <div class='input-group date' id='datetimepicker_tgl_pks'>
+                    <input type='date' class="form-control" name="tgl_um" id="tgl_um"  value="{{date('d/m/Y')}}"/>
+                    <span class="input-group-addon bg-info text-white">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Keterangan
+            </label>
+            <div class="col-md-9">
+                <textarea class="form-control"  name="keterangan" placeholder="Keterangan" id="keterangan"></textarea>
+            </div>
+        </div>
+    </div>
+</div>

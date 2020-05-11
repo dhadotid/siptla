@@ -21,6 +21,11 @@ use App\Models\RincianUmum;
 use App\Models\TindakLanjutRincian;
 use App\Models\CatatanMonev;
 use App\Models\StatusRekomendasi;
+use App\Models\RincianKontribusi;
+use App\Models\RincianNonSetoranPerpanjanganPerjanjianKerjasama;
+use App\Models\RincianNonSetoran;
+use App\Models\RincianNonSetoranUmum;
+use App\Models\RincianNonSetoranRincianNonSetoranPertanggungjawabanUangMuka;
 use Auth;
 class TindakLanjutController extends Controller
 {
@@ -1177,6 +1182,38 @@ class TindakLanjutController extends Controller
                     ->with('idform',$idform)
                     ->with('jenis',$jenis);
         }
+        else if($jenis=='kontribusi'){
+            $idform=abs(crc32(sha1(md5(rand()))));
+            return view('backend.pages.data-lhp.rincian-form.form-kontribusi')
+                    ->with('idrincian',$idrincian)
+                    ->with('idform',$idform)
+                    ->with('jenis',$jenis);
+        }
+        else if($jenis=='nonsetoranperjanjiankerjasama'){
+            $idform=abs(crc32(sha1(md5(rand()))));
+            return view('backend.pages.data-lhp.rincian-form.form-nonsetoranperjanjiankerjasama')
+                    ->with('idrincian',$idrincian)
+                    ->with('idform',$idform)
+                    ->with('jenis',$jenis);
+        }elseif($jenis=='nonsetoran'){
+            $idform=abs(crc32(sha1(md5(rand()))));
+            return view('backend.pages.data-lhp.rincian-form.form-nonsetoran')
+                    ->with('idrincian',$idrincian)
+                    ->with('idform',$idform)
+                    ->with('jenis',$jenis);
+        }elseif($jenis=='nonsetoranumum'){
+            $idform=abs(crc32(sha1(md5(rand()))));
+            return view('backend.pages.data-lhp.rincian-form.form-nonsetoranumum')
+                    ->with('idrincian',$idrincian)
+                    ->with('idform',$idform)
+                    ->with('jenis',$jenis);
+        }elseif($jenis=='nonsetoranpertanggungjawabanuangmuka'){
+            $idform=abs(crc32(sha1(md5(rand()))));
+            return view('backend.pages.data-lhp.rincian-form.form-nonsetoranpertanggungjawabanuangmuka')
+                    ->with('idrincian',$idrincian)
+                    ->with('idform',$idform)
+                    ->with('jenis',$jenis);
+        }
     }
     public function list_tindaklanjut_rincian($idrincian,$jenis,$idtl=null)
     {
@@ -1211,6 +1248,17 @@ class TindakLanjutController extends Controller
         elseif($jenis=='umum')
         {
             $rincian=RincianUmum::find($idrincian);
+        }
+        else if($jenis=='kontribusi'){
+            $rincian=RincianKontribusi::find($idrincian);
+        }else if($jenis=='nonsetoranperjanjiankerjasama'){
+            $rincian=RincianNonSetoranPerpanjanganPerjanjianKerjasama::find($idrincian);
+        }else if($jenis=='nonsetoran'){
+            $rincian=RincianNonSetoran::find($idrincian);
+        }else if($jenis=='nonsetoranumum'){
+            $rincian=RincianNonSetoranUmum::find($idrincian);
+        }else if($jenis=='nonsetoranpertanggungjawabanuangmuka'){
+            $rincian=RincianNonSetoranPertanggungjawabanUangMuka::find($idrincian);
         }
 
         $unitkerja=$rinciantindaklanjut=array();
@@ -1283,6 +1331,16 @@ class TindakLanjutController extends Controller
         elseif($jenis=='umum')
         {
             $rincian=RincianUmum::find($idrincian);
+        }elseif($jenis=='kontribusi'){
+            $rincian=RincianKontribusi::find($idrincian);
+        }elseif($jenis=='nonsetoranperjanjiankerjasama'){
+            $rincian=RincianNonSetoranPerpanjanganPerjanjianKerjasama::find($idrincian);
+        }elseif($jenis=='nonsetoran'){
+            $rincian=RincianNonSetoran::find($idrincian);
+        }elseif($jenis=='nonsetoranumum'){
+            $rincian=RincianNonSetoranUmum::find($idrincian);
+        }elseif($jenis=='nonsetoranpertanggungjawabanuangmuka'){
+            $rincian=RincianNonSetoranPertanggungjawabanUangMuka::find($idrincian);
         }
 
         $data['idtemuan']=$rincian->id_temuan;
@@ -1312,6 +1370,16 @@ class TindakLanjutController extends Controller
             $rincian=RincianPenutupanRekening::find($idrincian);
         elseif($jenis=='umum')
             $rincian=RincianUmum::find($idrincian);
+        elseif($jenis=='kontribusi')
+            $rincian=RincianKontribusi::find($idrincian);
+        elseif($jenis=='nonsetoranperjanjiankerjasama')
+            $rincian=RincianNonSetoranPerpanjanganPerjanjianKerjasama::find($idrincian);
+        elseif($jenis=='nonsetoran')
+            $rincian=RincianNonSetoran::find($idrincian);
+        elseif($jenis=='nonsetoranumum')
+            $rincian=RincianNonSetoranUmum::find($idrincian);
+        elseif($jenis=='nonsetoranpertanggungjawabanuangmuka')
+            $rincian=RincianNonSetoranPertanggungjawabanUangMuka::find($idrincian);
 
         $rincian->id_tindak_lanjut=$request->idform;
         $rincian->save();
@@ -1396,6 +1464,14 @@ class TindakLanjutController extends Controller
             $insert->dokumen_pendukung = $request->dokumen_pendukung;
             $insert->keterangan = $request->keterangan;
         }
+        if($jenis == 'nonsetoranperjanjiankerjasama' || $jenis == 'nonsetoran' || 
+            $jenis == 'nonsetoranumum' || $jenis == 'nonsetoranpertanggungjawabanuangmuka'){
+            $insert->nama_bank = $request->nama_bank;
+            $insert->nomor_rekening = $request->nomor_rekening;
+            $insert->nama_rekening = $request->nama_rekening;
+            $insert->jenis_rekening = $request->jenis_rekening;
+            $insert->saldo_akhir = str_replace('.','',$request->saldo_akhir);
+        }
         $insert->save();
 
         $data['jenis']=$insert->jenis;
@@ -1442,6 +1518,16 @@ class TindakLanjutController extends Controller
             $rincian=RincianPenutupanRekening::where($where)->get();
         elseif($jenis=='umum')
             $rincian=RincianUmum::where($where)->get();
+        elseif($jenis=='kontribusi')
+            $rincian=RincianKontribusi::where($where)->get();
+        elseif($jenis=='nonsetoranperjanjiankerjasama')
+            $rincian=RincianNonSetoranPerpanjanganPerjanjianKerjasama::where($where)->get();
+        elseif($jenis=='nonsetoran')
+            $rincian=RincianNonSetoran::where($where)->get();
+        elseif($jenis=='nonsetoranumum')
+            $rincian=RincianNonSetoranUmum::where($where)->get();
+        elseif($jenis=='nonsetoranpertanggungjawabanuangmuka')
+            $rincian=RincianNonSetoranPertanggungjawabanUangMuka::where($where)->get();
 
         $tlrincian=TindakLanjutRincian::where('id_rekomendasi',$idrekomendasi)->get();
         $tindaklanjut_rincian=array();
@@ -1559,7 +1645,50 @@ class TindakLanjutController extends Controller
                     ->with('jenis',$jenis)
                     ->with('idrekomendasi',$idrekomendasi);
         }
-
+        elseif($jenis=='kontribusi'){
+            $rincian=RincianKontribusi::where($where)->get();
+            return view('backend.pages.data-lhp.rincian-table.table-kontribusi')
+                    ->with('rincian',$rincian)
+                    ->with('idtl',$idtl)
+                    ->with('idtemuan',$idtemuan)
+                    ->with('jenis',$jenis)
+                    ->with('idrekomendasi',$idrekomendasi);
+        }elseif($jenis=='nonsetoranperjanjiankerjasama'){
+            $rincian=RincianNonSetoranPerpanjanganPerjanjianKerjasama::where($where)->get();
+            return view('backend.pages.data-lhp.rincian-table.table-nonsetoranperjanjiankerjasama')
+                    ->with('rincian',$rincian)
+                    ->with('idtl',$idtl)
+                    ->with('idtemuan',$idtemuan)
+                    ->with('jenis',$jenis)
+                    ->with('idrekomendasi',$idrekomendasi);
+        }
+        elseif($jenis=='nonsetoran'){
+            $rincian=RincianNonSetoran::where($where)->get();
+            return view('backend.pages.data-lhp.rincian-table.table-nonsetoran')
+                    ->with('rincian',$rincian)
+                    ->with('idtl',$idtl)
+                    ->with('idtemuan',$idtemuan)
+                    ->with('jenis',$jenis)
+                    ->with('idrekomendasi',$idrekomendasi);
+        }
+        elseif($jenis=='nonsetoranumum'){
+            $rincian=RincianNonSetoran::where($where)->get();
+            return view('backend.pages.data-lhp.rincian-table.table-nonsetoranumum')
+                    ->with('rincian',$rincian)
+                    ->with('idtl',$idtl)
+                    ->with('idtemuan',$idtemuan)
+                    ->with('jenis',$jenis)
+                    ->with('idrekomendasi',$idrekomendasi);
+        }
+        elseif($jenis=='nonsetoranpertanggungjawabanuangmuka'){
+            $rincian=RincianNonSetoran::where($where)->get();
+            return view('backend.pages.data-lhp.rincian-table.table-nonsetoranpertanggungjawabanuangmuka')
+                    ->with('rincian',$rincian)
+                    ->with('idtl',$idtl)
+                    ->with('idtemuan',$idtemuan)
+                    ->with('jenis',$jenis)
+                    ->with('idrekomendasi',$idrekomendasi);
+        }
     }
 
     public function detail_tindaklanjut_junior($idrekomendasi)
@@ -1772,6 +1901,16 @@ class TindakLanjutController extends Controller
             $rincian=RincianPenutupanRekening::where($where)->get();
         elseif($jenis=='umum')
             $rincian=RincianUmum::where($where)->get();
+        elseif($jenis=='kontribusi')
+            $rincian=RincianKontribusi::where($where)->get();
+        elseif($jenis=='nonsetoranperjanjiankerjasama')
+            $rincian=RincianNonSetoranPerpanjanganPerjanjianKerjasama::where($where)->get();
+        elseif($jenis=='nonsetoran')
+            $rincian=RincianNonSetoran::where($where)->get();
+        elseif($jenis=='nonsetoranumum')
+            $rincian=RincianNonSetoranUmum::where($where)->get();
+        elseif($jenis=='nonsetoranpertanggungjawabanuangmuka')
+            $rincian=RincianNonSetoranPertanggungjawabanUangMuka::where($where)->get();
 
         $tlrincian=TindakLanjutRincian::where('id_rekomendasi',$idrekomendasi)->get();
         $tindaklanjut_rincian=array();

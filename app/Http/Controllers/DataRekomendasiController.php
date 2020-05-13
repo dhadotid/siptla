@@ -717,6 +717,7 @@ class DataRekomendasiController extends Controller
                 $totalnilai+=$v->nilai_pekerjaan;
                 
             }
+            echo "<script> setCookie('total_nilai',$totalnilai,1); </script>";
             $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
 
             $table.='</tbody>';
@@ -791,6 +792,7 @@ class DataRekomendasiController extends Controller
                 $totalnilai+=$v->jumlah_pum;
                 
             }
+            echo "<script> setCookie('total_nilai',$totalnilai,1); </script>";
             $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
 
             
@@ -816,7 +818,7 @@ class DataRekomendasiController extends Controller
         }
         elseif($jenis=='listrik')
         {
-            
+            $rincian=RincianListrik::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
             $table='<h3 class="text-center">Rincian Nilai – Rekomendasi Biaya Listrik</h3>
             <h5 class="text-center">Total Rekomendasi: '.number_format($rincian->sum('tagihan'),0,',','.').'</h5>
             <table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
@@ -833,7 +835,6 @@ class DataRekomendasiController extends Controller
                 $table.='</tr>';
             $table.='</thead><tbody>';
 
-            $rincian=RincianListrik::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
             $no=1;
             $totalnilai=0;
             foreach($rincian as $k=>$v)
@@ -855,6 +856,7 @@ class DataRekomendasiController extends Controller
 
                 $totalnilai+=$v->tagihan;
             }
+            echo "<script> setCookie('total_nilai',$totalnilai,1); </script>";
             $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
             $table.='</tbody>';
             $table.='</table>';
@@ -913,6 +915,7 @@ class DataRekomendasiController extends Controller
 
                 $totalnilai+=$v->tagihan;
             }
+            echo "<script> setCookie('total_nilai',$totalnilai,1); </script>";
             $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
             
             $table.='</tbody>';
@@ -972,6 +975,7 @@ class DataRekomendasiController extends Controller
 
                 $totalnilai+=$v->pinjaman;
             }
+            echo "<script> setCookie('total_nilai',$totalnilai,1); </script>";
             $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
 
             $table.='</tbody>';
@@ -1034,6 +1038,7 @@ class DataRekomendasiController extends Controller
 
                 $totalnilai+=$v->sisa_setor;
             }
+            // echo "<script> setCookie('total_nilai',$totalnilai,1); </script>";
             $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
 
             $table.='</tbody>';
@@ -1098,6 +1103,7 @@ class DataRekomendasiController extends Controller
 
                 $totalnilai+=$v->saldo_akhir;
             }
+            echo "<script> eraseCookie('total_nilai'); </script>";
             $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
 
             $table.='</tbody>';
@@ -1122,7 +1128,7 @@ class DataRekomendasiController extends Controller
         }
         elseif($jenis=='umum')
         {
-            
+            $rincian=RincianUmum::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
             $table='<h3 class="text-center">Rincian Nilai – Rekomendasi (Umum - Setoran)</h3>
             <h5 class="text-center">Total Rekomendasi: '.number_format($rincian->sum('jumlah_rekomendasi'),0,',','.').'</h5>
             <table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
@@ -1137,7 +1143,6 @@ class DataRekomendasiController extends Controller
                 $table.='</tr>';
             $table.='</thead><tbody>';
 
-            $rincian=RincianUmum::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
             $no=1;
             $totalnilai=0;
             foreach($rincian as $k=>$v)
@@ -1157,6 +1162,7 @@ class DataRekomendasiController extends Controller
 
                 $totalnilai+=$v->jumlah_rekomendasi;
             }
+            echo "<script> setCookie('total_nilai',$totalnilai,1); </script>";
             $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
             $table.='</tbody>';
             $table.='</table>';
@@ -1215,6 +1221,7 @@ class DataRekomendasiController extends Controller
 
                 $totalnilai+=$v->nilai_penerimaan;
             }
+            echo "<script> setCookie('total_nilai',$totalnilai,1); </script>";
             $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
             $table.='</tbody>';
             $table.='</table>';
@@ -1274,6 +1281,7 @@ class DataRekomendasiController extends Controller
 
                 $totalnilai+=$v->nilai_pekerjaan;
             }
+            echo "<script> eraseCookie('total_nilai'); </script>";
             $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
             $table.='</tbody>';
             $table.='</table>';
@@ -1330,6 +1338,7 @@ class DataRekomendasiController extends Controller
 
                 $totalnilai+=$v->nilai_rekomendasi;
             }
+            echo "<script> setCookie('total_nilai',$totalnilai,1); </script>";
             $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
             $table.='</tbody>';
             $table.='</table>';
@@ -1382,6 +1391,7 @@ class DataRekomendasiController extends Controller
 
                 $totalnilai+=$v->nilai_rekomendasi;
             }
+            echo "<script> eraseCookie('total_nilai'); </script>";
             $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
             $table.='</tbody>';
             $table.='</table>';
@@ -1440,6 +1450,7 @@ class DataRekomendasiController extends Controller
 
                 $totalnilai+=$v->jumlah_um;
             }
+            echo "<script> eraseCookie('total_nilai'); </script>";
             $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
             $table.='</tbody>';
             $table.='</table>';

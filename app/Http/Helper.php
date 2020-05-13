@@ -245,8 +245,8 @@ function rinciantindaklanjut()
             $drinc['piutang']=$v;
         }else if($v == 'Setoran - Piutang Karyawan'){
             $drinc['piutangkaryawan']=$v;
-        }else if($v == 'Non Setoran - Hutang Titipan'){
-            $drinc['hutangtitipan']=$v;
+        // }else if($v == 'Non Setoran - Hutang Titipan'){
+        //     $drinc['hutangtitipan']=$v;
         }else if($v == 'Non Setoran - Penutupan Rekening'){
             $drinc['penutupanrekening']=$v;
         }else if($v == 'Setoran - Umum'){

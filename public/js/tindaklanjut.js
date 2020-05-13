@@ -154,8 +154,8 @@ function update_rincian(rekom_id,temuan_id)
     });
     $('#modal-update-rincian').modal('show')
 }
-function getrincainTables(jenis, idtemuan, idrekom){
-    console.log(flagsUrl + '/load-table-rincian/' + jenis + '/' + idtemuan + '/' + idrekom)
+function getrincainTables(title, jenis, idtemuan, idrekom){
+    document.getElementById('modaltitle').textContent = title;
     $('#form-rincian').load(flagsUrl + '/load-table-rincian/' + jenis + '/' + idtemuan + '/' + idrekom,  function () {
         $('#rincian_tl').select2();
         $('#table-tl-rincian-'+idrekom).DataTable();

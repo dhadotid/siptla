@@ -35,14 +35,13 @@ function validasirekom(act) {
     var senior_auditor = $('#' + act +'_senior_auditor');
     // var review_auditor = $('#'+act+'_review_auditor');
 
-    if ($('#butuh_rincian').is(':checked')){ 
+    if ($('#butuh_rincian').is(':checked') && getCookie('total_nilai')!=null){ 
         var total_nilai = parseFloat(getCookie('total_nilai').replace(/\./g, ""));
         if(nominal >= total_nilai)
             return notif('error', 'Nilai rekomendasi melebihi total rincian');
     }else{
         eraseCookie('total_nilai');
     }
-    return;
     if (norekomendasi.val() == '')
         notif('error', 'Nomor Rekomendasi Belum Diisi');
     else if (rekomendasi.val() == '')
@@ -74,7 +73,6 @@ function validasirekom(act) {
                 type: 'POST',
                 datatype: 'JSON',
                 success: function (res) {
-                    console.log(totalnilai.val() + 'didide: '+ nominal.val());
                     // reloadtable('temuan_' + idtemuan, idtemuan)
                     $('#temuan_' + idtemuan).load(flagsUrl + '/rekomendasi-data-new/' + idtemuan + '/' + res.status_rekomendasi_id);
                     $('#modaltambahrekomendasi').modal('hide');

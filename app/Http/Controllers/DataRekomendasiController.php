@@ -23,6 +23,7 @@ use App\Models\RincianNonSetoran;
 use App\Models\RincianNonSetoranUmum;
 use App\Models\RincianNonSetoranPertanggungjawabanUangMuka;
 use Auth;
+use Config;
 class DataRekomendasiController extends Controller
 {
     public function rekomendasi_simpan(Request $request)
@@ -326,11 +327,11 @@ class DataRekomendasiController extends Controller
 
                         if($v->rincian!='' && Auth::user()->level != 'pic-unit')
                         {
-                            $table.=$v;
-                            //('.$v->id.',\'sewa\')
                             // $table.=$v;
                             // $table.='<a class="label label-danger fz-sm" href="javascript:update_rincian('.$v->rekom_id.','.$idtemuan.')"><i class="fa fa-check"></i> Rincian : '.ucwords($v->rincian).'</a> &nbsp;<br>';
-                            $table.='<a class="label label-danger fz-sm" href="javascript:getrincainTables(\''.$v->rincian.'\',\''.$idtemuan.'\',\''.$v->rekom_id.'\')"><i class="fa fa-check"></i> Rincian : '.ucwords($v->rincian).'</a> &nbsp;<br>';
+                            $rincianText = str_replace("Rincian Nilai", "",Config::get('constants.rincian.'.$v->rincian.''));
+                            // $rincianText = str_replace('-', '',$rincianText);
+                            $table.='<a class="label label-danger fz-sm" href="javascript:getrincainTables(\''.Config::get('constants.rincian.'.$v->rincian.'').'\',\''.$v->rincian.'\',\''.$idtemuan.'\',\''.$v->rekom_id.'\')"><i class="fa fa-check"></i> Rincian : '.ucwords(str_slug($rincianText, ' ')).'</a> &nbsp;<br>';
                         }
                         // else
                         // {

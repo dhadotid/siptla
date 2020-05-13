@@ -100,33 +100,34 @@ class DataRekomendasiController extends Controller
             $rekomid_tl=$idlhp.$request->id_temuan;
 
             if($rinciantl=='sewa')
-                $tl=RincianSewa::where('id_rekomendasi',$rekomid_tl)->where('id_temuan',$request->id_temuan)->get();
+                $tl=RincianSewa::where('id_rekomendasi','2')->where('id_temuan',$request->id_temuan)->get();
             elseif($rinciantl=='uangmuka')
-                $tl=RincianUangMuka::where('id_rekomendasi',$rekomid_tl)->where('id_temuan',$request->id_temuan)->get();
+                $tl=RincianUangMuka::where('id_rekomendasi','2')->where('id_temuan',$request->id_temuan)->get();
             elseif($rinciantl=='listrik')
-                $tl=RincianListrik::where('id_rekomendasi',$rekomid_tl)->where('id_temuan',$request->id_temuan)->get();
+                $tl=RincianListrik::where('id_rekomendasi','2')->where('id_temuan',$request->id_temuan)->get();
+                // $tl=RincianListrik::where('id_rekomendasi',$rekomid_tl)->where('id_temuan',$request->id_temuan)->get();
             elseif($rinciantl=='piutang')
-                $tl=RincianPiutang::where('id_rekomendasi',$rekomid_tl)->where('id_temuan',$request->id_temuan)->get();
+                $tl=RincianPiutang::where('id_rekomendasi','2')->where('id_temuan',$request->id_temuan)->get();
             elseif($rinciantl=='piutangkaryawan')
-                $tl=RincianPiutangKaryawan::where('id_rekomendasi',$rekomid_tl)->where('id_temuan',$request->id_temuan)->get();
+                $tl=RincianPiutangKaryawan::where('id_rekomendasi','2')->where('id_temuan',$request->id_temuan)->get();
             elseif($rinciantl=='hutangtitipan')
-                $tl=RincianHutangTitipan::where('id_rekomendasi',$rekomid_tl)->where('id_temuan',$request->id_temuan)->get();
+                $tl=RincianHutangTitipan::where('id_rekomendasi','2')->where('id_temuan',$request->id_temuan)->get();
             elseif($rinciantl=='penutupanrekening')
-                $tl=RincianPenutupanRekening::where('id_rekomendasi',$rekomid_tl)->where('id_temuan',$request->id_temuan)->get();
+                $tl=RincianPenutupanRekening::where('id_rekomendasi','2')->where('id_temuan',$request->id_temuan)->get();
             elseif($rinciantl=='umum')
-                $tl=RincianUmum::where('id_rekomendasi',$rekomid_tl)->where('id_temuan',$request->id_temuan)->get();
+                $tl=RincianUmum::where('id_rekomendasi','2')->where('id_temuan',$request->id_temuan)->get();
             elseif($rinciantl=='kontribusi')
-                $tl=RincianKontribusi::where('id_rekomendasi',$rekomid_tl)->where('id_temuan',$request->id_temuan)->get();
+                $tl=RincianKontribusi::where('id_rekomendasi','2')->where('id_temuan',$request->id_temuan)->get();
             elseif($rinciantl=='nonsetoranperjanjiankerjasama')
-                $tl=RincianNonSetoranPerpanjanganPerjanjianKerjasama::where('id_rekomendasi',$rekomid_tl)->where('id_temuan',$request->id_temuan)->get();
+                $tl=RincianNonSetoranPerpanjanganPerjanjianKerjasama::where('id_rekomendasi','2')->where('id_temuan',$request->id_temuan)->get();
 
-            foreach($tl as $k=>$v)
+            foreach($tl as $v)
             {
                 $v->id_rekomendasi=$idrekomendasi;
                 $v->save();
             }
         }
-        return $insert;
+        return 'HUA AHAH '.$insert;
         // return redirect('data-temuan-lhp/'.$idlhp)
         //     ->with('success', 'Anda telah memasukkan data rekomendasi baru untuk <B><u>Nomor Temuan : '.$notemuan.'</u></B>.');
     }
@@ -325,7 +326,11 @@ class DataRekomendasiController extends Controller
 
                         if($v->rincian!='' && Auth::user()->level != 'pic-unit')
                         {
-                            $table.='<a class="label label-danger fz-sm" href="javascript:update_rincian('.$v->rekom_id.','.$idtemuan.')"><i class="fa fa-check"></i> Rincian : '.ucwords($v->rincian).'</a> &nbsp;<br>';
+                            $table.=$v;
+                            //('.$v->id.',\'sewa\')
+                            // $table.=$v;
+                            // $table.='<a class="label label-danger fz-sm" href="javascript:update_rincian('.$v->rekom_id.','.$idtemuan.')"><i class="fa fa-check"></i> Rincian : '.ucwords($v->rincian).'</a> &nbsp;<br>';
+                            $table.='<a class="label label-danger fz-sm" href="javascript:getrincainTables(\''.$v->rincian.'\',\''.$idtemuan.'\',\''.$v->rekom_id.'\')"><i class="fa fa-check"></i> Rincian : '.ucwords($v->rincian).'</a> &nbsp;<br>';
                         }
                         // else
                         // {
@@ -672,23 +677,24 @@ class DataRekomendasiController extends Controller
         $table='';
         if($jenis=='sewa')
         {
-            
-            $table='<h3 class="text-center">Rincian Nilai Setoran – Sewa</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
+            $rincian=RincianSewa::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
+            $table='<h3 class="text-center">Rincian Nilai – Rekomendasi Pembayaran Sewa</h3>
+            <h5 class="text-center">Total Rekomendasi: '.number_format($rincian->sum('nilai_pekerjaan'),0,',','.').'</h5>
+            <table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
-                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Unit Kerja - PIC 2</th>
                     <th class="text-center">Mitra</th>
                     <th class="text-center">No. PKS</th>
                     <th class="text-center">Tgl. PKS</th>
-                    <th class="text-center">Nilai Rekomendasi</th>
+                    <th class="text-center">Nilai Rekomendasi (Rp)</th>
                     <th class="text-center">Masa Kontrak</th>';
                     $table.='
                     <th class="text-center">Aksi</th>';
                 $table.='</tr>';
             $table.='</thead><tbody>';
 
-            $rincian=RincianSewa::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
             $no=1;
             $totalnilai=0;
             foreach($rincian as $k=>$v)
@@ -742,22 +748,26 @@ class DataRekomendasiController extends Controller
         }
         elseif($jenis=='uangmuka')
         {
-            
-            $table='<h3 class="text-center">Rincian Nilai Uang Muka</h3><table class="table table-bordered" style="width:100%" id="table-tl-rincian-'.$idrekomendasi.'">';
+            $rincian=RincianUangMuka::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
+
+
+            $table='<h3 class="text-center">Rincian Nilai – Rekomendasi Pengembalian Sisa Uang Muka</h3>
+            <h5 class="text-center">Total Rekomendasi: '.number_format($rincian->sum('jumlah_pum'),0,',','.').'</h5>
+            <table class="table table-bordered" style="width:100%" id="table-tl-rincian-'.$idrekomendasi.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
-                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Unit Kerja – PIC 2</th>
                     <th class="text-center">No. Invoice</th>
-                    <th class="text-center">Tanggal PUM</th>
-                    <th class="text-center">Jumlah UM</th>
-                    <th class="text-center">Keterangan</th>';
+                    <th class="text-center">Tanggal UM</th>
+                    <th class="text-center">Keterangan</th>
+                    <th class="text-center">Jumlah Sisa Uang Muka (Rp)</th>';
                     $table.='
                     <th class="text-center">Aksi</th>';
                 $table.='</tr>';
             $table.='</thead><tbody>';
 
-            $rincian=RincianUangMuka::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
+            
             $no=1;
             $totalnilai=0;
             foreach($rincian as $k=>$v)
@@ -767,8 +777,8 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.$v->unit_kerja.'</td>
                     <td class="text-center">'.$v->no_invoice.'</td>
                     <td class="text-center">'.($v->tgl_pum != '' ? date('d/m/Y',strtotime($v->tgl_pum)) : '-').'</td>
-                    <td class="text-center">'.number_format($v->jumlah_pum,0,',','.').'</td>
-                    <td class="text-center">'.$v->keterangan.'</td>';
+                    <td class="text-center">'.$v->keterangan.'</td>
+                    <td class="text-center">'.number_format($v->jumlah_pum,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
                         <div style="width:80px;">
@@ -807,14 +817,16 @@ class DataRekomendasiController extends Controller
         elseif($jenis=='listrik')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Pembayaran Listrik</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
+            $table='<h3 class="text-center">Rincian Nilai – Rekomendasi Biaya Listrik</h3>
+            <h5 class="text-center">Total Rekomendasi: '.number_format($rincian->sum('tagihan'),0,',','.').'</h5>
+            <table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
-                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Unit Kerja – PIC 2</th>
                     <th class="text-center">Lokasi</th>
                     <th class="text-center">Tanggal Invoice</th>
-                    <th class="text-center">Tagihan</th>
+                    <th class="text-center">Jumlah Tagihan (Rp)</th>
                     <th class="text-center">Keterangan</th>';
                     $table.='
                     <th class="text-center">Aksi</th>';
@@ -835,6 +847,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.$v->keterangan.'</td>';
                     $table.='
                     <td class="text-center">
+                        <a href="javascript:editrincian('.$v->id.',\'listrik\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'listrik\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -866,20 +879,21 @@ class DataRekomendasiController extends Controller
         }
         elseif($jenis=='piutang')
         {
-            
-            $table='<h3 class="text-center">Rincian Nilai Setoran – Piutang</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
+            $rincian=RincianPiutang::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
+            $table='<h3 class="text-center">Rincian Nilai – Rekomendasi Piutang</h3>
+            <h5 class="text-center">Total Rekomendasi: '.number_format($rincian->sum('tagihan'),0,',','.').'</h5>
+            <table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
-                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Unit Kerja - PIC 2</th>
                     <th class="text-center">Pelanggan</th>
-                    <th class="text-center">Jumlah Tagihan</th>';
+                    <th class="text-center">Jumlah Tagihan (Rp)</th>';
                     $table.='
                     <th class="text-center">Aksi</th>';
                 $table.='</tr>';
             $table.='</thead><tbody>';
 
-            $rincian=RincianPiutang::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
             $no=1;
             $totalnilai=0;
             foreach($rincian as $k=>$v)
@@ -891,6 +905,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.number_format($v->tagihan,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
+                        <a href="javascript:editrincian('.$v->id.',\'piutang\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'piutang\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -923,20 +938,21 @@ class DataRekomendasiController extends Controller
         }
         elseif($jenis=='piutangkaryawan')
         {
-            
-            $table='<h3 class="text-center">Rincian Nilai Setoran – Piutang Karyawan</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
+            $rincian=RincianPiutangKaryawan::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
+            $table='<h3 class="text-center">Rincian Nilai – Rekomendasi Piutang Karyawan</h3>
+            <h5 class="text-center">Total Rekomendasi: '.number_format($rincian->sum('pinjaman'),0,',','.').'</h5>
+            <table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
-                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Unit Kerja – PIC 2</th>
                     <th class="text-center">Karyawan</th>
-                    <th class="text-center">Jumlah Pinjaman</th>';
+                    <th class="text-center">Jumlah Pinjaman (Rp)</th>';
                     $table.='
                     <th class="text-center">Aksi</th>';
                 $table.='</tr>';
             $table.='</thead><tbody>';
 
-            $rincian=RincianPiutangKaryawan::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
             $no=1;
             $totalnilai=0;
             foreach($rincian as $k=>$v)
@@ -948,6 +964,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.number_format($v->pinjaman,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
+                        <a href="javascript:editrincian('.$v->id.',\'piutangkaryawan\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'piutangkaryawan\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1009,6 +1026,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.number_format($v->sisa_setor,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
+                        <a href="javascript:editrincian('.$v->id.',\'hutangtitipan\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'hutangtitipan\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1072,6 +1090,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.number_format($v->saldo_akhir,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
+                        <a href="javascript:editrincian('.$v->id.',\'penutupanrekening\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'penutupanrekening\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1104,11 +1123,13 @@ class DataRekomendasiController extends Controller
         elseif($jenis=='umum')
         {
             
-            $table='<h3 class="text-center">Rincian Nilai Setoran - Umum</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
+            $table='<h3 class="text-center">Rincian Nilai – Rekomendasi (Umum - Setoran)</h3>
+            <h5 class="text-center">Total Rekomendasi: '.number_format($rincian->sum('jumlah_rekomendasi'),0,',','.').'</h5>
+            <table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
-                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Unit Kerja – PIC 2</th>
                     <th class="text-center">Keterangan</th>
                     <th class="text-center">Nilai Rekomendasi (Rp)</th>';
                     $table.='
@@ -1128,6 +1149,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.number_format($v->jumlah_rekomendasi,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
+                        <a href="javascript:editrincian('.$v->id.',\'umum\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'umum\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1157,20 +1179,22 @@ class DataRekomendasiController extends Controller
                 }
             }
         }else if ($jenis=='kontribusi'){
-            $table='<h3 class="text-center">Rincian Nilai Setoran - Kontribusi</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
+            $rincian=RincianKontribusi::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
+            $table='<h3 class="text-center">Rincian Nilai – Rekomendasi Kontribusi</h3>
+            <h5 class="text-center">Total Rekomendasi: '.number_format($rincian->sum('nilai_penerimaan'),0,',','.').'</h5>
+            <table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
-                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Unit Kerja - PIC 2</th>
                     <th class="text-center">Tahun</th>
                     <th class="text-center">Keterangan</th>
-                    <th class="text-center">Rekomendasi Kontribusi</th>';
+                    <th class="text-center">Rekomendasi Kontribusi (Rp)</th>';
                     $table.='
                     <th class="text-center">Aksi</th>';
                 $table.='</tr>';
             $table.='</thead><tbody>';
 
-            $rincian=RincianKontribusi::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
             $no=1;
             $totalnilai=0;
             foreach($rincian as $k=>$v)
@@ -1183,6 +1207,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.number_format($v->nilai_penerimaan,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
+                        <a href="javascript:editrincian('.$v->id.',\'kontribusi\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'kontribusi\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1241,6 +1266,7 @@ class DataRekomendasiController extends Controller
                 // <td class="text-center">'.rupiah($v->nilai_pekerjaan).'</td>
                     $table.='
                     <td class="text-center">
+                        <a href="javascript:editrincian('.$v->id.',\'nonsetoranperjanjiankerjasama\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'nonsetoranperjanjiankerjasama\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1270,11 +1296,14 @@ class DataRekomendasiController extends Controller
                 }
             }
         }elseif($jenis=='nonsetoran'){
-            $table='<h3 class="text-center">Rincian Nilai Non Setoran</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
+            $rincian=RincianNonSetoran::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
+            $table='<h3 class="text-center">Rincian Nilai – Rekomendasi Non Setoran</h3>
+            <h5 class="text-center">Total Rekomendasi: '.number_format($rincian->sum('nilai_rekomendasi'),0,',','.').'</h5>
+            <table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
-                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Unit Kerja - PIC 2</th>
                     <th class="text-center">Keterangan</th>
                     <th class="text-center">Nilai Rekomendasi (Rp)</th>';
                     $table.='
@@ -1282,7 +1311,6 @@ class DataRekomendasiController extends Controller
                 $table.='</tr>';
             $table.='</thead><tbody>';
 
-            $rincian=RincianNonSetoran::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
             $no=1;
             $totalnilai=0;
             foreach($rincian as $k=>$v)
@@ -1294,6 +1322,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.number_format($v->nilai_rekomendasi,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
+                        <a href="javascript:editrincian('.$v->id.',\'nonsetoran\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'nonsetoran\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1323,7 +1352,7 @@ class DataRekomendasiController extends Controller
                 }
             }
         }elseif($jenis=='nonsetoranumum'){
-            $table='<h3 class="text-center">Rincian Nilai Non Setoran - Umum</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
+            $table='<h3 class="text-center">Rincian Nilai – Rekomendasi Umum (Non Setoran)</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -1345,6 +1374,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.$v->keterangan.'</td>';
                     $table.='
                     <td class="text-center">
+                        <a href="javascript:editrincian('.$v->id.',\'nonsetoranumum\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'nonsetoranumum\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1374,7 +1404,7 @@ class DataRekomendasiController extends Controller
                 }
             }
         }elseif($jenis=='nonsetoranpertanggungjawabanuangmuka'){
-            $table='<h3 class="text-center">Rincian Nilai Non Setoran - Pertanggungjawaban Uang Muka</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
+            $table='<h3 class="text-center">Rincian Nilai – Rekomendasi Pertanggungjawaban Uang Muka</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -1402,6 +1432,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.number_format($v->jumlah_um,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
+                        <a href="javascript:editrincian('.$v->id.',\'nonsetoranpertanggungjawabanuangmuka\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'nonsetoranpertanggungjawabanuangmuka\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1670,31 +1701,32 @@ class DataRekomendasiController extends Controller
         }
         elseif($jenis=='penutupanrekening')
         {
-            
-            $table='<h3 class="text-center">Rincian Nilai Non Setoran – Penutupan Rekening</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekom.'">';
+            $rincian=RincianPenutupanRekening::where('id_rekomendasi',$idrekom)->where('id_temuan',$idtemuan)->get();
+            $table='<h3 class="text-center">Rincian Nilai – Rekomendasi Penutupa Rekening</h3>
+            <h5 class="text-center">Total Rekomendasi: '.number_format($rincian->sum('saldo_akhir'),0,',','.').'</h5>
+            <table class="table table-bordered " id="table-tl-rincian-'.$idrekom.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
-                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Unit Kerja - PIC 2</th>
+                    <th class="text-center">Jenis Rekening</th>
                     <th class="text-center">Nama Bank</th>
                     <th class="text-center">Nomor Rekening</th>
                     <th class="text-center">Nama Rekening</th>
-                    <th class="text-center">Jenis Rekening</th>
                     <th class="text-center">Saldo Akhir</th>
                 </tr>';
             $table.='</thead><tbody>';
 
-            $rincian=RincianPenutupanRekening::where('id_rekomendasi',$idrekom)->where('id_temuan',$idtemuan)->get();
             $no=1;
             foreach($rincian as $k=>$v)
             {
                 $table.='<tr>
                     <td class="text-center">'.$no.'</td>
                     <td class="text-center">'.$v->unit_kerja.'</td>
+                    <td class="text-center">'.$v->jenis_rekening.'</td>
                     <td class="text-center">'.$v->nama_bank.'</td>
                     <td class="text-center">'.$v->nomor_rekening.'</td>
                     <td class="text-center">'.$v->nama_rekening.'</td>
-                    <td class="text-center">'.$v->jenis_rekening.'</td>
                     <td class="text-center">'.number_format($v->saldo_akhir,0,',','.').'</td>
                 </tr>';
                 $no++;
@@ -1731,7 +1763,7 @@ class DataRekomendasiController extends Controller
             $table.='</tbody>';
             $table.='</table>';
         }elseif($jenis=='kontribusi'){
-            $table='<h3 class="text-center">Rincian Nilai Setoran - Kontribusi</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekom.'">';
+            $table='<h3 class="text-center">Rincian Nilai – Rekomendasi Kontribusi </h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekom.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
@@ -1759,11 +1791,12 @@ class DataRekomendasiController extends Controller
             $table.='</tbody>';
             $table.='</table>';
         }elseif($jenis=='nonsetoranperjanjiankerjasama'){
-            $table='<h3 class="text-center">Rincian Nilai Setoran – Sewa</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekom.'">';
+            $table='<h3 class="text-center">Rincian Nilai Setoran – Sewa</h3>
+            <table class="table table-bordered " id="table-tl-rincian-'.$idrekom.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
-                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Unit Kerja - PIC 2</th>
                     <th class="text-center">No. PKS</th>
                     <th class="text-center">Tgl. PKS</th>
                     <th class="text-center">Periode</th>
@@ -1815,11 +1848,11 @@ class DataRekomendasiController extends Controller
             $table.='</tbody>';
             $table.='</table>';
         }elseif($jenis=='nonsetoranumum'){
-            $table='<h3 class="text-center">Rincian Nilai Non Setoran - Umum</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekom.'">';
+            $table='<h3 class="text-center">Rincian Nilai – Rekomendasi Umum (Non Setoran)</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekom.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
-                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Unit Kerja - PIC 2</th>
                     <th class="text-center">Keterangan</th>';
                 $table.='</tr>';
             $table.='</thead><tbody>';
@@ -1839,11 +1872,13 @@ class DataRekomendasiController extends Controller
             $table.='</tbody>';
             $table.='</table>';
         }elseif($jenis=='nonsetoranpertanggungjawabanuangmuka'){
-            $table='<h3 class="text-center">Rincian Nilai Non Setoran - Pertanggungjawaban Uang Muka</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekom.'">';
+            $table='<h3 class="text-center">Rincian Nilai – Rekomendasi Pertanggungjawaban Uang Muka</h3>
+            <h5 class="text-center">Total Rekomendasi: '.number_format($rincian->sum('jumlah_um'),0,',','.').'</h5>
+            <table class="table table-bordered " id="table-tl-rincian-'.$idrekom.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
-                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Unit Kerja - PIC 2</th>
                     <th class="text-center">No. Invoice</th>
                     <th class="text-center">Tanggal UM</th>
                     <th class="text-center">Keterangan</th>

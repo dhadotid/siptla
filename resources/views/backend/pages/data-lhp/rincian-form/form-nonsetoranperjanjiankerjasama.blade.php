@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-12" style="margin-top:10px;">
         <div class="form-group" style="margin-bottom:10px;">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Unit Kerja :
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Unit Kerja – PIC 2
             </label>
             <div class="col-sm-9">
                 <select name="unit_kerja" class="form-control" id="unit_kerja" data-plugin="select2">
@@ -35,12 +35,7 @@
            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Tanggal PKS</small>
             </label>
             <div class="col-md-7">
-                <div class='input-group date' id='datetimepicker_tgl_pks'>
-                    <input type='date' class="form-control" name="tgl_pks" id="tgl_pks"  value="{{date('d/m/Y')}}"/>
-                    <span class="input-group-addon bg-info text-white">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                </div>
+                <input type='date' class="form-control" name="tgl_pks" id="tgl_pks" />
             </div>
         </div>
         {{--<div class="form-group" style="margin-bottom:10px;">
@@ -54,12 +49,13 @@
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Masa Kontrak
             </label>
             <div class="col-md-7">
-                <div class='input-group date' id='datetimepicker_masa_berlaku'>
-                    <input type='date' class="form-control" name="masa_berlaku" id="masa_berlaku"  value="{{date('d/m/Y')}}"/>
+                <input type='date' class="form-control" name="masa_berlaku" id="masa_berlaku"/>
+                <!-- <div class='input-group date' id='datetimepicker_masa_berlaku'>
+                    
                     <span class="input-group-addon bg-info text-white">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="form-group" style="margin-bottom:10px;">

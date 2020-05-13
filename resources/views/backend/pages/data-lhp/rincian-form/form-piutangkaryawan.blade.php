@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-12" style="margin-top:10px;">
         <div class="form-group" style="margin-bottom:10px;">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Unit Kerja :
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Unit Kerja – PIC 2
             </label>
             <div class="col-sm-9">
                 <select name="unit_kerja" class="form-control" id="unit_kerja" data-plugin="select2">
@@ -25,7 +25,7 @@
             </div>
         </div>    --}}
         <div class="form-group" style="margin-bottom:10px;">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Karyawan :
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Karyawan 
             </label>
             <div class="col-sm-9">
                 <input type="text" class="form-control"  class="form-control"  name="karyawan"  placeholder="Karyawan" id="karyawan">
@@ -33,7 +33,7 @@
         </div>
        
         <div class="form-group" style="margin-bottom:10px;">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Jumlah Pinjaman:
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Jumlah Pinjaman (Rp) 
             </label>
             <div class="col-sm-9">
                 <input type="text" class="form-control nominal"  class="form-control"  name="pinjaman"  placeholder="Jumlah Pinjaman" id="pinjaman">

@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-12" style="margin-top:10px;">
         <div class="form-group" style="margin-bottom:10px;">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Unit Kerja :
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Unit Kerja – PIC 2
             </label>
             <div class="col-sm-9">
                 <select name="unit_kerja" class="form-control" id="unit_kerja" data-plugin="select2">
@@ -35,7 +35,7 @@
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nilai Rekomendasi (Rp)
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control"  class="form-control"  name="jumlah_rekomendasi"  placeholder="Nilai Rekomendasi (Rp)" id="jumlah_rekomendasi">
+                <input type="number" class="form-control nominal"  class="form-control"  name="jumlah_rekomendasi"  placeholder="Nilai Rekomendasi (Rp)" id="jumlah_rekomendasi">
             </div>
         </div>
       

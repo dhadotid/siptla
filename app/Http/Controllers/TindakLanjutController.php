@@ -25,7 +25,7 @@ use App\Models\RincianKontribusi;
 use App\Models\RincianNonSetoranPerpanjanganPerjanjianKerjasama;
 use App\Models\RincianNonSetoran;
 use App\Models\RincianNonSetoranUmum;
-use App\Models\RincianNonSetoranRincianNonSetoranPertanggungjawabanUangMuka;
+use App\Models\RincianNonSetoranPertanggungjawabanUangMuka;
 use Auth;
 class TindakLanjutController extends Controller
 {

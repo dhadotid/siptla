@@ -184,7 +184,7 @@
                     @csrf
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Rincian Tindak Lanjut Setoran – Sewa</h4>
+                        <h4 class="modal-title">Rincian Nilai – Rekomendasi Pembayaran Sewa – Sewa</h4>
                     </div>
                     <div class="modal-body">
                         <div id="form-rincian-sewa"></div>
@@ -206,7 +206,7 @@
                     @csrf
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Rincian Tindak Lanjut Uang Muka </h4>
+                        <h4 class="modal-title">Rincian Nilai – Rekomendasi Pengembalian Sisa Uang Muka </h4>
                     </div>
                     <div class="modal-body">
                         <div id="form-rincian-uangmuka"></div>
@@ -228,7 +228,7 @@
                     @csrf
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Rincian Tindak Lanjut Pembayaran Listrik </h4>
+                        <h4 class="modal-title">Rincian Nilai – Rekomendasi Biaya Listrik</h4>
                     </div>
                     <div class="modal-body">
                         <div id="form-rincian-listrik"></div>
@@ -250,7 +250,7 @@
                     @csrf
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Rincian Tindak Lanjut Pembayaran Piutang </h4>
+                        <h4 class="modal-title">Rincian Nilai – Rekomendasi Piutang</h4>
                     </div>
                     <div class="modal-body">
                         <div id="form-rincian-piutang"></div>
@@ -272,7 +272,7 @@
                     @csrf
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Rincian Tindak Lanjut Pembayaran Piutang Karyawan</h4>
+                        <h4 class="modal-title">Rincian Nilai – Rekomendasi Piutang Karyawan</h4>
                     </div>
                     <div class="modal-body">
                         <div id="form-rincian-piutangkaryawan"></div>
@@ -316,7 +316,7 @@
                     @csrf
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Rincian Tindak Lanjut Penutupan Rekening</h4>
+                        <h4 class="modal-title">Rincian Nilai – Rekomendasi Penutupan Rekening</h4>
                     </div>
                     <div class="modal-body">
                         <div id="form-rincian-penutupanrekening"></div>
@@ -338,7 +338,7 @@
                     @csrf
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Rincian Tindak Lanjut Penutupan Rekening</h4>
+                        <h4 class="modal-title">Rincian Nilai – Rekomendasi (Umum -Setoran)</h4>
                     </div>
                     <div class="modal-body">
                         <div id="form-rincian-umum"></div>
@@ -361,7 +361,7 @@
                     @csrf
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Rincian Nilai Setoran - Kontribusi</h4>
+                        <h4 class="modal-title">Rincian Nilai – Rekomendasi Kontribusi </h4>
                     </div>
                     <div class="modal-body">
                         <div id="form-rincian-kontribusi"></div>
@@ -383,7 +383,7 @@
                     @csrf
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Rincian Nilai Non Setoran – Perpanjangan Perjanjian Kerjasama</h4>
+                        <h4 class="modal-title">Rincian Nilai – Rekomendasi Perjanjian Kerjasama</h4>
                     </div>
                     <div class="modal-body">
                         <div id="form-rincian-nonsetoranperjanjiankerjasama"></div>
@@ -448,7 +448,7 @@
                     @csrf
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Rincian Nilai Non Setoran</h4>
+                        <h4 class="modal-title">Rincian Nilai – Rekomendasi Non Setoran</h4>
                     </div>
                     <div class="modal-body">
                         <div id="form-rincian-modalrinciannonsetoran"></div>
@@ -471,7 +471,7 @@
                     @csrf
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Rincian Nilai Non Setoran - Umum</h4>
+                        <h4 class="modal-title">Rincian Nilai – Rekomendasi Umum (Non Setoran)</h4>
                     </div>
                     <div class="modal-body">
                         <div id="form-rincian-modalrinciannonsetoranumum"></div>
@@ -494,7 +494,7 @@
                     @csrf
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Rincian Nilai Non Setoran - Pertanggungjawaban Uang Muka</h4>
+                        <h4 class="modal-title">Rincian Nilai – Rekomendasi Pertanggungjawaban Uang Muka</h4>
                     </div>
                     <div class="modal-body">
                         <div id="form-rincian-modalrinciannonsetoranpertanggungjawabanuangmuka"></div>

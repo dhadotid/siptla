@@ -154,8 +154,16 @@ function update_rincian(rekom_id,temuan_id)
     });
     $('#modal-update-rincian').modal('show')
 }
-
+function getrincainTables(jenis, idtemuan, idrekom){
+    console.log(flagsUrl + '/load-table-rincian/' + jenis + '/' + idtemuan + '/' + idrekom)
+    $('#form-rincian').load(flagsUrl + '/load-table-rincian/' + jenis + '/' + idtemuan + '/' + idrekom,  function () {
+        $('#rincian_tl').select2();
+        $('#table-tl-rincian-'+idrekom).DataTable();
+    });
+    $('#modal-update-rincian').modal('show')
+}
 function pilihrincian(val,idtemuan,idrekom) {
+    // console.log('diididid   ' + '/load-table-rincian/' + jenis + '/' + idtemuan + '/' + idrekom );
     // $('#det-update-rincian').load(flagsUrl + '/load-table-rincian/' + val + '/' + idtemuan + '/' + idrekom);
     gettablerincian(val, idtemuan, idrekom)
 }
@@ -163,6 +171,8 @@ function pilihrincian(val,idtemuan,idrekom) {
 function gettablerincian(jenis, idtemuan, idrekom)
 {
     $('#det-update-rincian').load(flagsUrl + '/load-table-rincian/' + jenis + '/' + idtemuan + '/' + idrekom, function () {
-        $('#table-tl-rincian-'+idrekom).DataTable();
+        $('#table-tl-rincian-'+idrekom).DataTable({
+            responsive: true
+        });
     });
 }

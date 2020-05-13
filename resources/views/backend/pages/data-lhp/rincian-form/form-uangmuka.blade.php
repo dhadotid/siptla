@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-12" style="margin-top:10px;">
         <div class="form-group" style="margin-bottom:10px;">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Unit Kerja :
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Unit Kerja - PIC 2 :
             </label>
             <div class="col-sm-9">
                 <select name="unit_kerja" class="form-control" id="unit_kerja" data-plugin="select2">
@@ -32,22 +32,16 @@
             </div>
         </div>
         <div class="form-group">
-           <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Tanggal PUM</small>
+           <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Tanggal UM</small>
             </label>
             <div class="col-md-7">
-                <div class='input-group date' id='datetimepicker_tgl_pks'>
-                    <input type='date' class="form-control" name="tgl_pum" id="tgl_pum"  value="{{date('d/m/Y')}}"/>
+            <input type='date' class="form-control" name="tgl_pum" id="tgl_pum" />
+                <!-- <div class='input-group date' id='datetimepicker_tgl_pks'>
+                    
                     <span class="input-group-addon bg-info text-white">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
-                </div>
-            </div>
-        </div>
-        <div class="form-group" style="margin-bottom:10px;">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Jumlah UM:
-            </label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control nominal"  class="form-control"  name="jumlah_um"  placeholder="Jumlah UM" id="jumlah_um">
+                </div> -->
             </div>
         </div>
         <div class="form-group">
@@ -55,6 +49,13 @@
             </label>
             <div class="col-md-9">
                 <textarea class="form-control"  name="keterangan" placeholder="Keterangan" id="keterangan"></textarea>
+            </div>
+        </div>
+        <div class="form-group" style="margin-bottom:10px;">
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Jumlah Sisa Uang Muka (Rp):
+            </label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control nominal"  class="form-control"  name="jumlah_um"  placeholder="Jumlah UM" id="jumlah_um">
             </div>
         </div>
     </div>

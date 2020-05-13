@@ -263,6 +263,7 @@ function validasinonsetoranpertanggungjawabanuangmuka(){
     var keterangan = $('#keterangan');
     var no_invoice = $('#no_invoice');
     var tgl_um = $('#tgl_um');
+    var jumlah_um = $('#jumlah_um');
 
     if(unit_kerja.val() == '')
         notif('error', 'Unit Kerja Belum Dipilih');
@@ -272,6 +273,8 @@ function validasinonsetoranpertanggungjawabanuangmuka(){
         notif('error', 'Keterangan belum diisi');
     else if(tgl_um.val()=='')
         notif('error', 'Tanggal uang muka belum diisi');
+    else if(jumlah_um.val() =='')
+        notif('error', 'Jumlah Uang Muka belum diisi')
     else{
         $.ajax({
             url: flagsUrl + '/form-rincian-simpan',

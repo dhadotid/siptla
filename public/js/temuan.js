@@ -64,6 +64,7 @@ function validasirekom(act) {
                 type: 'POST',
                 datatype: 'JSON',
                 success: function (res) {
+                    console.log('didide: '+ res);
                     // reloadtable('temuan_' + idtemuan, idtemuan)
                     $('#temuan_' + idtemuan).load(flagsUrl + '/rekomendasi-data-new/' + idtemuan + '/' + res.status_rekomendasi_id);
                     $('#modaltambahrekomendasi').modal('hide');
@@ -730,6 +731,7 @@ function validasinonsetoranpertanggungjawabanuangmuka(){
     var keterangan = $('#keterangan');
     var no_invoice = $('#no_invoice');
     var tgl_um = $('#tgl_um');
+    var jumlah_um = $('#jumlah_um');
 
     if(unit_kerja.val() == '')
         notif('error', 'Unit Kerja Belum Dipilih');
@@ -739,6 +741,8 @@ function validasinonsetoranpertanggungjawabanuangmuka(){
         notif('error', 'Keterangan belum diisi');
     else if(tgl_um.val()=='')
         notif('error', 'Tanggal uang muka belum diisi');
+    else if(jumlah_um.val() =='')
+        notif('error', 'Jumlah Uang Muka belum diisi')
     else{
         $.ajax({
             url: flagsUrl + '/form-rincian-simpan',

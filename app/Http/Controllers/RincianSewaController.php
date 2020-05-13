@@ -18,7 +18,7 @@ use App\Models\TindakLanjutTemuan;
 use App\Models\RincianNonSetoranPerpanjanganPerjanjianKerjasama;
 use App\Models\RincianNonSetoran;
 use App\Models\RincianNonSetoranUmum;
-use App\Models\RincianNonSetoranRincianNonSetoranPertanggungjawabanUangMuka;
+use App\Models\RincianNonSetoranPertanggungjawabanUangMuka;
 use Auth;
 class RincianSewaController extends Controller
 {
@@ -572,7 +572,7 @@ class RincianSewaController extends Controller
                 $simpan->unit_kerja_id=$idunitkerja;
                 $simpan->unit_kerja=$namaunitkerja;
                 $simpan->keterangan=$request->keterangan;
-                $simpan->jumlah_rekomendasi = $request->jumlah_rekomendasi;
+                $simpan->nilai_rekomendasi = $request->jumlah_rekomendasi;
                 $save=$simpan->save();
                 
                 return $request->all();
@@ -585,7 +585,7 @@ class RincianSewaController extends Controller
                 $simpan->unit_kerja_id=$idunitkerja;
                 $simpan->unit_kerja=$namaunitkerja;
                 $simpan->keterangan=$request->keterangan;
-                $simpan->jumlah_rekomendasi = $request->jumlah_rekomendasi;
+                // $simpan->nilai_rekomendasi = $request->jumlah_rekomendasi;
                 $save=$simpan->save();
                 
                 return $request->all();
@@ -598,8 +598,8 @@ class RincianSewaController extends Controller
                 $simpan->unit_kerja_id=$idunitkerja;
                 $simpan->unit_kerja=$namaunitkerja;
                 $simpan->no_invoice = $request->no_invoice;
-                $simpan->tgl_pum = $request->tgl_pum;
-                $simpan->jumlah_pum = str_replace(array(',','.'),'',$request->jumlah_um);
+                $simpan->tgl_um = $request->tgl_um;
+                $simpan->jumlah_um = str_replace(array(',','.'),'',$request->jumlah_um);
                 $simpan->keterangan = $request->keterangan;
                 $save=$simpan->save();
 

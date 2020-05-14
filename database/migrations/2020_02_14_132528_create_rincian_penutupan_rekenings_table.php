@@ -24,7 +24,8 @@ class CreateRincianPenutupanRekeningsTable extends Migration
             $table->string('nomor_rekening')->nullable();
             $table->string('nama_rekening')->nullable();
             $table->string('jenis_rekening')->nullable();
-            $table->double('saldo_akhir')->nullable()->default(0);
+            $table->string('saldo_akhir')->nullable()->default(0);
+            $table->string('mata_uang')->nullable();
             $table->timestamps();
             $table->softdeletes();
         });

@@ -158,7 +158,10 @@ function getrincainTables(title, jenis, idtemuan, idrekom){
     document.getElementById('modaltitle').textContent = title;
     $('#form-rincian').load(flagsUrl + '/load-table-rincian/' + jenis + '/' + idtemuan + '/' + idrekom,  function () {
         $('#rincian_tl').select2();
-        $('#table-tl-rincian-'+idrekom).DataTable();
+        $('#table-tl-rincian-'+idrekom).DataTable({
+            "bAutoWidth": false,
+            "bDestroy": true
+        });
     });
     $('#modal-update-rincian').modal('show')
 }

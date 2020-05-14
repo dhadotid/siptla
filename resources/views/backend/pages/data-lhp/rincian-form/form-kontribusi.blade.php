@@ -28,7 +28,7 @@
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Tahun
             </label>
             <div class="col-sm-9">
-                <input type="number" class="form-control"  class="form-control"  name="tahun"  placeholder="Tahun" id="tahun">
+                <input type="text" class="form-control"  class="form-control"  name="tahun"  placeholder="Tahun" id="tahun">
             </div>
         </div>
         <div class="form-group" style="margin-bottom:10px;">

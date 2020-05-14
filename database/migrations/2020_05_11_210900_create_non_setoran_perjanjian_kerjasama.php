@@ -24,7 +24,7 @@ class CreateNonSetoranPerjanjianKerjasama extends Migration
             $table->string('no_pks')->nullable();
             $table->date('tgl_pks')->nullable();
             $table->string('nilai_pekerjaan')->nullable()->default(0);
-            $table->date('masa_berlaku')->nullable();
+            $table->string('masa_berlaku')->nullable();
             $table->string('keterangan')->nullable();
             $table->timestamps();
             $table->softdeletes();

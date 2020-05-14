@@ -33,7 +33,7 @@
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nilai Rekomendasi (Rp)
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control"  class="form-control"  name="jumlah_rekomendasi"  placeholder="Nilai Rekomendasi (Rp)" id="jumlah_rekomendasi">
+                <input type="text" class="form-control nominal"  class="form-control"  name="jumlah_rekomendasi"  placeholder="Nilai Rekomendasi (Rp)" id="jumlah_rekomendasi">
             </div>
         </div>
       

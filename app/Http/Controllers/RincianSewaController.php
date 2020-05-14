@@ -504,6 +504,7 @@ class RincianSewaController extends Controller
                 $simpan->nomor_rekening = $request->nomor_rekening;
                 $simpan->nama_rekening = $request->nama_rekening;
                 $simpan->jenis_rekening = $request->jenis_rekening;
+                $simpan->mata_uang = $request->mata_uang;
                 $simpan->saldo_akhir = str_replace(array(',','.'),'',$request->saldo_akhir);
                 $save=$simpan->save();
 
@@ -523,7 +524,7 @@ class RincianSewaController extends Controller
                 $simpan->unit_kerja_id=$idunitkerja;
                 $simpan->unit_kerja=$namaunitkerja;
                 $simpan->keterangan = $request->keterangan;
-                $simpan->jumlah_rekomendasi = $request->jumlah_rekomendasi;
+                $simpan->jumlah_rekomendasi = str_replace(array(',','.'),'',$request->jumlah_rekomendasi);
                 $save=$simpan->save();
 
                 // $rekom=DataRekomendasi::find($request->idrekomendasi);
@@ -544,7 +545,7 @@ class RincianSewaController extends Controller
                 $simpan->keterangan = $request->keterangan;
                 $simpan->tahun = $request->tahun;
                 // $simpan->nilai_penerimaan = str_replace(array(',','.'),'',$request->jumlah_rekomendasi);
-                $simpan->nilai_penerimaan = $request->jumlah_rekomendasi;
+                $simpan->nilai_penerimaan = str_replace(array(',','.'),'',$request->jumlah_rekomendasi);
                 $save=$simpan->save();
 
                 return $request->all();
@@ -572,7 +573,7 @@ class RincianSewaController extends Controller
                 $simpan->unit_kerja_id=$idunitkerja;
                 $simpan->unit_kerja=$namaunitkerja;
                 $simpan->keterangan=$request->keterangan;
-                $simpan->nilai_rekomendasi = $request->jumlah_rekomendasi;
+                $simpan->nilai_rekomendasi = str_replace(array(',','.'),'',$request->jumlah_rekomendasi);
                 $save=$simpan->save();
                 
                 return $request->all();

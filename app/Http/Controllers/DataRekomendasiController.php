@@ -1007,7 +1007,7 @@ class DataRekomendasiController extends Controller
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
-                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Unit Kerja - PIC 2</th>
                     <th class="text-center">Tanggal</th>
                     <th class="text-center">Keterangan</th>
                     <th class="text-center">Saldo Hutang Titipan (Rp)</th>
@@ -1065,23 +1065,25 @@ class DataRekomendasiController extends Controller
         }
         elseif($jenis=='penutupanrekening')
         {
-            
-            $table='<h3 class="text-center">Rincian Nilai Non Setoran – Penutupan Rekening</h3><table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
+            $rincian=RincianPenutupanRekening::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();   
+            $table='<h3 class="text-center">Rincian Nilai Non Setoran – Penutupan Rekening</h3>
+            <h5 class="text-center">Total Rekomendasi: '.number_format($rincian->sum('saldo_akhir'),0,',','.').'</h5>
+            <table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
-                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Unit Kerja - PIC 2</th>
+                    <th class="text-center">Jenis Rekening</th>
                     <th class="text-center">Nama Bank</th>
                     <th class="text-center">Nomor Rekening</th>
                     <th class="text-center">Nama Rekening</th>
-                    <th class="text-center">Jenis Rekening</th>
-                    <th class="text-center">Saldo Akhir</th>';
+                    <th class="text-center">Mata Uang</th>
+                    <th class="text-center">Saldo Temuan</th>';
                     $table.='
                     <th class="text-center">Aksi</th>';
                 $table.='</tr>';
             $table.='</thead><tbody>';
 
-            $rincian=RincianPenutupanRekening::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
             $no=1;
             $totalnilai=0;
             foreach($rincian as $k=>$v)
@@ -1089,10 +1091,11 @@ class DataRekomendasiController extends Controller
                 $table.='<tr>
                     <td class="text-center">'.$no.'</td>
                     <td class="text-center">'.$v->unit_kerja.'</td>
+                    <td class="text-center">'.$v->jenis_rekening.'</td>
                     <td class="text-center">'.$v->nama_bank.'</td>
                     <td class="text-center">'.$v->nomor_rekening.'</td>
                     <td class="text-center">'.$v->nama_rekening.'</td>
-                    <td class="text-center">'.$v->jenis_rekening.'</td>
+                    <td class="text-center">'.$v->mata_uang.'</td>
                     <td class="text-center">'.number_format($v->saldo_akhir,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
@@ -1249,7 +1252,7 @@ class DataRekomendasiController extends Controller
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
-                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Unit Kerja - PIC 2</th>
                     <th class="text-center">No. PKS</th>
                     <th class="text-center">Tanggal PKS</th>
                     <th class="text-center">Periode</th>
@@ -1366,7 +1369,7 @@ class DataRekomendasiController extends Controller
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
-                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Unit Kerja - PIC 2</th>
                     <th class="text-center">Keterangan</th>';
                     $table.='
                     <th class="text-center">Aksi</th>';
@@ -1419,7 +1422,7 @@ class DataRekomendasiController extends Controller
             $table.='<thead>';
                 $table.='<tr class="inverse">
                     <th class="text-center">No</th>
-                    <th class="text-center">Unit Kerja</th>
+                    <th class="text-center">Unit Kerja - PIC 2</th>
                     <th class="text-center">No. Invoice</th>
                     <th class="text-center">Tanggal UM</th>
                     <th class="text-center">Keterangan</th>
@@ -1719,13 +1722,14 @@ class DataRekomendasiController extends Controller
             <table class="table table-bordered " id="table-tl-rincian-'.$idrekom.'">';
             $table.='<thead>';
                 $table.='<tr class="inverse">
-                    <th class="text-center">No</th>
-                    <th class="text-center">Unit Kerja - PIC 2</th>
-                    <th class="text-center">Jenis Rekening</th>
-                    <th class="text-center">Nama Bank</th>
-                    <th class="text-center">Nomor Rekening</th>
-                    <th class="text-center">Nama Rekening</th>
-                    <th class="text-center">Saldo Akhir</th>
+                <th class="text-center">No</th>
+                <th class="text-center">Unit Kerja - PIC 2</th>
+                <th class="text-center">Jenis Rekening</th>
+                <th class="text-center">Nama Bank</th>
+                <th class="text-center">Nomor Rekening</th>
+                <th class="text-center">Nama Rekening</th>
+                <th class="text-center">Mata Uang</th>
+                <th class="text-center">Saldo Temuan</th>
                 </tr>';
             $table.='</thead><tbody>';
 
@@ -1733,13 +1737,14 @@ class DataRekomendasiController extends Controller
             foreach($rincian as $k=>$v)
             {
                 $table.='<tr>
-                    <td class="text-center">'.$no.'</td>
-                    <td class="text-center">'.$v->unit_kerja.'</td>
-                    <td class="text-center">'.$v->jenis_rekening.'</td>
-                    <td class="text-center">'.$v->nama_bank.'</td>
-                    <td class="text-center">'.$v->nomor_rekening.'</td>
-                    <td class="text-center">'.$v->nama_rekening.'</td>
-                    <td class="text-center">'.number_format($v->saldo_akhir,0,',','.').'</td>
+                <td class="text-center">'.$no.'</td>
+                <td class="text-center">'.$v->unit_kerja.'</td>
+                <td class="text-center">'.$v->jenis_rekening.'</td>
+                <td class="text-center">'.$v->nama_bank.'</td>
+                <td class="text-center">'.$v->nomor_rekening.'</td>
+                <td class="text-center">'.$v->nama_rekening.'</td>
+                <td class="text-center">'.$v->mata_uang.'</td>
+                <td class="text-center">'.number_format($v->saldo_akhir,0,',','.').'</td>
                 </tr>';
                 $no++;
             }

@@ -20,7 +20,7 @@ class CreateRincianKontribusisTable extends Migration
             $table->integer('unit_kerja_id')->nullable()->default(0);
             $table->integer('id_tindak_lanjut')->nullable()->default(0);
             $table->integer('tahun')->nullable()->default(0);
-            $table->double('nilai_penerimaan')->nullable()->default(0);
+            $table->string('nilai_penerimaan')->nullable()->default(0);
             $table->string('unit_kerja')->nullable();
             $table->string('jenis_setoran')->nullable();
             $table->string('bank_tujuan')->nullable();

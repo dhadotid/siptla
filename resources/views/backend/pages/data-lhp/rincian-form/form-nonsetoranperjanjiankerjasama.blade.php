@@ -25,7 +25,7 @@
             </div>
         </div>    --}}
         <div class="form-group" style="margin-bottom:10px;">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nomor PKS:
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nomor PKS
             </label>
             <div class="col-sm-9">
                 <input type="text" class="form-control"  class="form-control"  name="no_pks"  placeholder="Nomor PKS" id="no_pks">
@@ -39,7 +39,7 @@
             </div>
         </div>
         {{--<div class="form-group" style="margin-bottom:10px;">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nilai Rekomendasi:
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nilai Rekomendasi
             </label>
             <div class="col-sm-9">
                 <input type="text" class="form-control nominal"  class="form-control"  name="nilai_perjanjian"  placeholder="Nilai Rekomendasi" id="nilai_perjanjian">
@@ -49,7 +49,7 @@
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Masa Kontrak
             </label>
             <div class="col-md-7">
-                <input type='date' class="form-control" name="masa_berlaku" id="masa_berlaku"/>
+                <input type='text' class="form-control" name="masa_berlaku" id="masa_berlaku"/>
                 <!-- <div class='input-group date' id='datetimepicker_masa_berlaku'>
                     
                     <span class="input-group-addon bg-info text-white">

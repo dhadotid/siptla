@@ -356,10 +356,10 @@ function validasinonsetoranpertanggungjawabanuangmuka(){
 
     if(unit_kerja.val() == '')
         notif('error', 'Unit Kerja Belum Dipilih');
-    else if(no_invoice.val() == '')
-        notif('error', 'No Invoice belum diisi');
-    else if(keterangan.val() == '')
-        notif('error', 'Keterangan belum diisi');
+    // else if(no_invoice.val() == '')
+    //     notif('error', 'No Invoice belum diisi');
+    // else if(keterangan.val() == '')
+    //     notif('error', 'Keterangan belum diisi');
     else if(tgl_um.val()=='')
         notif('error', 'Tanggal uang muka belum diisi');
     else if(jumlah_um.val() =='')
@@ -401,12 +401,12 @@ function validasinonsetoranperjanjiankerjasama(){
         notif('error', 'Unit Kerja Belum Dipilih');
     else if (no_pks.val() == '')
         notif('error', 'Nomor PKS Belum Diisi');
-    else if (tgl_pks.val() == '')
-        notif('error', 'Tanggal PKS Belum Dipilih');
+    // else if (tgl_pks.val() == '')
+    //     notif('error', 'Tanggal PKS Belum Dipilih');
     else if (masa_berlaku.val() == '')
         notif('error', 'Masa Kontrak Belum Dipilih');
-    else if(keterangan.val() == '')
-        notif('error', 'Keterangan belum diisi');
+    // else if(keterangan.val() == '')
+    //     notif('error', 'Keterangan belum diisi');
     else {
         $.ajax({
             url: flagsUrl + '/form-rincian-simpan',
@@ -444,12 +444,15 @@ function validasikontribusi() {
 
     if (unit_kerja.val() == '')
         notif('error', 'Unit Kerja Belum Dipilih');
+    else if (tahun.val() == '')
+        notif('error', 'Tahun belum diisi');
     else if (keterangan.val() == '')
         notif('error', 'Keterangan Belum Diisi');
     else if (jumlah_rekomendasi.val() == '')
         notif('error', 'Nilai Rekomendasi (Rp) Belum Diisi');
-    else if (tahun.val() == '')
-        notif('error', 'Tahun belum diisi');
+    else if (! /^\d{4}$/.test(tahun.val()) ) {
+        notif('error', 'Format tahun salah');
+    }
     else {
         var totalnilai = parseFloat($('#total_nilai').val())
         var nilairekom = $('input.nilai_rekomendasi').val()

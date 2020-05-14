@@ -25,6 +25,13 @@
             </div>
         </div>    --}}
         <div class="form-group" style="margin-bottom:10px;">
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Jenis Rekening
+            </label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control"  class="form-control"  name="jenis_rekening"  placeholder="Jenis Rekening" id="jenis_rekening">
+            </div>
+        </div>
+        <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nama Bank
             </label>
             <div class="col-sm-9">
@@ -46,17 +53,17 @@
             </div>
         </div>
         <div class="form-group" style="margin-bottom:10px;">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Jenis Rekening
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Mata Uang
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control"  class="form-control"  name="jenis_rekening"  placeholder="Jenis Rekening" id="jenis_rekening">
+                <input type="text" class="form-control"  class="form-control"  name="mata_uang"  placeholder="Mata Uang" id="mata_uang">
             </div>
         </div>
         <div class="form-group" style="margin-bottom:10px;">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Saldo Akhir:
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Saldo Temuan
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control nominal"  class="form-control"  name="saldo_akhir"  placeholder="Saldo Akhir" id="saldo_akhir">
+                <input type="text" class="form-control nominal"  class="form-control"  name="saldo_akhir"  placeholder="Saldo Temuan" id="saldo_akhir">
             </div>
         </div>
     </div>

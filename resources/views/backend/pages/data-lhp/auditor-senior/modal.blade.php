@@ -400,7 +400,7 @@
 
 {{-- Modal Rincian Umum--}}
  <div class="modal fade" id="modal-update-rincian"  tabindex="-1" role="dialog">
-		<div class="modal-dialog modal-lg">
+		<div class="modal-dialog modal-lg" style="width:90%;">
 			<div class="modal-content">
                 <form action="#" method="POST" class="form-horizontal" id="form-update-rincian">
                     @csrf

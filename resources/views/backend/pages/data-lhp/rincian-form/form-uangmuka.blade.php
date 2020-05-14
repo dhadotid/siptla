@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-12" style="margin-top:10px;">
         <div class="form-group" style="margin-bottom:10px;">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Unit Kerja - PIC 2 :
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Unit Kerja - PIC 2
             </label>
             <div class="col-sm-9">
                 <select name="unit_kerja" class="form-control" id="unit_kerja" data-plugin="select2">
@@ -25,7 +25,7 @@
             </div>
         </div>    --}}
         <div class="form-group" style="margin-bottom:10px;">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nomor Invoice:
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nomor Invoice
             </label>
             <div class="col-sm-9">
                 <input type="text" class="form-control"  class="form-control"  name="no_invoice"  placeholder="Nomor Invoice" id="no_invoice">
@@ -52,7 +52,7 @@
             </div>
         </div>
         <div class="form-group" style="margin-bottom:10px;">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Jumlah Sisa Uang Muka (Rp):
+            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Jumlah Sisa Uang Muka (Rp)
             </label>
             <div class="col-sm-9">
                 <input type="text" class="form-control nominal"  class="form-control"  name="jumlah_um"  placeholder="Jumlah UM" id="jumlah_um">

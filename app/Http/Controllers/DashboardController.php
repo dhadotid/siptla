@@ -114,7 +114,7 @@ class DashboardController extends Controller
                     ->with('dpengguna',$dpengguna)
                     ->with('jenisaudit',$jenisaudit);
         }
-        elseif(Auth::user()->level=='super-user')
+        elseif(Auth::user()->level=='super-user-admin')
         {
             $user=User::all();
             $duser=array();
@@ -254,8 +254,14 @@ class DashboardController extends Controller
                     ->with('tahun',$thn)
                     ->with('datatl',$datatl);
         }
-        elseif(Auth::user()->level=='auditor-senior')
+        elseif(Auth::user()->level=='auditor-senior' || Auth::user()->level=='super-user')
         {
+            if (Auth::user()->level=='auditor-senior') {
+                $url = 'data-tindaklanjut-senior/';
+            } else {
+                $url = 'data-tindaklanjut-su/';
+            }
+            
             // $lhp=DaftarTemuan::with('dpemeriksa')->with('djenisaudit')->get();
             // $datalhp=array();
             // foreach($lhp as $k=>$v)
@@ -366,6 +372,7 @@ class DashboardController extends Controller
             // return $doverdue;
             return view('backend.pages.dashboard.auditor-senior')
                     // ->with('lhp',$lhp)
+                    ->with('url',$url)
                     ->with('dtl',$dtl)
                     ->with('status',$status)
                     ->with('overdue',$overdue)

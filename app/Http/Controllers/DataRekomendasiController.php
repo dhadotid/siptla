@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\DataRekomendasi;
 use App\Models\DaftarRekanan;
+use App\Models\DaftarTemuan;
 use App\Models\DataTemuan;
 use App\Models\PICUnit;
 use App\Models\RincianSewa;
@@ -167,6 +168,7 @@ class DataRekomendasiController extends Controller
                     <a href="javascript:rekomedit(\''.$v->id_temuan.'\',\''.$v->id.'\')" class="btn btn-info btn-xs pull-right"><i class="fa fa-edit"></i> Edit Rekomendasi</a>';
                 }
                 $table.='
+                    <u>Nomor Rekomendasi : </u><br><h4>'.$v->nomor_rekomendasi.'</h4><br>
                     <u>Nilai Rekomendasi :</u><br><h5><span class="text-primary">Rp.'.number_format($v->nominal_rekomendasi,2,',','.').'</span></h5>
                     <br>
                     <u>Rekomendasi : </u><br><h4>'.$v->rekomendasi.'</h4><br>
@@ -270,6 +272,7 @@ class DataRekomendasiController extends Controller
         $rekom=DataRekomendasi::selectRaw('*,data_rekomendasi.id as rekom_id')
                 ->where('id_temuan',$idtemuan)
                 ->where('status_rekomendasi_id',$status_rekom)
+                ->with('dtemuan')
                 ->with('picunit1')
                 ->with('picunit2')
                 ->with('statusrekomendasi')
@@ -282,6 +285,8 @@ class DataRekomendasiController extends Controller
         {
             foreach($rekom as $k=>$v)
             {   
+                $lhp    = DaftarTemuan::find($v->dtemuan->id_lhp);
+
                 if($v->status_rekomendasi_id==1) 
                     $status='success';
                 elseif($v->status_rekomendasi_id==2)
@@ -293,7 +298,7 @@ class DataRekomendasiController extends Controller
 
                 $table.='<li style="margin-bottom:10px;padding:10px 0;border-bottom:1px solid #bbb;">';
 
-                if($v->senior_publish!=1 && Auth::user()->level != 'pic-unit')
+                if($v->senior_publish!=1 && Auth::user()->level != 'pic-unit' && !$lhp->publish_flag)
                 {
                     $table.='<a href="javascript:hapusrekomendasi(\''.$v->id_temuan.'\',\''.$v->id.'\')" class="btn btn-danger btn-xs pull-right"><i class="fa fa-trash"></i> Hapus Rekomendasi</a>
                     <a href="javascript:rekomedit(\''.$v->id_temuan.'\',\''.$v->id.'\')" class="btn btn-info btn-xs pull-right"><i class="fa fa-edit"></i> Edit Rekomendasi</a>';
@@ -306,7 +311,10 @@ class DataRekomendasiController extends Controller
                     }
                 }
                     
-                $table.='<u>Nilai Rekomendasi :</u><br><h5><span class="text-primary">Rp.'.number_format($v->nominal_rekomendasi,2,',','.').'</span></h5>
+                $table.='
+                    <u>Nomor Rekomendasi : </u><br><h5>'.$v->nomor_rekomendasi.'</h5>
+                    <br>
+                    <u>Nilai Rekomendasi :</u><br><h5><span class="text-primary">Rp.'.number_format($v->nominal_rekomendasi,2,',','.').'</span></h5>
                     <br>
                     <u>Rekomendasi : </u><br><h4>'.$v->rekomendasi.'</h4><br>
                     <a href="#" class="btn btn-sm btn-'.($status).'">'.$v->statusrekomendasi->rekomendasi.'</a>
@@ -392,17 +400,17 @@ class DataRekomendasiController extends Controller
         // return $request->all();
         $update=DataRekomendasi::find($idrekom);
         $update->no_temuan=$notemuan=$request->nomor_temuan;
-        $update->id_temuan=$request->id_temuan;
+        $update->id_temuan=$idtemuan;
         $update->jenis_temuan=$request->jenis_temuan;
         $update->nominal_rekomendasi=str_replace('.','',$request->nilai_rekomendasi);
         $update->rekomendasi=$request->rekomendasi;
         $update->pic_1_temuan_id=$request->pic_1;
         // $update->pic_2_temuan_id=$request->pic_2;
         $pic2='';
-        foreach($request->pic_2 as $k=>$v)
+        foreach($request->pic_2 as $k => $v)
         {
             $pic2.=$v.',';
-        }   
+        }
         // $update->pic_2_temuan_id=substr($pic2,0,-1);
         $update->pic_2_temuan_id=$pic2;
         $update->jangka_waktu_id=$request->jangka_waktu;

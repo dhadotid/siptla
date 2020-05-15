@@ -1,6 +1,6 @@
 {{-- Modal Rekomendasi --}}
     <div class="modal fade" id="modaltambahrekomendasi"  role="dialog">
-		<div class="modal-dialog" id="modal-size" style="width:60% !important">
+		<div class="modal-dialog" id="add-modal-size" style="width:60% !important">
 			<div class="modal-content">
                 <form method="POST" class="form-horizontal" id="form_rekom_add">
                     @csrf
@@ -14,10 +14,10 @@
                         @endphp
                         <input type="hidden" name="id_lhp" value="{{$idlhp}}">
                         <div class="row">
-                            <div id="left-div" class="col-md-12">
+                            <div id="add-left-div" class="col-md-12">
                                 @include('backend.pages.data-lhp.auditor-senior.rekomendasi-form',$dt)
                             </div>
-                            <div id="right-div" class="col-md-0"></div>
+                            <div id="add-right-div" class="col-md-0"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -29,7 +29,7 @@
 		</div>
     </div>  
     <div class="modal fade" id="modalubahrekomendasi"  role="dialog">
-		<div class="modal-dialog" style="width:60% !important">
+		<div class="modal-dialog" id="edit-modal-size" style="width:60% !important">
 			<div class="modal-content">
                 <form method="POST" class="form-horizontal" id="form_rekom_edit">
                     @csrf
@@ -43,7 +43,12 @@
                         @endphp
                         <input type="hidden" name="id_lhp" value="{{$idlhp}}">
                         <input type="hidden" name="idrekom" id="idrekom">
-                        @include('backend.pages.data-lhp.auditor-senior.rekomendasi-form',$dt)
+                        <div class="row">
+                            <div id="edit-left-div" class="col-md-12">
+                                @include('backend.pages.data-lhp.auditor-senior.rekomendasi-form',$dt)
+                            </div>
+                            <div id="edit-right-div" class="col-md-0"></div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>

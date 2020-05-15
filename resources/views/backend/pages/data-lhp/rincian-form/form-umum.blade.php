@@ -7,7 +7,7 @@
                 <select name="unit_kerja" class="form-control" id="unit_kerja" data-plugin="select2">
                     {{-- <option value="">-- Pilih --</option> --}}
                     @foreach ($pic as $key=>$item)
-                            <option value="{{$item->id}}__{{$item->nama_pic}}">{{$item->nama_pic}}</option>
+                            <option value="{{$item->id}}__{{$item->nama_pic}}" @if($id!=-1) {{$idform == $item->id  ? 'selected' : ''}} @endif>{{$item->nama_pic}}</option>
                     @endforeach
                 </select>
             </div>

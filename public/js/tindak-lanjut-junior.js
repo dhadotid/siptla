@@ -53,13 +53,30 @@ function drafttljunior()
     $('#tindaklanjut-junior').submit();
 }
 
-function addtindaklanjut(jenis, idtemuan, idrekom, id) {
+function addtindaklanjut(jenis, idtemuan, idrekom, id, idPic=-1) {
     var idlhp = $('#idlhp').val();
     // alert(idlhp)
     // idrekom = idform;
+
+    var selectedPIC = $("select[name='pic_1'").find('option:selected').val();
+    var selectedPIC2 = [];
+    $("select[name='pic_2[]'").find('option:selected').each(function(){
+        selectedPIC2.push($(this).val());
+    });
+    if(selectedPIC == '' && id == -1)
+        if($('#modal-update-rincian').hasClass('in')){
+            selectedPIC2.push(idPic);
+            console.log('gegege ' + idPic)
+        }else{
+            return notif('error', 'Harap pilih PIC terlebih dahulu');
+        }
+    if(selectedPIC != '')
+        selectedPIC2.push(selectedPIC);
+    if(idPic != -1)
+        selectedPIC2.push(idPic);
     if (jenis == 'sewa') {
         $('#formrinciansewa').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
-        $('#form-rincian-sewa').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id, function () {
+        $('#form-rincian-sewa').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id + '/' + selectedPIC2, function () {
             $('#unit_kerja').select2()
             $('.nominal').on('keyup', function (e) {
                 $(this).val(format($(this).val()));
@@ -69,7 +86,7 @@ function addtindaklanjut(jenis, idtemuan, idrekom, id) {
     }
     else if (jenis == 'uangmuka') {
         $('#formrincianuangmuka').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
-        $('#form-rincian-uangmuka').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id, function () {
+        $('#form-rincian-uangmuka').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id + '/' + selectedPIC2, function () {
             $('#unit_kerja').select2()
             $('.nominal').on('keyup', function (e) {
                 $(this).val(format($(this).val()));
@@ -79,7 +96,7 @@ function addtindaklanjut(jenis, idtemuan, idrekom, id) {
     }
     else if (jenis == 'listrik') {
         $('#formrincianlistrik').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
-        $('#form-rincian-listrik').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id, function () {
+        $('#form-rincian-listrik').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id + '/' + selectedPIC2, function () {
             $('#unit_kerja').select2()
             $('.nominal').on('keyup', function (e) {
                 $(this).val(format($(this).val()));
@@ -89,7 +106,7 @@ function addtindaklanjut(jenis, idtemuan, idrekom, id) {
     }
     else if (jenis == 'piutang') {
         $('#formrincianpiutang').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
-        $('#form-rincian-piutang').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id, function () {
+        $('#form-rincian-piutang').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id + '/' + selectedPIC2, function () {
             $('#unit_kerja').select2()
             $('.nominal').on('keyup', function (e) {
                 $(this).val(format($(this).val()));
@@ -99,7 +116,7 @@ function addtindaklanjut(jenis, idtemuan, idrekom, id) {
     }
     else if (jenis == 'piutangkaryawan') {
         $('#formrincianpiutangkaryawan').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
-        $('#form-rincian-piutangkaryawan').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id, function () {
+        $('#form-rincian-piutangkaryawan').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id + '/' + selectedPIC2, function () {
             $('#unit_kerja').select2()
             $('.nominal').on('keyup', function (e) {
                 $(this).val(format($(this).val()));
@@ -109,7 +126,7 @@ function addtindaklanjut(jenis, idtemuan, idrekom, id) {
     }
     else if (jenis == 'hutangtitipan') {
         $('#formrincianhutangtitipan').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
-        $('#form-rincian-hutangtitipan').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id, function () {
+        $('#form-rincian-hutangtitipan').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id + '/' + selectedPIC2, function () {
             $('#unit_kerja').select2()
             $('.nominal').on('keyup', function (e) {
                 $(this).val(format($(this).val()));
@@ -119,7 +136,7 @@ function addtindaklanjut(jenis, idtemuan, idrekom, id) {
     }
     else if (jenis == 'penutupanrekening') {
         $('#formrincianpenutupanrekening').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
-        $('#form-rincian-penutupanrekening').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id, function () {
+        $('#form-rincian-penutupanrekening').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id + '/' + selectedPIC2, function () {
             $('#unit_kerja').select2()
             $('.nominal').on('keyup', function (e) {
                 $(this).val(format($(this).val()));
@@ -129,7 +146,7 @@ function addtindaklanjut(jenis, idtemuan, idrekom, id) {
     }
     else if (jenis == 'umum') {
         $('#formrincianumum').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
-        $('#form-rincian-umum').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id, function () {
+        $('#form-rincian-umum').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id + '/' + selectedPIC2, function () {
             $('#unit_kerja').select2()
             $('.nominal').on('keyup', function (e) {
                 $(this).val(format($(this).val()));
@@ -139,7 +156,7 @@ function addtindaklanjut(jenis, idtemuan, idrekom, id) {
     }
     else if (jenis == 'kontribusi'){
         $('#formrinciankontribusi').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
-        $('#form-rincian-kontribusi').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id, function () {
+        $('#form-rincian-kontribusi').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id + '/' + selectedPIC2, function () {
             $('#unit_kerja').select2()
             $('.nominal').on('keyup', function (e) {
                 $(this).val(format($(this).val()));
@@ -149,7 +166,7 @@ function addtindaklanjut(jenis, idtemuan, idrekom, id) {
     }
     else if(jenis == 'nonsetoranperjanjiankerjasama'){
         $('#formrinciannonsetoranperjanjiankerjasama').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
-        $('#form-rincian-nonsetoranperjanjiankerjasama').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id, function () {
+        $('#form-rincian-nonsetoranperjanjiankerjasama').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id + '/' + selectedPIC2, function () {
             $('#unit_kerja').select2()
             $('.nominal').on('keyup', function (e) {
                 $(this).val(format($(this).val()));
@@ -159,7 +176,7 @@ function addtindaklanjut(jenis, idtemuan, idrekom, id) {
     }
     else if(jenis == 'nonsetoran'){
         $('#formrinciannonsetoran').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
-        $('#form-rincian-modalrinciannonsetoran').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id, function () {
+        $('#form-rincian-modalrinciannonsetoran').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id + '/' + selectedPIC2, function () {
             $('#unit_kerja').select2()
             $('.nominal').on('keyup', function (e) {
                 $(this).val(format($(this).val()));
@@ -169,7 +186,7 @@ function addtindaklanjut(jenis, idtemuan, idrekom, id) {
     }
     else if(jenis == 'nonsetoranumum'){
         $('#formrinciannonsetoranumum').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
-        $('#form-rincian-modalrinciannonsetoranumum').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id, function () {
+        $('#form-rincian-modalrinciannonsetoranumum').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id + '/' + selectedPIC2, function () {
             $('#unit_kerja').select2()
             $('.nominal').on('keyup', function (e) {
                 $(this).val(format($(this).val()));
@@ -179,7 +196,7 @@ function addtindaklanjut(jenis, idtemuan, idrekom, id) {
     }
     else if(jenis == 'nonsetoranpertanggungjawabanuangmuka'){
         $('#formrinciannonsetoranpertanggungjawabanuangmuka').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
-        $('#form-rincian-modalrinciannonsetoranpertanggungjawabanuangmuka').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id, function () {
+        $('#form-rincian-modalrinciannonsetoranpertanggungjawabanuangmuka').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id + '/' + selectedPIC2, function () {
             $('#unit_kerja').select2()
             $('.nominal').on('keyup', function (e) {
                 $(this).val(format($(this).val()));

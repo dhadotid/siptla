@@ -186,25 +186,29 @@ class RincianSewaController extends Controller
                 ->with('jenis',$jenis);
         }
     }
-    public function form_rincian2($jenis,$idtemuan,$idrekomendasi,$id=-1)
+    public function form_rincian2($jenis,$idtemuan,$idrekomendasi,$id=-1, $pic=[])
     {
 
-        $dpic=$array_pic=array();
-        $rekom=DataRekomendasi::find($idrekomendasi);
-        if($rekom->pic_1_temuan_id!=null)
-            $dpic[]=$rekom->pic_1_temuan_id;
+        // $dpic=$array_pic=array();
+        // $rekom=DataRekomendasi::find($idrekomendasi);
+        // if($rekom->pic_1_temuan_id!=null)
+        //     $dpic[]=$rekom->pic_1_temuan_id;
 
         
-        if($rekom->pic_2_temuan_id!='' && $rekom->pic_2_temuan_id!=',')
-        {
-            $array_pic=explode(',',$rekom->pic_2_temuan_id);
-            foreach($array_pic as $k=>$v)
-            {
-                $dpic[]=$v;
-            }
-        }
+        // if($rekom->pic_2_temuan_id!='' && $rekom->pic_2_temuan_id!=',')
+        // {
+        //     $array_pic=explode(',',$rekom->pic_2_temuan_id);
+        //     foreach($array_pic as $k=>$v)
+        //     {
+        //         $dpic[]=$v;
+        //     }
+        // }
 
-        $pic=PICUnit::whereIn('id',$dpic)->orderBy('nama_pic')->get();
+        // $pic=PICUnit::whereIn('id',$dpic)->orderBy('nama_pic')->get();
+
+        // PICUnit::whereIn('id',$explode_id)->orderBy('nama_pic')->get();
+
+        $pic = PICUnit::whereIn('id', array_map('intval', explode(',', $pic)))->orderBy('nama_pic')->get();
        
         if($jenis=='sewa')
         {
@@ -215,6 +219,7 @@ class RincianSewaController extends Controller
                     ->with('idtemuan',$rincianData[0]->id_temuan)
                     ->with('idrekomendasi',$rincianData[0]->id_rekomendasi)
                     ->with('idform',$rincianData[0]->unit_kerja_id)
+                    ->with('unit_kerja', $rincianData[0]->unit_kerja)
                     ->with('id',$rincianData[0]->id)
                     ->with('pic',$pic)
                     ->with('mitra', $rincianData[0]->mitra)
@@ -241,6 +246,7 @@ class RincianSewaController extends Controller
                     ->with('idtemuan',$rincianData[0]->id_temuan)
                     ->with('idrekomendasi',$rincianData[0]->id_rekomendasi)
                     ->with('idform',$rincianData[0]->unit_kerja_id)
+                    ->with('unit_kerja', $rincianData[0]->unit_kerja)
                     ->with('id',$rincianData[0]->id)
                     ->with('pic',$pic)
                     ->with('no_invoice', $rincianData[0]->no_invoice)
@@ -266,6 +272,7 @@ class RincianSewaController extends Controller
                     ->with('idtemuan',$rincianData[0]->id_temuan)
                     ->with('idrekomendasi',$rincianData[0]->id_rekomendasi)
                     ->with('idform',$rincianData[0]->unit_kerja_id)
+                    ->with('unit_kerja', $rincianData[0]->unit_kerja)
                     ->with('id',$rincianData[0]->id)
                     ->with('pic',$pic)
                     ->with('lokasi', $rincianData[0]->lokasi)
@@ -291,6 +298,7 @@ class RincianSewaController extends Controller
                     ->with('idtemuan',$rincianData[0]->id_temuan)
                     ->with('idrekomendasi',$rincianData[0]->id_rekomendasi)
                     ->with('idform',$rincianData[0]->unit_kerja_id)
+                    ->with('unit_kerja', $rincianData[0]->unit_kerja)
                     ->with('id',$rincianData[0]->id)
                     ->with('pic',$pic)
                     ->with('pelanggan', $rincianData[0]->pelanggan)
@@ -313,6 +321,7 @@ class RincianSewaController extends Controller
                     ->with('jenis',$jenis)
                     ->with('idtemuan',$rincianData[0]->id_temuan)
                     ->with('idrekomendasi',$rincianData[0]->id_rekomendasi)
+                    ->with('unit_kerja', $rincianData[0]->unit_kerja)
                     ->with('idform',$rincianData[0]->unit_kerja_id)
                     ->with('id',$rincianData[0]->id)
                     ->with('pic',$pic)
@@ -361,6 +370,7 @@ class RincianSewaController extends Controller
                     ->with('idtemuan',$rincianData[0]->id_temuan)
                     ->with('idrekomendasi',$rincianData[0]->id_rekomendasi)
                     ->with('idform',$rincianData[0]->unit_kerja_id)
+                    ->with('unit_kerja', $rincianData[0]->unit_kerja)
                     ->with('id',$rincianData[0]->id)
                     ->with('pic',$pic)
                     ->with('nama_bank', $rincianData[0]->nama_bank)
@@ -388,6 +398,7 @@ class RincianSewaController extends Controller
                     ->with('idtemuan',$rincianData[0]->id_temuan)
                     ->with('idrekomendasi',$rincianData[0]->id_rekomendasi)
                     ->with('idform',$rincianData[0]->unit_kerja_id)
+                    ->with('unit_kerja', $rincianData[0]->unit_kerja)
                     ->with('id',$rincianData[0]->id)
                     ->with('pic',$pic)
                     ->with('keterangan', $rincianData[0]->keterangan)
@@ -410,6 +421,7 @@ class RincianSewaController extends Controller
                     ->with('idtemuan',$rincianData[0]->id_temuan)
                     ->with('idrekomendasi',$rincianData[0]->id_rekomendasi)
                     ->with('idform',$rincianData[0]->unit_kerja_id)
+                    ->with('unit_kerja', $rincianData[0]->unit_kerja)
                     ->with('id',$rincianData[0]->id)
                     ->with('pic',$pic)
                     ->with('tahun', $rincianData[0]->tahun)
@@ -432,6 +444,7 @@ class RincianSewaController extends Controller
                     ->with('idtemuan',$rincianData[0]->id_temuan)
                     ->with('idrekomendasi',$rincianData[0]->id_rekomendasi)
                     ->with('idform',$rincianData[0]->unit_kerja_id)
+                    ->with('unit_kerja', $rincianData[0]->unit_kerja)
                     ->with('id',$rincianData[0]->id)
                     ->with('pic',$pic)
                     ->with('no_pks', $rincianData[0]->no_pks)
@@ -456,6 +469,7 @@ class RincianSewaController extends Controller
                     ->with('idtemuan',$rincianData[0]->id_temuan)
                     ->with('idrekomendasi',$rincianData[0]->id_rekomendasi)
                     ->with('idform',$rincianData[0]->unit_kerja_id)
+                    ->with('unit_kerja', $rincianData[0]->unit_kerja)
                     ->with('id',$rincianData[0]->id)
                     ->with('pic',$pic)
                     ->with('keterangan', $rincianData[0]->keterangan)
@@ -477,6 +491,7 @@ class RincianSewaController extends Controller
                     ->with('idtemuan',$rincianData[0]->id_temuan)
                     ->with('idrekomendasi',$rincianData[0]->id_rekomendasi)
                     ->with('idform',$rincianData[0]->unit_kerja_id)
+                    ->with('unit_kerja', $rincianData[0]->unit_kerja)
                     ->with('id',$rincianData[0]->id)
                     ->with('pic',$pic)
                     ->with('keterangan', $rincianData[0]->keterangan);
@@ -497,6 +512,7 @@ class RincianSewaController extends Controller
                     ->with('idtemuan',$rincianData[0]->id_temuan)
                     ->with('idrekomendasi',$rincianData[0]->id_rekomendasi)
                     ->with('idform',$rincianData[0]->unit_kerja_id)
+                    ->with('unit_kerja', $rincianData[0]->unit_kerja)
                     ->with('id',$rincianData[0]->id)
                     ->with('pic',$pic)
                     ->with('no_invoice', $rincianData[0]->no_invoice)

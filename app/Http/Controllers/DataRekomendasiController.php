@@ -698,6 +698,7 @@ class DataRekomendasiController extends Controller
 
             $no=1;
             $totalnilai=0;
+            $arrayPIC = array();
             foreach($rincian as $k=>$v)
             {
                 $table.='<tr>
@@ -710,13 +711,13 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.$v->masa_berlaku.'</td>';
                     $table.='
                     <td class="text-center">
-                        <a href="javascript:addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.','.$v->unit_kerja_id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'sewa\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
                 $no++;
                 $totalnilai+=$v->nilai_pekerjaan;
-                
+                $arrayPIC[] = $v->unit_kerja_id;
             }
             echo "<script> setCookie('total_nilai',$totalnilai,1); </script>";
             $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
@@ -731,7 +732,7 @@ class DataRekomendasiController extends Controller
                 //         </tr>';
                 $table.='
                 <div style="text-align: center">
-                <a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                <a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1,'.implode (",", $arrayPIC).')" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
                 </div>';
             }
             else
@@ -743,7 +744,7 @@ class DataRekomendasiController extends Controller
                     //     </tr>';
                     $table.='
                     <div style="text-align: center">
-                    <a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                    <a href="#" onclick="addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\',-1,\''.implode (",", $arrayPIC).'\')" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
                     </div>';
                 }
             }
@@ -784,7 +785,7 @@ class DataRekomendasiController extends Controller
                     $table.='
                     <td class="text-center">
                         <div style="width:80px;">
-                            <a href="javascript:addtindaklanjut(\'uangmuka\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                            <a href="javascript:addtindaklanjut(\'uangmuka\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.','.$v->unit_kerja_id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                             <a href="javascript:hapusrincian('.$v->id.',\'uangmuka\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                         </div>
                     </td>';
@@ -849,7 +850,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.$v->keterangan.'</td>';
                     $table.='
                     <td class="text-center">
-                        <a href="javascript:addtindaklanjut(\'listrik\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:addtindaklanjut(\'listrik\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.','.$v->unit_kerja_id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'listrik\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -908,7 +909,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.number_format($v->tagihan,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
-                        <a href="javascript:addtindaklanjut(\'piutang\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:addtindaklanjut(\'piutang\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.','.$v->unit_kerja_id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'piutang\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -968,7 +969,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.number_format($v->pinjaman,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
-                        <a href="javascript:addtindaklanjut(\'piutangkaryawan\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:addtindaklanjut(\'piutangkaryawan\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.','.$v->unit_kerja_id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'piutangkaryawan\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1031,7 +1032,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.number_format($v->sisa_setor,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
-                        <a href="javascript:addtindaklanjut(\'hutangtitipan\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:addtindaklanjut(\'hutangtitipan\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.','.$v->unit_kerja_id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'hutangtitipan\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1099,7 +1100,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.number_format($v->saldo_akhir,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
-                        <a href="javascript:addtindaklanjut(\'penutupanrekening\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:addtindaklanjut(\'penutupanrekening\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.','.$v->unit_kerja_id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'penutupanrekening\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1158,7 +1159,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.number_format($v->jumlah_rekomendasi,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
-                        <a href="javascript:addtindaklanjut(\'umum\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:addtindaklanjut(\'umum\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.','.$v->unit_kerja_id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'umum\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1217,7 +1218,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.number_format($v->nilai_penerimaan,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
-                        <a href="javascript:addtindaklanjut(\'kontribusi\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:addtindaklanjut(\'kontribusi\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.','.$v->unit_kerja_id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'kontribusi\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1277,7 +1278,7 @@ class DataRekomendasiController extends Controller
                 // <td class="text-center">'.rupiah($v->nilai_pekerjaan).'</td>
                     $table.='
                     <td class="text-center">
-                        <a href="javascript:addtindaklanjut(\'nonsetoranperjanjiankerjasama\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:addtindaklanjut(\'nonsetoranperjanjiankerjasama\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.','.$v->unit_kerja_id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'nonsetoranperjanjiankerjasama\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1334,7 +1335,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.number_format($v->nilai_rekomendasi,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
-                        <a href="javascript:addtindaklanjut(\'nonsetoran\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:addtindaklanjut(\'nonsetoran\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.','.$v->unit_kerja_id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'nonsetoran\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1387,7 +1388,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.$v->keterangan.'</td>';
                     $table.='
                     <td class="text-center">
-                        <a href="javascript:addtindaklanjut(\'nonsetoranumum\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:addtindaklanjut(\'nonsetoranumum\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.','.$v->unit_kerja_id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'nonsetoranumum\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1446,7 +1447,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.number_format($v->jumlah_um,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
-                        <a href="javascript:addtindaklanjut(\'nonsetoranpertanggungjawabanuangmuka\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:addtindaklanjut(\'nonsetoranpertanggungjawabanuangmuka\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.','.$v->unit_kerja_id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'nonsetoranpertanggungjawabanuangmuka\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';

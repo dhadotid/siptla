@@ -568,6 +568,7 @@ function addtindaklanjut(jenis,idtemuan,idrekom,id)
     var pic2 = $('select.pic2').val();
     // alert(pic2)
     // $("#unit_kerja").append('<option value="'+pic1+'">option5</option>');
+    
     idrekom = idform;
     if(jenis=='sewa')
     {

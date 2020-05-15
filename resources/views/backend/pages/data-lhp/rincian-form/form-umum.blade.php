@@ -28,16 +28,16 @@
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Keterangan
             </label>
             <div class="col-sm-9">
-                <textarea class="form-control"  class="form-control"  name="keterangan"  placeholder="Keterangan" id="keterangan"></textarea>
+                <textarea class="form-control"  class="form-control"  name="keterangan"  placeholder="Keterangan" id="keterangan">@if($id!=-1){{$keterangan}}@endif</textarea>
             </div>
         </div>
         <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nilai Rekomendasi (Rp)
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control nominal"  class="form-control"  name="jumlah_rekomendasi"  placeholder="Nilai Rekomendasi (Rp)" id="jumlah_rekomendasi">
+                <input type="text" class="form-control nominal"  class="form-control"  name="jumlah_rekomendasi"  placeholder="Nilai Rekomendasi (Rp)" id="jumlah_rekomendasi"
+                @if($id!=-1) value="{{$jumlah_rekomendasi}}" @endif>
             </div>
         </div>
-      
     </div>
 </div>

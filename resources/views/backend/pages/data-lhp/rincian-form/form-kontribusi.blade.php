@@ -28,23 +28,24 @@
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Tahun
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control"  class="form-control"  name="tahun"  placeholder="Tahun" id="tahun">
+                <input type="text" class="form-control"  class="form-control"  name="tahun"  placeholder="Tahun" id="tahun"
+                @if($id!=-1) value="{{$tahun}}" @endif>
             </div>
         </div>
         <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Keterangan
             </label>
             <div class="col-sm-9">
-                <textarea class="form-control"  class="form-control"  name="keterangan"  placeholder="Keterangan" id="keterangan"></textarea>
+                <textarea class="form-control"  class="form-control"  name="keterangan"  placeholder="Keterangan" id="keterangan">@if($id!=-1){{$keterangan}}@endif</textarea>
             </div>
         </div>
         <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Rekomendasi Temuan (Rp)
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control nominal"  class="form-control"  name="jumlah_rekomendasi"  placeholder="Rekomendasi Temuan (Rp)" id="jumlah_rekomendasi">
+                <input type="text" class="form-control nominal"  class="form-control"  name="jumlah_rekomendasi"  placeholder="Rekomendasi Temuan (Rp)" id="jumlah_rekomendasi"
+                @if($id!=-1) value="{{$nilai_penerimaan}}" @endif>
             </div>
         </div>
-      
     </div>
 </div>

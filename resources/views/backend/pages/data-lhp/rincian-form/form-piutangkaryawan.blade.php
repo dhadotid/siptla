@@ -17,18 +17,12 @@
         <input type="hidden" name="idrekomendasi" value="{{$idrekomendasi}}">
         <input type="hidden" name="idform" value="{{$idform}}">
         <input type="hidden" name="id" value="{{$id}}">
-        {{-- <div class="form-group" style="margin-bottom:10px;">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Tindak Lanjut</small>
-            </label>
-            <div class="col-sm-7">
-                <textarea class="form-control"  name="tindak_lanjut" placeholder="Tindak Lanjut" id="tindak_lanjuttxt"></textarea>
-            </div>
-        </div>    --}}
         <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Karyawan 
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control"  class="form-control"  name="karyawan"  placeholder="Karyawan" id="karyawan">
+                <input type="text" class="form-control"  class="form-control"  name="karyawan"  placeholder="Karyawan" id="karyawan"
+                @if($id != -1) value="{{$karyawan}}" @endif>
             </div>
         </div>
        
@@ -36,7 +30,8 @@
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Jumlah Pinjaman (Rp) 
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control nominal"  class="form-control"  name="pinjaman"  placeholder="Jumlah Pinjaman" id="pinjaman">
+                <input type="text" class="form-control nominal"  class="form-control"  name="pinjaman"  placeholder="Jumlah Pinjaman" id="pinjaman"
+                @if($id != -1) value="{{$pinjaman}}" @endif>
             </div>
         </div>
     </div>

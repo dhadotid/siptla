@@ -516,11 +516,22 @@ function pilihrincianold(val)
 
 function gettablerincianold(jenis, idtemuan, idrekom)
 {
-    $('#right-div').load(flagsUrl+'/load-table-rincian/'+jenis+'/'+idtemuan+'/'+idrekom,function(){
-        $('#table-tl-rincian-'+idrekom).DataTable( {
-            responsive: true
-        } );
-    });
+    if($('#modal-update-rincian').hasClass('in')){
+        $('#form-rincian').load(flagsUrl + '/load-table-rincian/' + jenis + '/' + idtemuan + '/' + idrekom,  function () {
+            $('#rincian_tl').select2();
+            $('#table-tl-rincian-'+idrekom).DataTable({
+                "bAutoWidth": false,
+                "bDestroy": true
+            });
+        });
+        $('#modal-update-rincian').modal('show')
+    }else{
+        $('#right-div').load(flagsUrl+'/load-table-rincian/'+jenis+'/'+idtemuan+'/'+idrekom,function(){
+            $('#table-tl-rincian-'+idrekom).DataTable( {
+                responsive: true
+            } );
+        });
+    }
 }
 
 function setCookie(name,value,days) {

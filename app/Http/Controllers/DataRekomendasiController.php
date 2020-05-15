@@ -707,10 +707,10 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.$v->no_pks.'</td>
                     <td class="text-center">'.($v->tgl_pks != '' ? date('d/m/Y',strtotime($v->tgl_pks)) : '-').'</td>
                     <td class="text-center">'.rupiah($v->nilai_pekerjaan).'</td>
-                    <td class="text-center">'.($v->masa_berlaku != '' ? date('d/m/Y',strtotime($v->masa_berlaku)) : '-').'</td>';
+                    <td class="text-center">'.$v->masa_berlaku.'</td>';
                     $table.='
                     <td class="text-center">
-                        <a href="javascript:editrincian('.$v->id.',\'sewa\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:addtindaklanjut(\'sewa\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'sewa\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -784,7 +784,7 @@ class DataRekomendasiController extends Controller
                     $table.='
                     <td class="text-center">
                         <div style="width:80px;">
-                            <a href="javascript:editrincian('.$v->id.',\'uangmuka\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                            <a href="javascript:addtindaklanjut(\'uangmuka\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                             <a href="javascript:hapusrincian('.$v->id.',\'uangmuka\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                         </div>
                     </td>';
@@ -849,7 +849,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.$v->keterangan.'</td>';
                     $table.='
                     <td class="text-center">
-                        <a href="javascript:editrincian('.$v->id.',\'listrik\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:addtindaklanjut(\'listrik\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'listrik\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -908,7 +908,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.number_format($v->tagihan,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
-                        <a href="javascript:editrincian('.$v->id.',\'piutang\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:addtindaklanjut(\'piutang\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'piutang\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -968,7 +968,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.number_format($v->pinjaman,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
-                        <a href="javascript:editrincian('.$v->id.',\'piutangkaryawan\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:addtindaklanjut(\'piutangkaryawan\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'piutangkaryawan\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1031,7 +1031,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.number_format($v->sisa_setor,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
-                        <a href="javascript:editrincian('.$v->id.',\'hutangtitipan\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:addtindaklanjut(\'hutangtitipan\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'hutangtitipan\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1099,7 +1099,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.number_format($v->saldo_akhir,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
-                        <a href="javascript:editrincian('.$v->id.',\'penutupanrekening\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:addtindaklanjut(\'penutupanrekening\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'penutupanrekening\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1158,7 +1158,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.number_format($v->jumlah_rekomendasi,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
-                        <a href="javascript:editrincian('.$v->id.',\'umum\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:addtindaklanjut(\'umum\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'umum\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1217,7 +1217,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.number_format($v->nilai_penerimaan,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
-                        <a href="javascript:editrincian('.$v->id.',\'kontribusi\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:addtindaklanjut(\'kontribusi\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'kontribusi\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1277,7 +1277,7 @@ class DataRekomendasiController extends Controller
                 // <td class="text-center">'.rupiah($v->nilai_pekerjaan).'</td>
                     $table.='
                     <td class="text-center">
-                        <a href="javascript:editrincian('.$v->id.',\'nonsetoranperjanjiankerjasama\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:addtindaklanjut(\'nonsetoranperjanjiankerjasama\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'nonsetoranperjanjiankerjasama\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1334,7 +1334,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.number_format($v->nilai_rekomendasi,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
-                        <a href="javascript:editrincian('.$v->id.',\'nonsetoran\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:addtindaklanjut(\'nonsetoran\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'nonsetoran\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1387,7 +1387,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.$v->keterangan.'</td>';
                     $table.='
                     <td class="text-center">
-                        <a href="javascript:editrincian('.$v->id.',\'nonsetoranumum\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:addtindaklanjut(\'nonsetoranumum\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'nonsetoranumum\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';
@@ -1446,7 +1446,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.number_format($v->jumlah_um,0,',','.').'</td>';
                     $table.='
                     <td class="text-center">
-                        <a href="javascript:editrincian('.$v->id.',\'nonsetoranpertanggungjawabanuangmuka\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="javascript:addtindaklanjut(\'nonsetoranpertanggungjawabanuangmuka\',\''.$idtemuan.'\',\''.$idrekomendasi.'\','.$v->id.')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
                         <a href="javascript:hapusrincian('.$v->id.',\'nonsetoranpertanggungjawabanuangmuka\')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                     </td>';
                 $table.='</tr>';

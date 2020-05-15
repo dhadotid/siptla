@@ -16,7 +16,7 @@
         <input type="hidden" name="jenis" value="{{$jenis}}">
         <input type="hidden" name="idrekomendasi" value="{{$idrekomendasi}}">
         <input type="hidden" name="idform" value="{{$idform}}">
-        <input type="hidden" name="id" value="{{$id}}">
+        <input type="hidden" name="id" id="id" value="{{$id}}">
         {{-- <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Tindak Lanjut</small>
             </label>
@@ -28,21 +28,21 @@
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Mitra
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control"  class="form-control"  name="mitra"  placeholder="Nama Mitra" id="mitra">
+                <input type="text" class="form-control"  class="form-control"  name="mitra"  placeholder="Nama Mitra" id="mitra" @if ($id!=-1) value="{{$mitra}}" @endif>
             </div>
         </div>
         <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nomor PKS
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control"  class="form-control"  name="no_pks"  placeholder="Nomor PKS" id="no_pks">
+                <input type="text" class="form-control"  class="form-control"  name="no_pks"  placeholder="Nomor PKS" id="no_pks" @if ($id!=-1) value="{{$no_pks}}" @endif>
             </div>
         </div>
         <div class="form-group">
            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Tanggal PKS</small>
             </label>
             <div class="col-md-7">
-                <input type='date' class="form-control" name="tgl_pks" id="tgl_pks"/>
+                <input type='date' class="form-control" name="tgl_pks" id="tgl_pks" @if ($id!=-1) value="{{$tgl_pks}}" @endif/>
                 <!-- <div class='input-group date' id='datetimepicker_tgl_pks'>
                     
                     <span class="input-group-addon bg-info text-white">
@@ -55,14 +55,14 @@
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nilai Rekomendasi (Rp)
             </label>
             <div class="col-sm-9">
-            <input type="text" class="form-control nominal"  class="form-control"  name="nilai_perjanjian"  placeholder="Nilai Rekomendasi" id="nilai_perjanjian">
+            <input type="text" @if ($id!=-1) value="{{$nilai_pekerjaan}}" @endif class="form-control nominal"  class="form-control"  name="nilai_perjanjian"  placeholder="Nilai Rekomendasi" id="nilai_perjanjian">
             </div>
         </div>
         <div class="form-group">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Masa Kontrak
             </label>
             <div class="col-md-7">
-                <input type='text' class="form-control" name="masa_berlaku" id="masa_berlaku" />
+                <input type='text' class="form-control" name="masa_berlaku" id="masa_berlaku" @if ($id!=-1) value="{{$masa_berlaku}}" @endif/>
             </div>
         </div>
     </div>

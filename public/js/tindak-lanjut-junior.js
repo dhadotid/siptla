@@ -216,7 +216,8 @@ function validasinonsetoran(){
                     gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                     $('#tombol-add-rincian').attr('style', 'display:inline !important');
                     setTimeout(function () {
-                        $('#modalrinciannonsetoran').modal('show');
+                        if(res.id==-1)
+                            $('#modalrinciannonsetoran').modal('show');
                     }, 1500)
                 }
                 else
@@ -250,7 +251,8 @@ function validasinonsetoranumum(){
                     gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                     $('#tombol-add-rincian').attr('style', 'display:inline !important');
                     setTimeout(function () {
-                        $('#modalrinciannonsetoranumum').modal('show');
+                        if(res.id==-1)
+                            $('#modalrinciannonsetoranumum').modal('show');
                     }, 1500)
                 }
                 else
@@ -293,7 +295,8 @@ function validasinonsetoranpertanggungjawabanuangmuka(){
                     gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                     $('#tombol-add-rincian').attr('style', 'display:inline !important');
                     setTimeout(function () {
-                        $('#modalrinciannonsetoranpertanggungjawabanuangmuka').modal('show');
+                        if(res.id==-1)
+                            $('#modalrinciannonsetoranpertanggungjawabanuangmuka').modal('show');
                     }, 1500)
                 }
                 else
@@ -336,7 +339,8 @@ function validasinonsetoranperjanjiankerjasama(){
                     gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                     $('#tombol-add-rincian').attr('style', 'display:inline !important');
                     setTimeout(function () {
-                        $('#modalrinciannonsetoranperjanjiankerjasama').modal('show');
+                        if(res.id==-1)
+                            $('#modalrinciannonsetoranperjanjiankerjasama').modal('show');
                     }, 1500)
                 }
                 else
@@ -347,6 +351,7 @@ function validasinonsetoranperjanjiankerjasama(){
 }
 
 function validasiformsewa() {
+    var idRincian = $('#id');
     var unit_kerja = $('#unit_kerja');
     var mitra = $('#mitra');
     var no_pks = $('#no_pks');
@@ -357,8 +362,6 @@ function validasiformsewa() {
     // $('#nilai_perjanjian').on('blur',function(){
     // alert(totalnilai+'-'+nilairekom)
     // alert(nilai_perjanjian.val() + '..' + totalnilai + '--' + nilairekom);
-
-
 
     if (unit_kerja.val() == '')
         notif('error', 'Unit Kerja Belum Dipilih');
@@ -391,15 +394,14 @@ function validasiformsewa() {
                     datatype: 'JSON',
                     success: function (res) {
                         if (res) {
-                            // $('#formrinciansewa').reset();
                             $('#formrinciansewa').trigger("reset");
                             $('#modalrinciansewa').modal('hide');
-                            // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
                             notif('success', 'Data Rincian Berhasil Di Simpan');
                             gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                             $('#tombol-add-rincian').attr('style', 'display:inline !important');
                             setTimeout(function () {
-                                $('#modalrinciansewa').modal('show');
+                                if(res.id==-1)
+                                    $('#modalrinciansewa').modal('show');
                             }, 1500)
                         } else
                             notif('error', 'Data Rincian Gagal Disimpan');
@@ -423,7 +425,8 @@ function validasiformsewa() {
                         notif('success', 'Data Rincian Berhasil Di Simpan');
                         gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                         setTimeout(function () {
-                            $('#modalrinciansewa').modal('show');
+                            if(res.id==-1)
+                                $('#modalrinciansewa').modal('show');
                         }, 1500)
                     } else
                         notif('error', 'Data Rincian Gagal Disimpan');
@@ -475,7 +478,8 @@ function validasiformuangmuka() {
                             notif('success', 'Data Rincian Berhasil Di Simpan');
                             gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                             setTimeout(function () {
-                                $('#modalrincianuangmuka').modal('show');
+                                if(res.id==-1)
+                                    $('#modalrincianuangmuka').modal('show');
                             }, 1500)
                         } else
                             notif('error', 'Data Rincian Gagal Disimpan');
@@ -499,7 +503,8 @@ function validasiformuangmuka() {
                         notif('success', 'Data Rincian Berhasil Di Simpan');
                         gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                         setTimeout(function () {
-                            $('#modalrincianuangmuka').modal('show');
+                            if(res.id==-1)
+                                $('#modalrincianuangmuka').modal('show');
                         }, 1500)
                     } else
                         notif('error', 'Data Rincian Gagal Disimpan');
@@ -551,7 +556,8 @@ function validasiformlistrik() {
                             notif('success', 'Data Rincian Berhasil Di Simpan');
                             gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                             setTimeout(function () {
-                                $('#modalrincianlistrik').modal('show');
+                                if(res.id==-1)
+                                    $('#modalrincianlistrik').modal('show');
                             }, 1500)
                         } else
                             notif('error', 'Data Rincian Gagal Disimpan');
@@ -575,7 +581,8 @@ function validasiformlistrik() {
                         notif('success', 'Data Rincian Berhasil Di Simpan');
                         gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                         setTimeout(function () {
-                            $('#modalrincianuangmuka').modal('show');
+                            if(res.id==-1)
+                                $('#modalrincianuangmuka').modal('show');
                         }, 1500)
                     } else
                         notif('error', 'Data Rincian Gagal Disimpan');
@@ -624,7 +631,8 @@ function validasiformpiutang() {
                             notif('success', 'Data Rincian Berhasil Di Simpan');
                             gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                             setTimeout(function () {
-                                $('#modalrincianpiutang').modal('show');
+                                if(res.id==-1)
+                                    $('#modalrincianpiutang').modal('show');
                             }, 1500)
                         } else
                             notif('error', 'Data Rincian Gagal Disimpan');
@@ -648,7 +656,8 @@ function validasiformpiutang() {
                         notif('success', 'Data Rincian Berhasil Di Simpan');
                         gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                         setTimeout(function () {
-                            $('#modalrincianuangmuka').modal('show');
+                            if(res.id==-1)
+                                $('#modalrincianuangmuka').modal('show');
                         }, 1500)
                     } else
                         notif('error', 'Data Rincian Gagal Disimpan');
@@ -697,7 +706,8 @@ function validasiformpiutangkaryawan() {
                             notif('success', 'Data Rincian Berhasil Di Simpan');
                             gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                             setTimeout(function () {
-                                $('#modalrincianpiutangkaryawan').modal('show');
+                                if(res.id==-1)
+                                    $('#modalrincianpiutangkaryawan').modal('show');
                             }, 1500)
                         } else
                             notif('error', 'Data Rincian Gagal Disimpan');
@@ -721,7 +731,8 @@ function validasiformpiutangkaryawan() {
                         notif('success', 'Data Rincian Berhasil Di Simpan');
                         gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                         setTimeout(function () {
-                            $('#modalrincianuangmuka').modal('show');
+                            if(res.id==-1)
+                                $('#modalrincianuangmuka').modal('show');
                         }, 1500)
                     } else
                         notif('error', 'Data Rincian Gagal Disimpan');
@@ -771,7 +782,8 @@ function validasihutangtitipan() {
                             notif('success', 'Data Rincian Berhasil Di Simpan');
                             gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                             setTimeout(function () {
-                                $('#modalrincianhutangtitipan').modal('show');
+                                if(res.id==-1)
+                                    $('#modalrincianhutangtitipan').modal('show');
                             }, 1500)
                         } else
                             notif('error', 'Data Rincian Gagal Disimpan');
@@ -795,7 +807,8 @@ function validasihutangtitipan() {
                         notif('success', 'Data Rincian Berhasil Di Simpan');
                         gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                         setTimeout(function () {
-                            $('#modalrincianuangmuka').modal('show');
+                            if(res.id==-1)
+                                $('#modalrincianuangmuka').modal('show');
                         }, 1500)
                     } else
                         notif('error', 'Data Rincian Gagal Disimpan');
@@ -850,7 +863,8 @@ function validasipenutupanrekening() {
                             notif('success', 'Data Rincian Berhasil Di Simpan');
                             gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                             setTimeout(function () {
-                                $('#modalrincianpenutupanrekening').modal('show');
+                                if(res.id==-1)
+                                    $('#modalrincianpenutupanrekening').modal('show');
                             }, 1500)
                         } else
                             notif('error', 'Data Rincian Gagal Disimpan');
@@ -874,7 +888,8 @@ function validasipenutupanrekening() {
                         notif('success', 'Data Rincian Berhasil Di Simpan');
                         gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                         setTimeout(function () {
-                            $('#modalrincianuangmuka').modal('show');
+                            if(res.id==-1)
+                                $('#modalrincianuangmuka').modal('show');
                         }, 1500)
                     } else
                         notif('error', 'Data Rincian Gagal Disimpan');
@@ -924,7 +939,8 @@ function validasiumum() {
                             notif('success', 'Data Rincian Berhasil Di Simpan');
                             gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                             setTimeout(function () {
-                                $('#modalrincianumum').modal('show');
+                                if(res.id==-1)
+                                    $('#modalrincianumum').modal('show');
                             }, 1500)
                         } else
                             notif('error', 'Data Rincian Gagal Disimpan');
@@ -948,7 +964,8 @@ function validasiumum() {
                         notif('success', 'Data Rincian Berhasil Di Simpan');
                         gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                         setTimeout(function () {
-                            $('#modalrincianumum').modal('show');
+                            if(res.id==-1)
+                                $('#modalrincianumum').modal('show');
                         }, 1500)
                     } else
                         notif('error', 'Data Rincian Gagal Disimpan');
@@ -1002,7 +1019,8 @@ function validasikontribusi() {
                             notif('success', 'Data Rincian Berhasil Di Simpan');
                             gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                             setTimeout(function () {
-                                $('#modalrinciankontribusi').modal('show');
+                                if(res.id==-1)
+                                    $('#modalrinciankontribusi').modal('show');
                             }, 1500)
                         }
                         else
@@ -1029,7 +1047,8 @@ function validasikontribusi() {
                         notif('success', 'Data Rincian Berhasil Di Simpan');
                         gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                         setTimeout(function () {
-                            $('#modalrincianuangmuka').modal('show');
+                            if(res.id==-1)
+                                $('#modalrincianuangmuka').modal('show');
                         }, 1500)
                     }
                     else

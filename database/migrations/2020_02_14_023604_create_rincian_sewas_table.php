@@ -24,7 +24,7 @@ class CreateRincianSewasTable extends Migration
             $table->string('no_pks')->nullable();
             $table->date('tgl_pks')->nullable();
             $table->string('nilai_pekerjaan')->nullable();
-            $table->date('masa_berlaku')->nullable();
+            $table->string('masa_berlaku')->nullable();
             $table->timestamps();
             $table->softdeletes();
         });

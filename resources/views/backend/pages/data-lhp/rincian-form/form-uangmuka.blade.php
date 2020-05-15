@@ -12,30 +12,25 @@
                 </select>
             </div>
         </div>
+
         <input type="hidden" name="idtemuan" value="{{$idtemuan}}">
         <input type="hidden" name="jenis" value="{{$jenis}}">
         <input type="hidden" name="idrekomendasi" value="{{$idrekomendasi}}">
         <input type="hidden" name="idform" value="{{$idform}}">
         <input type="hidden" name="id" value="{{$id}}">
-        {{-- <div class="form-group" style="margin-bottom:10px;">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Tindak Lanjut</small>
-            </label>
-            <div class="col-sm-7">
-                <textarea class="form-control"  name="tindak_lanjut" placeholder="Tindak Lanjut" id="tindak_lanjuttxt"></textarea>
-            </div>
-        </div>    --}}
         <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nomor Invoice
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control"  class="form-control"  name="no_invoice"  placeholder="Nomor Invoice" id="no_invoice">
+                <input type="text" class="form-control"  class="form-control"  name="no_invoice"  placeholder="Nomor Invoice" id="no_invoice" 
+                @if($id != -1) value="{{$no_invoice}}" @endif>
             </div>
         </div>
         <div class="form-group">
            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Tanggal UM</small>
             </label>
             <div class="col-md-7">
-            <input type='date' class="form-control" name="tgl_pum" id="tgl_pum" />
+            <input type='date' class="form-control" name="tgl_pum" id="tgl_pum" @if($id != -1) value="{{$tgl_pum}}" @endif/>
                 <!-- <div class='input-group date' id='datetimepicker_tgl_pks'>
                     
                     <span class="input-group-addon bg-info text-white">
@@ -48,14 +43,15 @@
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Keterangan
             </label>
             <div class="col-md-9">
-                <textarea class="form-control"  name="keterangan" placeholder="Keterangan" id="keterangan"></textarea>
+                <textarea class="form-control"  name="keterangan" placeholder="Keterangan" id="keterangan">@if($id != -1) {{$keterangan}} @endif</textarea>
             </div>
         </div>
         <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Jumlah Sisa Uang Muka (Rp)
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control nominal"  class="form-control"  name="jumlah_um"  placeholder="Jumlah UM" id="jumlah_um">
+                <input type="text" class="form-control nominal"  class="form-control"  name="jumlah_um"  placeholder="Jumlah UM" id="jumlah_um"
+                @if($id != -1) value="{{$jumlah_pum}}" @endif>
             </div>
         </div>
     </div>

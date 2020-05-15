@@ -17,25 +17,19 @@
         <input type="hidden" name="idrekomendasi" value="{{$idrekomendasi}}">
         <input type="hidden" name="idform" value="{{$idform}}">
         <input type="hidden" name="id" value="{{$id}}">
-        {{-- <div class="form-group" style="margin-bottom:10px;">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Tindak Lanjut</small>
-            </label>
-            <div class="col-sm-7">
-                <textarea class="form-control"  name="tindak_lanjut" placeholder="Tindak Lanjut" id="tindak_lanjuttxt"></textarea>
-            </div>
-        </div>    --}}
         <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nomor PKS
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control"  class="form-control"  name="no_pks"  placeholder="Nomor PKS" id="no_pks">
+                <input type="text" class="form-control"  class="form-control"  name="no_pks"  placeholder="Nomor PKS" id="no_pks"
+                @if($id!=-1) value="{{$no_pks}}" @endif>
             </div>
         </div>
         <div class="form-group">
            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Tanggal PKS</small>
             </label>
             <div class="col-md-7">
-                <input type='date' class="form-control" name="tgl_pks" id="tgl_pks" />
+                <input type='date' class="form-control" name="tgl_pks" id="tgl_pks" @if($id!=-1) value="{{$tgl_pks}}" @endif/>
             </div>
         </div>
         {{--<div class="form-group" style="margin-bottom:10px;">
@@ -49,20 +43,15 @@
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Masa Kontrak
             </label>
             <div class="col-md-7">
-                <input type='text' class="form-control" name="masa_berlaku" id="masa_berlaku"/>
-                <!-- <div class='input-group date' id='datetimepicker_masa_berlaku'>
-                    
-                    <span class="input-group-addon bg-info text-white">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                </div> -->
+                <input type='text' class="form-control" name="masa_berlaku" id="masa_berlaku"
+                @if($id!=-1) value="{{$masa_berlaku}}" @endif/>
             </div>
         </div>
         <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Keterangan
             </label>
             <div class="col-sm-9">
-                <textarea class="form-control"  class="form-control"  name="keterangan"  placeholder="Keterangan" id="keterangan"></textarea>
+                <textarea class="form-control"  class="form-control"  name="keterangan"  placeholder="Keterangan" id="keterangan">@if($id!=-1){{$keterangan}}@endif</textarea>
             </div>
         </div>
     </div>

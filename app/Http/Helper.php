@@ -229,7 +229,7 @@ function rinciantindaklanjut()
             'Setoran - Pengembalian Sisa Uang Muka','Setoran - Piutang Karyawan','Setoran - Biaya Listrik','Setoran - Umum',
             'Setoran - Kontribusi','Setoran - Piutang','Setoran - Pembayaran Sewa','Non Setoran',
             'Non Setoran - Penutupan Rekening','Non Setoran - Pertanggungjawaban Uang Muka', 'Non Setoran - Perjanjian Kerjasama',
-            'Non Setoran - Umum', 'Non Setoran - Hutang Titipan'
+            'Non Setoran - Umum' //'Non Setoran - Hutang Titipan'
         ];
     $drinc=array();
     foreach($rincian as $k=>$v)

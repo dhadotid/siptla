@@ -17,53 +17,53 @@
         <input type="hidden" name="idrekomendasi" value="{{$idrekomendasi}}">
         <input type="hidden" name="idform" value="{{$idform}}">
         <input type="hidden" name="id" value="{{$id}}">
-        {{-- <div class="form-group" style="margin-bottom:10px;">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Tindak Lanjut</small>
-            </label>
-            <div class="col-sm-7">
-                <textarea class="form-control"  name="tindak_lanjut" placeholder="Tindak Lanjut" id="tindak_lanjuttxt"></textarea>
-            </div>
-        </div>    --}}
+        
         <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Jenis Rekening
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control"  class="form-control"  name="jenis_rekening"  placeholder="Jenis Rekening" id="jenis_rekening">
+                <input type="text" class="form-control"  class="form-control"  name="jenis_rekening"  placeholder="Jenis Rekening" id="jenis_rekening"
+                @if($id != -1) value="{{$jenis_rekening}}" @endif>
             </div>
         </div>
         <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nama Bank
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control"  class="form-control"  name="nama_bank"  placeholder="Nama Bank" id="nama_bank">
+                <input type="text" class="form-control"  class="form-control"  name="nama_bank"  placeholder="Nama Bank" id="nama_bank"
+                @if($id != -1) value="{{$nama_bank}}" @endif>
             </div>
         </div>
         <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nomor Rekening
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control"  class="form-control"  name="nomor_rekening"  placeholder="Nomor Rekening" id="nomor_rekening">
+                <input type="text" class="form-control"  class="form-control"  name="nomor_rekening"  placeholder="Nomor Rekening" id="nomor_rekening"
+                @if($id != -1) value="{{$nomor_rekening}}" @endif>
             </div>
         </div>
         <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nama Rekening
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control"  class="form-control"  name="nama_rekening"  placeholder="Nama Rekening" id="nama_rekening">
+                <input type="text" class="form-control"  class="form-control"  name="nama_rekening"  placeholder="Nama Rekening" id="nama_rekening"
+                @if($id != -1) value="{{$nama_rekening}}" @endif>
             </div>
         </div>
         <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Mata Uang
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control"  class="form-control"  name="mata_uang"  placeholder="Mata Uang" id="mata_uang">
+                <input type="text" class="form-control"  class="form-control"  name="mata_uang"  placeholder="Mata Uang" id="mata_uang"
+                @if($id != -1) value="{{$mata_uang}}" @endif>
             </div>
         </div>
         <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Saldo Temuan
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control nominal"  class="form-control"  name="saldo_akhir"  placeholder="Saldo Temuan" id="saldo_akhir">
+                <input type="text" class="form-control nominal"  class="form-control"  name="saldo_akhir"  placeholder="Saldo Temuan" id="saldo_akhir"
+                @if($id != -1) value="{{$saldo_akhir}}" @endif>
             </div>
         </div>
     </div>

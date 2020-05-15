@@ -12,23 +12,18 @@
                 </select>
             </div>
         </div>
+
         <input type="hidden" name="idtemuan" value="{{$idtemuan}}">
         <input type="hidden" name="jenis" value="{{$jenis}}">
         <input type="hidden" name="idrekomendasi" value="{{$idrekomendasi}}">
         <input type="hidden" name="idform" value="{{$idform}}">
         <input type="hidden" name="id" value="{{$id}}">
-        {{-- <div class="form-group" style="margin-bottom:10px;">
-            <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Tindak Lanjut</small>
-            </label>
-            <div class="col-sm-7">
-                <textarea class="form-control"  name="tindak_lanjut" placeholder="Tindak Lanjut" id="tindak_lanjuttxt"></textarea>
-            </div>
-        </div>    --}}
         <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Pelanggan 
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control"  class="form-control"  name="pelanggan"  placeholder="Pelanggan" id="pelanggan">
+                <input type="text" class="form-control"  class="form-control"  name="pelanggan"  placeholder="Pelanggan" id="pelanggan"
+                @if($id != -1) value="{{$pelanggan}}" @endif>
             </div>
         </div>
        
@@ -36,7 +31,8 @@
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Jumlah Tagihan (Rp)
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control nominal"  class="form-control"  name="tagihan"  placeholder="Jumlah Tagihan" id="tagihan">
+                <input type="text" class="form-control nominal"  class="form-control"  name="tagihan"  placeholder="Jumlah Tagihan" id="tagihan"
+                @if($id != -1) value="{{$tagihan}}" @endif>
             </div>
         </div>
     </div>

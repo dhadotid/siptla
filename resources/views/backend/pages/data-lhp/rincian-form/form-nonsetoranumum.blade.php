@@ -28,9 +28,8 @@
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Keterangan
             </label>
             <div class="col-sm-9">
-                <textarea class="form-control"  class="form-control"  name="keterangan"  placeholder="Keterangan" id="keterangan"></textarea>
+                <textarea class="form-control"  class="form-control"  name="keterangan"  placeholder="Keterangan" id="keterangan">@if($id!=-1){{$keterangan}}@endif</textarea>
             </div>
         </div>
-      
     </div>
 </div>

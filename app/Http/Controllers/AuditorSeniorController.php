@@ -238,7 +238,7 @@ class AuditorSeniorController extends Controller
         }
     }
 
-    public function tindaklanjut_su_index($tahun=null,$rekomid=null,$temuanid=null)
+    public function tindaklanjut_su_index(Request $request,$tahun=null,$rekomid=null,$temuanid=null)
     {
         $tahun=($tahun==null ? date('Y') : $tahun);
         $rekomid=($rekomid==null ? -1 : $rekomid);
@@ -284,7 +284,7 @@ class AuditorSeniorController extends Controller
             $arrayrekomid[$v->id_rekom]=$v->id_rekom;
         }
 
-        $get_tl=TindakLanjutTemuan::whereIn('rekomendasi_id',$arrayrekomid)->get();
+        $get_tl=TindakLanjutTemuan::whereIn('rekomendasi_id',$arrayrekomid)->where('status_review_pic_1', $request->key)->get();
         $tindaklanjut=array();
         foreach($get_tl as $k=>$v)
         {

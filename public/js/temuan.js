@@ -65,9 +65,9 @@ function validasirekom(act) {
                 datatype: 'JSON',
                 success: function (res) {
                     // reloadtable('temuan_' + idtemuan, idtemuan)
-                    $('#temuan_' + idtemuan).load(flagsUrl + '/rekomendasi-data-new/' + idtemuan + '/' + res.status_rekomendasi_id);
+                    // $('#temuan_' + idtemuan).load(flagsUrl + '/rekomendasi-data-new/' + idtemuan + '/' + res.status_rekomendasi_id);
                     $('#modaltambahrekomendasi').modal('hide');
-                    // swal("Berhasil", "Data Rekomendasi Berhasil Di Ubah", "success");
+
                     resetform(act);
                     updatejlhrekomendasi(idtemuan, res.status_rekomendasi_id);
                     setTimeout(function(){
@@ -84,7 +84,7 @@ function validasirekom(act) {
         }
         else if(act=='edit')
         {
-            var idtemuan = $('.d_id_temuan').val();
+            var idtemuan = $('#id_temuan').val();
             var idrekom = $('#idrekom').val();
             // $('#form_rekom_' + act).attr('action', flagsUrl + '/rekomendasi-update/'+idtemuan+'/'+idrekom);
             
@@ -95,9 +95,14 @@ function validasirekom(act) {
                 datatype: 'JSON',
                 success:function(res){
                     // reloadtable('temuan_'+idtemuan, idtemuan)
-                    $('#temuan_' + idtemuan).load(flagsUrl + '/rekomendasi-data-new/' + idtemuan + '/' + res.status_rekomendasi_id);
+                    // $('#temuan_' + idtemuan).load(flagsUrl + '/rekomendasi-data-new/' + idtemuan + '/' + res.status_rekomendasi_id);
                     $('#modalubahrekomendasi').modal('hide');
-                    swal("Berhasil", "Data Rekomendasi Berhasil Di Ubah", "success");
+
+                    swal("Berhasil", "Data Rekomendasi Berhasil Di Ubah", "success").then(
+                        function () {
+                            location.reload();
+                        }
+                    );
                 }
             });
         }
@@ -176,43 +181,45 @@ function rekomedit(idtemuan,idrekom)
     $('#right-div').html('');
     // var idform = $('#idform').val();
     $('#id_temuan').val(idtemuan);
+    $('#idrekom').val(idrekom);
     $.ajax({
         url: flagsUrl + '/rekomendasi-edit-data/' + idrekom,
         success : function(res){
+            console.log(res);
             $('#idform').val(res.id_lhp+''+idtemuan);
-            $('#nomor_temuan').val(res.no_temuan);
-            $('#temuan').val(res.dtemuan.temuan);
-            $('#jenis_temuan').val(res.jenis_temuan);
-            $('#add_no_rekomendasi').val(res.nomor_rekomendasi);
-            $('#add_rekomendasi').val(res.rekomendasi);
-            $('#add_senior_auditor').val(res.senior_user_id).trigger('change');
-            $('#add_nilai_rekomendasi').val(format(res.nominal_rekomendasi));
-            $('#add_pic_1').val(res.pic_1_temuan_id).trigger('change');
+            $('#edit_nomor_temuan').val(res.dtemuan.no_temuan);
+            $('#edit_temuan').val(res.dtemuan.temuan);
+            $('#edit_jenis_temuan').val(res.dtemuan.jenis_temuan_id);
+            $('#edit_no_rekomendasi').val(res.nomor_rekomendasi);
+            $('#edit_rekomendasi').val(res.rekomendasi);
+            $('#edit_senior_auditor').val(res.senior_user_id).trigger('change');
+            $('#edit_nilai_rekomendasi').val(format(res.nominal_rekomendasi));
+            $('#edit_pic_1').val(res.pic_1_temuan_id).trigger('change');
             
 
             if(res.pic_2_temuan_id)
-                $('#add_pic_2').val(res.pic_2_temuan_id).trigger('change');
+                $('#edit_pic_2').val(res.pic_2_temuan_id.split(',')).trigger('change');
 
-            $('#add_status_rekomendasi').val(res.status_rekomendasi_id).trigger('change');
+            $('#edit_status_rekomendasi').val(res.status_rekomendasi_id).trigger('change');
 
-            $('#form_rekom_add').append('<input type="hidden" name="idrekom" value="' + res.rekom_id+'" />');
+            $('#form_rekom_edit').append('<input type="hidden" name="idrekom" value="' + res.rekom_id+'" />');
 
             // alert(res.rincian)
             if (res.rincian)
             {
-                $('#butuh_rincian').prop('checked',true);
-                $('#butuh_rincian_false').prop('checked',false);
+                $('#edit_butuh_rincian').prop('checked',true);
+                $('#edit_butuh_rincian_false').prop('checked',false);
 
                 // $("#rincian_tl").select2("disabled", false);
-                // $("#rincian_tl").attr('disabled', false);
-                $('#rincian_tl').val(res.rincian).trigger('change');
+                $("#edit_rincian_tl").attr('disabled', false);
+                $('#edit_rincian_tl').val(res.rincian).trigger('change');
                 gettablerincianold(res.rincian, idtemuan, idrekom)
             }
             else
             {
-                $('#butuh_rincian').prop('checked', false);
-                $('#butuh_rincian_false').prop('checked', true);
-                $('#rincian_tl').val('').trigger('change');
+                $('#edit_butuh_rincian').prop('checked', false);
+                $('#edit_butuh_rincian_false').prop('checked', true);
+                $('#edit_rincian_tl').val('').trigger('change');
             }
 
 
@@ -229,7 +236,7 @@ function rekomedit(idtemuan,idrekom)
         }
     });
 
-    $('#modaltambahrekomendasi').modal('show')
+    $('#modalubahrekomendasi').modal('show')
 }
 
 //------------------------
@@ -463,27 +470,27 @@ function updatejlhrekomendasi(idtemuan,st_rekom)
     $('#count_temuan_' + idtemuan + '_' + st_rekom).load(flagsUrl + '/update-jlh-rekomendasi/' + idtemuan+'/'+st_rekom);
 }
 
-function cekrbutuhrincian()
+function cekrbutuhrincian(act)
 {
-    if ($('#butuh_rincian').is(':checked')) 
+    if ($('#'+act+'_butuh_rincian').is(':checked')) 
     { 
-        $('#rincian_tl').prop('disabled',false);
+        $('#'+act+'_rincian_tl').prop('disabled',false);
     }
     else
     {
-        $('#rincian_tl').prop('disabled', true);
-        $('#left-div').removeClass('col-md-6');
-        $('#left-div').addClass('col-md-12');
-        $('#right-div').removeClass('col-md-6');
-        $('#right-div').addClass('col-md-0');
-        $('#modal-size').attr({ 'style': 'width:60% !important' });
+        $('#'+act+'_rincian_tl').prop('disabled', true);
+        $('#'+act+'-left-div').removeClass('col-md-6');
+        $('#'+act+'-left-div').addClass('col-md-12');
+        $('#'+act+'-right-div').removeClass('col-md-6');
+        $('#'+act+'-right-div').addClass('col-md-0');
+        $('#'+act+'-modal-size').attr({ 'style': 'width:60% !important' });
     }
 }
 
 function pilihrincianold(val)
 {
     var idtemuan = $('#id_temuan').val();
-    var idrekom = $('.status_rekom').val();
+    var idrekom = $('#idrekom').val();
     if(val!='')
     {
         // alert(val+'-'+ idtemuan+'-'+ idrekom);

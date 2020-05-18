@@ -140,7 +140,7 @@
 										$dst[str_slug($item)]=str_slug($item);
 									@endphp
 									<li><div class="box" style="background: {{$warna}}"></div> 
-										<a href="#">{{$item}} ({{isset($dtl['datasets'][0]['data'][$idx]) ? $dtl['datasets'][0]['data'][$idx] : 0}})</a>
+										<a href="{{url($url.$tahun)}}?key={{str_slug($item)}}">{{$item}} ({{isset($dtl['datasets'][0]['data'][$idx]) ? $dtl['datasets'][0]['data'][$idx] : 0}})</a>
 									</li>
 								@endforeach
 
@@ -148,7 +148,7 @@
 									@if(!in_array(str_slug($item),$dst))
 										<li>
 											<div class="box" style="background: {{generate_color_one()}}"></div> 
-											<a href="#">{{$item}} (0)</a>
+											<a href="{{url($url.$tahun)}}?key={{str_slug($item)}}">{{$item}} (0)</a>
 										</li>
 									@endif
 								@endforeach
@@ -156,7 +156,7 @@
 								@foreach (status_lhp() as $item)
 									<li>
 										<div class="box" style="background: {{generate_color_one()}}"></div> 
-										<a href="#">{{$item}} (0)</a>
+										<a href="{{url($url.$tahun)}}?key={{str_slug($item)}}">{{$item}} (0)</a>
 									</li>
 								@endforeach
 							@endif
@@ -186,7 +186,7 @@
 
 									@endphp
 									<li><div class="box" style="background: {{$warna}}"></div> 
-										<a href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}">{{$item}} ({{isset($doverdue['datasets'][0]['data'][$idx]) ? $doverdue['datasets'][0]['data'][$idx] : 0}})</a>
+										<a href="{{url($url.$tahun)}}?key={{str_slug($item)}}">{{$item}} ({{isset($doverdue['datasets'][0]['data'][$idx]) ? $doverdue['datasets'][0]['data'][$idx] : 0}})</a>
 									</li>
 								@endforeach
 
@@ -195,7 +195,7 @@
 								@foreach (bataswaktu() as $item)
 									<li>
 										<div class="box" style="background: {{generate_color_one()}}"></div> 
-										<a href="#">{{$item}} (0)</a>
+										<a href="{{url($url.$tahun)}}?key={{str_slug($item)}}">{{$item}} (0)</a>
 									</li>
 								@endforeach
 							@endif

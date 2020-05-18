@@ -15,9 +15,9 @@
                     <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
                         <label for="exampleTextInput1" class="col-sm-12 control-label text-left" style="font-size:10px;font-style:italic">Nomor Temuan:</label>
                         <div class="col-sm-12">
-                            <input type="text" class="d_nomor_temuan" name="nomor_temuan" placeholder="Nomor Temuan" id="nomor_temuan"readonly style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;background:#eee !important;width:100%">
+                            <input type="text" class="d_nomor_temuan" name="nomor_temuan" placeholder="Nomor Temuan" id="{{$act}}_nomor_temuan"readonly style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;background:#eee !important;width:100%">
                             <input type="hidden" class="d_id_temuan" name="id_temuan" id="id_temuan">
-                            <input type="hidden" class="d_jenis_temuan" name="jenis_temuan" id="jenis_temuan">
+                            <input type="hidden" class="d_jenis_temuan" name="jenis_temuan" id="{{$act}}_jenis_temuan">
                         </div>
                     </div>
                 </div>
@@ -25,7 +25,7 @@
                     <div class="form-group" style="margin:0px;padding:0px;margin-bottom:10px;">
                         <label for="exampleTextInput1" class="col-sm-12 control-label text-left" style="font-size:10px;font-style:italic">Temuan:</label>
                         <div class="col-sm-12">
-                            <textarea type="text" class="d_temuan" name="temuan" placeholder="Temuan" id="temuan" readonly style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;background:#eee !important;width:100%;min-height:50px"></textarea>
+                            <textarea type="text" class="d_temuan" name="temuan" placeholder="Temuan" id="{{$act}}_temuan" readonly style="padding:0px !important;border:0px;border-bottom:1px dotted #aaa;background:#eee !important;width:100%;min-height:50px"></textarea>
                         </div>
                     </div>
                 </div>
@@ -61,7 +61,7 @@
                 @else
                     
                     <select name="senior_auditor" class="form-control" id="{{$act}}_senior_auditor" data-plugin="select2">
-                        <option value="">-- Pilih --</option>
+                        <option>-- Pilih --</option>
                         @foreach ($senior as $key=>$item)
                             @if (Auth::user()->id==$item->id)
                                 <option value="{{$item->id}}" selected="selected">{{$item->name}}</option>
@@ -86,16 +86,16 @@
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Butuh Rincian ? :
             </label>
             <div class="col-sm-9" style="padding-top:5px;">
-                <div style="width:100px;float:left"><input type="radio" style="float:left;width:20%" onclick="cekrbutuhrincian()" name="butuh_rincian" id="butuh_rincian" value="1"> Ya</div>
-                <div style="width:100px;float:left"><input type="radio"  style="float:left;width:20%" onclick="cekrbutuhrincian()" name="butuh_rincian" id="butuh_rincian_false" value="0" checked> Tidak</div>
+                <div style="width:100px;float:left"><input type="radio" style="float:left;width:20%" onclick="cekrbutuhrincian('{{$act}}')" name="butuh_rincian" id="{{$act}}_butuh_rincian" value="1"> Ya</div>
+                <div style="width:100px;float:left"><input type="radio"  style="float:left;width:20%" onclick="cekrbutuhrincian('{{$act}}')" name="butuh_rincian" id="{{$act}}_butuh_rincian_false" value="0" checked> Tidak</div>
             </div>
         </div>
         <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Rincian Tindak Lanjut :
             </label>
             <div class="col-sm-9">
-                <select name="rincian_tl" class="form-control" disabled id="rincian_tl" data-plugin="select2" onchange="pilihrincianold(this.value)">
-                    <option value="">-- Pilih --</option>
+                <select name="rincian_tl" class="form-control" disabled id="{{$act}}_rincian_tl" data-plugin="select2" onchange="pilihrincianold(this.value)">
+                    <option>-- Pilih --</option>
                     @foreach (rinciantindaklanjut() as $key=>$item)
                             <option value="{{$key}}">{{$item}}</option>
                     @endforeach
@@ -108,7 +108,7 @@
             </label>
             <div class="col-sm-9">
                 <select name="pic_1" class="form-control pic1" id="{{$act}}_pic_1" data-plugin="select2" onchange="aktifinrincian(this.value)">
-                    <option value="">-- Pilih --</option>
+                    <option>-- Pilih --</option>
                     @foreach ($picunit as $item)
                         @if (isset($item->levelpic->nama_level))
                             <option value="{{$item->id}}">{{$item->nama_pic}}</option>
@@ -123,7 +123,7 @@
             </label>
             <div class="col-sm-9">
                 <select name="pic_2[]" class="form-control pic2" id="{{$act}}_pic_2" data-plugin="select2" multiple>
-                    <option value="">-- Pilih --</option>
+                    <option>-- Pilih --</option>
                     @foreach ($picunit as $item)
                         @if (isset($item->levelpic->nama_level))
                             <option value="{{$item->id}}">{{$item->nama_pic}}</option>

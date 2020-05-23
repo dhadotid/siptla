@@ -561,7 +561,11 @@ class DataTemuanController extends Controller
         $dt['jangkawaktu']=$jangkawaktu=JangkaWaktu::orderBy('jangka_waktu')->get();
         $dt['statusrekomendasi']=$statusrekomendasi=StatusRekomendasi::orderBy('rekomendasi')->get();
         
-        $rekom=DataRekomendasi::with('jenistemuan')->with('picunit1')->with('picunit2')->with('jangkawaktu')->with('statusrekomendasi')->get();
+        if(Auth::user()->level=='auditor-senior')
+            $rekom=DataRekomendasi::where('senior_user_id', Auth::id())->with('jenistemuan')->with('picunit1')->with('picunit2')->with('jangkawaktu')->with('statusrekomendasi')->get();
+        else
+            $rekom=DataRekomendasi::with('jenistemuan')->with('picunit1')->with('picunit2')->with('jangkawaktu')->with('statusrekomendasi')->get();
+        
         $rekomendasi=$drekom=$arraytemuanid=array();
         foreach($rekom as $k=>$v)
         {

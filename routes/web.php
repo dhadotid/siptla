@@ -140,10 +140,13 @@ Route::group(['middleware'=>['auth','checkstatus']],function(){
     Route::post('review-pic1-simpan','TindakLanjutController@review_pic1_simpan');
     
     Route::get('form-tindaklanjut-rincian/{idrincian}/{jenis}','TindakLanjutController@form_tindaklanjut_rincian');
-    Route::get('list-tindaklanjut-rincian/{idrincian}/{jenis}/{idtl?}','TindakLanjutController@list_tindaklanjut_rincian');
+    Route::get('list-tindaklanjut-rincian/{idrincian}/{jenis}/{idtl?}/{totalNilai?}','TindakLanjutController@list_tindaklanjut_rincian');
     Route::get('list-rincian-rekomendasi/{idrekomendasi}/{jenis}','TindakLanjutController@list_rincian_rekomendasi');
     Route::get('hapus-rincian/{idrincian}/{jenis}','TindakLanjutController@hapus_rincian_jenis');
-    Route::post('simpan-tindaklanjut-rincian','TindakLanjutController@simpan_tindaklanjut_rincian');
+    Route::post('simpan-tindaklanjut-rincian','TindakLanjutController@simpan_tindaklanjut_rincian')->name('simpan-tindaklanjut-rincian');
+    Route::get('hapus-rincian-tindaklanjut/{idrincian}', 'TindakLanjutController@hapus_tindak_lanjut_rincian');
+    Route::get('get-tindak-lanjut-rincian/{idrincian}', 'TindakLanjutController@get_tindak_lanjut_rincian');
+    Route::get('update-status-rincian/{idtindaklanjut}/{status_rincian}', 'TindakLanjutController@update_status_rincian');
     
     Route::get('list-rincian/{idrekomendasi}/{idunitkerja}/{idtl}','TindakLanjutController@list_rincian');
     

@@ -61,9 +61,9 @@
                                                 @endif
                                                 
                                             </li>
-                                            <li>
+                                            {{--<li>
                                                 <a href="#" data-toggle="modal" data-target="#modalreview" data-value="{{$item->lhp_id}}" class="btn-review"><i class="glyphicon glyphicon-comment"></i> &nbsp;&nbsp;Tanggapan dan Review LHP</a>
-                                            </li>
+                                            </li>--}}
                                             @if (Auth::user()->level=='auditor-senior')  
                                                 @if ($item->status_lhp!='Publish LHP') 
                                                     <li>
@@ -126,9 +126,11 @@
                                                 <a href="#" onclick="detaillhp({{$item->lhp_id}},0)"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail LHP</a>
                                             @endif
                                         </li>
+                                        {{-- 
                                         <li>
                                             <a href="#" data-toggle="modal" data-target="#modalreview" data-value="{{$item->lhp_id}}" class="btn-review"><i class="glyphicon glyphicon-comment"></i> &nbsp;&nbsp;Tanggapan dan Review LHP</a>
                                         </li>
+                                        --}}
                                         @if (Auth::user()->level=='auditor-senior')  
                                             @if ($item->status_lhp!='Publish LHP') 
                                                 <li>

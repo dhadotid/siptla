@@ -94,9 +94,10 @@
             }
         });
         loaddata('{{$tahun}}','{{$statusrekom}}');
-        // loaddatasemua('{{$tahun}}');
         hidealert();
         $('.select').select2();
+        
+        
     </script>
     <style>
     /* .form-inline .btn

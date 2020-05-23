@@ -64,11 +64,17 @@ function addtindaklanjut(jenis, idtemuan, idrekom, id, idPic = -1) {
         selectedPIC2.push($(this).val());
     });
     if(selectedPIC == '' && id == -1)
-        return notif('error', 'Harap pilih PIC terlebih dahulu');
-    if(selectedPIC != '')
+        if($('#modal-update-rincian').hasClass('in')){
+            selectedPIC2.push(idPic);
+        }else{
+            return notif('error', 'Harap pilih PIC terlebih dahulu');
+        }
+    if(selectedPIC != ''){
         selectedPIC2.push(selectedPIC);
-    if(idPic != -1)
+    }
+    if(idPic != -1){
         selectedPIC2.push(idPic);
+    }
     if (jenis == 'sewa') {
         $('#formrinciansewa').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
         $('#form-rincian-sewa').load(flagsUrl + '/form-rincian2/' + jenis + '/' + idtemuan + '/' + idrekom + '/' + id + '/' + selectedPIC2, function () {
@@ -368,8 +374,7 @@ function validasikontribusi() {
     var keterangan = $('#keterangan');
     var jumlah_rekomendasi = $('#jumlah_rekomendasi');
     var tahun = $('#tahun');
-    // var totalnilai = parseFloat(($('#total_nilai').val()).replace(/./g,''));
-    // var nilairekom = parseFloat(($('input.nilai_rekomendasi').val()).replace(/./g,''));
+    var idRekomendasi = $('#idrekomendasi').val();
 
     if (unit_kerja.val() == '')
         notif('error', 'Unit Kerja Belum Dipilih');
@@ -387,6 +392,8 @@ function validasikontribusi() {
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(jumlah_rekomendasi.val().replace(/\./g, ""));
+        if(!isValidNilai(nil) && idRekomendasi != '2')
+            return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalnilai != 0) {
             // alert((totalnilai + nil) +'--'+nilairekom)
             if ((totalnilai + nil) > nilairekom) {
@@ -457,25 +464,18 @@ function validasiformsewa() {
     var tgl_pks = $('#tgl_pks');
     var nilai_perjanjian = $('#nilai_perjanjian');
     var masa_berlaku = $('#masa_berlaku');
-    // var tindak_lanjut = $('#tindak_lanjuttxt');
+    var idRekomendasi = $('#idrekomendasi').val();
 
-    // if (tindak_lanjut.val() == '')
-    //     notif('error', 'Tindak Lanjut Belum Diisi');
-    //     // alert('Tindak Lanjut Belum Diisi')
-    // else 
     if (unit_kerja.val() == '')
         notif('error', 'Unit Kerja Belum Dipilih');
     else if (mitra.val() == '')
         notif('error', 'Nama Mitra Belum Diisi');
-    // else if (no_pks.val() == '')
-    //     notif('error', 'Nomor PKS Belum Diisi');
-    // else if (tgl_pks.val() == '')
-    //     notif('error', 'Tanggal PKS Belum Dipilih');
     else if (nilai_perjanjian.val() == '')
         notif('error', 'Nilai Rekomendasi Belum Diisi');
-    // else if (masa_berlaku.val() == '')
-    //     notif('error', 'Masa Kontrak Belum Dipilih');
     else {
+        var nil = parseFloat(nilai_perjanjian.val().replace(/\./g, ""));
+        if(!isValidNilai(nil) && idRekomendasi != '2')
+            return notif('error', 'Nilai melebihi total rekomendasi');
         //formrinciansewa
         $.ajax({
             url: flagsUrl + '/form-rincian-simpan',
@@ -508,11 +508,8 @@ function validasiformuangmuka() {
     var no_invoice = $('#no_invoice');
     var tgl_pum = $('#tgl_pum');
     var jumlah_um = $('#jumlah_um');
-    // var tindak_lanjut = $('#tindak_lanjuttxt');
+    var idRekomendasi = $('#idrekomendasi').val();
 
-    // if (tindak_lanjut.val() == '')
-    //     notif('error', 'Tindak Lanjut Belum Diisi');
-    // else 
     if (unit_kerja.val() == '')
         notif('error', 'Unit Kerja Belum Dipilih');
     // else if (no_invoice.val() == '')
@@ -522,7 +519,9 @@ function validasiformuangmuka() {
     else if (jumlah_um.val() == '')
         notif('error', 'Jumlah UM Belum Diisi');
     else {
-        //formrinciansewa
+        var nil = parseFloat(jumlah_um.val().replace(/\./g, ""));
+        if(!isValidNilai(nil) && idRekomendasi != '2')
+            return notif('error', 'Nilai melebihi total rekomendasi');
         $.ajax({
             url: flagsUrl + '/form-rincian-simpan',
             data: $('#formrincianuangmuka').serialize(),
@@ -554,11 +553,8 @@ function validasiformlistrik() {
     var lokasi = $('#lokasi');
     var tgl_invoice = $('#tgl_invoice');
     var tagihan = $('#tagihan');
-    // var tindak_lanjut = $('#tindak_lanjuttxt');
+    var idRekomendasi = $('#idrekomendasi').val();
 
-    // if (tindak_lanjut.val() == '')
-    //     notif('error', 'Tindak Lanjut Belum Diisi');
-    // else 
     if (unit_kerja.val() == '')
         notif('error', 'Unit Kerja Belum Dipilih');
     else if (lokasi.val() == '')
@@ -568,7 +564,9 @@ function validasiformlistrik() {
     else if (tagihan.val() == '')
         notif('error', 'Jumlah Tagihan Belum Diisi');
     else {
-        //formrinciansewa
+        var nil = parseFloat(tagihan.val().replace(/\./g, ""));
+        if(!isValidNilai(nil) && idRekomendasi != '2')
+            return notif('error', 'Nilai melebihi total rekomendasi');
         $.ajax({
             url: flagsUrl + '/form-rincian-simpan',
             data: $('#formrincianlistrik').serialize(),
@@ -599,11 +597,8 @@ function validasiformpiutang() {
     var unit_kerja = $('#unit_kerja');
     var pelanggan = $('#pelanggan');
     var tagihan = $('#tagihan');
-    // var tindak_lanjut = $('#tindak_lanjuttxt');
+    var idRekomendasi = $('#idrekomendasi').val();
 
-    // if (tindak_lanjut.val() == '')
-    //     notif('error', 'Tindak Lanjut Belum Diisi');
-    // else 
     if (unit_kerja.val() == '')
         notif('error', 'Unit Kerja Belum Dipilih');
     else if (pelanggan.val() == '')
@@ -611,7 +606,9 @@ function validasiformpiutang() {
     else if (tagihan.val() == '')
         notif('error', 'Jumlah Tagihan Belum Diisi');
     else {
-        //formrinciansewa
+        var nil = parseFloat(tagihan.val().replace(/\./g, ""));
+        if(!isValidNilai(nil) && idRekomendasi != '2')
+            return notif('error', 'Nilai melebihi total rekomendasi');
         $.ajax({
             url: flagsUrl + '/form-rincian-simpan',
             data: $('#formrincianpiutang').serialize(),
@@ -642,11 +639,8 @@ function validasiformpiutangkaryawan() {
     var unit_kerja = $('#unit_kerja');
     var karyawan = $('#karyawan');
     var pinjaman = $('#pinjaman');
-    // var tindak_lanjut = $('#tindak_lanjuttxt');
+    var idRekomendasi = $('#idrekomendasi').val();
 
-    // if (tindak_lanjut.val() == '')
-    //     notif('error', 'Tindak Lanjut Belum Diisi');
-    // else 
     if (unit_kerja.val() == '')
         notif('error', 'Unit Kerja Belum Dipilih');
     else if (karyawan.val() == '')
@@ -654,7 +648,9 @@ function validasiformpiutangkaryawan() {
     else if (pinjaman.val() == '')
         notif('error', 'Jumlah Pinjaman Belum Diisi');
     else {
-        //formrinciansewa
+        var nil = parseFloat(pinjaman.val().replace(/\./g, ""));
+        if(!isValidNilai(nil) && idRekomendasi != '2')
+            return notif('error', 'Nilai melebihi total rekomendasi');
         $.ajax({
             url: flagsUrl + '/form-rincian-simpan',
             data: $('#formrincianpiutangkaryawan').serialize(),
@@ -680,17 +676,26 @@ function validasiformpiutangkaryawan() {
         });
     }
 }
+function updatestatusrinciantindaklanjut(idtidaklanjut, status){
+    $.ajax({
+        url: flagsUrl + '/update-status-rincian/'+idtidaklanjut+'/' + status,
+        success: function(res){
+            swal("Berhasil", "Status telah dirubah", "success");
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            notif('error', errorThrown);
+            console.log(jqXHR + '\n'+textStatus+'\n'+errorThrown);
+        }
+    })
+}
 function validasihutangtitipan() {
     var idlhp = $('#idlhp').val();
     var unit_kerja = $('#unit_kerja');
     var tanggal = $('#tanggal');
     var sisa_hutang = $('#sisa_hutang');
     var sisa_setor = $('#sisa_setor');
-    // var tindak_lanjut = $('#tindak_lanjuttxt');
-
-    // if (tindak_lanjut.val() == '')
-    //     notif('error', 'Tindak Lanjut Belum Diisi');
-    // else 
+    var idRekomendasi = $('#idrekomendasi').val();
+    
     if (unit_kerja.val() == '')
         notif('error', 'Unit Kerja Belum Dipilih');
     else if (tanggal.val() == '')
@@ -700,7 +705,9 @@ function validasihutangtitipan() {
     else if (sisa_setor.val() == '')
         notif('error', 'Jumlah Sisa Setor Belum Diisi');
     else {
-        //formrinciansewa
+        var nil = parseFloat(sisa_hutang.val().replace(/\./g, ""));
+        if(!isValidNilai(nil) && idRekomendasi != '2')
+            return notif('error', 'Nilai melebihi total rekomendasi');
         $.ajax({
             url: flagsUrl + '/form-rincian-simpan',
             data: $('#formrincianhutangtitipan').serialize(),
@@ -780,11 +787,8 @@ function validasiumum() {
     var unit_kerja = $('#unit_kerja');
     var keterangan = $('#keterangan');
     var jumlah_rekomendasi = $('#jumlah_rekomendasi');
-    // var tindak_lanjut = $('#tindak_lanjuttxt');
+    var idRekomendasi = $('#idrekomendasi').val();
 
-    // if (tindak_lanjut.val() == '')
-    //     notif('error', 'Tindak Lanjut Belum Diisi');
-    // else 
     if (unit_kerja.val() == '')
         notif('error', 'Unit Kerja Belum Dipilih');
     else if (keterangan.val() == '')
@@ -792,7 +796,9 @@ function validasiumum() {
     else if (jumlah_rekomendasi.val() == '')
         notif('error', 'Nilai Rekomendasi (Rp) Belum Diisi');
     else {
-        //formrinciansewa
+        var nil = parseFloat(jumlah_rekomendasi.val().replace(/\./g, ""));
+        if(!isValidNilai(nil) && idRekomendasi != '2')
+            return notif('error', 'Nilai melebihi total rekomendasi');
         $.ajax({
             url: flagsUrl + '/form-rincian-simpan',
             data: $('#formrincianumum').serialize(),

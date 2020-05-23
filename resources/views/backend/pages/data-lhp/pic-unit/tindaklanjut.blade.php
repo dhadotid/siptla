@@ -131,8 +131,8 @@
                         <div class="row" style="margin-bottom:20px;">
                             <div class="col-md-8">&nbsp;</div>
                             <div class="col-md-4 text-right">
-                                <a class="btn btn-xs btn-primary"><i class="fa fa-print"></i> Cetak Data</a>
-                                <a class="btn btn-xs btn-success"><i class="fa fa-file-excel-o"></i> Export Ke Excel</a>
+                                <!-- <a class="btn btn-xs btn-primary"><i class="fa fa-print"></i> Cetak Data</a>
+                                <a class="btn btn-xs btn-success"><i class="fa fa-file-excel-o"></i> Export Ke Excel</a> -->
                             </div>
                         </div>
 
@@ -527,7 +527,7 @@
                                                         
                                                         if($v->rincian!='')
                                                         {
-                                                            $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Update Rincian</a></li>';
+                                                            $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Update Tindak Lanjut Rincian</a></li>';
                                                         }
                                                         $aksi.='</ul></div>
                                                             </div>';
@@ -615,7 +615,7 @@
                                                             }
                                                             if($v->rincian!='')
                                                             {
-                                                                $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Update Rincian</a></li>';
+                                                                $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Update Tindak Lanjut Rincian</a></li>';
                                                             }
                                                             $aksi.='</ul>
                                                             </div></div>';
@@ -662,11 +662,12 @@
 
 @section('footscript')
     <link rel="stylesheet" href="{{asset('theme/backend/libs/misc/datatables/datatables.min.css')}}"/>
-    <script src="{{asset('theme/backend/libs/misc/datatables/datatables.min.js')}}"></script>
     <link rel="stylesheet" href="{{asset('css/noty.css')}}"/>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
     <script src="{{ asset('vendor/unisharp/laravel-ckeditor/ckeditor.js') }}"></script>
     <script src="{{asset('js/tindak-lanjut.js')}}"></script>
     <script src="{{asset('js/noty.js')}}"></script>
+    <script src="{{asset('theme/backend/libs/misc/datatables/datatables.min.js')}}"></script>
     <script>
 
         $.ajaxSetup({

@@ -122,8 +122,8 @@
                         <div class="row" style="margin-bottom:20px;">
                             <div class="col-md-8">&nbsp;</div>
                             <div class="col-md-4 text-right">
-                                <a class="btn btn-xs btn-primary"><i class="fa fa-print"></i> Cetak Data</a>
-                                <a class="btn btn-xs btn-success"><i class="fa fa-file-excel-o"></i> Export Ke Excel</a>
+                                <!-- <a class="btn btn-xs btn-primary"><i class="fa fa-print"></i> Cetak Data</a>
+                                <a class="btn btn-xs btn-success"><i class="fa fa-file-excel-o"></i> Export Ke Excel</a> -->
                             </div>
                         </div>
 

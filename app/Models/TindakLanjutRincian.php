@@ -34,4 +34,8 @@ class TindakLanjutRincian extends Model
     public function dokumen_tindak_lanjut() {
         return $this->hasMany('App\Models\DokumenTindakLanjut', 'id_tindak_lanjut_temuan');
     }
+
+    function bankTujuan(){
+        return $this->belongsTo('App\Models\BankList','bank_tujuan');
+    }
 }

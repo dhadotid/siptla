@@ -60,7 +60,7 @@
                     @csrf
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Rincian Nilai – Rekomendasi Pembayaran Sewa – Sewa</h4>
+                        <h4 class="modal-title">Rincian Nilai – Rekomendasi Pembayaran Sewa</h4>
                     </div>
                     <div class="modal-body">
                         <div id="form-rincian-sewa"></div>
@@ -228,53 +228,10 @@
 		</div>
 	</div>  
 {{-- END Modal Rincian Umum--}}
-{{-- Modal Rincian Umum--}}
- <div class="modal fade" id="modalrinciankontribusi"  role="dialog" style="z-index:10000 !important;">
-		<div class="modal-dialog">
-			<div class="modal-content">
-                <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrinciankontribusi">
-                    @csrf
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Rincian Nilai – Rekomendasi Kontribusi </h4>
-                    </div>
-                    <div class="modal-body">
-                        <div id="form-rincian-kontribusi"></div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
-                        <input type="button" onclick="validasikontribusi()" class="btn btn-success" value="Simpan">
-                    </div>
-				</form>
-			</div>
-		</div>
-	</div>  
-{{-- END Modal Rincian Umum--}}
-{{-- Modal Rincian Umum--}}
- <div class="modal fade" id="modalrinciannonsetoranperjanjiankerjasama"  role="dialog" style="z-index:10000 !important;">
-		<div class="modal-dialog">
-			<div class="modal-content">
-                <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrinciannonsetoranperjanjiankerjasama">
-                    @csrf
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Rincian Nilai – Rekomendasi Perjanjian Kerjasama</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div id="form-rincian-nonsetoranperjanjiankerjasama"></div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
-                        <input type="button" onclick="validasinonsetoranperjanjiankerjasama()" class="btn btn-success" value="Simpan">
-                    </div>
-				</form>
-			</div>
-		</div>
-	</div>  
-{{-- END Modal Rincian Umum--}}
+
 {{-- Modal Rincian--}}
  <div class="modal fade" id="modalrincian" role="dialog">
-		<div class="modal-dialog modal-lg">
+		<div class="modal-dialog modal-lg" style="width:90%;">
 			<div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -284,7 +241,7 @@
                     <div id="table-rincian"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-success">Tutupssss</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-success">Tutup</button>
                 </div>
 			</div>
 		</div>
@@ -315,12 +272,22 @@
 			<div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Rincian Tindak Lanjut</h4>
+                    <h4 class="modal-title" id="modaltitleaddtindaklanjutrincian">Rincian Tindak Lanjut</h4>
                 </div>
-                <form method="POST" class="form-horizontal" id="form_tindaklanjut_rincian" enctype="multipart/form-data">
+                <form method="POST" class="form-horizontal" action="{{ route('simpan-tindaklanjut-rincian') }}" id="form_tindaklanjut_rincian" enctype="multipart/form-data">
                     <div class="modal-body">
                         <div id="form-tindaklanjut-rincian"></div>
+                        <br>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow=""
+                            aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                0%
+                            </div>
+                        </div>
                     </div>
+                    <input type="hidden" name="isupdate" id="isupdate" value="0">
+                    <input type="hidden" name="idtindaklanjut" id="idtindaklanjut">
+                    <input type="hidden" name="totalnilai" id="totalnilai">
                     <div class="modal-footer">
                         <button type="button" data-dismiss="modal" class="btn btn-success">Tutup</button>
                         <button type="submit" class="btn btn-info"><i class="fa fa-save"></i> Simpan</button>
@@ -330,13 +297,13 @@
 		</div>
 	</div>  
 {{-- END Modal Rincian--}}
-{{-- Modal TIndal Lanjut--}}
- <div class="modal fade" id="listtindaklanjutrincian" role="dialog" style="z-index:100000 !important">
-		<div class="modal-dialog modal-lg">
+{{-- Modal TIndal Lanjut  style="z-index:100000 !important" --}}
+ <div class="modal fade" id="listtindaklanjutrincian" role="dialog">
+		<div class="modal-dialog modal-lg" style="width:90%;">
 			<div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Detail Data Rincian Nilai</h4>
+                    <h4 class="modal-title">Detail Tindak Lanjut</h4>
                 </div>
                     <div class="modal-body">
                         <div id="list-tindaklanjut-rincian"></div>
@@ -386,12 +353,55 @@
 		</div>
 	</div>  
 {{-- END Modal Rincian--}}
-
+{{-- Modal Rincian Umum--}}
+ <div class="modal fade" id="modalrinciankontribusi"  role="dialog" style="z-index:10000 !important;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+                <form method="POST" class="form-horizontal" id="formrinciankontribusi">
+                    @csrf
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Rincian Nilai – Rekomendasi Kontribusi </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="form-rincian-kontribusi"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
+                        <input type="button" onclick="validasikontribusi()" class="btn btn-success" value="Simpan">
+                    </div>
+				</form>
+			</div>
+		</div>
+	</div>  
+{{-- END Modal Rincian Umum--}}
+{{-- Modal Rincian Umum--}}
+ <div class="modal fade" id="modalrinciannonsetoranperjanjiankerjasama"  role="dialog" style="z-index:10000 !important;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+                <form method="POST" class="form-horizontal" id="formrinciannonsetoranperjanjiankerjasama">
+                    @csrf
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Rincian Nilai – Rekomendasi Perjanjian Kerjasama</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="form-rincian-nonsetoranperjanjiankerjasama"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Batal</button>
+                        <input type="button" onclick="validasinonsetoranperjanjiankerjasama()" class="btn btn-success" value="Simpan">
+                    </div>
+				</form>
+			</div>
+		</div>
+	</div>  
+{{-- END Modal Rincian Umum--}}
 {{-- Modal Rincian Umum--}}
  <div class="modal fade" id="modalrinciannonsetoran"  role="dialog" style="z-index:10000 !important;">
 		<div class="modal-dialog">
 			<div class="modal-content">
-                <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrinciannonsetoran">
+                <form method="POST" class="form-horizontal" id="formrinciannonsetoran">
                     @csrf
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -414,7 +424,7 @@
  <div class="modal fade" id="modalrinciannonsetoranumum"  role="dialog" style="z-index:10000 !important;">
 		<div class="modal-dialog">
 			<div class="modal-content">
-                <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrinciannonsetoranumum">
+                <form method="POST" class="form-horizontal" id="formrinciannonsetoranumum">
                     @csrf
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -437,7 +447,7 @@
  <div class="modal fade" id="modalrinciannonsetoranpertanggungjawabanuangmuka"  role="dialog" style="z-index:10000 !important;">
 		<div class="modal-dialog">
 			<div class="modal-content">
-                <form action="{{ url('rincian-simpan/'.$idlhp) }}" method="POST" class="form-horizontal" id="formrinciannonsetoranpertanggungjawabanuangmuka">
+                <form method="POST" class="form-horizontal" id="formrinciannonsetoranpertanggungjawabanuangmuka">
                     @csrf
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -453,7 +463,9 @@
 				</form>
 			</div>
 		</div>
-	</div>  
+    </div>  
+    
+{{-- beberapa ini dihapus action="{{ url('rincian-simpan/'.$idlhp) }}" --}}
 {{-- END Modal Rincian Umum--}}
 
 

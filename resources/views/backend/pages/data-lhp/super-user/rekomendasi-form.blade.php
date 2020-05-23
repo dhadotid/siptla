@@ -72,7 +72,7 @@
                 <br><small style="font-size:9px;color:red;font-style:italic">*wajib diisi</small>
             </label>
             <div class="col-sm-9">
-                <input type="text" class="form-control nominal nilai_rekomendasi"  name="nilai_rekomendasi"  placeholder="Nilai Rekomendasi" id="{{$act}}_nilai_rekomendasi">
+            <input type="text" class="form-control nominal nilai_rekomendasi"  name="nilai_rekomendasi"  placeholder="Nilai Rekomendasi" id="{{$act}}_nilai_rekomendasi">
             </div>
             <input type="hidden" name="idform" id="idform">
         </div>
@@ -88,7 +88,7 @@
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Rincian Tindak Lanjut :
             </label>
             <div class="col-sm-9">
-                <select name="rincian_tl" class="form-control" disabled id="rincian_tl" data-plugin="select2" onchange="pilihrincianold(this.value)">
+                <select name="rincian_tl" class="form-control" disabled id="rincian_tl" data-plugin="select2" onchange="pilihrincianold(this.value, '{{$act}}')">
                     <option value="">-- Pilih --</option>
                     @foreach (rinciantindaklanjut() as $key=>$item)
                             <option value="{{$key}}">{{$item}}</option>

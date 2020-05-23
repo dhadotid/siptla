@@ -60,7 +60,6 @@
 			<div class="widget-body">
                 <div class="">
                    
-                    
                     <div class="row" style="margin-top:10px;font-size:20px;">
                         <div class="col-md-12">
                             @if ($errors->any())
@@ -148,10 +147,12 @@
                                                             </button>
                                                             <ul class="dropdown-menu" role="menu">
                                                                 @if (! $data->publish_flag)
-                                                                    <li>
-                                                                        <a href="#" class="" onclick="rekomadd('{{$item->temuan_id}}')" data-toggle="modal" data-target="#modaltambahrekomendasi" data-value="{{$item->temuan_id}}"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Rekomendasi Temuan</a>
-                                                                    </li>
+                                                                    
                                                                     @if (Auth::user()->level != 'pic-unit')
+                                                                        <li>
+                                                                            <a href="#" class="" onclick="rekomadd('{{$item->temuan_id}}')" data-toggle="modal" data-target="#modaltambahrekomendasi" data-value="{{$item->temuan_id}}"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Rekomendasi Temuan</a>
+                                                                        </li>
+                                                                    
                                                                         <li>
                                                                             <a href="#" class="btn-edit-temuan" data-toggle="modal" data-target="#modalubah" data-value="{{ $item->temuan_id }}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit Temuan</a>
                                                                         </li>

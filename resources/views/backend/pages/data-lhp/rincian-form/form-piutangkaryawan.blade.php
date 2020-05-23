@@ -14,7 +14,7 @@
         </div>
         <input type="hidden" name="idtemuan" value="{{$idtemuan}}">
         <input type="hidden" name="jenis" value="{{$jenis}}">
-        <input type="hidden" name="idrekomendasi" value="{{$idrekomendasi}}">
+        <input type="hidden" name="idrekomendasi" id="idrekomendasi" value="{{$idrekomendasi}}">
         <input type="hidden" name="idform" value="{{$idform}}">
         <input type="hidden" name="id" value="{{$id}}">
         <div class="form-group" style="margin-bottom:10px;">

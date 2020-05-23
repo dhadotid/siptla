@@ -1,4 +1,4 @@
-<h3 class="text-center">Rincian Nilai Hutang Titipan</h3><table class="table table-bordered" id="table-rincian">
+<h3 class="text-center">Rincian Nilai Hutang Titipan</h3><table class="table table-bordered" id="table-rincian-hutangtitipan">
             <thead>
                 <tr class="inverse">
                     <th class="text-center">No</th>
@@ -26,10 +26,51 @@
                     <td class="text-center">{{rupiah($v->saldo_hutang)}}</td>
                     <td class="text-center">{{rupiah($v->sisa_setor)}}</td>
                     <td class="text-center">
-                        <div style="width:80px;">
-                            <a href="javascript:addtindaklanjutrincian({{$v->id}},'hutangtitipan')" class="btn-delete btn btn-xs btn-info"><i class="glyphicon glyphicon-plus"></i></a>&nbsp;
-                            <a href="javascript:listtindaklanjutrincian({{$v->id}},'hutangtitipan')" class="btn-edit btn btn-xs btn-success"><i class="glyphicon glyphicon-list"></i></a>
-                        </div>
+                        @if (Auth::user()->level == 'pic-unit')
+                            <a href="javascript:addtindaklanjutrincian({{$v->id}},'hutangtitipan','{{Config::get('constants.rincian.hutangtitipan')}}')" class="btn-delete btn btn-xs btn-info"><i class="glyphicon glyphicon-plus"></i></a>&nbsp;
+                        @else
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;"><span class="caret"></span></button>&nbsp;
+                                <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr class="inverse">
+                                                <th class="text-center">Status Tindak Lanjut Rincian</th>
+                                                <th class="text-center">Nilai Rekomendasi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($status_rekomendasi as $rekom)
+                                            <tr>
+                                                    @if($rekom->flag==0)
+                                                        <td class="text-center">{{$rekom->rekomendasi}}</td>
+                                                    @endif
+                                                    @if(count($rinciantindaklanjut) == 0)
+                                                        @if($rekom->id == 3)
+                                                            <td class="text-center">{{rupiah($v->saldo_hutang)}}</td>
+                                                        @else
+                                                            <td class="text-center">0</td>
+                                                        @endif
+                                                    @else
+                                                        @foreach($rinciantindaklanjut as $rtl)
+                                                            @if($rtl->rekomendasi == $rekom->rekomendasi)
+                                                                <td class="text-center">{{rupiah($rtl->sum)}}</td>
+                                                                @php $totalbtl = $v->saldo_hutang - $rtl->sum; @endphp
+                                                            @elseif($rekom->id == 3)
+                                                                <td class="text-center">{{rupiah($totalbtl)}}</td>
+                                                            @else
+                                                                <td class="text-center">0</td>
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </ul>
+                            </div>
+                        @endif
+                        <a href="javascript:listtindaklanjutrincian({{$v->id}},'hutangtitipan')" class="btn-edit btn btn-xs btn-success"><i class="glyphicon glyphicon-list"></i></a>
                     </td>
                 </tr>
                 @php

@@ -154,10 +154,13 @@ function update_rincian(rekom_id,temuan_id)
     });
     $('#modal-update-rincian').modal('show')
 }
-function getrincainTables(title, jenis, idtemuan, idrekom){
+function getrincainTables(title, jenis, idtemuan, idrekom, level, seniorPublish){
+    //disini cek dia pic atau bukan kalo iya, di hide button addnya idnya -> tombol-add-rincian
     document.getElementById('modaltitle').textContent = title;
     $('#form-rincian').load(flagsUrl + '/load-table-rincian/' + jenis + '/' + idtemuan + '/' + idrekom,  function () {
         $('#rincian_tl').select2();
+        if(level == 'pic-unit' || seniorPublish == 1)
+            $("#tombol-add-rincian").hide();
         $('#table-tl-rincian-'+idrekom).DataTable({
             "bAutoWidth": false,
             "bDestroy": true

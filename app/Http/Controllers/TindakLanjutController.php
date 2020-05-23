@@ -27,6 +27,9 @@ use App\Models\RincianNonSetoran;
 use App\Models\RincianNonSetoranUmum;
 use App\Models\RincianNonSetoranPertanggungjawabanUangMuka;
 use Auth;
+use App\Models\BankList;
+use Validator;
+
 class TindakLanjutController extends Controller
 {
     public function index($id_rekom,$idtemuan)
@@ -556,6 +559,12 @@ class TindakLanjutController extends Controller
         $rinc['titipan']=RincianHutangTitipan::whereIn('id_rekomendasi',$arrayrekomid)->get();
         $rinc['penutupanrekening']=RincianPenutupanRekening::whereIn('id_rekomendasi',$arrayrekomid)->get();
         $rinc['umum']=RincianUmum::whereIn('id_rekomendasi',$arrayrekomid)->get();
+        //
+        $rinc['kontribusi']=RincianKontribusi::whereIn('id_rekomendasi',$arrayrekomid)->get();
+        $rinc['nonsetoranperjanjiankerjasama'] = RincianNonSetoranPerpanjanganPerjanjianKerjasama::whereIn('id_rekomendasi',$arrayrekomid)->get();
+        $rinc['nonsetoran'] = RincianNonSetoran::whereIn('id_rekomendasi',$arrayrekomid)->get();
+        $rinc['nonsetoranumum'] = RincianNonSetoranUmum::whereIn('id_rekomendasi',$arrayrekomid)->get();
+        $rinc['nonsetoranpertanggungjawabanuangmuka'] = RincianNonSetoranPertanggungjawabanUangMuka::whereIn('id_rekomendasi',$arrayrekomid)->get();
 
         $rincian=array();
         foreach($rinc as $jns=>$det)
@@ -585,7 +594,6 @@ class TindakLanjutController extends Controller
         {
             $rinc[$v->id_rekomendasi][]=$v;
         }
-        
         // return $tindaklanjut;
         return view('backend.pages.data-lhp.pic-unit.tindaklanjut')
                 ->with('jumlahtl',$jlhtl)
@@ -676,7 +684,7 @@ class TindakLanjutController extends Controller
     {
         $tahun=($request->tahun ? $request->tahun : date('Y'));
         $rekomid=($request->rekomid ? $request->rekomid : -1);
-        $temuanid=($request->temuanid ? $request->temuanid : -1);
+        $temuanid=($request->temuan_id ? $request->temuan_id : -1);
         $statusrekom=($request->statusrekom ? $request->statusrekom : -1);
         $pemeriksa=($request->pemeriksa ? $request->pemeriksa : -1);
         $no_lhp=($request->no_lhp ? $request->no_lhp : -1);
@@ -695,6 +703,12 @@ class TindakLanjutController extends Controller
         }
 
         $wh=array();
+        if($request->pemeriksa!='')
+        {
+            if($request->pemeriksa!=0)
+                $wh['daftar_lhp.pemeriksa_id']=$request->pemeriksa;
+        }
+
         if($request->rekomid!='')
         {
             if($request->rekomid!=0)
@@ -713,12 +727,6 @@ class TindakLanjutController extends Controller
                 $wh['data_rekomendasi.status_rekomendasi_id']=$request->statusrekom;
         }
 
-        if($request->pemeriksa!='')
-        {
-            if($request->pemeriksa!=0)
-                $wh['daftar_lhp.pemeriksa_id']=$request->pemeriksa;
-        }
-
         // return $wh;
         $pemeriksaa=Pemeriksa::orderBy('code')->get();
         $jlhtl=$this->jlh_tindaklanjut();
@@ -726,7 +734,7 @@ class TindakLanjutController extends Controller
         $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
                                 ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
                                 ->where('daftar_lhp.status_lhp','Publish LHP')
-                                ->where('daftar_lhp.tahun_pemeriksa',$tahun)
+                                // ->where('daftar_lhp.tahun_pemeriksa',$tahun)
                                 ->where($wh)
                                 ->where(function($query) use ($user_pic){
                                     $query->where('data_rekomendasi.pic_1_temuan_id', $user_pic->id);
@@ -758,6 +766,12 @@ class TindakLanjutController extends Controller
         $rinc['titipan']=RincianHutangTitipan::whereIn('id_rekomendasi',$arrayrekomid)->get();
         $rinc['penutupanrekening']=RincianPenutupanRekening::whereIn('id_rekomendasi',$arrayrekomid)->get();
         $rinc['umum']=RincianUmum::whereIn('id_rekomendasi',$arrayrekomid)->get();
+        //
+        $rinc['kontribusi']=RincianKontribusi::whereIn('id_rekomendasi',$arrayrekomid)->get();
+        $rinc['nonsetoranperjanjiankerjasama'] = RincianNonSetoranPerpanjanganPerjanjianKerjasama::whereIn('id_rekomendasi',$arrayrekomid)->get();
+        $rinc['nonsetoran'] = RincianNonSetoran::whereIn('id_rekomendasi',$arrayrekomid)->get();
+        $rinc['nonsetoranumum'] = RincianNonSetoranUmum::whereIn('id_rekomendasi',$arrayrekomid)->get();
+        $rinc['nonsetoranpertanggungjawabanuangmuka'] = RincianNonSetoranPertanggungjawabanUangMuka::whereIn('id_rekomendasi',$arrayrekomid)->get();
 
         $rincian=array();
         foreach($rinc as $jns=>$det)
@@ -807,7 +821,7 @@ class TindakLanjutController extends Controller
         
         return view('backend.pages.data-lhp.pic-unit.tindaklanjut-list')
                 ->with('jumlahtl',$jlhtl)
-                ->with('tahun',$tahun)
+                // ->with('tahun',$tahun)
                 ->with('jlhrincian',$rinc)
                 ->with('rekomid',$rekomid)
                 ->with('strekom',$st)
@@ -1118,6 +1132,7 @@ class TindakLanjutController extends Controller
 
     public function form_tindaklanjut_rincian($idrincian,$jenis)
     {
+        $bank = BankList::all();
         if($jenis=='sewa')
         {
             $idform=abs(crc32(sha1(md5(rand()))));
@@ -1131,6 +1146,7 @@ class TindakLanjutController extends Controller
             $idform=abs(crc32(sha1(md5(rand()))));
             return view('backend.pages.data-lhp.rincian-form.pic-unit.form-uangmuka')
                     ->with('idrincian',$idrincian)
+                    ->with('bank', $bank)
                     ->with('idform',$idform)
                     ->with('jenis',$jenis);
         }
@@ -1148,6 +1164,7 @@ class TindakLanjutController extends Controller
             return view('backend.pages.data-lhp.rincian-form.pic-unit.form-piutang')
                     ->with('idrincian',$idrincian)
                     ->with('idform',$idform)
+                    ->with('bank', $bank)
                     ->with('jenis',$jenis);
         }
         elseif($jenis=='piutangkaryawan')
@@ -1179,6 +1196,7 @@ class TindakLanjutController extends Controller
             $idform=abs(crc32(sha1(md5(rand()))));
             return view('backend.pages.data-lhp.rincian-form.pic-unit.form-umum')
                     ->with('idrincian',$idrincian)
+                    ->with('bank', $bank)
                     ->with('idform',$idform)
                     ->with('jenis',$jenis);
         }
@@ -1215,8 +1233,9 @@ class TindakLanjutController extends Controller
                     ->with('jenis',$jenis);
         }
     }
-    public function list_tindaklanjut_rincian($idrincian,$jenis,$idtl=null)
+    public function list_tindaklanjut_rincian($idrincian,$jenis,$idtl=null, $totalNilai=-1)
     {
+        $status_rekomendasi = StatusRekomendasi::all();
         if($jenis=='sewa')
         {
             $rincian=RincianSewa::find($idrincian);
@@ -1268,7 +1287,9 @@ class TindakLanjutController extends Controller
             $rinciantindaklanjut=TindakLanjutRincian::where('id_temuan',$rincian->id_temuan)
                     ->where('id_rekomendasi',$rincian->id_rekomendasi)
                     ->where('unit_kerja_id',($rincian ? $rincian->unit_kerja_id : 0))
-                    ->get();
+                    ->where('jenis', $jenis)
+                    ->join('bank', 'tindak_lanjut_rincian.bank_tujuan', '=', 'bank.id')
+                    ->get(['tindak_lanjut_rincian.*', 'bank.bank as bank_tujuan_name']);
 
         }
 
@@ -1279,8 +1300,17 @@ class TindakLanjutController extends Controller
                     ->with('unitkerja',$unitkerja)
                     ->with('rinciantindaklanjut',$rinciantindaklanjut)
                     ->with('rincian',$rincian)
-                    ->with('jenis',$jenis);
+                    ->with('jenis',$jenis)
+                    ->with('status_rekomendasi', $status_rekomendasi)
+                    ->with('totalnilai',$totalNilai);
     }
+
+    public function update_status_rincian($idtindaklanjut, $status_rincian){
+        $tindaklanjut = TindakLanjutRincian::find($idtindaklanjut);
+        $tindaklanjut->status_rincian = $status_rincian;
+        $tindaklanjut->save();
+    }
+
     public function list_rincian_rekomendasi($idrekomendasi,$jenis)
     {
         
@@ -1351,6 +1381,17 @@ class TindakLanjutController extends Controller
 
     public function simpan_tindaklanjut_rincian(Request $request)
     {
+        $isUpdate = $request->isupdate;
+        if($request->totalnilai!=-1){
+            return response()->json(['errors'=>['Nilai melebihi total nilai.']]);
+        }
+        $validator = Validator::make($request->all(), [
+            'tanggal' => 'required'
+        ]);
+
+        if (!$validator->passes()) {
+            return response()->json(['errors'=>$validator->errors()->all()]);
+        }
         // return $request->all();
         $idrincian=$request->idrincian;
         $jenis=$request->jenis;
@@ -1380,37 +1421,58 @@ class TindakLanjutController extends Controller
             $rincian=RincianNonSetoranUmum::find($idrincian);
         elseif($jenis=='nonsetoranpertanggungjawabanuangmuka')
             $rincian=RincianNonSetoranPertanggungjawabanUangMuka::find($idrincian);
-
-        $rincian->id_tindak_lanjut=$request->idform;
-        $rincian->save();
-
+        
         $id_rekomendasi=$rincian->id_rekomendasi;
-        $path='-';
-        if($request->hasFile('file_pendukung')){
-            $file = $request->file('file_pendukung');
-            // $new_name = rand() . '.' . $file->getClientOriginalExtension(); 
-            $filenameWithExt = $request->file('file_pendukung')->getClientOriginalName();
-            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-            $extension = $request->file('file_pendukung')->getClientOriginalExtension();
-            $fileNameToStore = time().'.'.$extension;
-            // $fileNameToStore = rand() . '.' . $file->getClientOriginalExtension(); 
-            $path = $request->file('file_pendukung')->storeAs('public/dokumen',$fileNameToStore);
 
-            // $dokumen=new DokumenTindakLanjut;
-            // $dokumen->id_tindak_lanjut_temuan=$tindak_id;
-            // $dokumen->nama_dokumen=$fileNameToStore;
-            // $dokumen->path=$path;
-            // $dokumen->save();
+        $path='-';
+        $documentJSON = [];
+        if((int)$request->total_file > 0){
+            for($i = 1; $i <= (int)$request->total_file; $i++){
+                $idNamaFile = ('nama_file_'.$i);
+                if($request->hasFile('add_dokumen_'.$i)){
+                    $file = $request->file('add_dokumen_'.$i);
+                    $extension = $request->file('add_dokumen_'.$i)->getClientOriginalExtension();
+                    $filename = $request->$idNamaFile;
+                    $fileNameToStore = $filename.'.'.$extension;
+                    $path = $request->file('add_dokumen_'.$i)->storeAs('public/dokumen',$fileNameToStore);
+                    $documentJSON[] = [
+                        'file' => $path
+                    ];
+                }
+            }
         }
+        // if($request->hasFile('file_pendukung')){
+        //     $file = $request->file('file_pendukung');
+        //     // $new_name = rand() . '.' . $file->getClientOriginalExtension(); 
+        //     $filenameWithExt = $request->file('file_pendukung')->getClientOriginalName();
+        //     $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+        //     $extension = $request->file('file_pendukung')->getClientOriginalExtension();
+        //     $fileNameToStore = time().'.'.$extension;
+        //     // $fileNameToStore = rand() . '.' . $file->getClientOriginalExtension(); 
+        //     $path = $request->file('file_pendukung')->storeAs('public/dokumen',$fileNameToStore);
+
+        //     // $dokumen=new DokumenTindakLanjut;
+        //     // $dokumen->id_tindak_lanjut_temuan=$tindak_id;
+        //     // $dokumen->nama_dokumen=$fileNameToStore;
+        //     // $dokumen->path=$path;
+        //     // $dokumen->save();
+        // }
         $rekommm=DataRekomendasi::where('id',$id_rekomendasi)->with('dtemuan')->first();
         $user_pic=PICUnit::where('id_user',Auth::user()->id)->first();
         
         $insert=new TindakLanjutRincian;
+        if($isUpdate == '1'){
+            $insert=TindakLanjutRincian::find($request->idtindaklanjut);
+            if($documentJSON)
+                $insert->dokumen_pendukung = json_encode($documentJSON);
+        }else{
+            $insert->dokumen_pendukung = json_encode($documentJSON);
+        }
+        
         $insert->id_temuan = $rincian->id_temuan;
         $insert->id_rekomendasi = $rincian->id_rekomendasi;
         $insert->unit_kerja_id = $rincian->unit_kerja_id;
         $insert->id_tindak_lanjut = $request->idform;
-        $insert->dokumen_pendukung = $path;
         $insert->jenis = $request->jenis;
 
         if($user_pic)
@@ -1449,35 +1511,47 @@ class TindakLanjutController extends Controller
 
         if($jenis=='penutupanrekening')
         {
-
-            $insert->nama_bank = $request->nama_bank;
-            $insert->nomor_rekening = $request->nomor_rekening;
-            $insert->nama_rekening = $request->nama_rekening;
-            $insert->jenis_rekening = $request->jenis_rekening;
+            $insert->tanggal = $request->tanggal;
+            $insert->tindak_lanjut_rincian = $request->tindak_lanjut;
+            $insert->tanggal_penutupan = $request->tanggal_penutupan_rekening;
             $insert->saldo_akhir = str_replace('.','',$request->saldo_akhir);
-            
+            $insert->no_rek_pemindah_saldo = $request->no_rekening_pemindahan_saldo;
+            $insert->nama_rekening_pemindah_saldo = $request->nama_rekening_pemindahan_saldo;
         }
 
         if($jenis=='umum')
         {
-            $insert->jumlah_rekomendasi = str_replace('.','',$request->jumlah_rekomendasi);
-            $insert->dokumen_pendukung = $request->dokumen_pendukung;
-            $insert->keterangan = $request->keterangan;
-        }
-        if($jenis == 'nonsetoranperjanjiankerjasama' || $jenis == 'nonsetoran' || 
-            $jenis == 'nonsetoranumum' || $jenis == 'nonsetoranpertanggungjawabanuangmuka'){
-            $insert->nama_bank = $request->nama_bank;
-            $insert->nomor_rekening = $request->nomor_rekening;
-            $insert->nama_rekening = $request->nama_rekening;
+            $insert->tindak_lanjut_rincian = $request->tindak_lanjut;
+            $insert->nilai = str_replace('.','',$request->nilai);
+            $insert->tanggal = $request->tanggal;
+            $insert->jenis_setoran = $request->jenis_setoran;
+            $insert->bank_tujuan = $request->bank_tujuan;
+            $insert->no_referensi = $request->no_ref;
             $insert->jenis_rekening = $request->jenis_rekening;
-            $insert->saldo_akhir = str_replace('.','',$request->saldo_akhir);
         }
+        if($jenis == 'nonsetoranperjanjiankerjasama'){
+            $insert->tanggal = $request->tanggal;
+            $insert->tindak_lanjut_rincian = $request->tindak_lanjut;
+            $insert->no_pks = $request->no_pks;
+            $insert->tanggal_pks = $request->tanggal_pks;
+            $insert->periode_pks = $request->periode_perpanjangan_pks;
+        }
+
+        if($jenis == 'nonsetoran' || $jenis == 'nonsetoranpertanggungjawabanuangmuka' || $jenis == 'nonsetoranumum'){
+            $insert->tanggal = $request->tanggal;
+            $insert->tindak_lanjut_rincian = $request->tindak_lanjut;
+            $insert->nilai = str_replace('.','',$request->nilai);
+        }
+
         $insert->save();
+        
+        $rincian->id_tindak_lanjut=$insert->id;
+        $rincian->save();
 
         $data['jenis']=$insert->jenis;
         $data['temuan_id']=$insert->id_temuan;
         $data['rekomendasi_id']=$insert->id_rekomendasi;
-
+        $data['idrincian']=$idrincian;
         
         return $data;
     }
@@ -1556,6 +1630,23 @@ class TindakLanjutController extends Controller
             echo 1;
         else
             echo 0;
+    }
+
+    function hapus_tindak_lanjut_rincian($idrincian){
+        $tlr = TindakLanjutRincian::find($idrincian);
+        $del = $tlr->delete();
+
+        if($del)
+            echo 1;
+        else
+            echo 2;
+    }
+
+    function get_tindak_lanjut_rincian($idrincian){
+        $rinciantindaklanjut=TindakLanjutRincian::where('tindak_lanjut_rincian.id',$idrincian)
+                    ->join('bank', 'tindak_lanjut_rincian.bank_tujuan', '=', 'bank.id')
+                    ->get(['tindak_lanjut_rincian.*', 'bank.bank as bank_tujuan_name']);
+        return json_encode($rinciantindaklanjut);
     }
 
     function list_rincian($idrekomendasi,$idunitkerja,$idtl)

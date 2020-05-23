@@ -24,6 +24,15 @@ function validasiadd(act) {
     }
 }
 
+$('.nilai_rekomendasi').on('input', function(){
+    var nominal = parseFloat(this.value.replace(/\./g, ""));
+    if ($('#butuh_rincian').is(':checked') && getCookie('total_nilai')!=null){ 
+        var total_nilai = parseFloat(getCookie('total_nilai').replace(/\./g, ""));
+        if(nominal >= total_nilai)
+            return notif('error', 'Nilai rekomendasi melebihi total rincian');
+    }
+});
+
 function validasirekom(act) {
     var norekomendasi = $('#'+act+'_no_rekomendasi');
     var rekomendasi = $('#'+act+'_rekomendasi');
@@ -197,10 +206,11 @@ function rekomedit(idtemuan,idrekom)
             $('#add_senior_auditor').val(res.senior_user_id).trigger('change');
             $('#add_nilai_rekomendasi').val(format(res.nominal_rekomendasi));
             $('#add_pic_1').val(res.pic_1_temuan_id).trigger('change');
-            
 
-            if(res.pic_2_temuan_id)
-                $('#add_pic_2').val(res.pic_2_temuan_id).trigger('change');
+            if(res.pic_2_temuan_id){
+                var arrayPIC2 = res.pic_2_temuan_id.split(',');
+                $('#add_pic_2').val(arrayPIC2.slice(0, -1)).trigger('change');
+            }
 
             $('#add_status_rekomendasi').val(res.status_rekomendasi_id).trigger('change');
 
@@ -251,6 +261,7 @@ $('#datatable-temuan tbody').on('click', 'span.rekomendasi-detail', function () 
     if (row.child.isShown()) {
         // This row is already open - close it
         // table.ajax.reload();
+
         row.child.hide();
         tr.removeClass('shown');
     }
@@ -489,7 +500,7 @@ function cekrbutuhrincian()
     }
 }
 
-function pilihrincianold(val)
+function pilihrincianold(val, action)
 {
     var idtemuan = $('#id_temuan').val();
     var idrekom = $('.status_rekom').val();
@@ -502,7 +513,7 @@ function pilihrincianold(val)
         $('#right-div').addClass('col-md-6');
         $('#modal-size').attr({'style':'width:95% !important'});
         
-        gettablerincianold(val, idtemuan, idrekom)
+        gettablerincianold(val, idtemuan, idrekom, action)
     }
     else
     {
@@ -514,7 +525,7 @@ function pilihrincianold(val)
     }
 }
 
-function gettablerincianold(jenis, idtemuan, idrekom)
+function gettablerincianold(jenis, idtemuan, idrekom, action)
 {
     if($('#modal-update-rincian').hasClass('in')){
         $('#form-rincian').load(flagsUrl + '/load-table-rincian/' + jenis + '/' + idtemuan + '/' + idrekom,  function () {
@@ -530,6 +541,11 @@ function gettablerincianold(jenis, idtemuan, idrekom)
             $('#table-tl-rincian-'+idrekom).DataTable( {
                 responsive: true
             } );
+
+            var totalNilai = parseFloat($(this).parent().find('input[type="hidden"][name="total_nilai"]').val());
+            var nominal = parseFloat($('#'+action+'_nilai_rekomendasi').val().replace(/\./g, ""));
+            if(nominal >= totalNilai && totalNilai != '-1')
+                return notif('error', 'Nilai rekomendasi melebihi total rincian');
         });
     }
 }
@@ -552,6 +568,12 @@ function getCookie(name) {
         if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
     }
     return null;
+}
+function isValidNilai(inputValue){
+    var totalNilai = parseFloat(getCookie('total_nilai').replace(/\./g, ""));
+    if(inputValue > totalNilai)
+        return false;
+    return true;
 }
 function eraseCookie(name) {   
     document.cookie = name+'=; Max-Age=-99999999;';  
@@ -845,6 +867,8 @@ function validasiformsewa()
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(nilai_perjanjian.val().replace(/\./g, ""));
+        if(!isValidNilai(nil))
+            return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalnilai != 0) {
             // alert((totalnilai + nil) +'--'+nilairekom)
             if ((totalnilai + nil) > nilairekom) {
@@ -929,6 +953,8 @@ function validasiformuangmuka() {
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(jumlah_um.val().replace(/\./g, ""));
+        if(!isValidNilai(nil))
+            return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalnilai != 0) {
             // alert((totalnilai + nil) +'--'+nilairekom)
             if ((totalnilai + nil) > nilairekom) {
@@ -1008,6 +1034,8 @@ function validasiformlistrik() {
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(tagihan.val().replace(/\./g, ""));
+        if(!isValidNilai(nil))
+            return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalnilai != 0) {
             // alert((totalnilai + nil) +'--'+nilairekom)
             if ((totalnilai + nil) > nilairekom) {
@@ -1085,6 +1113,8 @@ function validasiformpiutang() {
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(tagihan.val().replace(/\./g, ""));
+        if(!isValidNilai(nil))
+            return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalnilai != 0) {
             // alert((totalnilai + nil) +'--'+nilairekom)
             if ((totalnilai + nil) > nilairekom) {
@@ -1163,6 +1193,8 @@ function validasiformpiutangkaryawan() {
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(pinjaman.val().replace(/\./g, ""));
+        if(!isValidNilai(nil))
+            return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalnilai != 0) {
             // alert((totalnilai + nil) +'--'+nilairekom)
             if ((totalnilai + nil) > nilairekom) {
@@ -1243,6 +1275,8 @@ function validasihutangtitipan() {
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(sisa_setor.val().replace(/\./g, ""));
+        if(!isValidNilai(nil))
+            return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalnilai != 0) {
             // alert((totalnilai + nil) +'--'+nilairekom)
             if ((totalnilai + nil) > nilairekom) {
@@ -1402,6 +1436,8 @@ function validasiumum() {
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(jumlah_rekomendasi.val().replace(/\./g, ""));
+        if(!isValidNilai(nil))
+            return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalnilai != 0) {
             // alert((totalnilai + nil) +'--'+nilairekom)
             if ((totalnilai + nil) > nilairekom) {
@@ -1483,6 +1519,8 @@ function validasikontribusi() {
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(jumlah_rekomendasi.val().replace(/\./g, ""));
+        if(!isValidNilai(nil))
+            return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalnilai != 0) {
             // alert((totalnilai + nil) +'--'+nilairekom)
             if ((totalnilai + nil) > nilairekom) {

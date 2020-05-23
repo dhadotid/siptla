@@ -329,7 +329,6 @@ class RincianSewaController extends Controller
                     ->with('pinjaman', rupiah($rincianData[0]->pinjaman));
             }
             return view('backend.pages.data-lhp.rincian-form.form-piutangkaryawan')
-                ->with('rincianData', $rincianData)
                 ->with('jenis',$jenis)
                 ->with('idtemuan',$idtemuan)
                 ->with('idrekomendasi',$idrekomendasi)

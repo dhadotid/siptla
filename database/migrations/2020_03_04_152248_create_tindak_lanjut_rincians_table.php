@@ -24,6 +24,7 @@ class CreateTindakLanjutRinciansTable extends Migration
             $table->text('tindak_lanjut_rincian')->nullable();
             $table->double('nilai')->nullable()->default(0);
             $table->date('tanggal')->nullable();
+            $table->date('tanggal_penutupan')->nullable();
             $table->string('jenis_setoran')->nullable();
             $table->string('bank_tujuan')->nullable();
             $table->string('no_referensi')->nullable();

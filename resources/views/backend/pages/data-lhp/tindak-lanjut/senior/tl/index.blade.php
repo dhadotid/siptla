@@ -135,8 +135,8 @@
                         <div class="row" style="margin-bottom:20px;">
                             <div class="col-md-8">&nbsp;</div>
                             <div class="col-md-4 text-right">
-                                <a class="btn btn-xs btn-primary"><i class="fa fa-print"></i> Cetak Data</a>
-                                <a class="btn btn-xs btn-success"><i class="fa fa-file-excel-o"></i> Export Ke Excel</a>
+                                <!-- <a class="btn btn-xs btn-primary"><i class="fa fa-print"></i> Cetak Data</a>
+                                <a class="btn btn-xs btn-success"><i class="fa fa-file-excel-o"></i> Export Ke Excel</a> -->
                             </div>
                         </div>
 
@@ -360,7 +360,7 @@
                                                             
                                                         if($v->rincian!='')
                                                         {
-                                                            $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Lihat Rincian</a></li>';
+                                                            $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Lihat Tindak Lanjut Rincian</a></li>';
                                                         }
                                                         $aksi.='</ul>
                                                         </div></div>';
@@ -410,7 +410,7 @@
 
                                                             if($v->rincian!='')
                                                             {
-                                                                $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Lihat Rincian</a></li>';
+                                                                $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Lihat Tindak Lanjut Rincian</a></li>';
                                                             }
                                                             $aksi.='</ul>
                                                             </div></div>';
@@ -430,7 +430,7 @@
                                                                     <li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
                                                             if($v->rincian!='')
                                                             {
-                                                                $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Lihat Rincian</a></li>';
+                                                                $aksi.=' <li><a href="javascript:updaterincian_unitkerja('.$v->id.','.$v->id_temuan.',\''.$v->rincian.'\')" style="font-size:11px;"><i class="menu-icon zmdi zmdi-view-dashboard zmdi-hc-lg"></i> &nbsp;&nbsp;Lihat Tindak Lanjut Rincian</a></li>';
                                                             }
                                                             $aksi.='</ul>
                                                                 </div>

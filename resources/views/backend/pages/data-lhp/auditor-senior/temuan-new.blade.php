@@ -57,8 +57,6 @@
             <hr class="widget-separator">
 			<div class="widget-body">
                 <div class="">
-                   
-                    
                     <div class="row" style="margin-top:10px;font-size:20px;">
                         <div class="col-md-12">
                             @if ($errors->any())

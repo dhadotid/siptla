@@ -1,27 +1,27 @@
-<h3 class="text-center">Rincian Nilai – Rekomendasi Piutang</h3><table class="table table-bordered" id="table-rincian-piutang">
+<h3 class="text-center">Rincian Nilai – Rekomendasi Kontribusi</h3><table class="table table-bordered"  id="table-rincian-kontribusi">
             <thead>
                 <tr class="inverse">
                     <th class="text-center">No</th>
                     <th class="text-center">Unit Kerja</th>
-                    <th class="text-center">Pelanggan</th>
-                    <th class="text-center">Jumlah Tagihan</th>
+                    <th class="text-center">Keterangan</th>
+                    <th class="text-center">Nilai Rekomendasi (Rp)</th>
                     <th class="text-center">Aksi</th>
                 </tr>
             </thead><tbody>
+
             @php
                 $no=1;
                 $totalnilai=0;
             @endphp
             @foreach($rincian as $k=>$v)
-
                 <tr>
                     <td class="text-center">{{$no}}</td>
                     <td class="text-center">{{$v->unit_kerja}}</td>
-                    <td class="text-center">{{$v->pelanggan}}</td>
-                    <td class="text-center">{{rupiah($v->tagihan)}}</td>
+                    <td class="text-center">{{$v->keterangan}}</td>
+                    <td class="text-center">{{rupiah($v->nilai_penerimaan)}}</td>
                     <td class="text-center">
                         @if (Auth::user()->level == 'pic-unit')
-                        <a href="javascript:addtindaklanjutrincian({{$v->id}},'piutang','{{$v->tagihan}}','{{Config::get('constants.rincian.piutang')}}')" class="btn-delete btn btn-xs btn-info"><i class="glyphicon glyphicon-plus"></i></a>&nbsp;
+                            <a href="javascript:addtindaklanjutrincian({{$v->id}},'kontribusi','{{$v->nilai_penerimaan}}','{{Config::get('constants.rincian.kontribusi')}}')" class="btn-delete btn btn-xs btn-info"><i  class="glyphicon glyphicon-plus"></i></a>&nbsp;
                         @else
                             <div class="btn-group">
                                 <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;"><span class="caret"></span></button>&nbsp;
@@ -41,7 +41,7 @@
                                                     @endif
                                                     @if(count($rinciantindaklanjut) == 0)
                                                         @if($rekom->id == 3)
-                                                            <td class="text-center">{{rupiah($v->tagihan)}}</td>
+                                                            <td class="text-center">{{rupiah($v->nilai_penerimaan)}}</td>
                                                         @else
                                                             <td class="text-center">0</td>
                                                         @endif
@@ -49,7 +49,7 @@
                                                         @foreach($rinciantindaklanjut as $rtl)
                                                             @if($rtl->rekomendasi == $rekom->rekomendasi)
                                                                 <td class="text-center">{{rupiah($rtl->sum)}}</td>
-                                                                @php $totalbtl = $v->tagihan - $rtl->sum; @endphp
+                                                                @php $totalbtl = $v->nilai_penerimaan - $rtl->sum; @endphp
                                                             @elseif($rekom->id == 3)
                                                                 <td class="text-center">{{rupiah($totalbtl)}}</td>
                                                             @else
@@ -64,24 +64,24 @@
                                 </ul>
                             </div>
                         @endif
-                        <a href="javascript:listtindaklanjutrincian({{$v->id}},'piutang','{{$v->tagihan}}')" class="btn-edit btn btn-xs btn-success"><i class="glyphicon glyphicon-list"></i></a>
+                        <a href="javascript:listtindaklanjutrincian({{$v->id}},'kontribusi','{{$v->nilai_penerimaan}}')" class="btn-edit btn btn-xs btn-success"><i class="glyphicon glyphicon-list"></i></a>
                     </td>
                 </tr>
                 @php
                     $no++;
-                    $totalnilai+=$v->tagihan;
+                    $totalnilai+=$v->jumlah_rekomendasi;
                 @endphp
             @endforeach
             @if (isset($idtl))
                 <input type="hidden" id="idformtindaklanjut" name="idformtindaklanjut" value="{{$idtl}}">
             @endif
+  
             <input type="hidden" id="total_nilai" value="{{$totalnilai}}">
-
             @if (Auth::user()->level != 'pic-unit')
-            <tr >
-                <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut('piutang','{{$idtemuan}}','{{$idrekomendasi}}',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
-            </tr>
+                    <tr >
+                        <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut('kontribusi','{{$idtemuan}}','{{$idrekomendasi}}',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
+                    </tr>
             @endif
-
+                
             </tbody>
             </table>

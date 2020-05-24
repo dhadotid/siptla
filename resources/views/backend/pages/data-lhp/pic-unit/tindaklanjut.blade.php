@@ -201,7 +201,7 @@
                                 @foreach ($temuan as $idlhp=>$item)
                                     @php
                                         $norekom=$tglselesai=$aksi=$rincian=$rinc='';
-                                        $tem='<div class="row" style="height:80px;border-bottom:1px dotted #ddd">';
+                                        $tem='<div class="row" style="height:140px;border-bottom:1px dotted #ddd">';
                                         $tem.='<div class="col-md-12 text-center"><small><i>Nomor LHP</i> : </small> <b><u>'.$item->no_lhp.'</u></b></div>
                                             <div class="col-md-2"><small><i>Nomor</i></small><br>
                                             <b>'.$item->no_temuan.'</b>
@@ -221,11 +221,11 @@
                                         }
                                         
                                         $tem.='</div>';
-                                        $tgl='<div class="row" style="height:80px;border-bottom:1px dotted #ddd">&nbsp;</div>';
-                                        $pic2='<div class="row" style="height:80px;border-bottom:1px dotted #ddd">&nbsp;</div>';
-                                        $aksi='<div class="row" style="height:80px;border-bottom:1px dotted #ddd">&nbsp;</div>';
-                                        $tindak_lanjut='<div class="row" style="height:80px;border-bottom:1px dotted #ddd">&nbsp;</div>';
-                                        $rinc='<div class="row" style="height:80px;border-bottom:1px dotted #ddd">&nbsp;</div>';
+                                        $tgl='<div class="row" style="height:140px;border-bottom:1px dotted #ddd">&nbsp;</div>';
+                                        $pic2='<div class="row" style="height:140px;border-bottom:1px dotted #ddd">&nbsp;</div>';
+                                        $aksi='<div class="row" style="height:140px;border-bottom:1px dotted #ddd">&nbsp;</div>';
+                                        $tindak_lanjut='<div class="row" style="height:140px;border-bottom:1px dotted #ddd">&nbsp;</div>';
+                                        $rinc='<div class="row" style="height:140px;border-bottom:1px dotted #ddd">&nbsp;</div>';
                                         
                                         
                                         $rinc.='<div class="row" style="height:20px;border-bottom:1px dotted #ddd">';
@@ -233,29 +233,29 @@
                                         $rinc.='</div>';
 
                                         $tem.='<div class="row" style="height:20px;border-bottom:1px dotted #ddd">';
-                                        $tem.='<div class="col-md-1"><small><i>Status</i></small></div>';
-                                        $tem.='<div class="col-md-1"><small><i>No.</i></small></div>';
-                                        $tem.='<div class="col-md-10"><small><i>Rekomendasi</i></small></div>';
+                                        $tem.='<div class="col-md-2"><small><i>Status</i></small></div>';
+                                        $tem.='<div class="col-md-1"><small><i>&nbsp;No.</i></small></div>';
+                                        $tem.='<div class="col-md-9"><small><i>Rekomendasi</i></small></div>';
                                         $tem.='</div>';
 
                                         $tgl.='<div class="row" style="height:20px;border-bottom:1px dotted #ddd">';
-                                        $tgl.='<div class="col-md-2">&nbsp;</div>';
-                                        $tgl.='<div class="col-md-10">&nbsp;</div>';
+                                        $tgl.='<div class="col-md-3">&nbsp;</div>';
+                                        $tgl.='<div class="col-md-9">&nbsp;</div>';
                                         $tgl.='</div>';
 
                                         $pic2.='<div class="row" style="height:20px;border-bottom:1px dotted #ddd">';
-                                        $pic2.='<div class="col-md-2">&nbsp;</div>';
-                                        $pic2.='<div class="col-md-10">&nbsp;</div>';
+                                        $pic2.='<div class="col-md-3">&nbsp;</div>';
+                                        $pic2.='<div class="col-md-9">&nbsp;</div>';
                                         $pic2.='</div>';
                                         
                                         $tindak_lanjut.='<div class="row" style="height:20px;border-bottom:1px dotted #ddd">';
-                                        $tindak_lanjut.='<div class="col-md-2">&nbsp;</div>';
-                                        $tindak_lanjut.='<div class="col-md-10">&nbsp;</div>';
+                                        $tindak_lanjut.='<div class="col-md-3">&nbsp;</div>';
+                                        $tindak_lanjut.='<div class="col-md-9">&nbsp;</div>';
                                         $tindak_lanjut.='</div>';
 
                                         $aksi.='<div class="row" style="height:20px;border-bottom:1px dotted #ddd">';
-                                        $aksi.='<div class="col-md-2">&nbsp;</div>';
-                                        $aksi.='<div class="col-md-10">&nbsp;</div>';
+                                        $aksi.='<div class="col-md-3">&nbsp;</div>';
+                                        $aksi.='<div class="col-md-9">&nbsp;</div>';
                                         $aksi.='</div>';
                                         if(isset($rekomendasi[$item->id_temuan]))
                                         {
@@ -268,15 +268,15 @@
                                                 else
                                                     $text_rekom=$v->rekomendasi;
 
-                                                $tem.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">';
+                                                $tem.='<div class="row" style="height:140px;border-bottom:1px dotted #ddd;padding:5px 0">';
 
                                                 if(isset($strekom[$v->status_rekomendasi_id]))
-                                                    $tem.='<div class="col-md-1 text-center"><span data-toggle="tooltip" title="'.$strekom[$v->status_rekomendasi_id]->rekomendasi.'" data-placement="right" class="label label-'.(warnasingkatanstatus(singkatanstatus($strekom[$v->status_rekomendasi_id]->rekomendasi))).'">'.singkatanstatus($strekom[$v->status_rekomendasi_id]->rekomendasi).'</span></div>';
+                                                    $tem.='<div class="col-md-2 text-center"><span data-toggle="tooltip" title="'.$strekom[$v->status_rekomendasi_id]->rekomendasi.'" data-placement="right" class="label label-'.(warnasingkatanstatus(singkatanstatus($strekom[$v->status_rekomendasi_id]->rekomendasi))).'">'.singkatanstatus($strekom[$v->status_rekomendasi_id]->rekomendasi).'</span></div>';
                                                 else
-                                                    $tem.='<div class="col-md-1 text-center">-</div>';
+                                                    $tem.='<div class="col-md-2 text-center">-</div>';
 
                                                 $tem.='<div class="col-md-1 text-center">'.$v->nomor_rekomendasi.'</div>';
-                                                $tem.='<div class="col-md-10">'.$text_rekom.'</div>';
+                                                $tem.='<div class="col-md-9">'.$text_rekom.'</div>';
                                                 $tem.='</div>';
 
                                                 $tem.='</div>';
@@ -285,14 +285,14 @@
                                                 // if(isset($gettindaklanjut[$v->id]))
                                                 if(isset($jumlahtl[$v->id]))
                                                 {
-                                                    $tindak_lanjut.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">';
+                                                    $tindak_lanjut.='<div class="row" style="height:140px;border-bottom:1px dotted #ddd;padding:5px 0">';
                                                     $tindak_lanjut.='<div class="col-md-12 text-center"><span class="label label-info fz-sm">'.count($gettindaklanjut[$v->id]).'</span></div>';
                                                     $tindak_lanjut.='</div>';
                                                     $jlhtl=count($jumlahtl[$v->id]);
                                                 }
                                                 else
                                                 {
-                                                    $tindak_lanjut.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">';
+                                                    $tindak_lanjut.='<div class="row" style="height:140px;border-bottom:1px dotted #ddd;padding:5px 0">';
                                                     // $tindak_lanjut.='<div class="col-md-12 text-center"><span class="label label-danger">0</span></div>';
                                                     $tindak_lanjut.='<div class="col-md-12 text-center" id="jlh_tl_'.$item->id_temuan.'_'.$v->id.'"><span class="label label-danger fz-sm">0</span></div>';
                                                     $tindak_lanjut.='</div>';
@@ -306,7 +306,7 @@
                                                     // if(isset($rincian[$v->rincian][$v->id_rekomendasi]))
                                                     if(isset($jumlahrincian[$v->id_rekom]))
                                                     {
-                                                        $rinc.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">';
+                                                        $rinc.='<div class="row" style="height:140px;border-bottom:1px dotted #ddd;padding:5px 0">';
                                                         $rinc.='<div class="col-md-12 text-center" style="margin-top:5px;"><span class="label label-primary fz-sm" id="jlh-rincian-'.$v->id_rekom.'" style="cursor:pointer" onclick="listrincianrekomendasi('.$v->id_rekom.',\''.$v->rincian.'\')">'.count($jumlahrincian[$v->id_rekom]).'</i></div>';
                                                         $rinc.='</div>';
                                                         // $jlhrincian=count($rincian[$v->rincian][$v->id_rekomendasi]);
@@ -314,14 +314,14 @@
                                                     }
                                                     else
                                                     {
-                                                        $rinc.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">';
+                                                        $rinc.='<div class="row" style="height:140px;border-bottom:1px dotted #ddd;padding:5px 0">';
                                                         $rinc.='<div class="col-md-12 text-center" style="margin-top:5px;"><span class="label label-inverse">0</i></div>';
                                                         $rinc.='</div>';
                                                     }
                                                 }
                                                 else
                                                 {
-                                                    $rinc.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">';
+                                                    $rinc.='<div class="row" style="height:140px;border-bottom:1px dotted #ddd;padding:5px 0">';
                                                     $rinc.='<div class="col-md-12 text-center" style="margin-top:5px;"><span class="label label-success">Tidak Ada</i></div>';
                                                     $rinc.='</div>';
                                                 }
@@ -332,7 +332,7 @@
                                                 {
                                                     // print_r($listpic2);
                                                    
-                                                    $pic2.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:280px;"><div class="col-md-12 text-left">';
+                                                    $pic2.='<div class="row" style="height:140px;border-bottom:1px dotted #ddd;padding:5px 0;width:280px;"><div class="col-md-12 text-left">';
                                                         $c=1;
                                                         $t_pic='';
                                                         $c=0;
@@ -354,12 +354,12 @@
                                                         $pic2.='</div></div>';
                                                 }
                                                 else
-                                                    $pic2.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:280px;"><div class="col-md-12 text-left">-</div></div>';
+                                                    $pic2.='<div class="row" style="height:140px;border-bottom:1px dotted #ddd;padding:5px 0;width:280px;"><div class="col-md-12 text-left">-</div></div>';
 
-                                                $tgl.='<div style="height:80px;"  id="tgl_penyelesaian_'.$item->id_temuan.'_'.$v->id.'">';
+                                                $tgl.='<div style="height:140px;"  id="tgl_penyelesaian_'.$item->id_temuan.'_'.$v->id.'">';
                                                 if($v->tanggal_penyelesaian!='')
                                                 {
-                                                    $tgl.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;">
+                                                    $tgl.='<div class="row" style="height:140px;border-bottom:1px dotted #ddd;padding:5px 0;">
                                                             <div class="col-md-12">'.tgl_indo($v->tanggal_penyelesaian).'</div>
                                                         </div>';
                                                     // $tglselesai.='<li style="height:32px;">'.tgl_indo($val->tanggal_penyelesaian).'</li>';
@@ -368,7 +368,7 @@
                                                 {
                                                     if($st_period==1)
                                                     {
-                                                        $tgl.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0">
+                                                        $tgl.='<div class="row" style="height:140px;border-bottom:1px dotted #ddd;padding:5px 0">
                                                                 <div class="col-md-12">
                                                                 <div class="input-group date" id="datetimepicker2" >
                                                                     <input type="text" data-plugin="datepicker" data-date-format="dd/mm/yyyy" class="form-control" name="tanggal_penyelesaian" id="tanggal_penyelesaian_'.$item->id_temuan.'_'.$v->id.'" value="'.date('d/m/Y').'" style="height:30px !important;width:90px !important;min-width:70px !important;font-size:11px; "/>
@@ -379,7 +379,7 @@
                                                     }
                                                     else
                                                     {
-                                                        $tgl.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;">
+                                                        $tgl.='<div class="row" style="height:140px;border-bottom:1px dotted #ddd;padding:5px 0;">
                                                             <div class="col-md-12">Periode Review Bulan Berjalan Telah Berakhir</div>
                                                         </div>';
                                                     }
@@ -424,7 +424,7 @@
                                                         {
                                                             $togl='data-toggle="tooltip" title="PIC 2 Belum Mengisi Tindak Lanjut"';
                                                         }
-                                                        $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
+                                                        $aksi.='<div class="row" style="height:140px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
                                                                 <div class="btn-group" style="'.$styleaksi.'" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
                                                                     <button '.$togl.' type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
                                                                     <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
@@ -464,7 +464,7 @@
                                                         
                                                         if(in_array($user_pic->id,$listpic2))
                                                         {
-                                                            $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
+                                                            $aksi.='<div class="row" style="height:140px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
                                                                 <div data-toggle="tooltip" title="Data Rekomendasi Sudah Publish Ke PIC 1" class="btn-group" style="'.$styleaksi.'" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
                                                                     <button type="button" class="btn btn-success btn-xs" style="height:28px;"><i class="fa fa-check"></i></button>
                                                                     <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
@@ -485,7 +485,7 @@
                                                             $icon='fa-check';
                                                             $color='success';
                                                             $toggle='data-toggle="tooltip" title="Data Rekomendasi Sudah Publish Ke Auditor"';
-                                                            $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
+                                                            $aksi.='<div class="row" style="height:140px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
                                                             <div  class="btn-group" style="'.$styleaksi.'" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
                                                                 <button '.$toggle.' type="button" class="btn btn-'.$color.' btn-xs" style="height:28px;"><i class="fa '.$icon.'"></i></button>
                                                                 <button type="button" class="btn btn-'.$color.' btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
@@ -501,7 +501,7 @@
                                                         }
                                                         else
                                                         {
-                                                            $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
+                                                            $aksi.='<div class="row" style="height:140px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
                                                                 <div class="btn-group" style="'.$styleaksi.'" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
                                                                     <button type="button" class="btn btn-primary btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
                                                                     <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
@@ -545,7 +545,7 @@
                                                             $color='primary';
                                                             $toggle='';
                                                         }
-                                                        $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
+                                                        $aksi.='<div class="row" style="height:140px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
                                                             <div  class="btn-group" style="'.$styleaksi.'" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
                                                                 <button '.$toggle.' type="button" class="btn btn-'.$color.' btn-xs" style="height:28px;"><i class="fa '.$icon.'"></i></button>
                                                                 <button type="button" class="btn btn-'.$color.' btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
@@ -623,7 +623,7 @@
                                                 }
                                                 else
                                                 {
-                                                    $aksi.='<div class="row" style="height:80px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
+                                                    $aksi.='<div class="row" style="height:140px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
                                                                 <div class="btn-group">
                                                                     <button data-toggle="tooltip" title="Periode Review bulan Berjalan Telah Berakhir" type="button" class="btn btn-default btn-xs" style="height:28px;"><i class="fa fa-bars"></i></button>
                                                                     <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
@@ -638,13 +638,13 @@
                                         }
                                     @endphp
                                     <tr>
-                                        <td class="text-center" style="font-size:11px !important;">{{$no}}</td>
-                                        <td class="text-left" style="font-size:11px !important;">{!!$tem!!}</td>
-                                        <td class="text-left" style="font-size:11px !important;">{!!$pic2!!}</td>
-                                        <td class="text-center" style="font-size:11px !important;">{!!$tgl!!}</td>
-                                        <td class="text-left" style="font-size:11px !important;">{!!$tindak_lanjut!!}</td>
-                                        <td class="text-center" style="font-size:11px !important;">{!!$rinc!!}</td>
-                                        <td class="text-center" style="font-size:11px !important;">{!!$aksi!!}</td>
+                                        <td class="text-center" style="font-size:15px !important;">{{$no}}</td>
+                                        <td class="text-left" style="font-size:15px !important;">{!!$tem!!}</td>
+                                        <td class="text-left" style="font-size:15px !important;">{!!$pic2!!}</td>
+                                        <td class="text-center" style="font-size:15px !important;">{!!$tgl!!}</td>
+                                        <td class="text-left" style="font-size:15px !important;">{!!$tindak_lanjut!!}</td>
+                                        <td class="text-center" style="font-size:15px !important;">{!!$rinc!!}</td>
+                                        <td class="text-center" style="font-size:15px !important;">{!!$aksi!!}</td>
                                     </tr>
                                     @php
                                         $no++;

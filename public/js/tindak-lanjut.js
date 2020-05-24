@@ -14,6 +14,7 @@ function loaddata() {
         type: 'POST',
         data: { pemeriksa: pemeriksa, no_lhp:no_lhp, rekomid: no_rekomendasi, temuan_id: no_temuan, statusrekom: status_rekomendasi },
         beforeSend: function(){
+            // console.log(this.data);
         },
         success: function (res) {
             $('#data').html(res);

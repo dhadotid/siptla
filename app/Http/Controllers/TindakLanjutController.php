@@ -594,6 +594,7 @@ class TindakLanjutController extends Controller
         {
             $rinc[$v->id_rekomendasi][]=$v;
         }
+
         // return $tindaklanjut;
         return view('backend.pages.data-lhp.pic-unit.tindaklanjut')
                 ->with('jumlahtl',$jlhtl)
@@ -726,6 +727,11 @@ class TindakLanjutController extends Controller
             if($request->statusrekom!=0)
                 $wh['data_rekomendasi.status_rekomendasi_id']=$request->statusrekom;
         }
+        if($request->no_lhp!='')
+        {
+            if($request->no_lhp!=0)
+                $wh['daftar_lhp.id']=$request->no_lhp;
+        }
 
         // return $wh;
         $pemeriksaa=Pemeriksa::orderBy('code')->get();
@@ -818,11 +824,11 @@ class TindakLanjutController extends Controller
         {
             $rinc[$v->id_rekomendasi][]=$v;
         }
-        
         return view('backend.pages.data-lhp.pic-unit.tindaklanjut-list')
-                ->with('jumlahtl',$jlhtl)
-                // ->with('tahun',$tahun)
-                ->with('jlhrincian',$rinc)
+        ->with('jumlahtl',$jlhtl)
+                ->with('tahun',$tahun)
+                ->with('jumlahrincian',$rinc)
+                ->with('rincian',$rincian)
                 ->with('rekomid',$rekomid)
                 ->with('strekom',$st)
                 ->with('temuanid',$temuanid)
@@ -832,7 +838,22 @@ class TindakLanjutController extends Controller
                 ->with('user_pic',$user_pic)
                 ->with('rekomendasi',$rekomendasi)
                 ->with('pemeriksa',$pemeriksaa)
+                // ->with('gettindaklanjut',$tindaklanjut)
                 ->with('temuan',$temuan);
+                
+                // ->with('jumlahtl',$jlhtl)
+                // // ->with('tahun',$tahun)
+                // ->with('jlhrincian',$rinc)
+                // ->with('rekomid',$rekomid)
+                // ->with('strekom',$st)
+                // ->with('temuanid',$temuanid)
+                // ->with('alldata',$alldata)
+                // ->with('pic',$pic)
+                // ->with('lhp',$lhp)
+                // ->with('user_pic',$user_pic)
+                // ->with('rekomendasi',$rekomendasi)
+                // ->with('pemeriksa',$pemeriksaa)
+                // ->with('temuan',$temuan);
     }
 
     public function set_tgl_penyelesaian($temuanid,$rekomid,$tgl,$bln,$thn)

@@ -198,6 +198,7 @@ class TindakLanjutController extends Controller
         {
             $st[$v->id]=$v;
         }
+        
         if(Auth::user()->level=='auditor-junior')
         {
             // return $wh;
@@ -225,8 +226,7 @@ class TindakLanjutController extends Controller
                                 ->orderBy('data_rekomendasi.nomor_rekomendasi')
                                 ->get();
         }
-        
-        ;
+
         $lhp=$temuan=$rekomendasi=$arrayrekomid=array();
         foreach($alldata as $k=>$v)
         {
@@ -374,6 +374,7 @@ class TindakLanjutController extends Controller
         {
             $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
                                 ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                                // ->join('tindak_lanjut_rincian', 'data_temuan.id', '=', 'tindak_lanjut_rincian.id_temuan')
                                 ->where('daftar_lhp.status_lhp','Publish LHP')
                                 ->where('daftar_lhp.tahun_pemeriksa',$tahun)
                                 ->where('daftar_lhp.user_input_id',Auth::user()->id)
@@ -388,6 +389,15 @@ class TindakLanjutController extends Controller
                                 ->where('daftar_lhp.status_lhp','Publish LHP')
                                 ->where('daftar_lhp.tahun_pemeriksa',$tahun)
                                 ->where('data_rekomendasi.senior_user_id',Auth::user()->id)
+                                ->whereNull('data_rekomendasi.deleted_at')
+                                ->orderBy('data_rekomendasi.nomor_rekomendasi')
+                                ->get();
+        }elseif(Auth::user()->level=='super-user'){
+            $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+                                ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                                ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                                ->where('daftar_lhp.status_lhp','Publish LHP')
+                                ->where('daftar_lhp.tahun_pemeriksa',$tahun)
                                 ->whereNull('data_rekomendasi.deleted_at')
                                 ->orderBy('data_rekomendasi.nomor_rekomendasi')
                                 ->get();
@@ -433,7 +443,21 @@ class TindakLanjutController extends Controller
                             $arrayrekomid[$v->id_rekom]=$v->id_rekom;
                         }
                     }
-
+                    if($keybataswaktu=='create-oleh-unit-kerja'){
+                        $arrayrekomid[$v->id_rekom]=$v->id_rekom;
+                    }
+                    if($keybataswaktu=='belum-direview-spi'){
+                        $arrayrekomid[$v->id_rekom]=$v->id_rekom;
+                    }
+                    if($keybataswaktu=='sedang-direview-spi'){
+                        $arrayrekomid[$v->id_rekom]=$v->id_rekom;
+                    }
+                    if($keybataswaktu=='sudah-direview-spi'){
+                        $arrayrekomid[$v->id_rekom]=$v->id_rekom;
+                    }
+                    if($keybataswaktu=='sudah-dipublish-oleh-spi'){
+                        $arrayrekomid[$v->id_rekom]=$v->id_rekom;
+                    }
                 }
             }
             else
@@ -453,6 +477,48 @@ class TindakLanjutController extends Controller
         }
         // return $st;
         $jlhtl=$this->jlh_tindaklanjut();
+
+        if($keybataswaktu=='create-oleh-unit-kerja'){
+            foreach($alldata as $k=>$v){
+                if(!isset($tindaklanjut[$v->id]) ){
+                    $lhp[$v->id_lhp]=$v;
+                    $temuan[$v->id_temuan]=$v;
+                    $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
+                }
+            }
+        }else if($keybataswaktu=='belum-direview-spi'){
+            foreach($alldata as $k=>$v){
+                if(isset($tindaklanjut[$v->id]) && $v->review_spi =='' && $v->published!=1){
+                    $lhp[$v->id_lhp]=$v;
+                    $temuan[$v->id_temuan]=$v;
+                    $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
+                }
+            }
+        }else if($keybataswaktu=='sudah-direview-spi'){
+            foreach($alldata as $k=>$v){
+                if(isset($tindaklanjut[$v->id]) && $v->review_spi !='' && $v->published==0){
+                    $lhp[$v->id_lhp]=$v;
+                    $temuan[$v->id_temuan]=$v;
+                    $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
+                }
+            }
+        }else if($keybataswaktu=='sedang-direview-spi'){
+            foreach($alldata as $k=>$v){
+                if(isset($tindaklanjut[$v->id]) && $v->review_spi =='' && $v->published==0){
+                    $lhp[$v->id_lhp]=$v;
+                    $temuan[$v->id_temuan]=$v;
+                    $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
+                }
+            }
+        }else if($keybataswaktu=='sudah-dipublish-oleh-spi'){
+            foreach($alldata as $k=>$v){
+                if(isset($tindaklanjut[$v->id]) && $v->review_spi !='' && $v->published==1){
+                    $lhp[$v->id_lhp]=$v;
+                    $temuan[$v->id_temuan]=$v;
+                    $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
+                }
+            }
+        }
 
         return view('backend.pages.data-lhp.auditor-junior.tindaklanjut')
                 ->with('tahun',$tahun)

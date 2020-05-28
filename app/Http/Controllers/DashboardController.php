@@ -89,6 +89,49 @@ class DashboardController extends Controller
         // echo Auth::user()->level;
         if(Auth::user()->level=='0')
         {
+            $tindaklanjut=TindakLanjutTemuan::with('lhp')->get();
+            $datatl=$dtl=$dlhp=$colorlhp=$arraylhp=array();
+            foreach($tindaklanjut as $k=>$v)
+            {
+                if(isset($v->lhp))
+                {
+                    if($v->lhp->user_input_id==Auth::user()->id)
+                    {
+                        // return $v->dtemuan->totemuan;
+                        list($th,$bl,$tg)=explode('-',$v->lhp->tanggal_lhp);
+                        if($th==$thn)
+                        {
+                            if($v->status_review_pic_1=='')
+                                $status='Create oleh Unit Kerja';
+                            else
+                                $status=$v->status_review_pic_1;
+    
+                            $dlhp[$status][]=$v;
+                            $arraylhp[$v->lhp->id]=$v->lhp->id;
+                        }
+                    }
+                }
+            }
+            
+            foreach($dlhp as $k=>$v)
+            {
+                $dtl['labels'][]=$k;
+                $dtl['datasets'][0]['data'][]=isset($dlhp[$k]) ? count($dlhp[$k]) : 0;
+                $dtl['datasets'][0]['backgroundColor'][]=$colorlhp[str_slug($k)]=generate_color_one();
+                $datatl[str_slug($k)][]=$v;
+            }
+
+            $doverdue=array();
+            $bataswaktu=bataswaktu();
+            $colorbataswaktu=array();
+            foreach($bataswaktu as $k=>$v)
+            {
+                $doverdue['labels'][]=$bataswaktu[$k];
+                $doverdue['datasets'][0]['data'][]=isset($overdue[$k]) ? count($overdue[$k]) : 0;
+                $doverdue['datasets'][0]['backgroundColor'][]=$colorbataswaktu[($k)]=generate_color_one();
+            }
+            $color['colorbataswaktu']=$colorbataswaktu;
+
             $user=User::all();
             $duser=array();
             foreach($user as $k=>$v)
@@ -101,6 +144,11 @@ class DashboardController extends Controller
             $picunit=PICUnit::with('levelpic')->with('fak')->with('bid')->orderByRaw('RAND()')->limit(10)->get();
             $jenisaudit=JenisAudit::get()->count();
             return view('backend.pages.dashboard.admin')
+                    // ->with('overdue',$overdue)
+                    ->with('dtl',$dtl)
+                    ->with('doverdue',$doverdue)
+                    ->with('datatl',$datatl)
+
                     ->with('jenistemuan',$jenistemuan)
                     ->with('datalevelpic',$datalevelpic)
                     ->with('pemeriksa',$pemeriksa)
@@ -116,6 +164,45 @@ class DashboardController extends Controller
         }
         elseif(Auth::user()->level=='super-user')
         {
+            $tindaklanjut=TindakLanjutTemuan::with('lhp')->get();
+            $datatl=$dtl=$dlhp=$colorlhp=$arraylhp=array();
+            foreach($tindaklanjut as $k=>$v)
+            {
+                if(isset($v->lhp))
+                {
+                    list($th,$bl,$tg)=explode('-',$v->lhp->tanggal_lhp);
+                        if($th==$thn)
+                        {
+                            if($v->status_review_pic_1=='')
+                                $status='Create oleh Unit Kerja';
+                            else
+                                $status=$v->status_review_pic_1;
+    
+                            $dlhp[$status][]=$v;
+                            $arraylhp[$v->lhp->id]=$v->lhp->id;
+                        }
+                }
+            }
+            
+            foreach($dlhp as $k=>$v)
+            {
+                $dtl['labels'][]=$k;
+                $dtl['datasets'][0]['data'][]=isset($dlhp[$k]) ? count($dlhp[$k]) : 0;
+                $dtl['datasets'][0]['backgroundColor'][]=$colorlhp[str_slug($k)]=generate_color_one();
+                $datatl[str_slug($k)][]=$v;
+            }
+
+            $doverdue=array();
+            $bataswaktu=bataswaktu();
+            $colorbataswaktu=array();
+            foreach($bataswaktu as $k=>$v)
+            {
+                $doverdue['labels'][]=$bataswaktu[$k];
+                $doverdue['datasets'][0]['data'][]=isset($overdue[$k]) ? count($overdue[$k]) : 0;
+                $doverdue['datasets'][0]['backgroundColor'][]=$colorbataswaktu[($k)]=generate_color_one();
+            }
+            $color['colorbataswaktu']=$colorbataswaktu;
+
             $user=User::all();
             $duser=array();
             foreach($user as $k=>$v)
@@ -128,6 +215,11 @@ class DashboardController extends Controller
             $picunit=PICUnit::with('levelpic')->with('fak')->with('bid')->orderByRaw('RAND()')->limit(10)->get();
             $jenisaudit=JenisAudit::get()->count();
             return view('backend.pages.dashboard.admin')
+                    // ->with('overdue',$overdue)
+                    ->with('dtl',$dtl)
+                    ->with('doverdue',$doverdue)
+                    ->with('datatl',$datatl)
+
                     ->with('jenistemuan',$jenistemuan)
                     ->with('datalevelpic',$datalevelpic)
                     ->with('pemeriksa',$pemeriksa)
@@ -140,6 +232,7 @@ class DashboardController extends Controller
                     ->with('tahun',$thn)
                     ->with('dpengguna',$dpengguna)
                     ->with('jenisaudit',$jenisaudit);
+
         }
         elseif(Auth::user()->level=='auditor-junior')
         {
@@ -168,6 +261,7 @@ class DashboardController extends Controller
                     }
                 }
             }
+            
             foreach($dlhp as $k=>$v)
             {
                 $dtl['labels'][]=$k;
@@ -175,7 +269,7 @@ class DashboardController extends Controller
                 $dtl['datasets'][0]['backgroundColor'][]=$colorlhp[str_slug($k)]=generate_color_one();
                 $datatl[str_slug($k)][]=$v;
             }
-
+            
             // return $dtl;
 
             //Status Rekomendasi

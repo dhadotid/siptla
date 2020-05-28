@@ -140,7 +140,7 @@
 										$dst[str_slug($item)]=str_slug($item);
 									@endphp
 									<li><div class="box" style="background: {{$warna}}"></div> 
-										<a href="#">{{$item}} ({{isset($dtl['datasets'][0]['data'][$idx]) ? $dtl['datasets'][0]['data'][$idx] : 0}})</a>
+										<a href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}">{{$item}} ({{isset($dtl['datasets'][0]['data'][$idx]) ? $dtl['datasets'][0]['data'][$idx] : 0}})</a>
 									</li>
 								@endforeach
 
@@ -148,7 +148,7 @@
 									@if(!in_array(str_slug($item),$dst))
 										<li>
 											<div class="box" style="background: {{generate_color_one()}}"></div> 
-											<a href="#">{{$item}} (0)</a>
+											<a href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}">{{$item}} (0)</a>
 										</li>
 									@endif
 								@endforeach
@@ -186,7 +186,14 @@
 
 									@endphp
 									<li><div class="box" style="background: {{$warna}}"></div> 
-										<a href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}">{{$item}} ({{isset($doverdue['datasets'][0]['data'][$idx]) ? $doverdue['datasets'][0]['data'][$idx] : 0}})</a>
+										{{--<a href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}">{{$item}} ({{isset($doverdue['datasets'][0]['data'][$idx]) ? $doverdue['datasets'][0]['data'][$idx] : 0}})</a>--}}
+										<div class="dropdown">
+										<a>{{$item}} ({{isset($doverdue['datasets'][0]['data'][$idx]) ? $doverdue['datasets'][0]['data'][$idx] : 0}})</a>
+										<div class="dropdown-content">
+											<a href="#">Low (0)</a>
+											<a href="#">Medium (0)</a>
+											<a href="#">High (0)</a>
+										</div>
 									</li>
 								@endforeach
 
@@ -368,5 +375,33 @@
 		.slider.round:before {
 		border-radius: 50%;
 		}
+		</style>
+		<style>
+		.dropdown {
+		position: relative;
+		display: inline-block;
+		}
+
+		.dropdown-content {
+		display: none;
+		position: absolute;
+		background-color: #f1f1f1;
+		min-width: 160px;
+		box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+		z-index: 1;
+		}
+
+		.dropdown-content a {
+		color: black;
+		padding: 12px 16px;
+		text-decoration: none;
+		display: block;
+		}
+
+		.dropdown-content a:hover {background-color: #ddd;}
+
+		.dropdown:hover .dropdown-content {display: block;}
+
+		.dropdown:hover .dropbtn {background-color: #3e8e41;}
 		</style>
 @endsection

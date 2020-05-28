@@ -149,7 +149,7 @@ function datauserpic($data)
 function bataswaktu()
 {
     $bataswaktu=[
-        'sudah-masuk-batas-waktu-penyelesaian' => 'Budah Masuk Batas Waktu Penyelesaian',
+        'sudah-masuk-batas-waktu-penyelesaian' => 'Sudah Masuk Batas Waktu Penyelesaian',
         'melewati-batas-waktu-penyelesaian' => 'Melewati Batas Waktu Penyelesaian',
         'belum-masuk-batas-waktu-penyelesaian' => 'Belum Masuk Batas Waktu Penyelesaian'
     ];

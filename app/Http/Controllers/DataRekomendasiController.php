@@ -275,23 +275,55 @@ class DataRekomendasiController extends Controller
 
         return $table;
     }
-    public function rekomendasi_data_new($idtemuan,$status_rekom)
+    public function rekomendasi_data_new(Request $request, $idtemuan,$status_rekom)
     {
+        $now=date('Y-m-d');
+        $wh = array();
+        $keyparam = '';
+        if(isset($request->key) && isset($request->priority)){
+            $wh['data_temuan.level_resiko_id']=$request->priority;
+        }
+
         $table='<ol style="list-style-type:upper-roman !important;padding-left:20px;">';
         $picunit=PICUnit::all();
         $pic_unit=datauserpic($picunit);
         $rekom=DataRekomendasi::selectRaw('*,data_rekomendasi.id as rekom_id')
-            ->where('id_temuan',$idtemuan)
-            ->where('status_rekomendasi_id',$status_rekom)
-            ->with('picunit1')
-            ->with('picunit2')
-            ->with('statusrekomendasi')
-            ->get();
+                ->select('data_rekomendasi.*', 'data_temuan.level_resiko_id')
+                ->join('data_temuan', 'data_temuan.id', '=', 'data_rekomendasi.id_temuan')
+                ->where($wh);
+                if($request->key == 'sudah-masuk-batas-waktu-penyelesaian'){
+                    $rekom = $rekom->where('data_rekomendasi.tanggal_penyelesaian', '=', $now);
+                }
+                if($request->key == 'melewati-batas-waktu-penyelesaian'){
+                    $rekom = $rekom->where('data_rekomendasi.tanggal_penyelesaian', '>', $now);
+                }
+                if($request->key=='belum-masuk-batas-waktu-penyelesaian'){
+                    $rekom = $rekom->where('data_rekomendasi.tanggal_penyelesaian', '<', $now);
+                }
+
+            $rekom = $rekom->where('data_rekomendasi.id_temuan',$idtemuan)
+                    ->where('data_rekomendasi.status_rekomendasi_id',$status_rekom)
+                    ->with('picunit1')
+                    ->with('picunit2')
+                    ->with('statusrekomendasi')
+                    ->get();
         if(Auth::user()->level == 'auditor-senior'){
         $rekom=DataRekomendasi::selectRaw('*,data_rekomendasi.id as rekom_id')
-            ->where('id_temuan',$idtemuan)
-            ->where('status_rekomendasi_id',$status_rekom)
-            ->where('senior_user_id', Auth::id())
+                ->select('data_rekomendasi.*', 'data_temuan.level_resiko_id')
+                ->join('data_temuan', 'data_temuan.id', '=', 'data_rekomendasi.id_temuan')
+                ->where($wh);
+                if($request->key == 'sudah-masuk-batas-waktu-penyelesaian'){
+                    $rekom = $rekom->where('data_rekomendasi.tanggal_penyelesaian', '=', $now);
+                }
+                if($request->key == 'melewati-batas-waktu-penyelesaian'){
+                    $rekom = $rekom->where('data_rekomendasi.tanggal_penyelesaian', '>', $now);
+                }
+                if($request->key=='belum-masuk-batas-waktu-penyelesaian'){
+                    $rekom = $rekom->where('data_rekomendasi.tanggal_penyelesaian', '<', $now);
+                }
+        $rekom = $rekom->where('id_temuan',$idtemuan)
+            ->where('data_rekomendasi.status_rekomendasi_id',$status_rekom)
+            ->where('data_rekomendasi.senior_user_id', Auth::id())
             ->with('picunit1')
             ->with('picunit2')
             ->with('statusrekomendasi')

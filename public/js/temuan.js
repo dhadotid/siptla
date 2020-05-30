@@ -319,15 +319,19 @@ function formatdatatable(idtemuan) {
     return div;
 }
 function formatdatatablenew(idtemuan_statusrekom) {
-
     var txt = idtemuan_statusrekom.split('_');
+    var defaultURL = flagsUrl + '/rekomendasi-data-new/' + txt[0]+'/'+txt[1];
+    if(txt.length>3){
+        defaultURL = flagsUrl + '/rekomendasi-data-new/' + txt[0]+'/'+txt[1]+txt[2]+'&'+txt[3];
+    }
+    console.log('url: '+defaultURL)
     var div = $('<div/>')
         .addClass('loading')
         .attr('id','temuan_'+txt[0])
         .text('Loading...');
 
     $.ajax({
-        url: flagsUrl + '/rekomendasi-data-new/' + txt[0]+'/'+txt[1],
+        url: defaultURL,
         success: function (res) {
             div.html(res).removeClass('loading');
         }

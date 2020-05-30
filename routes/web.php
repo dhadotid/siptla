@@ -15,6 +15,8 @@ Route::get('/', function () {
     return redirect('login');
 });
 
+Route::get('pimpinan/{tahun?}', 'DashboardController@pimpinanTest');
+
 Route::group(['middleware'=>['auth','checkstatus']],function(){
     Route::get('/dashboard/{tahun?}', 'DashboardController@index');
     Route::get('/profil', 'UsersController@profil')->name('pengguna.profil');

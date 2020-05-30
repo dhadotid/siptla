@@ -30,7 +30,7 @@
                                         <label for="my-input" class="col-md-3">Pemeriksa</label>
                                         <div class="col-md-6">
                                             <select class="select2 form-control" name="pemeriksa" id="pemeriksan" onchange="loaddata();getlhp(this.value)">
-                                                <option value="0">-Pilih-</option>
+                                                <option value="0">Semua</option>
                                                 @foreach ($pemeriksa as $item)
                                                     <option value="{{$item->id}}">{{$item->code}} - {{$item->pemeriksa}}</option>
                                                 @endforeach

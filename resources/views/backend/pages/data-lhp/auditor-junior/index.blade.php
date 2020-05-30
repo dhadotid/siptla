@@ -93,7 +93,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        loaddata('{{$tahun}}','{{$statusrekom}}');
+        loaddata('{{$tahun}}','{{$statusrekom}}','{{$key}}','{{$priority}}');
         // loaddatasemua('{{$tahun}}');
         hidealert();
         $('.select').select2();

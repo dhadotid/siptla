@@ -178,13 +178,13 @@
           @endphp
           <ul class="submenu" style="{{in_array(str_replace('laporan/','',$url),$menulaporan) ? 'display:block' : ''}}">
             <li class="{{strpos($url,'temuan-per-bidang')!==false ? 'active' : ''}}">
-              <a href="{{url('laporan/temuan-per-bidang')}}"><span class="menu-text">Temuan Per Bidang</span></a>
+              <a href="{{url('laporan/temuan-per-bidang')}}"><span class="menu-text">Rekapitulasi Pemeriksaan – Bidang</span></a>
             </li>
             <li class="{{strpos($url,'temuan-per-unitkerja')!==false ? 'active' : ''}}">
-              <a href="{{url('laporan/temuan-per-unitkerja')}}"><span class="menu-text">Temuan Per Unit Kerja</span></a>
+              <a href="{{url('laporan/temuan-per-unitkerja')}}"><span class="menu-text">Rekapitulasi Pemeriksaan – Unit Kerja</span></a>
             </li>
             <li class="{{strpos($url,'temuan-per-lhp')!==false ? 'active' : ''}}">
-              <a href="{{url('laporan/temuan-per-lhp')}}"><span class="menu-text">Temuan Per LHP</span></a>
+              <a href="{{url('laporan/temuan-per-lhp')}}"><span class="menu-text">Rekapitulasi Pemeriksaan – LHP</span></a>
             </li>
             <li class="{{strpos($url,'tindaklanjut-per-lhp')!==false ? 'active' : ''}}">
               <a href="{{url('laporan/tindaklanjut-per-lhp')}}"><span class="menu-text">Tindak Lanjut Per-LHP</span></a>
@@ -199,25 +199,25 @@
               <a href="{{url('laporan/tindak-lanjut')}}"><span class="menu-text">Matriks Pemantauan Tindak Lanjut</span></a>
             </li>
             <li class="{{$url=='laporan/status-penyelesaian-rekomendasi' ? 'active' : ''}}">
-              <a href="{{url('laporan/status-penyelesaian-rekomendasi')}}"><span class="menu-text">Status Penyelesaian Rekomendasi</span></a>
+              <a href="{{url('laporan/status-penyelesaian-rekomendasi')}}"><span class="menu-text">Status Penyelesaian Rekomendasi – LHP</span></a>
             </li>
             <li class="{{$url=='laporan/status-penyelesaian-rekomendasi-pemeriksa' ? 'active' : ''}}">
-              <a href="{{url('laporan/status-penyelesaian-rekomendasi-pemeriksa')}}"><span class="menu-text">Status Penyelesaian Rekomendasi Pemeriksa</span></a>
+              <a href="{{url('laporan/status-penyelesaian-rekomendasi-pemeriksa')}}"><span class="menu-text">Status Penyelesaian Rekomendasi – Pemeriksa</span></a>
             </li>
             <li class="{{$url=='laporan/status-penyelesaian-rekomendasi-bidang' ? 'active' : ''}}">
-              <a href="{{url('laporan/status-penyelesaian-rekomendasi-bidang')}}"><span class="menu-text">Status Penyelesaian Rekomendasi Bidang</span></a>
+              <a href="{{url('laporan/status-penyelesaian-rekomendasi-bidang')}}"><span class="menu-text">Status Penyelesaian Rekomendasi – Bidang</span></a>
             </li>
             <li class="{{$url=='laporan/status-penyelesaian-rekomendasi-tahun' ? 'active' : ''}}">
-              <a href="{{url('laporan/status-penyelesaian-rekomendasi-tahun')}}"><span class="menu-text">Status Penyelesaian Rekomendasi Tahun</span></a>
+              <a href="{{url('laporan/status-penyelesaian-rekomendasi-tahun')}}"><span class="menu-text">Status Penyelesaian Rekomendasi – Tahun</span></a>
             </li>
             <li class="{{$url=='laporan/status-penyelesaian-rekomendasi-unitkerja' ? 'active' : ''}}">
-              <a href="{{url('laporan/status-penyelesaian-rekomendasi-unitkerja')}}"><span class="menu-text">Status Penyelesaian Rekomendasi Unit Kerja</span></a>
+              <a href="{{url('laporan/status-penyelesaian-rekomendasi-unitkerja')}}"><span class="menu-text">Status Penyelesaian Rekomendasi – Unit Kerja</span></a>
             </li>
             <li class="{{$url=='laporan/rekomendasi-overdue-unitkerja' ? 'active' : ''}}">
               <a href="{{url('laporan/rekomendasi-overdue-unitkerja')}}"><span class="menu-text">Rekomendasi Overdue - Unit Kerja</span></a>
             </li>
               <li class="{{$url=='laporan/laporan-rekomendasi-overdue' ? 'active' : ''}}">
-                <a href="{{url('laporan/laporan-rekomendasi-overdue')}}"><span class="menu-text">Rekomendasi - Overdue</span></a>
+                <a href="{{url('laporan/laporan-rekomendasi-overdue')}}"><span class="menu-text">Rekomendasi Overdue</span></a>
               </li>
           
             {{-- <li class="{{strpos($url,'rekap-lhp')!==false ? 'active' : ''}}">

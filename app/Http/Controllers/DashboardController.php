@@ -16,9 +16,212 @@ use App\Models\DaftarTemuan;
 use App\Models\LevelPIC;
 use App\Models\TindakLanjutTemuan;
 use App\Models\DataRekomendasi;
+use App\Models\LevelResiko;
+use App\Models\Bidang;
 use App\User;
 class DashboardController extends Controller
 {
+    public function pimpinanTest($tahun=null){
+        $now=date('Y-m-d');
+        if($tahun==null)
+            $thn=date('Y');
+        else
+            $thn=$tahun;
+
+        $temuanPerbidang = DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+                        ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                        ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                        ->join('pic_unit', 'pic_unit.id', '=','data_temuan.pic_temuan_id')
+                        ->join('level_pic', 'level_pic.id', '=', 'pic_unit.level_pic')
+                        ->join('bidang', 'bidang.id', '=', 'pic_unit.bidang')
+                        ->join('status_rekomendasi', 'status_rekomendasi.id', '=', 'data_rekomendasi.status_rekomendasi_id')
+                        ->where('daftar_lhp.tahun_pemeriksa',$thn)
+                        ->whereNull('data_rekomendasi.deleted_at')
+                        ->orderBy('data_rekomendasi.nomor_rekomendasi')
+                        ->get();
+        $statusRekomendasi = StatusRekomendasi::all();
+        $levelPIC = LevelPIC::all();
+        $dataBidang = Bidang::all();
+        $temuans = $bidangfinal = array();
+        $totalDataPerbidang = 0;
+        
+        foreach($statusRekomendasi as $s=>$r){
+            $temuans['datasets'][$s]['label']=$r->rekomendasi;
+        }
+        foreach($dataBidang as $k=>$v){
+            array_push($bidangfinal,$v->nama_bidang);
+        }
+        foreach($levelPIC as $r=>$s){
+            if($s->id != 1 && $s->flag == 1){
+                array_push($bidangfinal,$s->nama_level);
+            }
+        }
+        array_push($bidangfinal,'Total');
+        foreach($bidangfinal as $a=>$s){
+            $temuans['labels'][]=$s;
+            foreach($statusRekomendasi as $q=>$r){
+                $totalData = 0;
+                $iniUntukTotal = 0;
+                $temuans['datasets'][$q]['backgroundColor']=generate_color_status($r->id);
+                foreach($temuanPerbidang as $k=>$v){
+                    if($s == $v->nama_bidang && $r->rekomendasi == $v->rekomendasi){
+                        $totalData++;
+                    }else if($s == $v->nama_level && $r->rekomendasi == $v->rekomendasi){
+                        $totalData++;
+                    }elseif($s == 'Total' && $r->rekomendasi == $v->rekomendasi){
+                        $totalData++;
+                    }
+                }
+                $temuans['datasets'][$q]['data'][]=$totalData;
+                // if($s == 'Total'){
+                //     $temuans['datasets'][$q]['data']= $iniUntukTotal;//[count($temuanPerbidang)];
+                // }else{
+                    
+                // }
+            }
+        }
+        
+        // GET TOTAL TEMUAN BERJALAN DI TAHUN
+        $temuanComplete=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+                                ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                                ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                                // ->where('daftar_lhp.status_lhp','Publish LHP')
+                                ->where('daftar_lhp.tahun_pemeriksa',$thn)
+                                ->whereNull('data_rekomendasi.deleted_at')
+                                ->orderBy('data_rekomendasi.nomor_rekomendasi')
+                                ->get();
+        $totalselesai=$totalbelumselesai=0;
+        $jsonTotalTemuan=$totaldata=array();
+        foreach($temuanComplete as $k=>$v){
+            if($v->status_rekomendasi_id==1){
+                $totalselesai++;
+            }else{
+                $totalbelumselesai++;
+            }
+        }
+        $totaldata = [$totalselesai, $totalbelumselesai];
+        foreach(total_data() as $k=>$v){
+            $jsonTotalTemuan['labels'][]=$v;
+            $jsonTotalTemuan['datasets'][0]['data'][]=$totaldata[$k];
+            $jsonTotalTemuan['datasets'][0]['backgroundColor'][]=generate_color_total_data($k);
+        }
+
+        //GET TOTAL TEMUAN SPI ATAU BUKAN
+        $totalspi=$totalbukanspi=0;
+        $jsonPemeriksaInternal=$totalpemeriksainternal=array();
+        foreach($temuanComplete as $k=>$v){
+            if($v->pemeriksa_id == 3){
+                if($v->status_rekomendasi_id==1){
+                    $totalspi++;
+                }else $totalbukanspi++;
+            }
+        }
+        $totalpemeriksainternal = [$totalspi, $totalbukanspi];
+        foreach(total_data() as $k=>$v){
+            $jsonPemeriksaInternal['labels'][]=$v;
+            $jsonPemeriksaInternal['datasets'][0]['data'][]=$totalpemeriksainternal[$k];
+            $jsonPemeriksaInternal['datasets'][0]['backgroundColor'][]=generate_color_total_data($k);
+        }
+
+        //GET TOTAL TEMUAN External ATAU BUKAN
+        $totalexternal=$totalbukanexternal=0;
+        $jsonPemeriksaExternal=$totalpemeriksaexternal=array();
+        foreach($temuanComplete as $k=>$v){
+            if($v->pemeriksa_id != 3){
+                if($v->status_rekomendasi_id==1)
+                    $totalexternal++;
+                else $totalbukanexternal++;
+            }
+        }
+        $totalpemeriksaexternal = [$totalexternal, $totalbukanexternal];
+        foreach(total_data() as $k=>$v){
+            $jsonPemeriksaExternal['labels'][]=$v;
+            $jsonPemeriksaExternal['datasets'][0]['data'][]=$totalpemeriksaexternal[$k];
+            $jsonPemeriksaExternal['datasets'][0]['backgroundColor'][]=generate_color_total_data($k);
+        }
+
+        //Rekomendasi Yang Overdue
+        $rekomendasiData = DataRekomendasi::with('statusrekomendasi')
+                            ->select('data_rekomendasi.*', 'level_resiko.level_resiko as level_resiko', 'level_resiko.id as id_resiko')
+                            ->join('data_temuan', 'data_temuan.id', '=', 'data_rekomendasi.id_temuan')
+                            ->join('level_resiko', 'data_temuan.level_resiko_id', '=', 'level_resiko.id')->get();
+        $rekomJson=$totalResiko=array();
+        $totallow=$totalmed=$totalhight=0;
+        foreach($rekomendasiData as $k=>$v){
+            if($v->statusrekomendasi['id'] == 2){
+                if($now > $v->tanggal_penyelesaian){
+                    if($v->id_resiko == 2){
+                        $totallow++;
+                    }elseif($v->id_resiko == 3){
+                        $totalmed++;
+                    }elseif($v->id_resiko == 4){
+                        $totalhight++;
+                    }
+                }
+            }
+        }
+        $totalResiko = [$totallow, $totalmed, $totalhight];
+        $levelresiko = LevelResiko::all();
+        foreach($levelresiko as $k=>$v){
+            if($v->id != 1){
+                $rekomJson['labels'][]='Overdue '.($k+1).' - '.$v->level_resiko;
+                $rekomJson['datasets'][0]['data']=$totalResiko;
+                $rekomJson['datasets'][0]['backgroundColor'][]=generate_color_tindak_lanjut($k);
+            }
+        }
+
+        //Monitoring Tindak Lanjut
+        $temuanData=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+                                ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                                ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                                // ->join('level_resiko', 'data_temuan.level_resiko_id', '=', 'level_resiko.id')
+                                // ->where('daftar_lhp.status_lhp','Publish LHP')
+                                ->where('daftar_lhp.tahun_pemeriksa',$thn)
+                                ->whereNull('data_rekomendasi.deleted_at')
+                                ->orderBy('data_rekomendasi.nomor_rekomendasi')
+                                ->get();
+        $arrayrekomid=$rekomendasi=$temuanJson=$totalTindaklanjut=array();
+        foreach($temuanData as $k=>$v)
+        {
+            $arrayrekomid[$v->id_rekom]=$v->id_rekom;
+        }
+        $get_tl=TindakLanjutTemuan::whereIn('rekomendasi_id',$arrayrekomid)->get();
+        $tindaklanjut=array();
+        foreach($get_tl as $k=>$v)
+        {
+            $tindaklanjut[$v->rekomendasi_id][]=$v;
+        }
+        $totalCreateUnitKerja=$totalBelumDireview=$totalSedangDireview=$totalSudahDireview=$totalPublish=0;
+        foreach($temuanData as $k=>$v){
+            if(!isset($tindaklanjut[$v->id]) ){
+                $totalCreateUnitKerja++;
+            }elseif(isset($tindaklanjut[$v->id]) && $v->review_spi =='' && $v->published!=1){
+                $totalBelumDireview++;
+            }elseif(isset($tindaklanjut[$v->id]) && $v->review_spi !='' && $v->published==0){
+                $totalSedangDireview++;
+            }elseif(isset($tindaklanjut[$v->id]) && $v->review_spi =='' && $v->published==0){
+                $totalSudahDireview++;
+            }elseif(isset($tindaklanjut[$v->id]) && $v->review_spi !='' && $v->published==1){
+                $totalPublish++;
+            }
+        }
+        $totalTindaklanjut = [$totalCreateUnitKerja, $totalBelumDireview, $totalSedangDireview, $totalSudahDireview, $totalPublish];
+        foreach(status_lhp() as $k=>$v){
+            $temuanJson['labels'][]=$v;
+            $temuanJson['datasets'][0]['data'][] = $totalTindaklanjut[$k];
+            $temuanJson['datasets'][0]['backgroundColor'][]=generate_color_tindak_lanjut($k);
+        }
+        // return $jsonTotalTemuan;
+        return view('backend.pages.dashboard.pimpinan')
+                ->with('tahun',$thn)
+                ->with('temuans',$temuans)
+                ->with('jsonTemuan', $temuanJson)
+                ->with('rekomJson', $rekomJson)
+                ->with('jsonTotalTemuan', $jsonTotalTemuan)
+                ->with('jsonPemeriksaInternal', $jsonPemeriksaInternal)
+                ->with('jsonPemeriksaExternal', $jsonPemeriksaExternal);
+    }
+
     public function index($tahun=null)
     {
         if($tahun==null)
@@ -348,7 +551,7 @@ class DashboardController extends Controller
                     ->with('tahun',$thn)
                     ->with('datatl',$datatl);
         }
-        elseif(Auth::user()->level=='auditor-senior')
+        elseif(Auth::user()->level=='auditor-senior' || Auth::user()->level=='pic-unit')
         {
             // $lhp=DaftarTemuan::with('dpemeriksa')->with('djenisaudit')->get();
             // $datalhp=array();
@@ -407,7 +610,6 @@ class DashboardController extends Controller
             {
                 if(isset($v->dtemuan->temuan))
                 {
-                    // return $v->dtemuan->totemuan;
                     list($th,$bl,$tg)=explode('-',$v->dtemuan->totemuan->tanggal_lhp);
                     if($th==$thn)
                     {
@@ -445,12 +647,12 @@ class DashboardController extends Controller
             }
             $color['colorrekom']=$colorrekom;
             $color['colorlhp']=$colorlhp;
-            
+            // return $overdue;
             $doverdue=array();
-            $colorbataswaktu=array();
             // return $rekomendasi;
             $bataswaktu=bataswaktu();
-            foreach($overdue as $k=>$v)
+            $colorbataswaktu=array();
+            foreach($bataswaktu as $k=>$v)
             {
                 $doverdue['labels'][]=$bataswaktu[$k];
                 $doverdue['datasets'][0]['data'][]=isset($overdue[$k]) ? count($overdue[$k]) : 0;

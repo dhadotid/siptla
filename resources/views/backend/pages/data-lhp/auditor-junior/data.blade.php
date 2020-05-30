@@ -65,10 +65,12 @@
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
                                         <li>
+                                        {{-- {{url('data-temuan-lhp/'.$item->lhp_id.'/'.$statusrekom.'?'.$key.'&'.$priority)}} --}}
+                                        {{-- {{url('data-temuan-lhp/'.$item->lhp_id.'?'.$key.'&'.$priority)}} --}}
                                             @if ($statusrekom!=null)
-                                                <a href="{{url('data-temuan-lhp/'.$item->lhp_id.'/'.$statusrekom)}}"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Data Temuan</a>
+                                                <a href="{{url('data-temuan-lhp/'.$item->lhp_id.'/'.$statusrekom.'?'.$keybataswaktu.'&'.$priority)}}"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Data Temuan</a>
                                             @else
-                                                <a href="{{url('data-temuan-lhp/'.$item->lhp_id)}}"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Data Temuan</a>
+                                                <a href="{{url('data-temuan-lhp/'.$item->lhp_id.'?'.$keybataswaktu.'&'.$priority)}}"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Data Temuan</a>
                                             @endif
                                         </li>
                                         {{-- <li><a href="{{url('data-lhp-detail/'.$item->lhp_id)}}" target="_blank"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail LHP</a></li> --}}
@@ -153,9 +155,9 @@
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
                                         @if ($statusrekom!=null)
-                                            <a href="{{url('data-temuan-lhp/'.$item->lhp_id.'/'.$statusrekom)}}"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Data Temuan</a>
+                                            <a href="{{url('data-temuan-lhp/'.$item->lhp_id.'/'.$statusrekom.'?'.$keybataswaktu.'&'.$priority)}}"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Data Temuan</a>
                                         @else
-                                            <a href="{{url('data-temuan-lhp/'.$item->lhp_id)}}"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Data Temuan</a>
+                                            <a href="{{url('data-temuan-lhp/'.$item->lhp_id.'?'.$keybataswaktu.'&'.$priority)}}"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Data Temuan</a>
                                         @endif
                                     </li>
                                     {{-- <li><a href="{{url('data-lhp-detail/'.$item->lhp_id)}}" target="_blank"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail LHP</a></li> --}}

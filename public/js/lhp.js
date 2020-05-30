@@ -1,5 +1,9 @@
-function loaddata(tahun,statusrekom=null) {
-    $('#data').load(flagsUrl + '/data-lhp-data/' + tahun + '/' + statusrekom, function () {
+function loaddata(tahun,statusrekom=null, key = '', priority = '') {
+    var urlTable = flagsUrl + '/data-lhp-data/' + tahun + '/' + statusrekom;
+    if(key != '' && priority != ''){
+        urlTable = flagsUrl + '/data-lhp-data/' + tahun + '/' + statusrekom + key +'&'+priority;
+    }
+    $('#data').load(urlTable, function () {
         $('#table').dataTable();
         $('#table').on('click', '.btn-edit', function () {
             var id = $(this).data('value')

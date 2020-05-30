@@ -160,6 +160,10 @@ function status_lhp()
     $status=array('Create oleh Unit Kerja','Belum direview SPI','Sedang direview SPI','Sudah direview SPI','Sudah dipublish oleh SPI');
     return $status;
 }
+function total_data(){
+    $status=['Sudah Selesai', 'Belum Selesai'];
+    return $status;
+}
 function status_lhp_key()
 {
     $status=array('Create oleh Unit Kerja','Belum direview SPI','Sedang direview SPI','Sudah direview SPI','Sudah dipublish oleh SPI');
@@ -169,6 +173,33 @@ function status_lhp_key()
         $dstatus[str_slug($v)]=$v;
     }
     return $dstatus;
+}
+function generate_color_total_data($i){
+    if($i == 1)
+        return '#5895f1';
+    return '#a8d1f5';
+}
+function generate_color_status($statusId){
+    if($statusId == 1)
+        return '#6097d2';
+    else if($statusId == 2)
+        return '#df7c43';
+    else if($statusId == 3)
+        return '#9b9b9b';
+    else if($statusId == 4)
+        return '#eec659';
+}
+function generate_color_tindak_lanjut($i){
+    if($i==0)
+        return '#6097d2';
+    elseif($i == 1)
+        return '#df7c43';
+    else if($i == 2)
+        return '#eec659';
+    else if($i == 3)
+        return '#78a74c';
+    else if($i == 4)
+        return '#9b9b9b';
 }
 function generate_color_one()
 {

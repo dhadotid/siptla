@@ -128,9 +128,9 @@
 										<div class="dropdown">
 										<a>{{$item}} ({{isset($doverdue['datasets'][0]['data'][$idx]) ? $doverdue['datasets'][0]['data'][$idx] : 0}})</a>
 										<div class="dropdown-content">
-											<a href="#">Low (0)</a>
-											<a href="#">Medium (0)</a>
-											<a href="#">High (0)</a>
+											<a href="{{url('data-lhp/'.$tahun)}}?key={{str_slug($item)}}&priority=2">Low (0)</a>
+											<a href="{{url('data-lhp/'.$tahun)}}?key={{str_slug($item)}}&priority=3">Medium (0)</a>
+											<a href="{{url('data-lhp/'.$tahun)}}?key={{str_slug($item)}}&priority=4">High (0)</a>
 										</div>
 									</li>
 								@endforeach

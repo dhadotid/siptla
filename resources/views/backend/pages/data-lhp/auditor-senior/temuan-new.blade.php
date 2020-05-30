@@ -120,7 +120,7 @@
                                                 <td class="text-center">{{isset($item->levelresiko->level_resiko) ? $item->levelresiko->level_resiko: '-'}}</td> --}}
                                                 @foreach ($statusrekomendasi as $vst)
                                                     <td class="text-center" style="width:65px">
-                                                            <span class="rekomendasi-detail" data-value="{{ $item->id.'_'.$vst->id }}">
+                                                            <span class="rekomendasi-detail" data-value="{{ $item->id.'_'.$vst->id . $keyparam}}">
                                                                 @if (isset($drekom[$item->temuan_id][$vst->id]))
                                                                     @if (count($drekom[$item->temuan_id][$vst->id])==0)
                                                                         <span class="label label-rounded label-danger" style="font-size:13px !important;">

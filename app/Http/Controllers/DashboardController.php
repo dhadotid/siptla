@@ -224,6 +224,7 @@ class DashboardController extends Controller
 
     public function index($tahun=null)
     {
+        $now=date('Y-m-d');
         if($tahun==null)
             $thn=date('Y');
         else
@@ -365,46 +366,114 @@ class DashboardController extends Controller
                     ->with('dpengguna',$dpengguna)
                     ->with('jenisaudit',$jenisaudit);
         }
+        elseif(Auth::user()->level=='pimpinan-kepala-spi'){
+            return $this->pimpinanTest($thn);
+        }
         elseif(Auth::user()->level=='super-user')
         {
-            $tindaklanjut=TindakLanjutTemuan::with('lhp')->get();
-            $datatl=$dtl=$dlhp=$colorlhp=$arraylhp=array();
-            foreach($tindaklanjut as $k=>$v)
+            $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+                                ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                                ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                                ->where('daftar_lhp.status_lhp','Publish LHP')
+                                ->where('daftar_lhp.tahun_pemeriksa',$thn)
+                                // ->where('data_rekomendasi.senior_user_id',Auth::user()->id)
+                                ->whereNull('data_rekomendasi.deleted_at')
+                                ->orderBy('data_rekomendasi.nomor_rekomendasi')
+                                ->get();
+            $arrayrekomid=array();
+            foreach($alldata as $k=>$v){
+                $arrayrekomid[$v->id_rekom]=$v->id_rekom;
+            }
+            $get_tl=TindakLanjutTemuan::whereIn('rekomendasi_id',$arrayrekomid)->get();
+            $tindaklanjut=array();
+            foreach($get_tl as $k=>$v)
             {
-                if(isset($v->lhp))
-                {
-                    list($th,$bl,$tg)=explode('-',$v->lhp->tanggal_lhp);
-                        if($th==$thn)
-                        {
-                            if($v->status_review_pic_1=='')
-                                $status='Create oleh Unit Kerja';
-                            else
-                                $status=$v->status_review_pic_1;
-    
-                            $dlhp[$status][]=$v;
-                            $arraylhp[$v->lhp->id]=$v->lhp->id;
-                        }
+                $tindaklanjut[$v->rekomendasi_id][]=$v;
+            }
+            $totalCreateUnitKerja=$totalBelumDireview=$totalSedangDireview=$totalSudahDireview=$totalPublish=0;
+            foreach($alldata as $k=>$v){
+                if(!isset($tindaklanjut[$v->id]) ){
+                    $totalCreateUnitKerja++;
+                    // $dlhp[$status][]=$v;
+                }elseif(isset($tindaklanjut[$v->id]) && $v->review_spi =='' && $v->published!=1){
+                    $totalBelumDireview++;
+                }elseif(isset($tindaklanjut[$v->id]) && $v->review_spi !='' && $v->published==0){
+                    $totalSedangDireview++;
+                }elseif(isset($tindaklanjut[$v->id]) && $v->review_spi =='' && $v->published==0){
+                    $totalSudahDireview++;
+                }elseif(isset($tindaklanjut[$v->id]) && $v->review_spi !='' && $v->published==1){
+                    $totalPublish++;
                 }
             }
-            
-            foreach($dlhp as $k=>$v)
+            $totalTindaklanjut = [$totalCreateUnitKerja,$totalBelumDireview, $totalSedangDireview, $totalSudahDireview, $totalPublish];
+            foreach(status_lhp() as $k=>$v)
             {
-                $dtl['labels'][]=$k;
-                $dtl['datasets'][0]['data'][]=isset($dlhp[$k]) ? count($dlhp[$k]) : 0;
-                $dtl['datasets'][0]['backgroundColor'][]=$colorlhp[str_slug($k)]=generate_color_one();
-                $datatl[str_slug($k)][]=$v;
+                $dtl['labels'][]=$v;
+                $dtl['datasets'][0]['data'][]=$totalTindaklanjut[$k];
+                $dtl['datasets'][0]['backgroundColor'][]=$colorlhp[str_slug($k-1)]=generate_color_one();
+                $datatl[str_slug($k-1)][]=$v;
             }
+            $colorBoxTindakLanjut = $dtl['datasets'][0]['backgroundColor'];
 
-            $doverdue=array();
-            $bataswaktu=bataswaktu();
-            $colorbataswaktu=array();
-            foreach($bataswaktu as $k=>$v)
-            {
-                $doverdue['labels'][]=$bataswaktu[$k];
-                $doverdue['datasets'][0]['data'][]=isset($overdue[$k]) ? count($overdue[$k]) : 0;
-                $doverdue['datasets'][0]['backgroundColor'][]=$colorbataswaktu[($k)]=generate_color_one();
-            }
-            $color['colorbataswaktu']=$colorbataswaktu;
+            $databataswaktu=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                            ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                            ->where('daftar_lhp.status_lhp','Publish LHP')
+                            ->where('daftar_lhp.tahun_pemeriksa',$thn)
+                            // ->where('daftar_lhp.user_input_id',Auth::user()->id)
+                            ->whereNull('data_rekomendasi.deleted_at')
+                            ->orderBy('data_rekomendasi.nomor_rekomendasi')
+                            // ->groupBy('data_temuan.id_lhp')
+                            ->get();
+
+                    $arrayBts=array();
+                    foreach($databataswaktu as $k=>$v){
+                        if($v->tanggal_penyelesaian!='')
+                        {
+                            if($v->tanggal_penyelesaian == $now){
+                                $arrayBts['sudah-masuk-batas-waktu-penyelesaian'][]=$v;
+                                if($v->level_resiko_id == 2){
+                                    $arrayBts['low']['sudah-masuk-batas-waktu-penyelesaian'][]=$v;
+                                }elseif($v->level_resiko_id == 3){
+                                    $arrayBts['med']['sudah-masuk-batas-waktu-penyelesaian'][]=$v;
+                                }elseif($v->level_resiko_id == 4){
+                                    $arrayBts['high']['sudah-masuk-batas-waktu-penyelesaian'][]=$v;
+                                }
+                            }elseif($now > $v->tanggal_penyelesaian){
+                                $arrayBts['melewati-batas-waktu-penyelesaian'][]=$v;
+                                if($v->level_resiko_id == 2){
+                                    $arrayBts['low']['melewati-batas-waktu-penyelesaian'][]=$v;
+                                }elseif($v->level_resiko_id == 3){
+                                    $arrayBts['med']['melewati-batas-waktu-penyelesaian'][]=$v;
+                                }elseif($v->level_resiko_id == 4){
+                                    $arrayBts['high']['melewati-batas-waktu-penyelesaian'][]=$v;
+                                }
+                            }elseif($now < $v->tanggal_penyelesaian){
+                                $arrayBts['belum-masuk-batas-waktu-penyelesaian'][] =$v;
+                                if($v->level_resiko_id == 2){
+                                    $arrayBts['low']['belum-masuk-batas-waktu-penyelesaian'][]=$v;
+                                }elseif($v->level_resiko_id == 3){
+                                    $arrayBts['med']['belum-masuk-batas-waktu-penyelesaian'][]=$v;
+                                }elseif($v->level_resiko_id == 4){
+                                    $arrayBts['high']['belum-masuk-batas-waktu-penyelesaian'][]=$v;
+                                }
+                            }
+                        }
+                    }
+                    // return $arrayBts;
+                    
+                    $doverdue=array();
+                    $bataswaktu=bataswaktu();
+                    $colorbataswaktu=array();
+                    foreach($bataswaktu as $k=>$v)
+                    {
+                        $doverdue['labels'][]=$bataswaktu[$k];
+                        $doverdue['datasets'][0]['data'][]=isset($arrayBts[$k]) ? count($arrayBts[$k]) : 0;
+                        $doverdue['datasets'][0]['priority_low'][]=isset($arrayBts['low'][$k]) ? count($arrayBts['low'][$k]) : 0;
+                        $doverdue['datasets'][0]['priority_med'][]=isset($arrayBts['med'][$k]) ? count($arrayBts['med'][$k]) : 0;
+                        $doverdue['datasets'][0]['priority_high'][]=isset($arrayBts['high'][$k]) ? count($arrayBts['high'][$k]) : 0;
+                        $doverdue['datasets'][0]['backgroundColor'][]=$colorbataswaktu[($k)]=generate_color_one();
+                    }
+                    $color['colorbataswaktu']=$colorbataswaktu;
 
             $user=User::all();
             $duser=array();
@@ -417,8 +486,9 @@ class DashboardController extends Controller
             $status=StatusRekomendasi::get()->count();
             $picunit=PICUnit::with('levelpic')->with('fak')->with('bid')->orderByRaw('RAND()')->limit(10)->get();
             $jenisaudit=JenisAudit::get()->count();
-            return view('backend.pages.dashboard.admin')
+            return view('backend.pages.dashboard.super-user')
                     // ->with('overdue',$overdue)
+                    ->with('colorBoxTindakLanjut', $colorBoxTindakLanjut)
                     ->with('dtl',$dtl)
                     ->with('doverdue',$doverdue)
                     ->with('datatl',$datatl)
@@ -464,16 +534,57 @@ class DashboardController extends Controller
                     }
                 }
             }
-            
-            foreach($dlhp as $k=>$v)
-            {
-                $dtl['labels'][]=$k;
-                $dtl['datasets'][0]['data'][]=isset($dlhp[$k]) ? count($dlhp[$k]) : 0;
-                $dtl['datasets'][0]['backgroundColor'][]=$colorlhp[str_slug($k)]=generate_color_one();
-                $datatl[str_slug($k)][]=$v;
+            //TODO REFACTOR HERE!
+            // foreach($dlhp as $k=>$v)
+            // {
+            //     $dtl['labels'][]=$k;
+            //     $dtl['datasets'][0]['data'][]=isset($dlhp[$k]) ? count($dlhp[$k]) : 0;
+            //     $dtl['datasets'][0]['backgroundColor'][]=$colorlhp[str_slug($k)]=generate_color_one();
+            //     $datatl[str_slug($k)][]=$v;
+            // }
+            $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+                                ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                                ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                                ->where('daftar_lhp.status_lhp','Publish LHP')
+                                ->where('daftar_lhp.tahun_pemeriksa',$thn)
+                                ->where('daftar_lhp.user_input_id',Auth::user()->id)
+                                ->whereNull('data_rekomendasi.deleted_at')
+                                ->orderBy('data_rekomendasi.nomor_rekomendasi')
+                                ->get();
+            $arrayrekomid=array();
+            foreach($alldata as $k=>$v){
+                $arrayrekomid[$v->id_rekom]=$v->id_rekom;
             }
-            
-            // return $dtl;
+            $get_tl=TindakLanjutTemuan::whereIn('rekomendasi_id',$arrayrekomid)->get();
+            $tindaklanjut=array();
+            foreach($get_tl as $k=>$v)
+            {
+                $tindaklanjut[$v->rekomendasi_id][]=$v;
+            }
+            $totalCreateUnitKerja=$totalBelumDireview=$totalSedangDireview=$totalSudahDireview=$totalPublish=0;
+            foreach($alldata as $k=>$v){
+                if(!isset($tindaklanjut[$v->id]) ){
+                    $totalCreateUnitKerja++;
+                    // $dlhp[$status][]=$v;
+                }elseif(isset($tindaklanjut[$v->id]) && $v->review_spi =='' && $v->published!=1){
+                    $totalBelumDireview++;
+                }elseif(isset($tindaklanjut[$v->id]) && $v->review_spi !='' && $v->published==0){
+                    $totalSedangDireview++;
+                }elseif(isset($tindaklanjut[$v->id]) && $v->review_spi =='' && $v->published==0){
+                    $totalSudahDireview++;
+                }elseif(isset($tindaklanjut[$v->id]) && $v->review_spi !='' && $v->published==1){
+                    $totalPublish++;
+                }
+            }
+            $totalTindaklanjut = [$totalCreateUnitKerja,$totalBelumDireview, $totalSedangDireview, $totalSudahDireview, $totalPublish];
+            foreach(status_lhp() as $k=>$v)
+            {
+                $dtl['labels'][]=$v;
+                $dtl['datasets'][0]['data'][]=$totalTindaklanjut[$k];
+                $dtl['datasets'][0]['backgroundColor'][]=$colorlhp[str_slug($k-1)]=generate_color_one();
+                $datatl[str_slug($k-1)][]=$v;
+            }
+            $colorBoxTindakLanjut = $dtl['datasets'][0]['backgroundColor'];
 
             //Status Rekomendasi
             $status=StatusRekomendasi::get();
@@ -516,7 +627,6 @@ class DashboardController extends Controller
                 }
             }
             $dstatus=array();
-            // return $rekomendasi;
             foreach($status as $k=>$v)
             {
                 $rekom['labels'][]=$v->rekomendasi;
@@ -526,21 +636,70 @@ class DashboardController extends Controller
             }
             $color['colorrekom']=$colorrekom;
             $color['colorlhp']=$colorlhp;
-            // return $overdue;
-            $doverdue=array();
-            // return $rekomendasi;
-            $bataswaktu=bataswaktu();
-            $colorbataswaktu=array();
-            foreach($bataswaktu as $k=>$v)
-            {
-                $doverdue['labels'][]=$bataswaktu[$k];
-                $doverdue['datasets'][0]['data'][]=isset($overdue[$k]) ? count($overdue[$k]) : 0;
-                $doverdue['datasets'][0]['backgroundColor'][]=$colorbataswaktu[($k)]=generate_color_one();
-            }
-            $color['colorbataswaktu']=$colorbataswaktu;
-            // return $doverdue;
+            $databataswaktu=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                            ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                            ->where('daftar_lhp.status_lhp','Publish LHP')
+                            ->where('daftar_lhp.tahun_pemeriksa',$thn)
+                            ->where('daftar_lhp.user_input_id',Auth::user()->id)
+                            ->whereNull('data_rekomendasi.deleted_at')
+                            ->orderBy('data_rekomendasi.nomor_rekomendasi')
+                            // ->groupBy('data_temuan.id_lhp')
+                            ->get();
+
+                    $arrayBts=array();
+                    foreach($databataswaktu as $k=>$v){
+                        if($v->tanggal_penyelesaian!='')
+                        {
+                            if($v->tanggal_penyelesaian == $now){
+                                $arrayBts['sudah-masuk-batas-waktu-penyelesaian'][]=$v;
+                                if($v->level_resiko_id == 2){
+                                    $arrayBts['low']['sudah-masuk-batas-waktu-penyelesaian'][]=$v;
+                                }elseif($v->level_resiko_id == 3){
+                                    $arrayBts['med']['sudah-masuk-batas-waktu-penyelesaian'][]=$v;
+                                }elseif($v->level_resiko_id == 4){
+                                    $arrayBts['high']['sudah-masuk-batas-waktu-penyelesaian'][]=$v;
+                                }
+                            }elseif($now > $v->tanggal_penyelesaian){
+                                $arrayBts['melewati-batas-waktu-penyelesaian'][]=$v;
+                                if($v->level_resiko_id == 2){
+                                    $arrayBts['low']['melewati-batas-waktu-penyelesaian'][]=$v;
+                                }elseif($v->level_resiko_id == 3){
+                                    $arrayBts['med']['melewati-batas-waktu-penyelesaian'][]=$v;
+                                }elseif($v->level_resiko_id == 4){
+                                    $arrayBts['high']['melewati-batas-waktu-penyelesaian'][]=$v;
+                                }
+                            }elseif($now < $v->tanggal_penyelesaian){
+                                $arrayBts['belum-masuk-batas-waktu-penyelesaian'][] =$v;
+                                if($v->level_resiko_id == 2){
+                                    $arrayBts['low']['belum-masuk-batas-waktu-penyelesaian'][]=$v;
+                                }elseif($v->level_resiko_id == 3){
+                                    $arrayBts['med']['belum-masuk-batas-waktu-penyelesaian'][]=$v;
+                                }elseif($v->level_resiko_id == 4){
+                                    $arrayBts['high']['belum-masuk-batas-waktu-penyelesaian'][]=$v;
+                                }
+                            }
+                        }
+                    }
+                    
+                    $doverdue=array();
+                    $bataswaktu=bataswaktu();
+                    $colorbataswaktu=array();
+                    foreach($bataswaktu as $k=>$v)
+                    {
+                        $doverdue['labels'][]=$bataswaktu[$k];
+                        $doverdue['datasets'][0]['data'][]=isset($arrayBts[$k]) ? count($arrayBts[$k]) : 0;
+                        $doverdue['datasets'][0]['priority_low'][]=isset($arrayBts['low'][$k]) ? count($arrayBts['low'][$k]) : 0;
+                        $doverdue['datasets'][0]['priority_med'][]=isset($arrayBts['med'][$k]) ? count($arrayBts['med'][$k]) : 0;
+                        $doverdue['datasets'][0]['priority_high'][]=isset($arrayBts['high'][$k]) ? count($arrayBts['high'][$k]) : 0;
+                        $doverdue['datasets'][0]['backgroundColor'][]=$colorbataswaktu[($k)]=generate_color_one();
+                    }
+
+                    $color['colorbataswaktu']=$colorbataswaktu;
+                    // return $arrayBts;
+                    
             return view('backend.pages.dashboard.auditor-junior')
                     // ->with('lhp',$lhp)
+                    ->with('colorBoxTindakLanjut', $colorBoxTindakLanjut)
                     ->with('dtl',$dtl)
                     ->with('status',$status)
                     ->with('dstatus',$dstatus)
@@ -553,19 +712,6 @@ class DashboardController extends Controller
         }
         elseif(Auth::user()->level=='auditor-senior' || Auth::user()->level=='pic-unit')
         {
-            // $lhp=DaftarTemuan::with('dpemeriksa')->with('djenisaudit')->get();
-            // $datalhp=array();
-            // foreach($lhp as $k=>$v)
-            // {
-            //     $datalhp[str_slug($v->status_lhp)][]=$v;
-            // }
-            // $status=StatusRekomendasi::get()->count();
-            // return view('backend.pages.dashboard.auditor-senior')
-            //         ->with('lhp',$lhp)
-            //         ->with('status',$status)
-            //         ->with('color',$color)
-            //         ->with('datalhp',$datalhp);
-            // $lhp=DaftarTemuan::where('user_input_id',Auth::user()->id)->with('dpemeriksa')->with('djenisaudit')->get();
             $tindaklanjut=TindakLanjutTemuan::with('lhp')->get();
             // return $lhp; 
             $datatl=$dtl=$dlhp=$colorlhp=$arraylhp=array();
@@ -590,13 +736,13 @@ class DashboardController extends Controller
                     // }
                 }
             }
-            foreach($dlhp as $k=>$v)
-            {
-                $dtl['labels'][]=$k;
-                $dtl['datasets'][0]['data'][]=isset($dlhp[$k]) ? count($dlhp[$k]) : 0;
-                $dtl['datasets'][0]['backgroundColor'][]=$colorlhp[str_slug($k)]=generate_color_one();
-                $datatl[str_slug($k)][]=$v;
-            }
+            // foreach($dlhp as $k=>$v)
+            // {
+            //     $dtl['labels'][]=$k;
+            //     $dtl['datasets'][0]['data'][]=isset($dlhp[$k]) ? count($dlhp[$k]) : 0;
+            //     $dtl['datasets'][0]['backgroundColor'][]=$colorlhp[str_slug($k)]=generate_color_one();
+            //     $datatl[str_slug($k)][]=$v;
+            // }
 
             // return $dtl;
 
@@ -647,21 +793,136 @@ class DashboardController extends Controller
             }
             $color['colorrekom']=$colorrekom;
             $color['colorlhp']=$colorlhp;
-            // return $overdue;
-            $doverdue=array();
-            // return $rekomendasi;
-            $bataswaktu=bataswaktu();
-            $colorbataswaktu=array();
-            foreach($bataswaktu as $k=>$v)
-            {
-                $doverdue['labels'][]=$bataswaktu[$k];
-                $doverdue['datasets'][0]['data'][]=isset($overdue[$k]) ? count($overdue[$k]) : 0;
-                $doverdue['datasets'][0]['backgroundColor'][]=$colorbataswaktu[($k)]=generate_color_one();
+            if(Auth::user()->level=='pic-unit'){
+                $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+                                ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                                ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                                ->where('daftar_lhp.status_lhp','Publish LHP')
+                                ->where('daftar_lhp.tahun_pemeriksa',$thn)
+                                ->whereNull('data_rekomendasi.deleted_at')
+                                ->orderBy('data_rekomendasi.nomor_rekomendasi')
+                                ->get();
+            }else{
+                $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+                                ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                                ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                                ->where('daftar_lhp.status_lhp','Publish LHP')
+                                ->where('daftar_lhp.tahun_pemeriksa',$thn)
+                                ->where('data_rekomendasi.senior_user_id',Auth::user()->id)
+                                ->whereNull('data_rekomendasi.deleted_at')
+                                ->orderBy('data_rekomendasi.nomor_rekomendasi')
+                                ->get();
             }
-            $color['colorbataswaktu']=$colorbataswaktu;
+            
+            $arrayrekomid=array();
+            foreach($alldata as $k=>$v){
+                $arrayrekomid[$v->id_rekom]=$v->id_rekom;
+            }
+            $get_tl=TindakLanjutTemuan::whereIn('rekomendasi_id',$arrayrekomid)->get();
+            $tindaklanjut=array();
+            foreach($get_tl as $k=>$v)
+            {
+                $tindaklanjut[$v->rekomendasi_id][]=$v;
+            }
+            $totalCreateUnitKerja=$totalBelumDireview=$totalSedangDireview=$totalSudahDireview=$totalPublish=0;
+            foreach($alldata as $k=>$v){
+                if(!isset($tindaklanjut[$v->id]) ){
+                    $totalCreateUnitKerja++;
+                    // $dlhp[$status][]=$v;
+                }elseif(isset($tindaklanjut[$v->id]) && $v->review_spi =='' && $v->published!=1){
+                    $totalBelumDireview++;
+                }elseif(isset($tindaklanjut[$v->id]) && $v->review_spi !='' && $v->published==0){
+                    $totalSedangDireview++;
+                }elseif(isset($tindaklanjut[$v->id]) && $v->review_spi =='' && $v->published==0){
+                    $totalSudahDireview++;
+                }elseif(isset($tindaklanjut[$v->id]) && $v->review_spi !='' && $v->published==1){
+                    $totalPublish++;
+                }
+            }
+            $totalTindaklanjut = [$totalCreateUnitKerja,$totalBelumDireview, $totalSedangDireview, $totalSudahDireview, $totalPublish];
+            foreach(status_lhp() as $k=>$v)
+            {
+                $dtl['labels'][]=$v;
+                $dtl['datasets'][0]['data'][]=$totalTindaklanjut[$k];
+                $dtl['datasets'][0]['backgroundColor'][]=$colorlhp[str_slug($k-1)]=generate_color_one();
+                $datatl[str_slug($k-1)][]=$v;
+            }
+            $colorBoxTindakLanjut = $dtl['datasets'][0]['backgroundColor'];
+
+            if(Auth::user()->level=='pic-unit'){
+                $databataswaktu=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                            ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                            ->where('daftar_lhp.status_lhp','Publish LHP')
+                            ->where('daftar_lhp.tahun_pemeriksa',$thn)
+                            ->whereNull('data_rekomendasi.deleted_at')
+                            ->orderBy('data_rekomendasi.nomor_rekomendasi')
+                            // ->groupBy('data_temuan.id_lhp')
+                            ->get();
+            }else{
+                $databataswaktu=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                            ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                            ->where('daftar_lhp.status_lhp','Publish LHP')
+                            ->where('daftar_lhp.tahun_pemeriksa',$thn)
+                            ->where('data_rekomendasi.senior_user_id',Auth::user()->id)
+                            ->whereNull('data_rekomendasi.deleted_at')
+                            ->orderBy('data_rekomendasi.nomor_rekomendasi')
+                            // ->groupBy('data_temuan.id_lhp')
+                            ->get();
+            }
+
+                    $arrayBts=array();
+                    foreach($databataswaktu as $k=>$v){
+                        if($v->tanggal_penyelesaian!='')
+                        {
+                            if($v->tanggal_penyelesaian == $now){
+                                $arrayBts['sudah-masuk-batas-waktu-penyelesaian'][]=$v;
+                                if($v->level_resiko_id == 2){
+                                    $arrayBts['low']['sudah-masuk-batas-waktu-penyelesaian'][]=$v;
+                                }elseif($v->level_resiko_id == 3){
+                                    $arrayBts['med']['sudah-masuk-batas-waktu-penyelesaian'][]=$v;
+                                }elseif($v->level_resiko_id == 4){
+                                    $arrayBts['high']['sudah-masuk-batas-waktu-penyelesaian'][]=$v;
+                                }
+                            }elseif($now > $v->tanggal_penyelesaian){
+                                $arrayBts['melewati-batas-waktu-penyelesaian'][]=$v;
+                                if($v->level_resiko_id == 2){
+                                    $arrayBts['low']['melewati-batas-waktu-penyelesaian'][]=$v;
+                                }elseif($v->level_resiko_id == 3){
+                                    $arrayBts['med']['melewati-batas-waktu-penyelesaian'][]=$v;
+                                }elseif($v->level_resiko_id == 4){
+                                    $arrayBts['high']['melewati-batas-waktu-penyelesaian'][]=$v;
+                                }
+                            }elseif($now < $v->tanggal_penyelesaian){
+                                $arrayBts['belum-masuk-batas-waktu-penyelesaian'][] =$v;
+                                if($v->level_resiko_id == 2){
+                                    $arrayBts['low']['belum-masuk-batas-waktu-penyelesaian'][]=$v;
+                                }elseif($v->level_resiko_id == 3){
+                                    $arrayBts['med']['belum-masuk-batas-waktu-penyelesaian'][]=$v;
+                                }elseif($v->level_resiko_id == 4){
+                                    $arrayBts['high']['belum-masuk-batas-waktu-penyelesaian'][]=$v;
+                                }
+                            }
+                        }
+                    }
+                    // return $arrayBts;
+                    
+                    $doverdue=array();
+                    $bataswaktu=bataswaktu();
+                    $colorbataswaktu=array();
+                    foreach($bataswaktu as $k=>$v)
+                    {
+                        $doverdue['labels'][]=$bataswaktu[$k];
+                        $doverdue['datasets'][0]['data'][]=isset($arrayBts[$k]) ? count($arrayBts[$k]) : 0;
+                        $doverdue['datasets'][0]['priority_low'][]=isset($arrayBts['low'][$k]) ? count($arrayBts['low'][$k]) : 0;
+                        $doverdue['datasets'][0]['priority_med'][]=isset($arrayBts['med'][$k]) ? count($arrayBts['med'][$k]) : 0;
+                        $doverdue['datasets'][0]['priority_high'][]=isset($arrayBts['high'][$k]) ? count($arrayBts['high'][$k]) : 0;
+                        $doverdue['datasets'][0]['backgroundColor'][]=$colorbataswaktu[($k)]=generate_color_one();
+                    }
+                    $color['colorbataswaktu']=$colorbataswaktu;
             // return $doverdue;
             return view('backend.pages.dashboard.auditor-senior')
                     // ->with('lhp',$lhp)
+                    ->with('colorBoxTindakLanjut', $colorBoxTindakLanjut)
                     ->with('dtl',$dtl)
                     ->with('status',$status)
                     ->with('overdue',$overdue)

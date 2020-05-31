@@ -161,6 +161,7 @@ function gettablerincian_unitkerja_lain(jenis, idtemuan, idrekom) {
 }
 function gettablerincian(jenis, idtemuan, idrekom) {
     $('#right-div').load(flagsUrl + '/load-table-rincian/' + jenis + '/' + idtemuan + '/' + idrekom, function () {
+        console.log(jenis +' '+ idtemuan+' '+idrekom);
         $('#table-tl-rincian-'+idrekom).DataTable({
             responsive: true
         });

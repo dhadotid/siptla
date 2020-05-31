@@ -140,8 +140,8 @@
                                 <a class="btn btn-xs btn-success"><i class="fa fa-file-excel-o"></i> Export Ke Excel</a> -->
                             </div>
                         </div>
-
-                        <table id="table" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                        <!--table-striped-->
+                        <table id="table" class="table table-bordered" cellspacing="0" width="100%">
                             <thead>
                                 <tr class="primary">
                                     <th class="text-center" style="width:15px;">#</th>

@@ -23,7 +23,7 @@
 				<div class="widget p-md clearfix">
 					<span class="pull-right fz-lg fw-500 counter" style="height:68px;padding-top:15px;">
 						Tahun&nbsp;&nbsp;
-						<select class="form-control pull-right" name="tahun" id="tahun" style="width:200px;" onchange="location.href='{{url('pimpinan')}}/'+this.value">
+						<select class="form-control pull-right" name="tahun" id="tahun" style="width:200px;" onchange="location.href='{{url('dashboard')}}/'+this.value">
 							@for($thn=date('Y');$thn>=(date('Y')-20);$thn--)
 								@if ($thn==$tahun)
 									<option value="{{$thn}}" selected="selected" style="text-align:right">{{$thn}}</option>
@@ -45,7 +45,7 @@
 						<small class="text-color">Temuan Per - Bidang</small>
                     </div>
                     <br><br>
-					<canvas id="myChart" height="412px"></canvas>
+					<canvas id="myChart" height="265px"></canvas>
 				</div>
             </div>
             <div class="col-md-5 col-sm-5">
@@ -54,22 +54,22 @@
 						<small class="text-color">Tingkat Penyelesaian Temuan</small>
                     </div>
                     <br><br>
-                    <div class="col-md-12" height="500px">
+                    <div class="col-md-12" height="170px">
                         <div class="row">
                             <div class="col-md-4 col-sm-4">
-                                <canvas id="totalTemuan" height="500px"></canvas>
+                                <canvas id="totalTemuan" height="170px"></canvas>
                                 <div class="text-center">
                                     <small class="text-color">Total Temuan</small>
                                 </div>
                             </div>
                             <div class="col-md-4 col-sm-4">
-                                <canvas id="temuanAuditInternal" height="500px"></canvas>
+                                <canvas id="temuanAuditInternal" height="170px"></canvas>
                                 <div class="text-center">
                                     <small class="text-color">Temuan Audit Internal</small>
                                 </div>
                             </div>
                             <div class="col-md-4 col-sm-4">
-                                <canvas id="temuanAuditExternal" height="500px"></canvas>
+                                <canvas id="temuanAuditExternal" height="170px"></canvas>
                                 <div class="text-center">
                                     <small class="text-color">Temuan Audit External</small>
                                 </div>
@@ -84,7 +84,7 @@
 						<small class="text-color">Rekomendasi Yang Overdue</small>
                     </div>
                     <br><br>
-					<canvas id="chartOverdue"></canvas>
+					<canvas id="chartOverdue" height="90px"></canvas>
 				</div>
             </div>
             <div class="col-md-5 col-sm-5">
@@ -93,7 +93,7 @@
 						<small class="text-color">Monitoring Tindak Lanjut</small>
                     </div>
                     <br><br>
-					<canvas id="chartTindakLanjut"></canvas>
+					<canvas id="chartTindakLanjut" height="90px"></canvas>
 				</div>
             </div>
         </div>

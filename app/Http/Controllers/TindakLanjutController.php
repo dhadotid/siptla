@@ -192,6 +192,9 @@ class TindakLanjutController extends Controller
             if($request->pemeriksa!=0)
                 $wh['daftar_lhp.pemeriksa_id']=$request->pemeriksa;
         }
+        if($request->priority!=''){
+            $wh['data_temuan.level_resiko_id']=$request->priority;
+        }
         $statusrekom=StatusRekomendasi::all();
         $st=array();
         foreach($statusrekom as $k=>$v)
@@ -221,6 +224,7 @@ class TindakLanjutController extends Controller
                                 ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
                                 ->where('daftar_lhp.status_lhp','Publish LHP')
                                 ->where('daftar_lhp.tahun_pemeriksa',$tahun)
+                                ->where($wh)
                                 ->where('data_rekomendasi.senior_user_id',Auth::user()->id)
                                 ->whereNull('data_rekomendasi.deleted_at')
                                 ->orderBy('data_rekomendasi.nomor_rekomendasi')
@@ -341,9 +345,14 @@ class TindakLanjutController extends Controller
     {
         // return $request->all();
         $keybataswaktu='';
+        $wh=array();
         if(isset($request->key))
             $keybataswaktu=$request->key;
 
+        if($request->priority!=''){
+            $wh['data_temuan.level_resiko_id']=$request->priority;
+        }
+        $wh['daftar_lhp.tahun_pemeriksa']=$tahun;
         // return $keybataswaktu;
         $tahun=($tahun==null ? date('Y') : $tahun);
         $rekomid=($rekomid==null ? -1 : $rekomid);
@@ -376,7 +385,7 @@ class TindakLanjutController extends Controller
                                 ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
                                 // ->join('tindak_lanjut_rincian', 'data_temuan.id', '=', 'tindak_lanjut_rincian.id_temuan')
                                 ->where('daftar_lhp.status_lhp','Publish LHP')
-                                ->where('daftar_lhp.tahun_pemeriksa',$tahun)
+                                ->where($wh)
                                 ->where('daftar_lhp.user_input_id',Auth::user()->id)
                                 ->whereNull('data_rekomendasi.deleted_at')
                                 ->orderBy('data_rekomendasi.nomor_rekomendasi')
@@ -387,7 +396,7 @@ class TindakLanjutController extends Controller
             $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
                                 ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
                                 ->where('daftar_lhp.status_lhp','Publish LHP')
-                                ->where('daftar_lhp.tahun_pemeriksa',$tahun)
+                                ->where($wh)
                                 ->where('data_rekomendasi.senior_user_id',Auth::user()->id)
                                 ->whereNull('data_rekomendasi.deleted_at')
                                 ->orderBy('data_rekomendasi.nomor_rekomendasi')
@@ -397,13 +406,12 @@ class TindakLanjutController extends Controller
                                 ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
                                 ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
                                 ->where('daftar_lhp.status_lhp','Publish LHP')
-                                ->where('daftar_lhp.tahun_pemeriksa',$tahun)
+                                ->where($wh)
                                 ->whereNull('data_rekomendasi.deleted_at')
                                 ->orderBy('data_rekomendasi.nomor_rekomendasi')
                                 ->get();
         }
         
-
         $lhp=$temuan=$rekomendasi=$arrayrekomid=array();
         $now=date('Y-m-d');
         foreach($alldata as $k=>$v)
@@ -423,7 +431,7 @@ class TindakLanjutController extends Controller
                             $arrayrekomid[$v->id_rekom]=$v->id_rekom;
                         }
                     }
-                    if($keybataswaktu=='melewati-batas-waktu-penyelesaian')
+                    elseif($keybataswaktu=='melewati-batas-waktu-penyelesaian')
                     {
                         if($now>$tgl_penyelsaian)
                         {
@@ -433,7 +441,7 @@ class TindakLanjutController extends Controller
                             $arrayrekomid[$v->id_rekom]=$v->id_rekom;
                         }
                     }
-                    if($keybataswaktu=='belum-masuk-batas-waktu-penyelesaian')
+                    elseif($keybataswaktu=='belum-masuk-batas-waktu-penyelesaian')
                     {
                         if($now<$tgl_penyelsaian)
                         {
@@ -443,19 +451,19 @@ class TindakLanjutController extends Controller
                             $arrayrekomid[$v->id_rekom]=$v->id_rekom;
                         }
                     }
-                    if($keybataswaktu=='create-oleh-unit-kerja'){
+                    elseif($keybataswaktu=='create-oleh-unit-kerja'){
                         $arrayrekomid[$v->id_rekom]=$v->id_rekom;
                     }
-                    if($keybataswaktu=='belum-direview-spi'){
+                    elseif($keybataswaktu=='belum-direview-spi'){
                         $arrayrekomid[$v->id_rekom]=$v->id_rekom;
                     }
-                    if($keybataswaktu=='sedang-direview-spi'){
+                    elseif($keybataswaktu=='sedang-direview-spi'){
                         $arrayrekomid[$v->id_rekom]=$v->id_rekom;
                     }
-                    if($keybataswaktu=='sudah-direview-spi'){
+                    elseif($keybataswaktu=='sudah-direview-spi'){
                         $arrayrekomid[$v->id_rekom]=$v->id_rekom;
                     }
-                    if($keybataswaktu=='sudah-dipublish-oleh-spi'){
+                    elseif($keybataswaktu=='sudah-dipublish-oleh-spi'){
                         $arrayrekomid[$v->id_rekom]=$v->id_rekom;
                     }
                 }
@@ -468,7 +476,7 @@ class TindakLanjutController extends Controller
                 $arrayrekomid[$v->id_rekom]=$v->id_rekom;
             }
         }
-
+        
         $get_tl=TindakLanjutTemuan::whereIn('rekomendasi_id',$arrayrekomid)->get();
         $tindaklanjut=array();
         foreach($get_tl as $k=>$v)

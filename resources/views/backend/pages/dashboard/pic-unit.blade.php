@@ -8,7 +8,7 @@
 	<div class="col-md-12">
         <div class="row">
 			
-			<div class="col-md-6 col-sm-6">
+			<div class="col-md-9 col-sm-6">
 				<div class="widget p-md clearfix">
 					<div class="pull-left">
 						<small class="text-color">Login Sebagai</small>
@@ -19,7 +19,57 @@
                     </span>
 				</div><!-- .widget -->
 			</div>
-			<div class="col-md-6 col-sm-6">
+			
+			{{-- <div class="col-md-3 col-sm-3">
+				<div class="widget p-md clearfix">
+								@php
+									$periode=\App\Models\PeriodeReview::first();
+									if($periode)
+									{
+										$tglmulai=$periode->tanggal_mulai;
+										$tglselesai=$periode->tanggal_selesai;
+										$id=$periode->id;
+									}
+									else
+									{
+										$tanggal=periodereview();
+										$tglmulai=$tanggal['tanggal_mulai'];
+										$tglselesai=$tanggal['tanggal_selesai'];
+										$id=0;
+									}
+
+									// if(isInDate($tglmulai,$tglselesai))
+									if(date('d')<=$tglmulai && date('d')>=$tglselesai)
+									{
+										$st_period=1;
+										$class='text-success';
+									}
+									else
+									{
+										$st_period=0;
+										$class='text-danger';
+									}
+								@endphp
+					<span class="pull-left" style="height:68px;width:100%">
+						<small class="text-color">Periode Review</small> : <span id="status_periode" class="{{$class}}" style="font-size:13px;font-weight:bold;">{{$st_period==1 ? 'Aktif' : 'Tidak Aktif'}}</span>
+						<div style="margin-top:5px;" class="row">
+							<div class="col-md-5">
+								<label class="switch">
+									<input type="checkbox" {{$st_period==1 ? 'checked' : ''}} onchange="periode({{$id}})" id="input-period">
+									<span class="slider"></span>
+								</label>
+							</div>
+							<div class="col-md-7">
+								
+								<small class="text-color" style="font-size:10px">Tanggal Mulai :</small> <b>{{$tglmulai}}</b><br>
+								<small class="text-color" style="font-size:10px">Tanggal Selesai :</small> <b>{{$tglselesai}}</b>
+							</div>
+							
+						</div>
+					</span>
+				</div>
+			</div> --}}
+			<div class="col-md-3 col-sm-3">
 				<div class="widget p-md clearfix">
 					<span class="pull-right fz-lg fw-500 counter" style="height:68px;padding-top:15px;">
 						Tahun&nbsp;&nbsp;
@@ -41,11 +91,11 @@
 	<div class="col-md-12">
         <div class="row">
 			<div class="col-md-4 col-sm-4">
-				<div class="widget p-md clearfix"  style="height:650px !important;">
+				<div class="widget p-md clearfix " style="height:650px !important;">
 					<div class="pull-left">
 						<small class="text-color">Statistik Rekomendasi ({{isset($rekom['datasets'][0]['data']) ? count($rekom['datasets'][0]['data']) : 0}})</small>
 					</div>
-					<canvas id="chart1" style="width:100%" height="400"></canvas>
+					<canvas id="chart1" style="width:100%;margin-top:80px;" height="300"></canvas>
 					<div class='cell'>
 						<ul>
 							@foreach ($rekom['labels'] as $idx=>$item)
@@ -69,11 +119,11 @@
 				</div>
 			</div>
 			<div class="col-md-4 col-sm-4">
-				<div class="widget p-md clearfix"  style="height:650px !important;">
+				<div class="widget p-md clearfix " style="height:650px !important;">
 					<div class="pull-left">
 						<small class="text-color">Monitoring Review SPI ({{isset($dtl['datasets'][0]['data']) ? count($dtl['datasets'][0]['data']) : 0}})</small>
 					</div>
-					<canvas id="chart2" style="width:100%" height="400"></canvas>
+					<canvas id="chart2" style="width:100%;margin-top:80px;" height="300"></canvas>
 					<div class='cell'>
 						<ul>
 							@if (isset($dtl['labels']))
@@ -89,8 +139,8 @@
 
 										$dst[str_slug($item)]=str_slug($item);
 									@endphp
-									<li><div class="box" style="background: {{$warna}}"></div> 
-										<a href="#">{{$item}} ({{isset($dtl['datasets'][0]['data'][$idx]) ? $dtl['datasets'][0]['data'][$idx] : 0}})</a>
+									<li><div class="box" style="background: {{$colorBoxTindakLanjut[$idx]}}"></div> 
+										<a href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}">{{$item}} ({{isset($dtl['datasets'][0]['data'][$idx]) ? $dtl['datasets'][0]['data'][$idx] : 0}})</a>
 									</li>
 								@endforeach
 
@@ -98,7 +148,7 @@
 									@if(!in_array(str_slug($item),$dst))
 										<li>
 											<div class="box" style="background: {{generate_color_one()}}"></div> 
-											<a href="#">{{$item}} (0)</a>
+											<a href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}">{{$item}} (0)</a>
 										</li>
 									@endif
 								@endforeach
@@ -118,12 +168,46 @@
 			<div class="col-md-4 col-sm-4">
 				<div class="widget p-md clearfix " style="height:650px !important;">
 					<div class="pull-left">
-						<small class="text-color">Overdue Review (7)</small>
+						<small class="text-color">Overdue Review ({{count(bataswaktu())}})</small>
 					</div>
-					<canvas id="chart3" style="width:100%" height="400"></canvas>
+					<canvas id="chart3" style="width:100%;margin-top:80px;" height="300"></canvas>
 					<div class='cell'>
 						<ul>
+							@if (isset($doverdue['labels']))
+								@php
+									$dstatus=$dst=bataswaktu();
+								@endphp
+								@foreach ($doverdue['labels'] as $idx=>$item)
+									@php
+										if(isset($color['colorbataswaktu'][str_slug($item)]))
+											$warna=$color['colorbataswaktu'][str_slug($item)];
+										else
+											$warna='#ffffff';
+
+									@endphp
+									<li><div class="box" style="background: {{$warna}}"></div> 
+										{{--<a href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}">{{$item}} ({{isset($doverdue['datasets'][0]['data'][$idx]) ? $doverdue['datasets'][0]['data'][$idx] : 0}})</a>--}}
+										<div class="dropdown">
+										<a>{{$item}} ({{isset($doverdue['datasets'][0]['data'][$idx]) ? $doverdue['datasets'][0]['data'][$idx] : 0}})</a>
+										@if(isset($doverdue['datasets'][0]['data'][$idx]) ? $doverdue['datasets'][0]['data'][$idx] : 0 != 0)
+										<div class="dropdown-content">
+										<a @if(isset($doverdue['datasets'][0]['priority_low'][$idx]) ? $doverdue['datasets'][0]['priority_low'][$idx] : 0 != 0) href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}&priority=2" @endif>Low ({{isset($doverdue['datasets'][0]['priority_low'][$idx]) ? $doverdue['datasets'][0]['priority_low'][$idx] : 0}})</a>
+											<a @if(isset($doverdue['datasets'][0]['priority_med'][$idx]) ? $doverdue['datasets'][0]['priority_med'][$idx] : 0 != 0) href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}&priority=3" @endif>Medium ({{isset($doverdue['datasets'][0]['priority_med'][$idx]) ? $doverdue['datasets'][0]['priority_med'][$idx] : 0}})</a>
+											<a @if(isset($doverdue['datasets'][0]['priority_high'][$idx]) ? $doverdue['datasets'][0]['priority_high'][$idx] : 0 != 0)  href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}&priority=4"@endif>High ({{isset($doverdue['datasets'][0]['priority_high'][$idx]) ? $doverdue['datasets'][0]['priority_high'][$idx] : 0}})</a>
+										</div>
+										@endif
+									</li>
+								@endforeach
+
 							
+							@else	
+								@foreach (bataswaktu() as $item)
+									<li>
+										<div class="box" style="background: {{generate_color_one()}}"></div> 
+										<a href="#">{{$item}} (0)</a>
+									</li>
+								@endforeach
+							@endif
 							
 						</ul>
 					</div>
@@ -173,21 +257,7 @@
 		});
 		//---------------
 		var oilCanvas = document.getElementById("chart3");
-		var oilData = {
-			labels: [
-				"Saudi Arabia",
-				"Russia",
-				"Iraq",
-				"United Arab Emirates",
-				"Canada"
-			],
-			datasets: [
-				{
-					data: [133.3, 86.2, 52.2, 51.2, 50.2],
-					backgroundColor: <?php echo json_encode($color);?>
-				}]
-			
-		};
+		var oilData = <?php echo json_encode($doverdue);?>;
 		var pieChart = new Chart(oilCanvas, {
 			type: 'doughnut',
 			data: oilData,
@@ -200,7 +270,32 @@
 				}
 			}
 		});
-		
+		function periode(id)
+		{
+			var checkBox = document.getElementById("input-period");
+
+			if (checkBox.checked == true){
+				$.ajax({
+					url : flagsUrl+'/status-periode/'+id+'/1',
+					success : function(){
+						$('#status_periode').removeClass('text-danger');
+						$('#status_periode').addClass('text-success');
+						$('#status_periode').text('Aktif');
+						swal("Berhasil", "Status Periode Review Berhasil Di Edit", "success");
+					}
+				});
+			} else {
+				$.ajax({
+					url : flagsUrl+'/status-periode/'+id+'/0',
+					success : function(){
+						$('#status_periode').removeClass('text-success');
+						$('#status_periode').addClass('text-danger');
+						$('#status_periode').text('Tidak Aktif');
+						swal("Berhasil", "Status Periode Review Berhasil Di Edit", "success");
+					}
+				});
+			}
+		}
 	</script>
 	<style>
 	.box{
@@ -213,6 +308,7 @@
 	.cell
 	{
 		width:100%;
+		margin-top:50px;
 		/* float:left; */
 	}
 	.cell li
@@ -221,5 +317,93 @@
 		width:100%;
 		float:left;
 	}
-	</style>
+
+		.switch {
+		position: relative;
+		display: inline-block;
+		width: 120px;
+		height: 40px;
+		}
+
+		.switch input { 
+		opacity: 0;
+		width: 0;
+		height: 0;
+		}
+
+		.slider {
+		position: absolute;
+		cursor: pointer;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: #ccc;
+		-webkit-transition: .4s;
+		transition: .4s;
+		}
+
+		.slider:before {
+		position: absolute;
+		content: "";
+		height: 32px;
+		width: 40px;
+		left: 30px;
+		bottom: 4px;
+		background-color: white;
+		-webkit-transition: .4s;
+		transition: .4s;
+		}
+
+		input:checked + .slider {
+		background-color: #2196F3;
+		}
+
+		input:focus + .slider {
+		box-shadow: 0 0 1px #2196F3;
+		}
+
+		input:checked + .slider:before {
+		-webkit-transform: translateX(26px);
+		-ms-transform: translateX(26px);
+		transform: translateX(26px);
+		}
+
+		/* Rounded sliders */
+		.slider.round {
+		border-radius: 34px;
+		}
+
+		.slider.round:before {
+		border-radius: 50%;
+		}
+		</style>
+		<style>
+		.dropdown {
+		position: relative;
+		display: inline-block;
+		}
+
+		.dropdown-content {
+		display: none;
+		position: absolute;
+		background-color: #f1f1f1;
+		min-width: 160px;
+		box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+		z-index: 1;
+		}
+
+		.dropdown-content a {
+		color: black;
+		padding: 12px 16px;
+		text-decoration: none;
+		display: block;
+		}
+
+		.dropdown-content a:hover {background-color: #ddd;}
+
+		.dropdown:hover .dropdown-content {display: block;}
+
+		.dropdown:hover .dropbtn {background-color: #3e8e41;}
+		</style>
 @endsection

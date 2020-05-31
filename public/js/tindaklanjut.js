@@ -156,6 +156,7 @@ function update_rincian(rekom_id,temuan_id)
 }
 function getrincainTables(title, jenis, idtemuan, idrekom, level, seniorPublish){
     //disini cek dia pic atau bukan kalo iya, di hide button addnya idnya -> tombol-add-rincian
+    // console.log(jenis +' '+ idtemuan+' '+idrekom);
     document.getElementById('modaltitle').textContent = title;
     $('#form-rincian').load(flagsUrl + '/load-table-rincian/' + jenis + '/' + idtemuan + '/' + idrekom,  function () {
         $('#rincian_tl').select2();

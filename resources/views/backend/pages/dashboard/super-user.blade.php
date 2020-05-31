@@ -23,13 +23,9 @@
 				<div class="widget p-md clearfix">
 					<span class="pull-right fz-lg fw-500 counter" style="height:68px;padding-top:15px;">
 						Tahun&nbsp;&nbsp;
-						<select class="form-control pull-right" name="tahun" id="tahun" style="width:200px;" onchange="location.href='{{url('dashboard')}}/'+this.value">
+						<select class="form-control pull-right" name="tahun" id="tahun" style="width:200px;">
 							@for($thn=date('Y');$thn>=(date('Y')-20);$thn--)
-								@if ($thn==$tahun)
-									<option value="{{$thn}}" selected="selected" style="text-align:right">{{$thn}}</option>
-								@else
-									<option value="{{$thn}}" style="text-align:right">{{$thn}}</option>
-								@endif
+								<option value="{{$thn}}" style="text-align:right">{{$thn}}</option>
 							@endfor
 						</select>
                     </span>
@@ -41,26 +37,18 @@
 	<div class="col-md-12">
         <div class="row">
 			<div class="col-md-4 col-sm-4">
-				<div class="widget p-md clearfix"  style="height:650px !important;">
+				<div class="widget p-md clearfix" style="height:650px !important;">
 					<div class="pull-left">
-						<small class="text-color">Statistik Rekomendasi ({{isset($rekom['datasets'][0]['data']) ? count($rekom['datasets'][0]['data']) : 0}})</small>
+						<small class="text-color">Rekapitulasi Jumlah PIC Unit ({{isset($datalevelpic['labels']) ? count($datalevelpic['labels']) : 0}})</small>
 					</div>
 					<canvas id="chart1" style="width:100%;margin-top:80px;" height="300"></canvas>
 					<div class='cell'>
 						<ul>
-							@foreach ($rekom['labels'] as $idx=>$item)
-								@php
-									if(isset($color['colorrekom'][str_slug($item)]))
-										$warna=$color['colorrekom'][str_slug($item)];
-									else
-										$warna='#ffffff';
-								@endphp
-								<li><div class="box" style="background: {{$warna}}"></div> 
-									@if ($dstatus[str_slug($item)])
-										<a href="{{url('data-lhp/'.$tahun.'/'.$dstatus[str_slug($item)]->id)}}">{{$item}} ({{isset($rekom['datasets'][0]['data'][$idx]) ? $rekom['datasets'][0]['data'][$idx] : 0}})</a>
-									@else
-										<a href="#">{{$item}} ({{isset($rekom['datasets'][0]['data'][$idx]) ? $rekom['datasets'][0]['data'][$idx] : 0}})</a>
-									@endif
+							
+							@foreach ($datalevelpic['labels'] as $idx=>$item)
+								<li>
+									<div class="box" style="background: {{isset($color['colorlevel'][$idx]) ? $color['colorlevel'][$idx] : '#ffffff'}}"></div> 
+									<a href="{{url('pic-unit')}}">{{$item}} ({{isset($datalevelpic['datasets'][0]['data'][$idx]) ? $datalevelpic['datasets'][0]['data'][$idx]: 0}})</a>
 								</li>
 							@endforeach
 							
@@ -69,10 +57,9 @@
 				</div>
 			</div>
 			<div class="col-md-4 col-sm-4">
-				<div class="widget p-md clearfix"  style="height:650px !important;">
+				<div class="widget p-md clearfix " style="height:650px !important;">
 					<div class="pull-left">
-						{{-- <small class="text-color">Monitoring Review SPI ({{isset($dtl['datasets'][0]['data']) ? count($dtl['datasets'][0]['data']) : 0}})</small> --}}
-						<small class="text-color">Monitoring Review SPI ({{count(status_lhp_key())}})</small>
+						<small class="text-color">Monitoring Review SPI ({{isset($dtl['datasets'][0]['data']) ? count($dtl['datasets'][0]['data']) : 0}})</small>
 					</div>
 					<canvas id="chart2" style="width:100%;margin-top:80px;" height="300"></canvas>
 					<div class='cell'>
@@ -98,7 +85,7 @@
 								@foreach ($dstatus as $item)
 									@if(!in_array(str_slug($item),$dst))
 										<li>
-											<div class="box" style="background: #fff"></div> 
+											<div class="box" style="background: {{generate_color_one()}}"></div> 
 											<a href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}">{{$item}} (0)</a>
 										</li>
 									@endif
@@ -106,8 +93,8 @@
 							@else	
 								@foreach (status_lhp() as $item)
 									<li>
-										<div class="box" style="background: #fff"></div> 
-										<a href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}">{{$item}} (0)</a>
+										<div class="box" style="background: {{generate_color_one()}}"></div> 
+										<a href="#">{{$item}} (0)</a>
 									</li>
 								@endforeach
 							@endif
@@ -123,6 +110,7 @@
 					</div>
 					<canvas id="chart3" style="width:100%;margin-top:80px;" height="300"></canvas>
 					<div class='cell'>
+						<ul>
 							@if (isset($doverdue['labels']))
 								@php
 									$dstatus=$dst=bataswaktu();
@@ -136,19 +124,16 @@
 
 									@endphp
 									<li><div class="box" style="background: {{$warna}}"></div> 
-										{{--{{url('data-lhp/'.$tahun.'/'.$dstatus[str_slug($item)]->id)}}<a href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}">{{$item}} ({{isset($doverdue['datasets'][0]['data'][$idx]) ? $doverdue['datasets'][0]['data'][$idx] : 0}})</a>--}}
+										{{--<a href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}">{{$item}} ({{isset($doverdue['datasets'][0]['data'][$idx]) ? $doverdue['datasets'][0]['data'][$idx] : 0}})</a>--}}
 										<div class="dropdown">
 										<a>{{$item}} ({{isset($doverdue['datasets'][0]['data'][$idx]) ? $doverdue['datasets'][0]['data'][$idx] : 0}})</a>
 										@if(isset($doverdue['datasets'][0]['data'][$idx]) ? $doverdue['datasets'][0]['data'][$idx] : 0 != 0)
-
 										<div class="dropdown-content">
-											<a @if(isset($doverdue['datasets'][0]['priority_low'][$idx]) ? $doverdue['datasets'][0]['priority_low'][$idx] : 0 != 0) href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}&priority=2" @endif>Low ({{isset($doverdue['datasets'][0]['priority_low'][$idx]) ? $doverdue['datasets'][0]['priority_low'][$idx] : 0}})</a>
+										<a @if(isset($doverdue['datasets'][0]['priority_low'][$idx]) ? $doverdue['datasets'][0]['priority_low'][$idx] : 0 != 0) href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}&priority=2" @endif>Low ({{isset($doverdue['datasets'][0]['priority_low'][$idx]) ? $doverdue['datasets'][0]['priority_low'][$idx] : 0}})</a>
 											<a @if(isset($doverdue['datasets'][0]['priority_med'][$idx]) ? $doverdue['datasets'][0]['priority_med'][$idx] : 0 != 0) href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}&priority=3" @endif>Medium ({{isset($doverdue['datasets'][0]['priority_med'][$idx]) ? $doverdue['datasets'][0]['priority_med'][$idx] : 0}})</a>
 											<a @if(isset($doverdue['datasets'][0]['priority_high'][$idx]) ? $doverdue['datasets'][0]['priority_high'][$idx] : 0 != 0)  href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}&priority=4"@endif>High ({{isset($doverdue['datasets'][0]['priority_high'][$idx]) ? $doverdue['datasets'][0]['priority_high'][$idx] : 0}})</a>
 										</div>
 										@endif
-										</div>
-										
 									</li>
 								@endforeach
 
@@ -166,6 +151,50 @@
 					</div>
 				</div>
 			</div>
+			{{--
+			<div class="col-md-4 col-sm-4">
+				<div class="widget p-md clearfix" style="height:650px !important;">
+					<div class="pull-left">
+						<small class="text-color">Rekapitulasi Pengguna ({{isset($dpengguna['labels']) ? count($dpengguna['labels']) : 0}})</small>
+					</div>
+					<canvas id="chart2" style="width:100%;margin-top:80px;" height="300"></canvas>
+					<div class='cell'>
+						<ul>
+							@foreach ($dpengguna['labels'] as $idx=>$item)
+								<li>
+									<div class="box" style="background: {{isset($color['coloruser'][$idx]) ? $color['coloruser'][$idx] : '#ffffff'}}"></div> 
+									<a href="{{url('pengguna/'.str_slug($item))}}">
+										{{$item}} ({{isset($dpengguna['datasets'][0]['data'][$idx]) ? $dpengguna['datasets'][0]['data'][$idx]: 0}})
+									</a>
+								</li>
+							@endforeach
+							
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 col-sm-4">
+				<div class="widget p-md clearfix" style="height:650px !important;">
+					<div class="pull-left">
+						<small class="text-color">Rekapitulasi Jumlah Pemeriksa ({{$pemeriksa->count()}})</small>
+					</div>
+					<canvas id="chart3" style="width:100%;margin-top:80px;" height="300"></canvas>
+					<div class='cell'>
+						<ul>
+							@foreach ($dpemeriksa['labels'] as $idx=>$item)
+								<li>
+									<div class="box" style="background: {{isset($color['colorpemeriksa'][$idx]) ? $color['colorpemeriksa'][$idx] : '#ffffff'}}"></div> 
+									<a href="{{url('pemeriksa')}}">
+										{{$item}} ({{isset($dpemeriksa['datasets'][0]['data'][$idx]) ? $dpemeriksa['datasets'][0]['data'][$idx]: 0}})
+									</a>
+								</li>
+							@endforeach
+							
+						</ul>
+					</div>
+				</div>
+			</div>
+			--}}
 		</div>
 	</div>
 	
@@ -180,7 +209,7 @@
 		var oilCanvas = document.getElementById("chart1");
 		Chart.defaults.global.defaultFontFamily = "Lato";
 		Chart.defaults.global.defaultFontSize = 18;
-		var oilData = <?php echo json_encode($rekom);?>;
+		var oilData = <?php echo json_encode($datalevelpic);?>;
 		var pieChart = new Chart(oilCanvas, {
 			type: 'doughnut',
 			data: oilData,
@@ -208,12 +237,12 @@
 				}
 			}
 		});
-		//---------------
-		var oilCanvas = document.getElementById("chart3");
-		var oilData = <?php echo json_encode($doverdue);?>;
-		var pieChart = new Chart(oilCanvas, {
+		//--------------
+		var jlhpemeriksa = document.getElementById("chart3");
+		var datapemeriksa = <?php echo json_encode($doverdue);?>;
+		var pieChart = new Chart(jlhpemeriksa, {
 			type: 'doughnut',
-			data: oilData,
+			data: datapemeriksa,
 			options: {
 				legend: {
 					display: false,
@@ -223,6 +252,7 @@
 				}
 			}
 		});
+
 		
 	</script>
 	<style>
@@ -247,32 +277,32 @@
 	}
 	</style>
 
-	<style>
-	.dropdown {
-	position: relative;
-	display: inline-block;
-	}
+		<style>
+		.dropdown {
+		position: relative;
+		display: inline-block;
+		}
 
-	.dropdown-content {
-	display: none;
-	position: absolute;
-	background-color: #f1f1f1;
-	min-width: 160px;
-	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-	z-index: 1;
-	}
+		.dropdown-content {
+		display: none;
+		position: absolute;
+		background-color: #f1f1f1;
+		min-width: 160px;
+		box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+		z-index: 1;
+		}
 
-	.dropdown-content a {
-	color: black;
-	padding: 12px 16px;
-	text-decoration: none;
-	display: block;
-	}
+		.dropdown-content a {
+		color: black;
+		padding: 12px 16px;
+		text-decoration: none;
+		display: block;
+		}
 
-	.dropdown-content a:hover {background-color: #ddd;}
+		.dropdown-content a:hover {background-color: #ddd;}
 
-	.dropdown:hover .dropdown-content {display: block;}
+		.dropdown:hover .dropdown-content {display: block;}
 
-	.dropdown:hover .dropbtn {background-color: #3e8e41;}
-	</style>
+		.dropdown:hover .dropbtn {background-color: #3e8e41;}
+		</style>
 @endsection

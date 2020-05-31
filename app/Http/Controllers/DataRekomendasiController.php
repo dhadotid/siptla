@@ -376,7 +376,7 @@ class DataRekomendasiController extends Controller
                             // $table.='<a class="label label-danger fz-sm" href="javascript:update_rincian('.$v->rekom_id.','.$idtemuan.')"><i class="fa fa-check"></i> Rincian : '.ucwords($v->rincian).'</a> &nbsp;<br>';
                             $rincianText = str_replace("Rincian Nilai", "",Config::get('constants.rincian.'.$v->rincian.''));
                             // $rincianText = str_replace('-', '',$rincianText);
-                            $table.='<a class="label label-danger fz-sm" href="javascript:getrincainTables(\''.Config::get('constants.rincian.'.$v->rincian.'').'\',\''.$v->rincian.'\',\''.$idtemuan.'\',\''.$v->rekom_id.'\',\''.Auth::user()->level.'\',\''.$v->senior_publish.'\')"><i class="fa fa-check"></i> Rincian : '.ucwords(str_slug($rincianText, ' ')).'</a> &nbsp;<br>';
+                            $table.='<a class="label label-danger fz-sm" href="javascript:getrincainTables(\''.Config::get('constants.rincian.'.$v->rincian.'').'\',\''.$v->rincian.'\',\''.$idtemuan.'\',\''.$v->id.'\',\''.Auth::user()->level.'\',\''.$v->senior_publish.'\')"><i class="fa fa-check"></i> Rincian : '.ucwords(str_slug($rincianText, ' ')).'</a> &nbsp;<br>';
                         }
                         // else
                         // {
@@ -821,6 +821,7 @@ class DataRekomendasiController extends Controller
         $table='';
         
         $rekom=DataRekomendasi::find($idrekomendasi);
+        // return 'hehehe '.$rekom;
 
         if($jenis=='sewa')
         {

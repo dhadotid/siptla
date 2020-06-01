@@ -57,20 +57,19 @@
                     <div class="col-md-12" height="170px">
                         <div class="row">
                             <div class="col-md-4 col-sm-4">
-                                <!-- <canvas id="totalTemuan" height="170px"></canvas> -->
-                                <div id="totalTemuan" class="circle-container" height="170px" ></div>
+                                <canvas id="totalTemuan" height="170px"></canvas>
                                 <div class="text-center">
                                     <small class="text-color">Total Temuan</small>
                                 </div>
                             </div>
                             <div class="col-md-4 col-sm-4">
-                                <div id="temuanAuditInternal" class="circle-container" height="170px" ></div>
+                                <canvas id="temuanAuditInternal" height="170px"></canvas>
                                 <div class="text-center">
                                     <small class="text-color">Temuan Audit Internal</small>
                                 </div>
                             </div>
                             <div class="col-md-4 col-sm-4">
-                                <div id="temuanAuditExternal" class="circle-container" height="170px" ></div>
+                                <canvas id="temuanAuditExternal" height="170px"></canvas>
                                 <div class="text-center">
                                     <small class="text-color">Temuan Audit External</small>
                                 </div>
@@ -106,7 +105,6 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato"/>
 <script src="{{asset('js/Chart.min.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/gh/emn178/chartjs-plugin-labels/src/chartjs-plugin-labels.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/progressbar.js/1.0.1/progressbar.min.js"></script>
 <script>
 var ctx = document.getElementById("myChart").getContext("2d");
 var data = <?php echo json_encode($temuans);?>;
@@ -148,6 +146,11 @@ var myBarChart = new Chart(ctx, {
                 return args.value;
             },
             arc: true
+            // position: 'outside',
+            // render: 'value',
+            // fontSize: 14,
+            //     fontStyle: 'bold',
+            //     fontColor: '#000',
             }
     }
   }
@@ -155,95 +158,70 @@ var myBarChart = new Chart(ctx, {
 </script>
 
 <script>
-var circleBar = new ProgressBar.Circle("#totalTemuan", {
-  color: "#a8d1f5",
-  strokeWidth: 1,
-  trailWidth: 25,
-  trailColor: "#5895f1",
-  easing: "easeInOut",
-  from: { color: "#5895f1", width: 1 },
-  to: { color: "#a8d1f5", width: 25 },
-  text: {
-    value: '30',
-    className: 'progress-text',
-    style: {
-      color: 'black',
-      position: 'absolute',
-      top: '35%',
-      left: '30%',
-      padding: 0,
-      margin: 0,
-      transform: null
+var ctx = document.getElementById('totalTemuan').getContext('2d');
+var totalTemuan = <?php echo json_encode($jsonTotalTemuan);?>;
+var myChart = new Chart(ctx, {
+    type: 'pie',
+    data: totalTemuan,
+    options: {
+        legend: {
+            display: false
+         },
+        plugins: {
+            labels: {
+                render: function (args) {
+                // console.log('hehe 'args);
+                if(args.value!=0)
+                    // console.log('hehe '+args);
+                },
+                arc: true
+                render: 'percentage',
+                fontSize: 14,
+                fontStyle: 'bold',
+                fontColor: '#ffff',
+            }
+        }
     }
-  },
-  step: (state, shape) => {
-    shape.path.setAttribute("stroke-width", 25);
-    shape.setText(Math.round(shape.value() * 100) + ' %');
-  }
 });
-var circleInternalBar = new ProgressBar.Circle("#temuanAuditInternal", {
-  color: "#a8d1f5",
-  strokeWidth: 1,
-  trailWidth: 25,
-  trailColor: "#5895f1",
-  easing: "easeInOut",
-  from: { color: "#5895f1", width: 1 },
-  to: { color: "#a8d1f5", width: 25 },
-  text: {
-    value: '30',
-    className: 'progress-text',
-    style: {
-      color: 'black',
-      position: 'absolute',
-      top: '35%',
-      left: '30%',
-      padding: 0,
-      margin: 0,
-      transform: null
+
+var ctx = document.getElementById('temuanAuditInternal').getContext('2d');
+var totalPemeriksaInternal = <?php echo json_encode($jsonPemeriksaInternal);?>;
+var myChart = new Chart(ctx, {
+    type: 'pie',
+    data: totalPemeriksaInternal,
+    options: {
+        legend: {
+            display: false
+         },
+         plugins: {
+            labels: {
+                render: 'percentage',
+                fontSize: 14,
+                fontStyle: 'bold',
+                fontColor: '#ffff',
+            }
+        }
     }
-  },
-  step: (state, shape) => {
-    shape.path.setAttribute("stroke-width", 25);
-    shape.setText(Math.round(shape.value() * 100) + ' %');
-  }
 });
-var circleExternalBar = new ProgressBar.Circle("#temuanAuditExternal", {
-  color: "#a8d1f5",
-  strokeWidth: 1,
-  trailWidth: 25,
-  trailColor: "#5895f1",
-  easing: "easeInOut",
-  from: { color: "#5895f1", width: 1 },
-  to: { color: "#a8d1f5", width: 25 },
-  text: {
-    value: '30',
-    className: 'progress-text',
-    style: {
-      color: 'black',
-      position: 'absolute',
-      top: '35%',
-      left: '30%',
-      padding: 0,
-      margin: 0,
-      transform: null
+
+var ctx = document.getElementById('temuanAuditExternal').getContext('2d');
+var totalPemeriksaExternal = <?php echo json_encode($jsonPemeriksaExternal);?>;
+var myChart = new Chart(ctx, {
+    type: 'pie',
+    data: totalPemeriksaExternal,
+    options: {
+        legend: {
+            display: false
+         },
+         plugins: {
+            labels: {
+                render: 'percentage',
+                fontSize: 14,
+                fontStyle: 'bold',
+                fontColor: '#ffff',
+            }
+        }
     }
-  },
-  step: (state, shape) => {
-    shape.path.setAttribute("stroke-width", 25);
-    shape.setText(Math.round(shape.value() * 100) + ' %');
-  }
-});
-var internalSPI = <?php echo json_encode($finalInternalSPI);?>;
-var externalSPI = <?php echo json_encode($finalExternal);?>;
-var totalTemuan = '0.'+ (Number(internalSPI) + Number(externalSPI));
-circleExternalBar.animate('0.'+Number(externalSPI), {
-    duration: 1700
-});
-circleInternalBar.animate('0.'+Number(internalSPI), {
-    duration: 1600
-});
-circleBar.animate(totalTemuan, {
-  duration: 1500
 });
 
 var ctx = document.getElementById('chartOverdue').getContext('2d');
@@ -396,18 +374,6 @@ var chart = new Chart(ctx, {
 		text-decoration: none;
 		display: block;
 		}
-
-        .circle-container {
-            width: 80px;
-            height: 80px;
-            margin: auto;
-        }
-        /* .progress-text {
-            font-size: 1.25em;
-            color: white;
-            margin-bottom: 1em;
-            font-weight: 60;
-        } */
 
 		.dropdown-content a:hover {background-color: #ddd;}
 

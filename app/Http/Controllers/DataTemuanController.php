@@ -242,11 +242,14 @@ class DataTemuanController extends Controller
                     }
                     // ->where('data_rekomendasi.tanggal_penyelesaian', '=', $now)
             $data = $data->where($wh)
+                    ->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
                     ->where('daftar_lhp.user_input_id',Auth::user()->id)
                     ->with('dpemeriksa')
                     ->with('djenisaudit')
                     ->groupBy('lhp_id')
                     ->orderBy('tanggal_lhp','desc')->get();
+
+            
         }
         elseif(Auth::user()->level=='auditor-senior')
         {
@@ -264,6 +267,7 @@ class DataTemuanController extends Controller
                     }
             $data = $data->where('daftar_lhp.tahun_pemeriksa',$thn)
                     ->where($wh)
+                    ->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
                     ->groupBy('lhp_id')
                     ->with('dpemeriksa')
                     ->with('djenisaudit')
@@ -304,6 +308,7 @@ class DataTemuanController extends Controller
                         $data = $data->where('data_rekomendasi.tanggal_penyelesaian', '<', $now);
                     }
                     $data = $data->where($wh)
+                            ->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
                             ->groupBy('lhp_id')
                             ->with('dpemeriksa')
                             ->with('djenisaudit')
@@ -338,6 +343,7 @@ class DataTemuanController extends Controller
                         $data = $data->where('data_rekomendasi.tanggal_penyelesaian', '<', $now);
                     }
             $data = $data->where($wh)
+                    ->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
                     ->groupBy('lhp_id')
                     // ->where('daftar_lhp.flag_unit_kerja',1)
                     ->with('dpemeriksa')

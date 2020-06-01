@@ -28,8 +28,17 @@
                                     </div>
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Pemeriksa</label>
+                                        {{-- <div class="col-md-6">
+                                            <select class="form-control pic2" id="pemeriksan" data-plugin="select2" name="pemeriksa[]" id="pemeriksan" onchange="loaddata();getlhp(this.value)" multiple>
+                                                <option value="0">Semua</option>
+                                                @foreach ($pemeriksa as $item)
+                                                    <option value="{{$item->id}}">{{$item->code}} - {{$item->pemeriksa}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>--}}
+                                        
                                         <div class="col-md-6">
-                                            <select class="select2 form-control" name="pemeriksa" id="pemeriksan" onchange="loaddata();getlhp(this.value)">
+                                            <select class="select2 form-control multiple"  name="pemeriksa" id="pemeriksan" onchange="loaddata();getlhp(this.value)" multiple>
                                                 <option value="0">Semua</option>
                                                 @foreach ($pemeriksa as $item)
                                                     <option value="{{$item->id}}">{{$item->code}} - {{$item->pemeriksa}}</option>

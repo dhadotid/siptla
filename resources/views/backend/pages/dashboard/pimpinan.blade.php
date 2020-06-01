@@ -45,7 +45,7 @@
 						<small class="text-color">Temuan Per - Bidang</small>
                     </div>
                     <br><br>
-					<canvas id="myChart" height="265px"></canvas>
+					<canvas id="myChart" height="280%"></canvas>
 				</div>
             </div>
             <div class="col-md-5 col-sm-5">
@@ -54,23 +54,23 @@
 						<small class="text-color">Tingkat Penyelesaian Temuan</small>
                     </div>
                     <br><br>
-                    <div class="col-md-12" height="170px">
+                    <div class="col-md-12" height="92%">
                         <div class="row">
                             <div class="col-md-4 col-sm-4">
                                 <!-- <canvas id="totalTemuan" height="170px"></canvas> -->
-                                <div id="totalTemuan" class="circle-container" height="170px" ></div>
+                                <div id="totalTemuan" class="circle-container" height="93%" ></div>
                                 <div class="text-center">
                                     <small class="text-color">Total Temuan</small>
                                 </div>
                             </div>
                             <div class="col-md-4 col-sm-4">
-                                <div id="temuanAuditInternal" class="circle-container" height="170px" ></div>
+                                <div id="temuanAuditInternal" class="circle-container" height="93%" ></div>
                                 <div class="text-center">
                                     <small class="text-color">Temuan Audit Internal</small>
                                 </div>
                             </div>
                             <div class="col-md-4 col-sm-4">
-                                <div id="temuanAuditExternal" class="circle-container" height="170px" ></div>
+                                <div id="temuanAuditExternal" class="circle-container" height="93%" ></div>
                                 <div class="text-center">
                                     <small class="text-color">Temuan Audit External</small>
                                 </div>
@@ -85,7 +85,7 @@
 						<small class="text-color">Rekomendasi Yang Overdue</small>
                     </div>
                     <br><br>
-					<canvas id="chartOverdue" height="90px"></canvas>
+					<canvas id="chartOverdue" height="98%"></canvas>
 				</div>
             </div>
             <div class="col-md-5 col-sm-5">
@@ -94,7 +94,7 @@
 						<small class="text-color">Monitoring Tindak Lanjut</small>
                     </div>
                     <br><br>
-					<canvas id="chartTindakLanjut" height="90px"></canvas>
+					<canvas id="chartTindakLanjut" height="98%"></canvas>
 				</div>
             </div>
         </div>

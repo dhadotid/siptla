@@ -295,7 +295,10 @@ function rekomsetujui(idtemuan, idrekom, status_rekom) {
                         text: 'Data Rekomendasi Telah Disetujui dan Akan segera di Publish ke PIC Unit',
                         icon: 'success'
                     }).then(function () {
+                        // $('#temuan_' + idtemuan).load(flagsUrl + '/rekomendasi-data-new/' + idtemuan + '/' + status_rekom); 
                         $('#temuan_' + idtemuan).load(flagsUrl + '/rekomendasi-data-new/' + idtemuan + '/' + status_rekom);
+                        // location.href = flagsUrl +'/data-temuan-lhp/{idlhp}/{status_rekomendasi?}/'+tahun;
+                        window.location.reload();
                     });
 
                 }

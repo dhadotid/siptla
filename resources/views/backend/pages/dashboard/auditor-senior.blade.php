@@ -4,7 +4,6 @@
 	<title>Dashboard</title>
 @endsection
 @section('content')
-
 	<div class="col-md-12">
         <div class="row">
 			

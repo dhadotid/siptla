@@ -5,15 +5,16 @@
         <div class="col-md-1 text-right">
             <form action="{{url('laporan/tindaklanjut-per-bidang-pdf')}}" method="post" id="cetakpdf" target="_blank">
                 @csrf
-                <input type="hidden" name="pemeriksa" value="{{$request->pemeriksa}}">
-                <input type="hidden" name="no_lhp" value="{{$no_lhp}}">
-                <input type="hidden" name="unit_kerja1" value="{{$unit_kerja1}}">
-                <input type="hidden" name="unit_kerja2" value="{{$unit_kerja2}}">
-                <input type="hidden" name="statusrekomendasi" value="{{$request->statusrekomendasi}}">
+                <input type="hidden" name="pemeriksa" value="{{implode(',', $request->pemeriksa)}}">
+                <input type="hidden" name="no_lhp" value="{{implode(',', $no_lhp)}}">
+                <input type="hidden" name="statusrekomendasi" value="{{implode(',', $request->statusrekomendasi)}}">
+                <input type="hidden" name="bidang" value="{{implode(',', $request->bidang)}}">
+                <input type="hidden" name="level_resiko" value="{{implode(',', $request->level_resiko)}}">
                 <input type="hidden" name="tanggal_awal" value="{{$request->tgl_awal}}">
                 <input type="hidden" name="tanggal_akhir" value="{{$request->tgl_akhir}}">
-                <input type="hidden" name="pejabat" value="{{$request->pejabat}}">
-                <input type="hidden" name="bidang" value="{{$bidang}}">
+                <input type="hidden" name="overdue" value="{{$request->overdue}}">
+                <input type="hidden" name="unit_kerja1" value="{{implode(',', $unit_kerja1)}}">
+                <input type="hidden" name="unit_kerja2" value="{{implode(',', $unit_kerja2)}}">
                 <button type="submit" class="btn btn-xs btn-primary"><i class="fa fa-print"></i> Cetak Data</button>
             </form>
         </div>
@@ -27,13 +28,20 @@
     <div class="row" style="margin-bottom:20px;">
         <div class="col-md-12 text-center">
             <h5>
-                TABEL PEMANTAUAN TINDAK LANJUT <br>
-                PEMERIKSA <span style="font-weight: bold;text-decoration:underline" id="span_pemeriksa">{{strtoupper($npemeriksa ? $npemeriksa->pemeriksa : '')}}</span><br>
-                PERIODE <span style="font-weight: bold;text-decoration:underline" id="span_tgl_awal">{{tgl_indo($tgl_awal)}}</span> s.d. <span style="font-weight: bold;text-decoration:underline" id="span_tgl_akhir">{{tgl_indo($tgl_akhir)}}</span> <br>
-                UNIT KERJA <span style="font-weight: bold;text-decoration:underline" id="span_unitkerja">
-                    {{-- {{isset($pic_unit[$unitkerja1]) ? $pic_unit[$unitkerja1]->nama_pic : 'UNIT KERJA 1'}}
-                    {{isset($pic_unit[$unitkerja2]) ? ', '.$pic_unit[$unitkerja2]->nama_pic : ', UNIT KERJA 2'}} --}}
-                </span>
+                @php
+                $pemeriksaTitle='';
+                if(implode(',', $request->pemeriksa) == 0){
+                    $pemeriksaTitle.='Semua';
+                }else{
+                    foreach($npemeriksa as $k=>$v){
+                        $pemeriksaTitle.=$v->pemeriksa.' ';
+                    }
+                }
+                @endphp
+                LAPORAN TINDAK LANJUT - UNIT KERJA <br>
+                PEMERIKSA: <span style="font-weight: bold;" id="span_pemeriksa">{{$pemeriksaTitle}}</span><br>
+                PERIODE: <span style="font-weight: bold;" id="span_tgl_awal">{{tgl_indo($tgl_awal)}}</span> s.d. <span style="font-weight: bold;" id="span_tgl_akhir">{{tgl_indo($tgl_akhir)}}</span> <br>
+                UNIT KERJA: <span style="font-weight: bold;" id="span_unitkerja">{{$selectedPic}}</span>
             </h5>
         </div>
     </div>
@@ -58,7 +66,7 @@
                 <th class="text-center">Level Resiko</th>
                 <th class="text-center">Nilai<br> Rekomendasi</th>
                 <th class="text-center">Saran dan<br>Rekomendasi</th>
-                <th class="text-center">Nilai<br>Rekomendasi</th>
+                <th class="text-center">No<br>Rekomendasi</th>
                 <th class="text-center">Status<br>Rekomendasi</th>
                 <th class="text-center">Tindak Lanjut</th>
                 <th class="text-center">Nilai<br>Tindak Lanjut</th>

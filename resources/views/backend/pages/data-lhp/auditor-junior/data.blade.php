@@ -82,6 +82,13 @@
                                             @endif
                                             
                                         </li>
+                                        @if(Auth::user()->level=='auditor-junior' && $item->status_lhp=='Create LHP')
+                                            @if($item->deliver_to!='0')
+                                                <li><a href="#" style="font-size:11px;"><i class="glyphicon glyphicon-ok"></i> &nbsp;&nbsp;Sudah Publish Ke Senior</a></li>
+                                            @else
+                                                <li><a href="javascript:publishkesenior({{$item->lhp_id}})" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Senior</a></li>
+                                            @endif
+                                        @endif
                                         <li>
                                             <a href="#" data-toggle="modal" data-target="#modalreview" data-value="{{$item->lhp_id}}" class="btn-review"><i class="glyphicon glyphicon-comment"></i> &nbsp;&nbsp;Tanggapan dan Review LHP</a>
                                         </li>
@@ -168,6 +175,13 @@
                                             <a href="#" onclick="detaillhp({{$item->lhp_id}},0)"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail LHP</a>
                                         @endif
                                     </li>
+                                    @if(Auth::user()->level=='auditor-junior' && $item->status_lhp=='Create LHP')
+                                        @if($item->deliver_to!='0')
+                                            <li><a href="#" style="font-size:11px;"><i class="glyphicon glyphicon-ok"></i> &nbsp;&nbsp;Sudah Publish Ke Senior</a></li>
+                                        @else
+                                            <li><a href="javascript:deliverlhp({{$item->lhp_id}})" style="font-size:11px;"><i class="glyphicon glyphicon-send"></i> &nbsp;&nbsp;Publish Ke Senior</a></li>
+                                        @endif
+                                    @endif
                                     <li>
                                         <a href="#" data-toggle="modal" data-target="#modalreview" data-value="{{$item->lhp_id}}" class="btn-review"><i class="glyphicon glyphicon-comment"></i> &nbsp;&nbsp;Tanggapan dan Review LHP</a>
                                     </li>

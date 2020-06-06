@@ -132,6 +132,37 @@ function detaillhp(id,offset,statusrekom=null)
     $('#modaldetail').modal('show');
 }
 
+function deliverlhp(idlhp){
+    var tahun = $('#tahun').val();
+    swal({
+        title: "Apakah Anda Yakin ?",
+        text: "Ingin Mempublish Data LHP ini",
+        icon: "info",
+        buttons: [
+            'Tidak!',
+            'Ya, Publish'
+        ],
+        dangerMode: true,
+    }).then(function (isConfirm) {
+        if (isConfirm) {
+            $.ajax({
+                url : flagsUrl + '/update-lhp-status/'+idlhp,
+                success : function(){
+                    swal({
+                        title: 'Berhasil!',
+                        text: 'Data LHP Berhasil Dipublish',
+                        icon: 'success'
+                    }).then(function () {
+                        location.href = flagsUrl +'/data-lhp/'+tahun;
+                    });
+                }
+            });
+        } else {
+            
+        }
+    });
+}
+
 function reviewlhp(id)
 {
     $('#review').load(flagsUrl + '/data-lhp-review/'+id,function(){

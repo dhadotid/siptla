@@ -35,7 +35,7 @@
             <span class="menu-text">Dashboard</span>
           </a>
         </li>
-         @if (Auth::user()->level!='pic-unit' && Auth::user()->level!='auditor-junior' && Auth::user()->level!='auditor-senior' && Auth::user()->level=='pimpinan-kepala-spi' && Auth::user()->level=='pimpinan-kepala-bidang')
+         @if (Auth::user()->level=='0' || Auth::user()->level=='super-user')
           <li class="has-submenu {{$url=='data-temuan' || $url=='data-penyebab' || $url=='data-rekomendasi' || $url=='bidang-pengawasan' ? 'active open' : ''}}">
             <a href="javascript:void(0)" class="submenu-toggle">
               <i class="menu-icon fa fa-bars"></i>

@@ -386,6 +386,7 @@ class TindakLanjutController extends Controller
                                 // ->join('tindak_lanjut_rincian', 'data_temuan.id', '=', 'tindak_lanjut_rincian.id_temuan')
                                 ->where('daftar_lhp.status_lhp','Publish LHP')
                                 ->where($wh)
+                                // ->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
                                 ->where('daftar_lhp.user_input_id',Auth::user()->id)
                                 ->whereNull('data_rekomendasi.deleted_at')
                                 ->orderBy('data_rekomendasi.nomor_rekomendasi')
@@ -397,6 +398,7 @@ class TindakLanjutController extends Controller
                                 ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
                                 ->where('daftar_lhp.status_lhp','Publish LHP')
                                 ->where($wh)
+                                // ->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
                                 ->where('data_rekomendasi.senior_user_id',Auth::user()->id)
                                 ->whereNull('data_rekomendasi.deleted_at')
                                 ->orderBy('data_rekomendasi.nomor_rekomendasi')
@@ -405,6 +407,7 @@ class TindakLanjutController extends Controller
             $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
                                 ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
                                 ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                                // ->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
                                 ->where('daftar_lhp.status_lhp','Publish LHP')
                                 ->where($wh)
                                 ->whereNull('data_rekomendasi.deleted_at')
@@ -602,6 +605,7 @@ class TindakLanjutController extends Controller
                                 ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
                                 ->where('daftar_lhp.status_lhp','Publish LHP')
                                 ->where('daftar_lhp.tahun_pemeriksa',$tahun)
+                                // ->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
                                 ->where(function($query) use ($user_pic){
                                     $query->where('data_rekomendasi.pic_1_temuan_id', $user_pic->id);
                                     $query->orWhere('data_rekomendasi.pic_2_temuan_id','like', "%$user_pic->id%,");

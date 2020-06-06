@@ -7,10 +7,10 @@
     <div class="row" style="padding:0px; margin:0px;">
             <div class="col-md-12 text-center" style="text-align:center">
                 <h5>
-                    TABEL TINDAK LANJUT REKOMENDASI <span style="font-weight: bold;text-decoration:underline" id="span_pemeriksa">{{strtoupper($npemeriksa ? $npemeriksa->pemeriksa : '')}}</span><br>
-                    PERIODE <span style="font-weight: bold;text-decoration:underline" id="span_tgl_awal">{{tgl_indo($tgl_awal)}}</span> s.d. <span style="font-weight: bold;text-decoration:underline" id="span_tgl_akhir">{{tgl_indo($tgl_akhir)}}</span> <br>
-                    <span style="font-weight: bold;text-decoration:underline" id="span_judul_lhp">{{isset($lhp[$no_lhp]) ? $lhp[$no_lhp]->judul_lhp : 'JUDUL LHP BERDASARKAN NO LHP YANG DIPILIH'}}</span><br>
-                    BIDANG <span style="font-weight: bold;text-decoration:underline" id="span_bidang">{{isset($nbidang->nama_bidang) ? strtoupper($nbidang->nama_bidang) : 'BIDANG'}}</span>
+                REKAPITULASI PEMERIKSAAN - BIDANG {{--<span style="font-weight: bold;" id="span_pemeriksa">{{strtoupper($npemeriksa ? $npemeriksa->pemeriksa : '')}}</span>--}}<br>
+                Periode: <span style="font-weight: bold;" id="span_tgl_awal">{{tgl_indo($tgl_awal)}}</span> s.d. <span style="font-weight: bold;" id="span_tgl_akhir">{{tgl_indo($tgl_akhir)}}</span> <br>
+                {{--<span style="font-weight: bold;" id="span_judul_lhp">{{isset($lhp[$no_lhp]) ? $lhp[$no_lhp]->judul_lhp : 'JUDUL LHP BERDASARKAN NO LHP YANG DIPILIH'}}</span><br>--}}
+                Bidang: <span style="font-weight: bold;" id="span_bidang">{{$bidangTitle}}</span>
                 </h5>
             </div>
         </div>

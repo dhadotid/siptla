@@ -28,3 +28,26 @@
 <script>
     Breakpoints();
 </script>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyBIdoXxWrkmgFSILxa3KF9JSt_hAWk2Vtg",
+    authDomain: "ui-siptla.firebaseapp.com",
+    databaseURL: "https://ui-siptla.firebaseio.com",
+    projectId: "ui-siptla",
+    storageBucket: "ui-siptla.appspot.com",
+    messagingSenderId: "824351596044",
+    appId: "1:824351596044:web:34175e5e72f16eb3855829",
+    measurementId: "G-NWETZ3K68D"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>

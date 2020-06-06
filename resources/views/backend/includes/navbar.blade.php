@@ -32,7 +32,35 @@
       </ul>
 
       <ul class="nav navbar-toolbar navbar-toolbar-right navbar-right">
-    
+
+      <li class="dropdown" width="150px">
+          <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"><i class="zmdi zmdi-hc-lg zmdi-notifications">
+          @if(count($notificationData) > 0)<span class="badge bg-danger">{{count($notificationData)}}</span>@endif
+          </i></a>
+          @if(Auth::check())
+          @if(count($notificationData) > 0)
+          <ul class="dropdown-menu animated flipInY" style="width: 400px !important;">
+          @foreach ($notificationData as $data)
+           <li>
+              <a href="{{url('read-notification/'.$data->id_lhp.'/'.$data->id_rekomendasi.'/'.$data->id)}}">
+              {{--<a href="{{url('data-temuan-lhp/'.$lhp_id)}}">--}}
+              <span style="display: inline-block; width: 380px; white-space: nowrap; overflow: hidden !important; text-overflow: ellipsis;">{{ $data->status }}</span>
+              </a>
+            </li>
+            @endforeach
+            @else
+            <ul class="dropdown-menu animated flipInY" style="width: 180px !important;">
+            <li>
+              <a>
+              <span style="display: inline-block; width: 180px; white-space: nowrap; overflow: hidden !important; text-overflow: ellipsis;">Tidak ada notifikasi baru</span>
+            </a>
+            </li>
+            @endif
+          </ul>
+          {{--<span class="media-annotation pull-right">{{ \Carbon\Carbon::parse($data->updated_at)->diffForHumans() }}</span>--}}
+          @endif
+        </li>
+
         <li class="dropdown">
           <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="zmdi zmdi-hc-lg zmdi-settings"></i></a>
           <ul class="dropdown-menu animated flipInY">

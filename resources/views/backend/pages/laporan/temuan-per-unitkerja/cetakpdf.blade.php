@@ -7,10 +7,10 @@
     <div class="row" style="padding:0px; margin:0px;">
             <div class="col-md-12 text-center" style="text-align:center">
                 <h5>
-                     REKOMENDASI PEMERIKSAAN UNITKERJA<br>
-                    PERIODE <span style="font-weight: bold;text-decoration:underline" id="span_tgl_awal">{{tgl_indo($tgl_awal)}}</span> s.d. <span style="font-weight: bold;text-decoration:underline" id="span_tgl_akhir">{{tgl_indo($tgl_akhir)}}</span> <br>
-                    <span style="font-weight: bold;text-decoration:underline" id="span_judul_lhp">{{isset($lhp[$no_lhp]) ? $lhp[$no_lhp]->judul_lhp : 'JUDUL LHP BERDASARKAN NO LHP YANG DIPILIH'}}</span><br>
-                    UNIT KERJA <span style="font-weight: bold;text-decoration:underline" id="span_unitkerja">{{isset($pic_unit[$request->unitkerja1]) ? $pic_unit[$request->unitkerja1]->nama_pic : 'UNIT KERJA'}}</span>
+                    REKAPITULASI PEMERIKSAAN – UNIT KERJA<br>
+                    Periode: <span style="font-weight: bold;" id="span_tgl_awal">{{tgl_indo($tgl_awal)}}</span> s.d. <span style="font-weight: bold;" id="span_tgl_akhir">{{tgl_indo($tgl_akhir)}}</span> <br>
+                    {{--<span style="font-weight: bold;" id="span_judul_lhp">{{isset($lhp[$no_lhp]) ? $lhp[$no_lhp]->judul_lhp : 'JUDUL LHP BERDASARKAN NO LHP YANG DIPILIH'}}</span><br>--}}
+                    Unit Kerja: <span style="font-weight: bold;" id="span_unitkerja">{{$picTitle}}</span>
                 </h5>
             </div>
         </div>

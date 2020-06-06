@@ -47,6 +47,18 @@
 										@endphp
                                     </select>
                                 </div>
+								<div class="form-group" id="add-name-bidang" style="display:none">
+									<label>Bidang</label>
+                                    <select name="name_bidang" class="form-control select2">
+                                        <option value="">-- Pilih Bidang --</option>
+                                        @php
+											foreach($bidang as $k=>$v)
+											{
+												echo '<option value="'.$v['id'].'__'.$v['category'].'__'.$v['name'].'">'.$v['name'].'</option>';	
+											}
+										@endphp
+                                    </select>
+                                </div>
                                 <div class="form-group">
 									<label>Email</label>
                                     <input name="email" type="text" class="form-control" placeholder="Email">
@@ -130,6 +142,20 @@
 									</select>
 									<input type="hidden" name="name_pic" id="name_pic">
                                 </div>
+								<div class="form-group" id="edit-name-bidang" style="display:none">
+									<label>Bidang</label>
+                                    <select name="" id="bidang-edit" class="form-control" disabled>
+                                        <option value="">-- Pilih Bidang --</option>
+                                        @php
+											foreach($bidang as $k=>$v)
+											{
+												echo '<option value="'.$v['id'].'__'.$v['category'].'__'.$v['name'].'">'.$v['name'].'</option>';	
+											}
+										@endphp
+                                    </select>
+									<input type="hidden" name="name_bidang" id="name_bidang">
+                                </div>
+
                                 <div class="form-group">
 									<label>Email</label>
                                     <input name="email" type="text" class="form-control" placeholder="Email" id="email">
@@ -310,6 +336,8 @@
 					$('#name').val(res.name)
 					$('#name_pic').val(res.picunit)
 					$('#pic-edit').val(res.picunit)
+					$('#bidang-edit').val(res.bidang)
+					$('#name_bidang').val(res.bidang)
 					$('#nip').val(res.nip)
 					$('#email').val(res.email)
 					$('#telepon').val(res.telepon)
@@ -322,11 +350,15 @@
 					{
 						$('#edit-name-txt').css('display','none');
 						$('#edit-name-pic').css('display','block');
-					}
-					else
-					{
+						$('#edit-name-bidang').css('display','none');
+					}else if(res.level == 'pimpinan-kepala-bidang'){
+						$('#edit-name-txt').css('display','block');
+						$('#edit-name-bidang').css('display','block');
+						$('#edit-name-pic').css('display','none');
+					}else{
 						$('#edit-name-txt').css('display','block');
 						$('#edit-name-pic').css('display','none');
+						$('#edit-name-bidang').css('display','none');
 					}
 					$('.select2').select2().trigger('change');
                 }
@@ -345,12 +377,17 @@
 			{
 				$('#add-name-txt').css('display','none');
 				$('#add-name-pic').css('display','block');
+				$('#add-name-bidang').css('display','none');
 				$('#addname').val('');
-			}
-			else
-			{
+			}else if(val == 'pimpinan-kepala-bidang'){
+				$('#add-name-txt').css('display','block');
+				$('#add-name-bidang').css('display','block');
+				$('#add-name-pic').css('display','none');
+				$('#addname').val('');
+			}else{
 				$('#add-name-txt').css('display','block');
 				$('#add-name-pic').css('display','none');
+				$('#add-name-bidang').css('display','none');
 			}
 		}
 		function editjenis(val)
@@ -359,12 +396,17 @@
 			{
 				$('#edit-name-txt').css('display','none');
 				$('#edit-name-pic').css('display','block');
+				$('#edit-name-bidang').css('display','none');
 				$('#name').val('');
-			}
-			else
-			{
+			}else if(val == 'pimpinan-kepala-bidang'){
+				$('#edit-name-txt').css('display','block');
+				$('#edit-name-bidang').css('display','block');
+				$('#edit-name-pic').css('display','none');
+				$('#name').val('');
+			}else{
 				$('#edit-name-txt').css('display','block');
 				$('#edit-name-pic').css('display','none');
+				$('#edit-name-bidang').css('display','none');
 			}
 		}
 	</script>

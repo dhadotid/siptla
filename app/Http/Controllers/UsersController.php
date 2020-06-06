@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\MasterDinas;
 use App\Models\PivotUserDinas;
 use App\Models\PICUnit;
+use App\Models\Bidang;
+use App\Models\LevelPIC;
 use App\User;
 use Validator;
 use Auth;
@@ -23,12 +25,33 @@ class UsersController extends Controller
         else
             $user=User::where('level',$level)->orderBy('name')->get();
         $picunit=PICUnit::orderBy('nama_pic')->get();
+        $bidang = Bidang::where('flag',1)->get();
+        $level_pic = LevelPIC::all();
+        $bidangArray = array();
+        foreach($bidang as $k=>$v){
+            $bidangArray[] = [
+                'id' => $v->id,
+                'category' => 'Bidang',
+                'name' => $v->nama_bidang
+            ];
+        }
+
+        foreach($level_pic as $r=>$s){
+            if($s->id != 1 && $s->flag == 1){
+                $bidangArray[] = [
+                    'id' => $s->id,
+                    'category' => 'Level',
+                    'name' => $s->nama_level
+                ];
+            }
+        }
         // dd($user[1]->user);
         $jenislevel=jenis_level();
         return view('backend.pages.user.index')
                 ->with('users',$user)
                 ->with('level',$level)
                 ->with('picunit',$picunit)
+                ->with('bidang', $bidangArray)
                 ->with('jenislevel',$jenislevel);
     }
 
@@ -47,6 +70,10 @@ class UsersController extends Controller
             list($picunit_id,$picunit_name)=explode('__',$request->name_pic);
             $insert->name = $picunit_name;
             $insert->pic_unit_id = $picunit_id;
+        }
+        else if($request->input('level')=='pimpinan-kepala-bidang'){
+            $insert->bidang = $request->name_bidang;
+            $insert->name = $request->name;
         }
         else
         {
@@ -84,8 +111,13 @@ class UsersController extends Controller
         $data['updated_at']=$user->updated_at;
         $data['deleted_at']=$user->deleted_at;
         $data['pic_unit_id']=$user->pic_unit_id;
-        $data['nama_pic']=$pisunit->nama_pic;
-        $data['picunit']=$pisunit->id.'__'.$pisunit->nama_pic;
+        if($pisunit){
+            $data['nama_pic']=$pisunit->nama_pic;
+            $data['picunit']=$pisunit->id.'__'.$pisunit->nama_pic;
+        }
+        if($user->bidang!=''){
+            $data['bidang']=$user->bidang;
+        }
         return $data;
     }
 
@@ -108,6 +140,9 @@ class UsersController extends Controller
                 $picunit=PICUnit::find($picunit_id);
                 $picunit->id_user=$id;
                 $picunit->save();
+            }else if($request->input('level')=='pimpinan-kepala-bidang'){
+                $update->name = $request->name;
+                $update->bidang = $request->name_bidang;
             }
             else
             {
@@ -141,6 +176,9 @@ class UsersController extends Controller
             $piunit=PICUnit::find($picunit_id);
             $picunit->id_user=$id;
             $picunit->save();
+        }else if($request->input('level')=='pimpinan-kepala-bidang'){
+            $insert->name = $request->name;
+            $insert->bidang = $request->name_bidang;
         }
         else
         {

@@ -57,6 +57,8 @@ Route::group(['middleware'=>['auth','checkstatus']],function(){
     Route::post('simpan-lhp-review/{idlhp}','DataTemuanController@simpan_lhp_review')->name('simpan-lhp-review');
     Route::post('data-lhp-store','DataTemuanController@store')->name('data-lhp.store');
     Route::post('data-lhp-update/{idlhp}','DataTemuanController@update')->name('data-lhp.update');
+    Route::get('update-lhp-status/{idlhp}', 'DataTemuanController@deliver_lhp')->name('deliver-data-lhp');
+    Route::get('read-notification/{lhpid}/{idrekom}/{id?}','DataTemuanController@isNotificationRead');
 
     Route::get('data-temuan-lhp/{idlhp}/{status_rekomendasi?}','DataTemuanController@data_temuan_lhp');
     Route::get('data-temuan-edit/{idlhp}','DataTemuanController@lhp_edit');

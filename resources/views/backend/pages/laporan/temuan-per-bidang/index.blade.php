@@ -28,18 +28,9 @@
                                     </div>
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Pemeriksa</label>
-                                        {{-- <div class="col-md-6">
-                                            <select class="form-control pic2" id="pemeriksan" data-plugin="select2" name="pemeriksa[]" id="pemeriksan" onchange="loaddata();getlhp(this.value)" multiple>
-                                                <option value="0">Semua</option>
-                                                @foreach ($pemeriksa as $item)
-                                                    <option value="{{$item->id}}">{{$item->code}} - {{$item->pemeriksa}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>--}}
-                                        
                                         <div class="col-md-6">
-                                            <select class="select2 form-control multiple"  name="pemeriksa" id="pemeriksan" onchange="loaddata();getlhp(this.value)" multiple>
-                                                <option value="0">Semua</option>
+                                            <select class="select2 form-control" data-plugin="select2" name="pemeriksa[]" id="pemeriksan" onchange="loaddata();getlhp()" multiple>
+                                                <option value="0" selected>Semua</option>
                                                 @foreach ($pemeriksa as $item)
                                                     <option value="{{$item->id}}">{{$item->code}} - {{$item->pemeriksa}}</option>
                                                 @endforeach
@@ -55,8 +46,8 @@
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Level Resiko</label>
                                         <div class="col-md-6">
-                                            <select class="select2 form-control" name="level-resiko" id="level-resiko" onchange="loaddata()">
-                                                <option value="0">-Pilih-</option>
+                                            <select class="select2 form-control" name="level-resiko[]" id="level-resiko" onchange="loaddata()" multiple>
+                                                <option value="0" selected>Semua</option>
                                                     @foreach ($levelresiko as $item)
                                                         <option value="{{$item->id}}">{{$item->level_resiko}}</option>
                                                     @endforeach
@@ -66,8 +57,8 @@
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Bidang</label>
                                         <div class="col-md-6">
-                                            <select class="select2 form-control" name="bidang" id="bidang" onchange="loaddata()">
-                                                <option value="0">-Pilih-</option>
+                                            <select class="select2 form-control" name="bidang[]" id="bidang" onchange="loaddata()" multiple>
+                                                <option value="0" selected>Semua</option>
                                                 @foreach ($bidang as $item)
                                                     <option value="{{$item->id}}">{{$item->nama_bidang}}</option>
                                                 @endforeach
@@ -114,6 +105,7 @@
                                             </select>
                                         </div>
                                     </div>
+                                    {{-- 
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Pejabat Penanda Tangan</label>
                                         <div class="col-md-6">
@@ -124,6 +116,7 @@
                                             </select>
                                         </div>
                                     </div>
+                                    --}}
                                 </div>
 							</div>
 						</div>
@@ -150,9 +143,35 @@
 		},3000);
 		$('.select2').select2();
         loaddata();
+        getlhp();
+        // function checkZeroValue(idselected, value){
+        //     var old_values = [];
+        //     var test = $(idselected);//$("#pemeriksan");
+        //     test.on("select2:select", function(event) {
+        //     var values = [];
+        //     $(event.currentTarget).find("option:selected").each(function(i, selected){ 
+        //         values[i] = $(selected).val();
+        //     });
+        //     var last = $(values).not(old_values).get();
+        //     old_values = values;
+        //     if(old_values.length > 0){
+        //         console.log("selected values: ", values);
+        //         console.log("selected last: ", last);
+        //         if(last.indexOf(0) ){
+        //             // removePemeriksaValue(test, 0);
+        //             $(idselected+" option[value='"+0+"']").prop("selected", false);
+        //         }else{
+        //             // $(idselected+" option[value='"+0+"']").prop("selected", false);
+        //             console.log('remove all')
+        //         }
+        //     }
+        //     }); checkZeroValue('#pemeriksan',this.value)
+        // }
 
         function loaddata()
         {
+            // var latest_value = $('#pemeriksan').closest('select').find('option').filter(':selected:last').val();
+            
             var pemeriksa=$('#pemeriksan').val();
             var no_lhp=$('#no_lhp').val();
             var level_resiko=$('#level-resiko').val();
@@ -173,8 +192,9 @@
             });
            
         }
-        function getlhp(idpemeriksa){
-            $('#div-lhp').load(flagsUrl+'/selectlhpbypemeriksa/'+idpemeriksa, function(){
+        function getlhp(){
+            var pemeriksa=$('#pemeriksan').val();
+            $('#div-lhp').load(flagsUrl+'/selectlhpbypemeriksa/'+pemeriksa+'/true', function(){
                 $('.select2').select2({
                     width:'100%'
                 });
@@ -188,6 +208,10 @@
     }
     .tooltip-inner {
         text-align: left !important;
+    }
+    .select2-selection--multiple{
+        overflow: hidden !important;
+        height: auto !important;
     }
 	</style>
 @endsection

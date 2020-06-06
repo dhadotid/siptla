@@ -5,17 +5,16 @@
         <div class="col-md-1 text-right">
             <form action="{{url('laporan/temuan-per-lhp-pdf')}}" method="post" id="cetakpdf" target="_blank">
                 @csrf
-                <input type="hidden" name="pemeriksa" value="{{$request->pemeriksa}}">
-                <input type="hidden" name="no_lhp" value="{{$request->no_lhp}}">
-                <input type="hidden" name="level_resiko" value="{{$request->level_resiko}}">
-                <input type="hidden" name="bidang" value="{{$request->bidang}}">
+                <input type="hidden" name="pemeriksa" value="{{implode(',', $request->pemeriksa)}}">
+                <input type="hidden" name="no_lhp" value="{{implode(',', $no_lhp)}}">
+                <input type="hidden" name="level_resiko" value="{{implode(',', $request->level_resiko)}}">
+                <input type="hidden" name="bidang" value="{{implode(',', $request->bidang)}}">
+                <input type="hidden" name="unitkerja1" value="{{implode(',', $request->unitkerja1)}}">
+                <input type="hidden" name="unitkerja2" value="{{implode(',', $request->unitkerja2)}}">
                 <input type="hidden" name="tanggal_awal" value="{{$request->tgl_awal}}">
-                <input type="hidden" name="unitkerja1" value="{{$request->unitkerja1}}">
-                <input type="hidden" name="unitkerja2" value="{{$request->unitkerja2}}">
                 <input type="hidden" name="tanggal_akhir" value="{{$request->tgl_akhir}}">
                 <input type="hidden" name="tampilkannilai" value="{{$request->tampilkannilai}}">
                 <input type="hidden" name="tampilkanwaktupenyelesaian" value="{{$request->tampilkanwaktupenyelesaian}}">
-                <input type="hidden" name="pejabat" value="{{$request->pejabat}}">
                 <button type="submit" class="btn btn-xs btn-primary"><i class="fa fa-print"></i> Cetak Data</button>
             </form>
         </div>
@@ -29,12 +28,12 @@
     <div class="row" style="margin-bottom:20px;">
         <div class="col-md-12 text-center">
             <h5>
-                REKIPUTLASI PEMERIKSAAN LHP<br>
-                PERIODE <span style="font-weight: bold;text-decoration:underline" id="span_tgl_awal">{{tgl_indo($tgl_awal)}}</span> s.d. <span style="font-weight: bold;text-decoration:underline" id="span_tgl_akhir">{{tgl_indo($tgl_akhir)}}</span> <br>
-                <span style="font-weight: bold;text-decoration:underline" id="span_judul_lhp">{{isset($lhp[$no_lhp]) ? $lhp[$no_lhp]->judul_lhp : 'JUDUL LHP BERDASARKAN NO LHP YANG DIPILIH'}}</span><br>
-                NO. LHP <span style="font-weight: bold;text-decoration:underline" id="span_unitkerja">{{isset($lhp[$no_lhp]) ? $lhp[$no_lhp]->no_lhp : 'NO. LHP'}}</span>
+                REKAPITULASI PEMERIKSAAN – LHP<br>
+                PERIODE: <span style="font-weight: bold;" id="span_tgl_awal">{{tgl_indo($tgl_awal)}}</span> s.d. <span style="font-weight: bold;" id="span_tgl_akhir">{{tgl_indo($tgl_akhir)}}</span> <br>
+                {{--<span style="font-weight: bold;" id="span_judul_lhp">{{isset($lhp[$no_lhp]) ? $lhp[$no_lhp]->judul_lhp : 'JUDUL LHP BERDASARKAN NO LHP YANG DIPILIH'}}</span><br>--}}
+                NO. LHP:@foreach($lhp as $k=>$v)<span style="font-weight: bold;" id="span_unitkerja"> {{$v->no_lhp}}</span>@endforeach
                 &nbsp;
-                TANGGAL LHP <span style="font-weight: bold;text-decoration:underline" id="span_unitkerja">{{tgl_indo($request->tgl_awal)}} s.d. {{tgl_indo($request->tgl_akhir)}}</span>
+                TANGGAL LHP: <span style="font-weight: bold;" id="span_unitkerja">{{tgl_indo($request->tgl_awal)}} s.d. {{tgl_indo($request->tgl_akhir)}}</span>
             </h5>
         </div>
     </div>

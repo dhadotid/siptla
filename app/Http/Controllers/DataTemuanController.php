@@ -13,10 +13,13 @@ use App\Models\DataTemuan;
 use App\Models\DataRekomendasi;
 use App\Models\JangkaWaktu;
 use App\Models\StatusRekomendasi;
+use App\Models\MappingRekomendasiNotifikasi;
 use App\User;
 use App\Models\Review;
 use Auth;
 use Validator;
+use DB;
+use Redirect;
 class DataTemuanController extends Controller
 {
     public function index(Request $request,$tahun=null,$statusrekom=null)
@@ -115,6 +118,45 @@ class DataTemuanController extends Controller
                 ->with('jenisaudit',$jenisaudit);
         }
         
+    }
+    public function deliver_lhp($idlhp){
+        $temuan=DaftarTemuan::where('id',$idlhp)->first();
+        if(Auth::user()->level=='auditor-junior'){
+            $temuan->deliver_to       = 1;
+            $temuan->save();
+
+            $temuanData = DataTemuan::where('id_lhp',$idlhp)->first();
+            $rekomData = DataRekomendasi::where('id_temuan',$temuanData->id)->get();
+            $su = User::where('level', 'super-user')->get();
+            foreach($rekomData as $k=>$v){
+
+                $this->createNotification($idlhp, $v->id, $v->senior_user_id, $temuanData->id, 
+                Auth::user()->name .' mengirim permintaan persetujuan rekomendasi');
+                foreach($su as $a=>$s){
+                    $this->createNotification($idlhp, $v->id, $s->id, $temuanData->id, Auth::user()->name .
+                    ' mengirim permintaan persetujuan rekomendasi kepada senior');
+                }
+
+            }
+        }
+        
+    }
+    public function isNotificationRead($idlhp, $idrekom=-1, $id=-1){
+        if($id != -1){
+            //Notification already read, delete it!
+            MappingRekomendasiNotifikasi::find($id)->delete();
+        }
+        return Redirect::to('data-temuan-lhp/'.$idlhp);
+
+    }
+    public function createNotification($idlhp, $idrekom, $userId, $idtemuan,$status=null){
+        $notification = new MappingRekomendasiNotifikasi();
+        $notification->id_lhp = $idlhp;
+        $notification->id_rekomendasi = $idrekom;
+        $notification->user_id = $userId;
+        $notification->id_temuan = $idtemuan;
+        $notification->status = $status;
+        $notification->save();
     }
     public function lhp_edit($id)
     {
@@ -229,8 +271,16 @@ class DataTemuanController extends Controller
         if(Auth::user()->level=='auditor-junior')
         {
             $data=DaftarTemuan::selectRaw('*,daftar_lhp.id as lhp_id')
-                    ->join('data_temuan', 'data_temuan.id_lhp', '=', 'daftar_lhp.id')
-                    ->join('data_rekomendasi', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id');
+                    ->select('daftar_lhp.id', 'daftar_lhp.id as lhp_id', 'daftar_lhp.no_lhp',
+                    'daftar_lhp.flag_tindaklanjut_id', 'daftar_lhp.kode_lhp', 'daftar_lhp.review',
+                    'daftar_lhp.user_input_id','daftar_lhp.judul_lhp','daftar_lhp.pemeriksa_id','daftar_lhp.tanggal_lhp',
+                    'daftar_lhp.tahun_pemeriksa', 'daftar_lhp.jenis_audit_id', 'daftar_lhp.status_lhp','daftar_lhp.review_lhp',
+                    'daftar_lhp.create_flag', 'daftar_lhp.review_flag', 'daftar_lhp.publish_flag','daftar_lhp.tanggal_publish',
+                    'daftar_lhp.flag_senior', 'daftar_lhp.flag_unit_kerja', 'daftar_lhp.deliver_to',
+                    'daftar_lhp.created_at', 'daftar_lhp.updated_at', 'daftar_lhp.deleted_at'
+                    )
+                    ->leftJoin('data_temuan', 'data_temuan.id_lhp', '=', 'daftar_lhp.id')
+                    ->leftJoin('data_rekomendasi', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id');
                     if($request->key == 'sudah-masuk-batas-waktu-penyelesaian'){
                         $data = $data->where('data_rekomendasi.tanggal_penyelesaian', '=', $now);
                     }
@@ -244,35 +294,60 @@ class DataTemuanController extends Controller
             $data = $data->where($wh)
                     ->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
                     ->where('daftar_lhp.user_input_id',Auth::user()->id)
+                    ->whereNull('daftar_lhp.deleted_at')
                     ->with('dpemeriksa')
                     ->with('djenisaudit')
-                    ->groupBy('lhp_id')
+                    ->groupBy('daftar_lhp.id')
                     ->orderBy('tanggal_lhp','desc')->get();
-
+// return $data;
             
         }
         elseif(Auth::user()->level=='auditor-senior')
         {
-            $data=DaftarTemuan::selectRaw('*,daftar_lhp.id as lhp_id')
-                    ->join('data_temuan', 'data_temuan.id_lhp', '=', 'daftar_lhp.id')
-                    ->join('data_rekomendasi', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id');
+            $query=DaftarTemuan::selectRaw('*,daftar_lhp.id as lhp_id')
+                    ->select('daftar_lhp.id', 'daftar_lhp.id as lhp_id', 'daftar_lhp.no_lhp',
+                    'daftar_lhp.flag_tindaklanjut_id', 'daftar_lhp.kode_lhp', 'daftar_lhp.review',
+                    'daftar_lhp.user_input_id','daftar_lhp.judul_lhp','daftar_lhp.pemeriksa_id','daftar_lhp.tanggal_lhp',
+                    'daftar_lhp.tahun_pemeriksa', 'daftar_lhp.jenis_audit_id', 'daftar_lhp.status_lhp','daftar_lhp.review_lhp',
+                    'daftar_lhp.create_flag', 'daftar_lhp.review_flag', 'daftar_lhp.publish_flag','daftar_lhp.tanggal_publish',
+                    'daftar_lhp.flag_senior', 'daftar_lhp.flag_unit_kerja', 'daftar_lhp.deliver_to',
+                    'data_rekomendasi.senior_user_id as senior_user_id'
+                    )
+                    ->leftJoin('data_temuan', 'data_temuan.id_lhp', '=', 'daftar_lhp.id')
+                    ->leftJoin('data_rekomendasi', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id');
                     if($request->key == 'sudah-masuk-batas-waktu-penyelesaian'){
-                        $data = $data->where('data_rekomendasi.tanggal_penyelesaian', '=', $now);
+                        $query = $query->where('data_rekomendasi.tanggal_penyelesaian', '=', $now);
                     }
                     if($request->key == 'melewati-batas-waktu-penyelesaian'){
-                        $data = $data->where('data_rekomendasi.tanggal_penyelesaian', '>', $now);
+                        $query = $query->where('data_rekomendasi.tanggal_penyelesaian', '>', $now);
                     }
                     if($request->key=='belum-masuk-batas-waktu-penyelesaian'){
-                        $data = $data->where('data_rekomendasi.tanggal_penyelesaian', '<', $now);
+                        $query = $query->where('data_rekomendasi.tanggal_penyelesaian', '<', $now);
                     }
-            $data = $data->where('daftar_lhp.tahun_pemeriksa',$thn)
+            $query = $query->where('daftar_lhp.tahun_pemeriksa',$thn)
+                    ->where('data_rekomendasi.senior_user_id',Auth::user()->id)
                     ->where($wh)
                     ->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
-                    ->groupBy('lhp_id')
+                    ->whereNull('daftar_lhp.deleted_at')
                     ->with('dpemeriksa')
                     ->with('djenisaudit')
                     ->orderBy('tanggal_lhp','desc')
                     ->get();
+                    //->groupBy('daftar_lhp.id')
+                    // return $query;
+            $data = $sorted = array();
+            foreach($query as $key=>$v){
+                if($v->deliver_to != 0 || $v->publish_flag == 1)
+                    if($v->senior_user_id == Auth::user()->id){
+                        if(!isset($sorted[$v->id])){
+                            $sorted[$v->id][] = $v;
+                            array_push($data, $v);
+                        }else{
+                            $sorted[$v->id] = array($v);
+                        }
+                    }
+            }
+            // return $data;
 
             foreach ($data as $key => $value) {
                 $count[$value->lhp_id]  = DataTemuan::where('id_lhp', $value->lhp_id)->count();
@@ -295,25 +370,40 @@ class DataTemuanController extends Controller
         }
         elseif(Auth::user()->level=='super-user')
         {
-            $data=DaftarTemuan::selectRaw('*,daftar_lhp.id as lhp_id')
-                    ->join('data_temuan', 'data_temuan.id_lhp', '=', 'daftar_lhp.id')
-                    ->join('data_rekomendasi', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id');
+            $query=DaftarTemuan::selectRaw('*,daftar_lhp.id as lhp_id')
+                    ->select('daftar_lhp.id', 'daftar_lhp.id as lhp_id', 'daftar_lhp.no_lhp',
+                    'daftar_lhp.flag_tindaklanjut_id', 'daftar_lhp.kode_lhp', 'daftar_lhp.review',
+                    'daftar_lhp.user_input_id','daftar_lhp.judul_lhp','daftar_lhp.pemeriksa_id','daftar_lhp.tanggal_lhp',
+                    'daftar_lhp.tahun_pemeriksa', 'daftar_lhp.jenis_audit_id', 'daftar_lhp.status_lhp','daftar_lhp.review_lhp',
+                    'daftar_lhp.create_flag', 'daftar_lhp.review_flag', 'daftar_lhp.publish_flag','daftar_lhp.tanggal_publish',
+                    'daftar_lhp.flag_senior', 'daftar_lhp.flag_unit_kerja', 'daftar_lhp.deliver_to',
+                    DB::raw('MIN(data_rekomendasi.status_rekomendasi_id) as senior_publish'))
+                    ->leftJoin('data_temuan', 'data_temuan.id_lhp', '=', 'daftar_lhp.id')
+                    ->leftJoin('data_rekomendasi', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id');
                     if($request->key == 'sudah-masuk-batas-waktu-penyelesaian'){
-                        $data = $data->where('data_rekomendasi.tanggal_penyelesaian', '=', $now);
+                        $query = $query->where('data_rekomendasi.tanggal_penyelesaian', '=', $now);
                     }
                     if($request->key == 'melewati-batas-waktu-penyelesaian'){
-                        $data = $data->where('data_rekomendasi.tanggal_penyelesaian', '>', $now);
+                        $query = $query->where('data_rekomendasi.tanggal_penyelesaian', '>', $now);
                     }
                     if($request->key=='belum-masuk-batas-waktu-penyelesaian'){
-                        $data = $data->where('data_rekomendasi.tanggal_penyelesaian', '<', $now);
+                        $query = $query->where('data_rekomendasi.tanggal_penyelesaian', '<', $now);
                     }
-                    $data = $data->where($wh)
+                    $query = $query->where($wh)
                             ->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
+                            ->whereNull('daftar_lhp.deleted_at')
                             ->groupBy('lhp_id')
                             ->with('dpemeriksa')
                             ->with('djenisaudit')
                             ->orderBy('tanggal_lhp','desc')
                             ->get();
+
+            
+            $data = array();
+            foreach($query as $key=>$v){
+                if($v->deliver_to != 0 || $v->publish_flag == 1)
+                    array_push($data, $v);
+            }
 
             foreach ($data as $key => $value) {
                 $count[$value->lhp_id]  = DataTemuan::where('id_lhp', $value->lhp_id)->count();
@@ -330,25 +420,38 @@ class DataTemuanController extends Controller
         }
         elseif(Auth::user()->level=='pic-unit')
         {
-            $data=DaftarTemuan::selectRaw('*,daftar_lhp.id as lhp_id')
-                    ->join('data_temuan', 'data_temuan.id_lhp', '=', 'daftar_lhp.id')
-                    ->join('data_rekomendasi', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id');
+            $query=DaftarTemuan::selectRaw('*,daftar_lhp.id as lhp_id')
+            ->select('daftar_lhp.id', 'daftar_lhp.id as lhp_id', 'daftar_lhp.no_lhp',
+                    'daftar_lhp.flag_tindaklanjut_id', 'daftar_lhp.kode_lhp', 'daftar_lhp.review',
+                    'daftar_lhp.user_input_id','daftar_lhp.judul_lhp','daftar_lhp.pemeriksa_id','daftar_lhp.tanggal_lhp',
+                    'daftar_lhp.tahun_pemeriksa', 'daftar_lhp.jenis_audit_id', 'daftar_lhp.status_lhp','daftar_lhp.review_lhp',
+                    'daftar_lhp.create_flag', 'daftar_lhp.review_flag', 'daftar_lhp.publish_flag','daftar_lhp.tanggal_publish',
+                    'daftar_lhp.flag_senior', 'daftar_lhp.flag_unit_kerja', 'daftar_lhp.deliver_to',
+                    DB::raw('MIN(data_rekomendasi.status_rekomendasi_id) as senior_publish'))
+                    ->leftJoin('data_temuan', 'data_temuan.id_lhp', '=', 'daftar_lhp.id')
+                    ->leftJoin('data_rekomendasi', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id');
                     if($request->key == 'sudah-masuk-batas-waktu-penyelesaian'){
-                        $data = $data->where('data_rekomendasi.tanggal_penyelesaian', '=', $now);
+                        $query = $query->where('data_rekomendasi.tanggal_penyelesaian', '=', $now);
                     }
                     if($request->key == 'melewati-batas-waktu-penyelesaian'){
-                        $data = $data->where('data_rekomendasi.tanggal_penyelesaian', '>', $now);
+                        $query = $query->where('data_rekomendasi.tanggal_penyelesaian', '>', $now);
                     }
                     if($request->key=='belum-masuk-batas-waktu-penyelesaian'){
-                        $data = $data->where('data_rekomendasi.tanggal_penyelesaian', '<', $now);
+                        $query = $query->where('data_rekomendasi.tanggal_penyelesaian', '<', $now);
                     }
-            $data = $data->where($wh)
+            $query = $query->where($wh)
                     ->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
                     ->groupBy('lhp_id')
+                    ->whereNull('daftar_lhp.deleted_at')
                     // ->where('daftar_lhp.flag_unit_kerja',1)
                     ->with('dpemeriksa')
                     ->with('djenisaudit')
                     ->orderBy('tanggal_lhp','desc')->get();
+            $data = array();
+            foreach($query as $key=>$v){
+                if($v->deliver_to != 0 || $v->publish_flag == 1)
+                    array_push($data, $v);
+            }
             
             $idlhp=$idtemuan=$filteridlhp=array();
             foreach($data as $k=>$v)
@@ -377,7 +480,7 @@ class DataTemuanController extends Controller
                     $filteridlhp[$vr->dtemuan->id_lhp]=$vr->dtemuan->id_lhp;
             }
 
-            // return $filteridlhp;
+            // return $data;
 
             return view('backend.pages.data-lhp.pic-unit.data')
                 ->with('keybataswaktu', $keybataswaktu)
@@ -400,8 +503,8 @@ class DataTemuanController extends Controller
 
         foreach ($data as $key => $value) {
             $count[$value->lhp_id]  = DataTemuan::where('id_lhp', $value->lhp_id)->count();
-        }//,
-        // ['level_resiko_id', $priority]
+        }
+        // return $statusrekom;
         
 
         return view('backend.pages.data-lhp.auditor-junior.data')
@@ -565,7 +668,6 @@ class DataTemuanController extends Controller
         }
         else
         {
-        // return $drekomendasi;
             return view('backend.pages.data-lhp.auditor-junior.detail-lhp')
                     ->with('temuan',$tm)
                     ->with('offset',$offset)
@@ -650,36 +752,25 @@ class DataTemuanController extends Controller
             $keyparam = '_?key='.$request->key.'_priority='.$request->priority;
         }
         if(Auth::user()->level=='auditor-junior'){
-            // $dt['data']=$data=DaftarTemuan::where('user_input_id',Auth::user()->id)
-            //         ->where('daftar_lhp.id',$idlhp)->with('dpemeriksa')->with('djenisaudit')->first();
-            $data=DaftarTemuan::where('user_input_id',Auth::user()->id)
-                    ->join('data_temuan', 'data_temuan.id_lhp', '=', 'daftar_lhp.id')
-                    ->join('data_rekomendasi', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id');
-                    if($request->key == 'sudah-masuk-batas-waktu-penyelesaian'){
-                        $data = $data->where('data_rekomendasi.tanggal_penyelesaian', '=', $now);
-                    }
-                    if($request->key == 'melewati-batas-waktu-penyelesaian'){
-                        $data = $data->where('data_rekomendasi.tanggal_penyelesaian', '>', $now);
-                    }
-                    if($request->key=='belum-masuk-batas-waktu-penyelesaian'){
-                        $data = $data->where('data_rekomendasi.tanggal_penyelesaian', '<', $now);
-                    }
-                    $data = $data->where($wh)->groupBy('daftar_lhp.id')->where('daftar_lhp.id',$idlhp)->with('dpemeriksa')->with('djenisaudit')->first();
-                    $dt['data'] = $data;
+                    $dt['data']=$data=DaftarTemuan::where('user_input_id',Auth::user()->id)
+                    ->where('daftar_lhp.id',$idlhp)->with('dpemeriksa')->with('djenisaudit')->first();
         }else{
-            $dt['data']=$data=DaftarTemuan::join('data_temuan', 'data_temuan.id_lhp', '=', 'daftar_lhp.id')
-                    ->join('data_rekomendasi', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id');
-                    if($request->key == 'sudah-masuk-batas-waktu-penyelesaian'){
-                        $data = $data->where('data_rekomendasi.tanggal_penyelesaian', '=', $now);
-                    }
-                    if($request->key == 'melewati-batas-waktu-penyelesaian'){
-                        $data = $data->where('data_rekomendasi.tanggal_penyelesaian', '>', $now);
-                    }
-                    if($request->key=='belum-masuk-batas-waktu-penyelesaian'){
-                        $data = $data->where('data_rekomendasi.tanggal_penyelesaian', '<', $now);
-                    }
-                    $data = $data->where($wh)->groupBy('daftar_lhp.id')->where('daftar_lhp.id',$idlhp)->with('dpemeriksa')->with('djenisaudit')->first();
-                    $dt['data'] = $data;
+            $dt['data']=$data=DaftarTemuan::where('id',$idlhp)->with('dpemeriksa')->with('djenisaudit')->first();
+            // $dt['data']=$data=DaftarTemuan::join('data_temuan', 'data_temuan.id_lhp', '=', 'daftar_lhp.id')
+            //         ->join('data_rekomendasi', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id');
+            //         if($request->key == 'sudah-masuk-batas-waktu-penyelesaian'){
+            //             $data = $data->where('data_rekomendasi.tanggal_penyelesaian', '=', $now);
+            //         }
+            //         if($request->key == 'melewati-batas-waktu-penyelesaian'){
+            //             $data = $data->where('data_rekomendasi.tanggal_penyelesaian', '>', $now);
+            //         }
+            //         if($request->key=='belum-masuk-batas-waktu-penyelesaian'){
+            //             $data = $data->where('data_rekomendasi.tanggal_penyelesaian', '<', $now);
+            //         }
+            //         $data = $data->where($wh)
+            //         ->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
+            //         ->where('daftar_lhp.id',$idlhp)->with('dpemeriksa')->with('djenisaudit')->groupBy('daftar_lhp.id')->first();
+            //         $dt['data'] = $data;
             // where($wh)->where('daftar_lhp.id',$idlhp)->with('dpemeriksa')->with('djenisaudit')->first();
         }
 
@@ -690,22 +781,28 @@ class DataTemuanController extends Controller
         $dt['statusrekomendasi']=$statusrekomendasi=StatusRekomendasi::orderBy('rekomendasi')->get();
         
         if(Auth::user()->level=='auditor-senior'){
-            $rekom=DataRekomendasi::where('data_rekomendasi.senior_user_id', Auth::id())
+            $rekomQuery=DataRekomendasi::where('data_rekomendasi.senior_user_id', Auth::id())
             ->join('data_temuan', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id')
             ->where($wh);
             if($request->key == 'sudah-masuk-batas-waktu-penyelesaian'){
-                $rekom = $rekom->where('data_rekomendasi.tanggal_penyelesaian', '=', $now);
+                $rekomQuery = $rekomQuery->where('data_rekomendasi.tanggal_penyelesaian', '=', $now);
             }
             if($request->key == 'melewati-batas-waktu-penyelesaian'){
-                $rekom = $rekom->where('data_rekomendasi.tanggal_penyelesaian', '>', $now);
+                $rekomQuery = $rekomQuery->where('data_rekomendasi.tanggal_penyelesaian', '>', $now);
             }
             if($request->key=='belum-masuk-batas-waktu-penyelesaian'){
-                $rekom = $rekom->where('data_rekomendasi.tanggal_penyelesaian', '<', $now);
+                $rekomQuery = $rekomQuery->where('data_rekomendasi.tanggal_penyelesaian', '<', $now);
             }
-            $rekom = $rekom->with('jenistemuan')->with('picunit1')->with('picunit2')->with('jangkawaktu')->with('statusrekomendasi')->get();
+            $rekomQuery = $rekomQuery
+            ->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
+            ->with('jenistemuan')->with('picunit1')->with('picunit2')->with('jangkawaktu')->with('statusrekomendasi')->get();
+            $rekom = $sorted = array();
+            foreach($rekomQuery as $key=>$v){
+                if($v->senior_user_id == Auth::user()->id){
+                    array_push($rekom, $v);
+                }
+            }
         }else{
-            // $rekom=DataRekomendasi::join('data_temuan', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id')
-            // ->with('jenistemuan')->with('picunit1')->with('picunit2')->with('jangkawaktu')->with('statusrekomendasi')->get();
             $rekom=DataRekomendasi::join('data_temuan', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id')
             ->where($wh);
             if($request->key == 'sudah-masuk-batas-waktu-penyelesaian'){
@@ -717,7 +814,11 @@ class DataTemuanController extends Controller
             if($request->key=='belum-masuk-batas-waktu-penyelesaian'){
                 $rekom = $rekom->where('data_rekomendasi.tanggal_penyelesaian', '<', $now);
             }
-            $rekom = $rekom->with('jenistemuan')->with('picunit1')->with('picunit2')->with('jangkawaktu')->with('statusrekomendasi')->get();
+            $rekom = $rekom
+            ->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
+            ->with('jenistemuan')->with('picunit1')->with('picunit2')->with('jangkawaktu')->with('statusrekomendasi')->get();
+            
+            
         }
         
         $rekomendasi=$drekom=$arraytemuanid=array();
@@ -741,43 +842,54 @@ class DataTemuanController extends Controller
         if(count($arraytemuanid)!=0)
         {
             $temuan=DataTemuan::selectRaw('*,data_temuan.id as temuan_id')
-                            ->select('data_temuan.*','data_temuan.id as temuan_id', 'data_rekomendasi.tanggal_penyelesaian')
-                            ->join('data_rekomendasi', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id')
                             ->with('jenistemuan')
                             ->with('picunit')
                             ->with('levelresiko')
-                            ->where('data_temuan.id_lhp',$idlhp)
-                            ->where($wh)
-                            ->whereIn('data_temuan.id',$arraytemuanid);
-                            if($request->key == 'sudah-masuk-batas-waktu-penyelesaian'){
-                                $temuan = $temuan->where('data_rekomendasi.tanggal_penyelesaian', '=', $now);
-                            }
-                            if($request->key == 'melewati-batas-waktu-penyelesaian'){
-                                $temuan = $temuan->where('data_rekomendasi.tanggal_penyelesaian', '>', $now);
-                            }
-                            if($request->key=='belum-masuk-batas-waktu-penyelesaian'){
-                                $temuan = $temuan->where('data_rekomendasi.tanggal_penyelesaian', '<', $now);
-                            }
-                            $temuan = $temuan->groupBy('temuan_id')->get();
+                            ->where('id_lhp',$idlhp)
+                            ->whereIn('data_temuan.id',$arraytemuanid)
+                            ->get();
         }else{
-            // $temuan=DataTemuan::selectRaw('*,data_temuan.id as temuan_id')->with('jenistemuan')->with('picunit')->with('levelresiko')->where('id_lhp',$idlhp)->get();
-            $temuan=DataTemuan::selectRaw('*,data_temuan.id as temuan_id')
-                    ->select('data_temuan.*','data_temuan.id as temuan_id', 'data_rekomendasi.tanggal_penyelesaian')
-                    ->join('data_rekomendasi', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id')
-                    ->where($wh);
-                    if($request->key == 'sudah-masuk-batas-waktu-penyelesaian'){
-                        $temuan = $temuan->where('data_rekomendasi.tanggal_penyelesaian', '=', $now);
+            // $temuan=DataTemuan::selectRaw('*,data_temuan.id as temuan_id')
+            //         ->select('data_temuan.*','data_temuan.id as temuan_id', 'data_rekomendasi.tanggal_penyelesaian')
+                    // ->join('data_rekomendasi', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id')
+            //         ->where($wh);
+            //         if($request->key == 'sudah-masuk-batas-waktu-penyelesaian'){
+            //             $temuan = $temuan->where('data_rekomendasi.tanggal_penyelesaian', '=', $now);
+            //         }
+            //         if($request->key == 'melewati-batas-waktu-penyelesaian'){
+            //             $temuan = $temuan->where('data_rekomendasi.tanggal_penyelesaian', '>', $now);
+            //         }
+            //         if($request->key=='belum-masuk-batas-waktu-penyelesaian'){
+            //             $temuan = $temuan->where('data_rekomendasi.tanggal_penyelesaian', '<', $now);
+            //         }
+            //         $temuan = $temuan
+            //         ->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
+            //         ->groupBy('data_temuan.id')->with('jenistemuan')->with('picunit')->with('levelresiko')->where('data_temuan.id_lhp',$idlhp)->get();
+
+            if(Auth::user()->level=='auditor-senior'){
+                $temuanQuery=DataTemuan::selectRaw('*,data_temuan.id as temuan_id')
+                ->leftJoin('data_rekomendasi', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id')
+                ->select('data_temuan.*','data_temuan.id as temuan_id', 'data_rekomendasi.senior_user_id')
+                ->with('jenistemuan')->with('picunit')->with('levelresiko')->where('id_lhp',$idlhp)->get();
+
+                $temuan = $sorted = array();
+                foreach($temuanQuery as $key=>$v){
+                    if($v->senior_user_id == Auth::user()->id){
+                        if(!isset($sorted[$v->id])){
+                            $sorted[$v->id][] = $v;
+                            array_push($temuan, $v);
+                        }else{
+                            $sorted[$v->id] = array($v);
+                        }
                     }
-                    if($request->key == 'melewati-batas-waktu-penyelesaian'){
-                        $temuan = $temuan->where('data_rekomendasi.tanggal_penyelesaian', '>', $now);
-                    }
-                    if($request->key=='belum-masuk-batas-waktu-penyelesaian'){
-                        $temuan = $temuan->where('data_rekomendasi.tanggal_penyelesaian', '<', $now);
-                    }
-                    $temuan = $temuan->groupBy('data_temuan.id')
-                    ->with('jenistemuan')->with('picunit')->with('levelresiko')->where('data_temuan.id_lhp',$idlhp)->get();
+                }
+            }else{
+                $temuan=DataTemuan::selectRaw('*,data_temuan.id as temuan_id')
+                ->with('jenistemuan')->with('picunit')->with('levelresiko')->where('id_lhp',$idlhp)->get();
+            }
+
         }
-        
+
         $dtem=array();
         foreach($temuan as $ktem=>$vtem)
         {
@@ -1014,6 +1126,29 @@ class DataTemuanController extends Controller
         $temuan->publish_flag       = 1;
         $temuan->tanggal_publish    = date('Y-m-d');
         $temuan->save();
+
+        if(Auth::user()->level=='super-user'){
+            $temuanData = DataTemuan::where('id_lhp',$idlhp)->first();
+            $rekomData = DataRekomendasi::where('id_temuan',$temuanData->id)->get();
+
+            foreach($rekomData as $k=>$v){
+                $pic = explode(',', $v->pic_2_temuan_id);
+                array_push($pic, $v->pic_1_temuan_id);
+
+                array_push($pic, $temuanData->pic_temuan_id);
+
+                foreach($pic as $s=>$p){
+                    if($v!='')
+                        $this->createNotification($temuan->id, $v->id, $p, $temuanData->id,Auth::user()->name .' telah menyetujui data LHP');
+                }
+
+                $this->createNotification($temuan->id, $v->id, $temuan->user_input_id, $temuanData->id,
+                Auth::user()->name .' telah menyetujui data LHP');
+
+                $this->createNotification($temuan->id, $v->id, $temuan->senior_user_id, $temuanData->id,
+                Auth::user()->name .' telah menyetujui data LHP');
+            }
+        }
 
         $request        = new Request();
         $request->judul = 'Publish LHP';

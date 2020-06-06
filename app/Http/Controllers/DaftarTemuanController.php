@@ -292,14 +292,21 @@ class DaftarTemuanController extends Controller
 
     public function selectlhpbypemeriksa($idpemeriksa,$multiple=null)
     {
-        $lhp=DaftarTemuan::where('pemeriksa_id',$idpemeriksa)->orderBy('tanggal_lhp','desc')->get();
-
+        $arrayPemeriksa = array();
+        foreach (explode(',', $idpemeriksa) as $v ) {
+            $arrayPemeriksa[] = $v;
+        }
+        
+        if(count($arrayPemeriksa)>0 && !in_array(0, $arrayPemeriksa))
+            $lhp=DaftarTemuan::whereIn('pemeriksa_id',$arrayPemeriksa)->orderBy('tanggal_lhp','desc')->get();
+        else 
+            $lhp=DaftarTemuan::orderBy('tanggal_lhp','desc')->get();
         if($multiple!=null)
             $select ='<select class="select2 form-control multiple" name="no_lhp" id="no_lhp" onchange="loaddata()" multiple="multiple">';
         else
             $select ='<select class="select2 form-control" name="no_lhp" id="no_lhp" onchange="loaddata()">';
         
-        $select.='<option value="0">-Semua-</option>';
+        $select.='<option value="0" selected>Semua</option>';
         foreach($lhp as $v)
         {
             $select.='<option value="'.$v->id.'">'.$v->no_lhp.'</option>';

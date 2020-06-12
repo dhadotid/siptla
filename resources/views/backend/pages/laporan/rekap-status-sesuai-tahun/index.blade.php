@@ -1,13 +1,13 @@
 @extends('backend.layouts.master')
 @section('title')
-    <title>Laporan Tindak Lanjut Per LHP </title>
+    <title>Rekap Status Sesuai Tahun</title>
 @endsection
 
 @section('content')
 	<div class="col-md-12">
 		<div class="widget">
 			<header class="widget-header">
-				<span class="widget-title">Laporan Tindak Lanjut Per LHP </span>
+				<span class="widget-title">Rekap Status Sesuai Tahun</span>
 			</header><!-- .widget-header -->
 			<hr class="widget-separator">
 			<div class="widget-body">
@@ -29,7 +29,7 @@
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Pemeriksa</label>
                                         <div class="col-md-6">
-                                            <select class="select2 form-control" data-plugin="select2" name="pemeriksa[]" id="pemeriksan" onchange="loaddata();getlhp()" multiple>
+                                            <select class="select2 form-control" data-plugin="select2" name="pemeriksa[]" id="pemeriksan" onchange="loaddata();" multiple>
                                                 <option value="0" selected>Semua</option>
                                                 @foreach ($pemeriksa as $item)
                                                     <option value="{{$item->id}}">{{$item->code}} - {{$item->pemeriksa}}</option>
@@ -37,31 +37,24 @@
                                             </select>
                                         </div>
                                     </div>
-                                    
                                     <div class="form-group" style="margin-bottom:5px;">
-                                        <label for="my-input" class="col-md-3">No LHP</label>
-                                        <div class="col-md-6" id="div-lhp">
-                                            <select class="select2 form-control" name="no_lhp" id="no_lhp"></select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group" style="margin-bottom:5px;">
-                                        <label for="my-input" class="col-md-3">Level Resiko</label>
+                                        <label for="my-input" class="col-md-3">LHP Dari Tahun</label>
                                         <div class="col-md-6">
-                                            <select class="select2 form-control" name="level-resiko[]" id="level-resiko" onchange="loaddata()" multiple>
+                                            <select class="select2 form-control" name="lhp_from_year" id="lhp_from_year" onchange="loaddata()">
                                                     <option value="0" selected>Semua</option>
-                                                    @foreach ($levelresiko as $item)
-                                                        <option value="{{$item->id}}">{{$item->level_resiko}}</option>
+                                                    @foreach ($year as $item)
+                                                        <option value="{{$item->tahun}}">{{$item->tahun}}</option>
                                                     @endforeach
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group" style="margin-bottom:5px;">
-                                        <label for="my-input" class="col-md-3">Status Rekomendasi</label>
+                                        <label for="my-input" class="col-md-3">LHP Sampai Tahun</label>
                                         <div class="col-md-6">
-                                            <select class="select2 form-control" name="statusrekomendasi[]" id="statusrekomendasi" onchange="loaddata()" multiple>
-                                            <option value="0" selected>Semua</option>
-                                                    @foreach ($statusrekomendasi as $item)
-                                                        <option value="{{$item->id}}">{{$item->rekomendasi}}</option>
+                                            <select class="select2 form-control" name="lhp_to_year" id="lhp_to_year" onchange="loaddata()">
+                                                    <option value="0" selected>Semua</option>
+                                                    @foreach ($year as $item)
+                                                        <option value="{{$item->tahun}}">{{$item->tahun}}</option>
                                                     @endforeach
                                             </select>
                                         </div>
@@ -88,14 +81,26 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="form-group" style="margin-bottom:5px;">
-                                        <label for="my-input" class="col-md-3">Overdue</label>
+                                        <label for="my-input" class="col-md-3">Bidang</label>
                                         <div class="col-md-6">
-                                            <select class="select2 form-control" name="overdue" id="overdue" onchange="loaddata()">
-                                                <option value="2">Semua</option>
-                                                <option value="1">Ya</option>
-                                                <option value="0">Tidak</option>
+                                            <select class="select2 form-control" name="bidang[]" id="bidang" onchange="loaddata()" multiple>
+                                                <option value="0" selected>Semua</option>
+                                                @foreach ($bidang as $item)
+                                                    <option value="{{$item->id}}">{{$item->nama_bidang}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom:5px;">
+                                        <label for="my-input" class="col-md-3">Unit Kerja</label>
+                                        <div class="col-md-6">
+                                            <select class="select2 form-control" name="unit_kerja1[]" id="unit_kerja1" onchange="loaddata()" multiple>
+                                                <option value="0" selected>Semua</option>
+                                                @foreach ($unitkerja as $item)
+                                                    <option value="{{$item->id}}">{{$item->nama_pic}}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -125,36 +130,26 @@
 		},3000);
 		$('.select2').select2();
         loaddata();
-        getlhp();
 
         function loaddata()
         {
             var pemeriksa=$('#pemeriksan').val();
-            var no_lhp=$('#no_lhp').val();
-            var statusrekomendasi=$('#statusrekomendasi').val();
+            var lhp_from_year = $('#lhp_from_year').val();
+            var lhp_to_year = $('#lhp_to_year').val();
+            var bidang=$('#bidang').val();
             var tanggal_awal=$('#tanggal_awal').val();
             var tanggal_akhir=$('#tanggal_akhir').val();
-            var level_resiko=$('#level-resiko').val();
-            var overdue=$('#overdue').val();
+            var unit_kerja1=$('#unit_kerja1').val();
 
             $.ajax({
-                url : flagsUrl+'/laporan/tindaklanjut-per-lhp-data',
-                data : {pemeriksa: pemeriksa, no_lhp:no_lhp, tgl_awal: tanggal_awal, tgl_akhir: tanggal_akhir, statusrekomendasi: statusrekomendasi, overdue:overdue,
-                    level_resiko:level_resiko},
+                url : flagsUrl+'/laporan/rekap-status-sesuai-tahun-data',
+                data : {unit_kerja1:unit_kerja1,bidang:bidang,pemeriksa: pemeriksa, lhp_from_year:lhp_from_year, tgl_awal: tanggal_awal, tgl_akhir: tanggal_akhir, lhp_to_year:lhp_to_year},
                 type : 'POST',
                 success : function(res){
                     $('#data').html(res);
                 }
             });
            
-        }
-        function getlhp(){
-            var pemeriksa=$('#pemeriksan').val();
-            $('#div-lhp').load(flagsUrl+'/selectlhpbypemeriksa/'+pemeriksa+'/true', function(){
-                $('.select2').select2({
-                    width:'100%'
-                });
-            })
         }
         
 	</script>

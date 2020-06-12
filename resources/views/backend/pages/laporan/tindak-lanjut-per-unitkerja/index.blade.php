@@ -7,7 +7,7 @@
 	<div class="col-md-12">
 		<div class="widget">
 			<header class="widget-header">
-				<span class="widget-title">Laporan Tindak Lanjut Per Bidang </span>
+				<span class="widget-title">Laporan Tindak Lanjut Per Unit Kerja </span>
 			</header><!-- .widget-header -->
 			<hr class="widget-separator">
 			<div class="widget-body">

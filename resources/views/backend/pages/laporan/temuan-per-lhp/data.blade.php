@@ -15,13 +15,25 @@
                 <input type="hidden" name="tanggal_akhir" value="{{$request->tgl_akhir}}">
                 <input type="hidden" name="tampilkannilai" value="{{$request->tampilkannilai}}">
                 <input type="hidden" name="tampilkanwaktupenyelesaian" value="{{$request->tampilkanwaktupenyelesaian}}">
+                <input type="hidden" name="export" value="pdf">
                 <button type="submit" class="btn btn-xs btn-primary"><i class="fa fa-print"></i> Cetak Data</button>
             </form>
         </div>
         <div class="col-md-1 text-right">
-            <form action="{{url('laporan/temuan-per-unitkerja-xls')}}" method="post" id="cetakxls" target="_blank">
+            <form action="{{url('laporan/temuan-per-lhp-pdf')}}" method="post" id="cetakxls" target="_blank">
                 @csrf
-                <button class="btn btn-xs btn-success" onclick="xls()"> <i class="fa fa-file-excel-o"></i> Export Ke Excel</button>
+                <input type="hidden" name="pemeriksa" value="{{implode(',', $request->pemeriksa)}}">
+                <input type="hidden" name="no_lhp" value="{{implode(',', $no_lhp)}}">
+                <input type="hidden" name="level_resiko" value="{{implode(',', $request->level_resiko)}}">
+                <input type="hidden" name="bidang" value="{{implode(',', $request->bidang)}}">
+                <input type="hidden" name="unitkerja1" value="{{implode(',', $request->unitkerja1)}}">
+                <input type="hidden" name="unitkerja2" value="{{implode(',', $request->unitkerja2)}}">
+                <input type="hidden" name="tanggal_awal" value="{{$request->tgl_awal}}">
+                <input type="hidden" name="tanggal_akhir" value="{{$request->tgl_akhir}}">
+                <input type="hidden" name="tampilkannilai" value="{{$request->tampilkannilai}}">
+                <input type="hidden" name="tampilkanwaktupenyelesaian" value="{{$request->tampilkanwaktupenyelesaian}}">
+                <input type="hidden" name="export" value="xls">
+                <button class="btn btn-xs btn-success"> <i class="fa fa-file-excel-o"></i> Export Ke Excel</button>
             </form>
         </div>
     </div>
@@ -31,9 +43,9 @@
                 REKAPITULASI PEMERIKSAAN – LHP<br>
                 PERIODE: <span style="font-weight: bold;" id="span_tgl_awal">{{tgl_indo($tgl_awal)}}</span> s.d. <span style="font-weight: bold;" id="span_tgl_akhir">{{tgl_indo($tgl_akhir)}}</span> <br>
                 {{--<span style="font-weight: bold;" id="span_judul_lhp">{{isset($lhp[$no_lhp]) ? $lhp[$no_lhp]->judul_lhp : 'JUDUL LHP BERDASARKAN NO LHP YANG DIPILIH'}}</span><br>--}}
-                NO. LHP:@foreach($lhp as $k=>$v)<span style="font-weight: bold;" id="span_unitkerja"> {{$v->no_lhp}}</span>@endforeach
+                NO. LHP:@foreach($lhp as $k=>$v)<span style="font-weight: bold;" id="span_no_lhp"> {{$v->no_lhp}}</span>@endforeach
                 &nbsp;
-                TANGGAL LHP: <span style="font-weight: bold;" id="span_unitkerja">{{tgl_indo($request->tgl_awal)}} s.d. {{tgl_indo($request->tgl_akhir)}}</span>
+                TANGGAL LHP: <span style="font-weight: bold;" id="span_tanggal_lhp">{{tgl_indo($request->tgl_awal)}} s.d. {{tgl_indo($request->tgl_akhir)}}</span>
             </h5>
         </div>
     </div>

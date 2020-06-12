@@ -219,7 +219,12 @@
               <li class="{{$url=='laporan/laporan-rekomendasi-overdue' ? 'active' : ''}}">
                 <a href="{{url('laporan/laporan-rekomendasi-overdue')}}"><span class="menu-text">Rekomendasi Overdue</span></a>
               </li>
-          
+              <li class="{{$url=='laporan/rekap-status-sesuai-tahun' ? 'active' : ''}}">
+                <a href="{{url('laporan/rekap-status-sesuai-tahun')}}"><span class="menu-text">Rekapitulasi Status Sesuai Tahun</span></a>
+              </li>
+              <li class="{{$url=='laporan/rekap-risiko-temuan' ? 'active' : ''}}">
+                <a href="{{url('laporan/rekap-risiko-temuan')}}"><span class="menu-text">Rekapitulasi Risiko Temuan</span></a>
+              </li>
             {{-- <li class="{{strpos($url,'rekap-lhp')!==false ? 'active' : ''}}">
               <a href="{{url('laporan/rekap-lhp')}}"><span class="menu-text">Rekap LHP</span></a>
             </li>

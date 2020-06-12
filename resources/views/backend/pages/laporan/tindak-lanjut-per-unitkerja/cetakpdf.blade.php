@@ -7,15 +7,21 @@
     <div class="row" style="padding:0px; margin:0px;">
             <div class="col-md-12 text-center" style="text-align:center">
                 <h5>
-                     TABEL PEMANTAUAN TINDAK LANJUT <br>
-                PEMERIKSA <span style="font-weight: bold;text-decoration:underline" id="span_pemeriksa">{{strtoupper($npemeriksa ? $npemeriksa->pemeriksa : '')}}</span><br>
-                PERIODE <span style="font-weight: bold;text-decoration:underline" id="span_tgl_awal">{{tgl_indo($tgl_awal)}}</span> s.d. <span style="font-weight: bold;text-decoration:underline" id="span_tgl_akhir">{{tgl_indo($tgl_akhir)}}</span> <br>
-                {{-- UNIT KERJA <span style="font-weight: bold;text-decoration:underline" id="span_unitkerja">
-                    {{isset($pic_unit[$unitkerja1]) ? $pic_unit[$unitkerja1]->nama_pic : 'UNIT KERJA 1'}}
-                    {{isset($pic_unit[$unitkerja2]) ? ', '.$pic_unit[$unitkerja2]->nama_pic : ', UNIT KERJA 2'}} --}}
+                @php
+                $pemeriksaTitle='';
+                if($request->pemeriksa == 0){
+                    $pemeriksaTitle.='Semua';
+                }else{
+                    foreach($npemeriksa as $k=>$v){
+                        $pemeriksaTitle.=$v->pemeriksa.' ';
+                    }
+                }
+                @endphp
+                LAPORAN TINDAK LANJUT - UNIT KERJA <br>
+                PEMERIKSA: <span style="font-weight: bold;" id="span_pemeriksa">{{$pemeriksaTitle}}</span><br>
+                PERIODE: <span style="font-weight: bold;" id="span_tgl_awal">{{tgl_indo($tgl_awal)}}</span> s.d. <span style="font-weight: bold;" id="span_tgl_akhir">{{tgl_indo($tgl_akhir)}}</span> <br>
+                UNIT KERJA: <span style="font-weight: bold;" id="span_unitkerja">{{$selectedPic}}</span>
                 </span>
-
-                   
                 </h5>
             </div>
         </div>
@@ -26,7 +32,8 @@
                 <th class="text-center" colspan="2">LHP</th>
                 <th class="text-center" colspan="4">Temuan Pemeriksa</th>
                 <th class="text-center" colspan="4">Rekomendasi</th>
-                <th class="text-center" colspan="4">Tindak Lanjut</th>
+                <th class="text-center" colspan="5">Tindak Lanjut</th>
+                <th class="text-center" rowspan="2">Review SPI</th>
                 <th class="text-center" rowspan="2">Waktu Penyelesaian</th>
 				<th class="text-center" rowspan="2">Overdue</th>
             </tr>
@@ -39,12 +46,13 @@
                 <th class="text-center">Level Resiko</th>
                 <th class="text-center">Nilai<br> Rekomendasi</th>
                 <th class="text-center">Saran dan<br>Rekomendasi</th>
-                <th class="text-center">Nilai<br>Rekomendasi</th>
+                <th class="text-center">No<br>Rekomendasi</th>
                 <th class="text-center">Status<br>Rekomendasi</th>
                 <th class="text-center">Tindak Lanjut</th>
                 <th class="text-center">Nilai<br>Tindak Lanjut</th>
                 <th class="text-center">Dokumen<br>Pendukung</th>
-                <th class="text-center">Unit Kerja</th>
+                <th class="text-center">Unit Kerja - 1</th>
+                <th class="text-center">Unit Kerja - 2</th>
             </tr>
         </thead>
         <tbody>
@@ -53,7 +61,7 @@
             @endphp
             @foreach ($rekomendasi as $k=> $item)
                 @php
-                    $dtindaklanjut=$ntindaklanjut=$doktindaklanjut=$unitkerja='';
+                    $dtindaklanjut=$ntindaklanjut=$doktindaklanjut=$unitkerja=$unitkerja2='';
                     if(isset($tindaklanjut[$item->id_rekom]))
                     {
                         foreach ($tindaklanjut[$item->id_rekom] as $key => $value) {
@@ -62,11 +70,13 @@
                     }
                     if(isset($pic_unit[$item->pic_1_temuan_id]))
                     {
-                        $unitkerja.='PIC 1 : <br>';
                         $unitkerja.='<b>'.$pic_unit[$item->pic_1_temuan_id]->nama_pic.'</b>';
                     }
                     else
                         $unitkerja.='-';
+                    if($item->pic_2_temuan_id != '' && isset($pic_unit[$item->pic_2_temuan_id])){
+                        $unitkerja2.='<b>'.$pic_unit[$item->pic_2_temuan_id]->nama_pic.'</b>';
+                    }else $unitkerja2.='-';
                 @endphp
                 <tr>
                     <td class="text-center">{{$no}}</td>
@@ -84,6 +94,8 @@
                     <td class="text-right"><ul>{!!$ntindaklanjut!!}</ul></td>
                     <td class="text-center"><ul>{!!$doktindaklanjut!!}</ul></td>
                     <td class="text-left"><div style="width:100px;">{!!$unitkerja!!}</div></td>
+                    <td class="text-left"><div style="width:100px;">{!!$unitkerja2!!}</div></td>
+                    <td class="text-center">{{$item->review_spi}}</td>
                    
                     @if ($item->tanggal_penyelesaian=='')
                         <td class="text-center">-</td>

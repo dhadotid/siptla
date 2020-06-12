@@ -13,13 +13,23 @@
                 <input type="hidden" name="tanggal_awal" value="{{$request->tgl_awal}}">
                 <input type="hidden" name="tanggal_akhir" value="{{$request->tgl_akhir}}">
                 <input type="hidden" name="overdue" value="{{$request->overdue}}">
+                <input type="hidden" name="export" value="pdf">
                 <button type="submit" class="btn btn-xs btn-primary"><i class="fa fa-print"></i> Cetak Data</button>
             </form>
         </div>
         <div class="col-md-1 text-right">
-            <form action="{{url('laporan/temuan-per-unitkerja-xls')}}" method="post" id="cetakxls" target="_blank">
+            <form action="{{url('laporan/tindaklanjut-per-bidang-pdf')}}" method="post" id="cetakxls" target="_blank">
                 @csrf
-                <button class="btn btn-xs btn-success" onclick="xls()"> <i class="fa fa-file-excel-o"></i> Export Ke Excel</button>
+                <input type="hidden" name="pemeriksa" value="{{implode(',', $request->pemeriksa)}}">
+                <input type="hidden" name="no_lhp" value="{{implode(',', $no_lhp)}}">
+                <input type="hidden" name="statusrekomendasi" value="{{implode(',', $request->statusrekomendasi)}}">
+                <input type="hidden" name="bidang" value="{{implode(',', $request->bidang)}}">
+                <input type="hidden" name="level_resiko" value="{{implode(',', $request->level_resiko)}}">
+                <input type="hidden" name="tanggal_awal" value="{{$request->tgl_awal}}">
+                <input type="hidden" name="tanggal_akhir" value="{{$request->tgl_akhir}}">
+                <input type="hidden" name="overdue" value="{{$request->overdue}}">
+                <input type="hidden" name="export" value="xls">
+                <button class="btn btn-xs btn-success"> <i class="fa fa-file-excel-o"></i> Export Ke Excel</button>
             </form>
         </div>
     </div>

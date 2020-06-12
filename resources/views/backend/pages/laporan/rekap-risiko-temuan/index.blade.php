@@ -1,13 +1,13 @@
 @extends('backend.layouts.master')
 @section('title')
-    <title>Laporan Tindak Lanjut Per LHP </title>
+    <title>Rekapitulasi Risiko Temuan</title>
 @endsection
 
 @section('content')
 	<div class="col-md-12">
 		<div class="widget">
 			<header class="widget-header">
-				<span class="widget-title">Laporan Tindak Lanjut Per LHP </span>
+				<span class="widget-title">Rekapitulasi Risiko Temuan</span>
 			</header><!-- .widget-header -->
 			<hr class="widget-separator">
 			<div class="widget-body">
@@ -29,40 +29,11 @@
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Pemeriksa</label>
                                         <div class="col-md-6">
-                                            <select class="select2 form-control" data-plugin="select2" name="pemeriksa[]" id="pemeriksan" onchange="loaddata();getlhp()" multiple>
+                                            <select class="select2 form-control" data-plugin="select2" name="pemeriksa[]" id="pemeriksan" onchange="loaddata()" multiple>
                                                 <option value="0" selected>Semua</option>
                                                 @foreach ($pemeriksa as $item)
                                                     <option value="{{$item->id}}">{{$item->code}} - {{$item->pemeriksa}}</option>
                                                 @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-group" style="margin-bottom:5px;">
-                                        <label for="my-input" class="col-md-3">No LHP</label>
-                                        <div class="col-md-6" id="div-lhp">
-                                            <select class="select2 form-control" name="no_lhp" id="no_lhp"></select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group" style="margin-bottom:5px;">
-                                        <label for="my-input" class="col-md-3">Level Resiko</label>
-                                        <div class="col-md-6">
-                                            <select class="select2 form-control" name="level-resiko[]" id="level-resiko" onchange="loaddata()" multiple>
-                                                    <option value="0" selected>Semua</option>
-                                                    @foreach ($levelresiko as $item)
-                                                        <option value="{{$item->id}}">{{$item->level_resiko}}</option>
-                                                    @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group" style="margin-bottom:5px;">
-                                        <label for="my-input" class="col-md-3">Status Rekomendasi</label>
-                                        <div class="col-md-6">
-                                            <select class="select2 form-control" name="statusrekomendasi[]" id="statusrekomendasi" onchange="loaddata()" multiple>
-                                            <option value="0" selected>Semua</option>
-                                                    @foreach ($statusrekomendasi as $item)
-                                                        <option value="{{$item->id}}">{{$item->rekomendasi}}</option>
-                                                    @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -86,17 +57,6 @@
                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                 </span>
                                             </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-group" style="margin-bottom:5px;">
-                                        <label for="my-input" class="col-md-3">Overdue</label>
-                                        <div class="col-md-6">
-                                            <select class="select2 form-control" name="overdue" id="overdue" onchange="loaddata()">
-                                                <option value="2">Semua</option>
-                                                <option value="1">Ya</option>
-                                                <option value="0">Tidak</option>
-                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -125,36 +85,22 @@
 		},3000);
 		$('.select2').select2();
         loaddata();
-        getlhp();
 
         function loaddata()
         {
             var pemeriksa=$('#pemeriksan').val();
-            var no_lhp=$('#no_lhp').val();
-            var statusrekomendasi=$('#statusrekomendasi').val();
             var tanggal_awal=$('#tanggal_awal').val();
             var tanggal_akhir=$('#tanggal_akhir').val();
-            var level_resiko=$('#level-resiko').val();
-            var overdue=$('#overdue').val();
 
             $.ajax({
-                url : flagsUrl+'/laporan/tindaklanjut-per-lhp-data',
-                data : {pemeriksa: pemeriksa, no_lhp:no_lhp, tgl_awal: tanggal_awal, tgl_akhir: tanggal_akhir, statusrekomendasi: statusrekomendasi, overdue:overdue,
-                    level_resiko:level_resiko},
+                url : flagsUrl+'/laporan/rekap-risiko-temuan-data',
+                data : {pemeriksa: pemeriksa, tgl_awal: tanggal_awal, tgl_akhir: tanggal_akhir},
                 type : 'POST',
                 success : function(res){
                     $('#data').html(res);
                 }
             });
            
-        }
-        function getlhp(){
-            var pemeriksa=$('#pemeriksan').val();
-            $('#div-lhp').load(flagsUrl+'/selectlhpbypemeriksa/'+pemeriksa+'/true', function(){
-                $('.select2').select2({
-                    width:'100%'
-                });
-            })
         }
         
 	</script>

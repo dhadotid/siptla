@@ -7,9 +7,8 @@
     <div class="row" style="padding:0px; margin:0px;">
             <div class="col-md-12 text-center" style="text-align:center">
                 <h5>
-                MATRIKS TABEL PEMANTAUAN TINDAK LANJUT <br>
-                PERIODE <span style="font-weight: bold;text-decoration:underline" id="span_tgl_awal">{{tgl_indo($tgl_awal)}}</span> s.d. <span style="font-weight: bold;text-decoration:underline" id="span_tgl_akhir">{{tgl_indo($tgl_akhir)}}</span> <br>
-                   
+                MATRIKS PEMANTAUAN TINDAK LANJUT <br>
+                PERIODE <span style="font-weight: bold;" id="span_tgl_awal">{{tgl_indo($tgl_awal)}}</span> s.d. <span style="font-weight: bold;" id="span_tgl_akhir">{{tgl_indo($tgl_akhir)}}</span> <br>   
                 </h5>
             </div>
         </div>
@@ -20,24 +19,26 @@
                 <th class="text-center" colspan="2">LHP</th>
                 <th class="text-center" colspan="4">Temuan Pemeriksa</th>
                 <th class="text-center" colspan="4">Rekomendasi</th>
-                <th class="text-center" colspan="2">Tindak Lanjut</th>
+                <th class="text-center" colspan="3">Tindak Lanjut</th>
                 <th class="text-center" rowspan="2">Review SPI</th>
                 <th class="text-center" rowspan="2">Waktu Penyelesaian</th>
 				<th class="text-center" rowspan="2">Overdue</th>
             </tr>
             <tr class="primary">
                 <th class="text-center">No.LHP</th>
-                <th class="text-center">Judul</th>
+                <th class="text-center">Judul LHP</th>
+                <th class="text-center">No.<br>Temuan</th>
                 <th class="text-center">Temuan</th>
                 <th class="text-center">Nilai Temuan</th>
-                <th class="text-center">PIC Temuan</th>
+                <!-- <th class="text-center">PIC Temuan</th> -->
                 <th class="text-center">Level Resiko</th>
                 <th class="text-center">Nilai<br> Rekomendasi</th>
                 <th class="text-center">Saran dan<br>Rekomendasi</th>
-                <th class="text-center">Nilai<br>Rekomendasi</th>
+                <th class="text-center">No.<br>Rekomendasi</th>
                 <th class="text-center">Status<br>Rekomendasi</th>
                 <th class="text-center">Tindak Lanjut</th>
                 <th class="text-center">Nilai<br>Tindak Lanjut</th>
+                <th class="text-center">Dokumen<br>Pendukung</th>
             </tr>
         </thead>
         <tbody>
@@ -59,9 +60,10 @@
                     <td class="text-center">{{$no}}</td>
                     <td class="text-left">{{$item->no_lhp}}</td>
                     <td class="text-left">{{$item->judul_lhp}}</td>
+                    <td class="text-left">{{$item->no_temuan}}</td>
                     <td class="text-left">{{$item->temuan}}</td>
                     <td class="text-right">{{rupiah($item->nominal)}}</td>
-                    <td class="text-center">{{isset($pic_unit[$item->pic_temuan_id]) ? $pic_unit[$item->pic_temuan_id]->nama_pic : '-'}}</td>
+                    
                     <td class="text-center">{{$item->level_resiko}}</td>
                     <td class="text-right">{{rupiah($item->nilai_rekomendasi)}}</td>
                     <td class="text-left">{{$item->rekom}}</td>
@@ -69,7 +71,8 @@
                     <td class="text-center">{{$item->st_rekom}}</td>
                     <td class="text-left"><ul>{!!$dtindaklanjut!!}</ul></td>
                     <td class="text-right"><ul>{!!$ntindaklanjut!!}</ul></td>
-                    <td class="text-left"><div style="width:100px;">{!!$item->reviw_spi!!}</div></td>
+                    <td class="text-center"><ul>{!!$doktindaklanjut!!}</ul></td>
+                    <td class="text-left"><div style="width:100px;">{!!$item->review_spi!!}</div></td>
                    
                     @if ($item->tanggal_penyelesaian=='')
                         <td class="text-center">-</td>

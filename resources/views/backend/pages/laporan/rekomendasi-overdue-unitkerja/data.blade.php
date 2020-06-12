@@ -5,20 +5,27 @@
         <div class="col-md-1 text-right">
             <form action="{{url('laporan/rekomendasi-overdue-unitkerja-pdf')}}" method="post" id="cetakpdf" target="_blank">
                 @csrf
-                <input type="hidden" name="pemeriksa" value="{{$request->pemeriksa}}">
-                <input type="hidden" name="no_lhp" value="{{$no_lhp}}">
-                <input type="hidden" name="bidang" value="{{$dbidang}}">
-                <input type="hidden" name="unitkerja" value="{{$unitkerja}}">
+                <input type="hidden" name="pemeriksa" value="{{implode(',', $request->pemeriksa)}}">
+                <input type="hidden" name="unit_kerja1" value="{{implode(',', $request->unit_kerja1)}}">
+                <input type="hidden" name="no_lhp" value="{{implode(',', $no_lhp)}}">
+                <input type="hidden" name="bidang" value="{{implode(',', $request->bidang)}}">
                 <input type="hidden" name="tanggal_awal" value="{{$request->tgl_awal}}">
                 <input type="hidden" name="tanggal_akhir" value="{{$request->tgl_akhir}}">
-                <input type="hidden" name="pejabat" value="{{$request->pejabat}}">
+                <input type="hidden" name="export" value="pdf">
                 <button type="submit" class="btn btn-xs btn-primary"><i class="fa fa-print"></i> Cetak Data</button>
             </form>
         </div>
         <div class="col-md-1 text-right">
-            <form action="{{url('laporan/temuan-per-unitkerja-xls')}}" method="post" id="cetakxls" target="_blank">
+            <form action="{{url('laporan/rekomendasi-overdue-unitkerja-pdf')}}" method="post" id="cetakxls" target="_blank">
                 @csrf
-                <button class="btn btn-xs btn-success" onclick="xls()"> <i class="fa fa-file-excel-o"></i> Export Ke Excel</button>
+                <input type="hidden" name="pemeriksa" value="{{implode(',', $request->pemeriksa)}}">
+                <input type="hidden" name="unit_kerja1" value="{{implode(',', $request->unit_kerja1)}}">
+                <input type="hidden" name="no_lhp" value="{{implode(',', $no_lhp)}}">
+                <input type="hidden" name="bidang" value="{{implode(',', $request->bidang)}}">
+                <input type="hidden" name="tanggal_awal" value="{{$request->tgl_awal}}">
+                <input type="hidden" name="tanggal_akhir" value="{{$request->tgl_akhir}}">
+                <input type="hidden" name="export" value="xls">
+                <button class="btn btn-xs btn-success"> <i class="fa fa-file-excel-o"></i> Export Ke Excel</button>
             </form>
         </div>
     </div>
@@ -27,7 +34,7 @@
             <h5>
                 LAPORAN REKOMENDASI OVERDUE - UNIT KERJA<br>
                 STATUS REKOMENDASI : BELUM SELESAI DAN BELUM DITINDAK LANJUTI<br>
-                PERIODE <span style="font-weight: bold;text-decoration:underline" id="span_tgl_awal">{{tgl_indo($tgl_awal)}}</span> s.d. <span style="font-weight: bold;text-decoration:underline" id="span_tgl_akhir">{{tgl_indo($tgl_akhir)}}</span> <br>
+                PERIODE <span style="font-weight: bold;" id="span_tgl_awal">{{tgl_indo($tgl_awal)}}</span> s.d. <span style="font-weight: bold;" id="span_tgl_akhir">{{tgl_indo($tgl_akhir)}}</span> <br>
             </h5>
         </div>
     </div>
@@ -38,8 +45,8 @@
 				<th class="text-center" rowspan="2" style="width:15px;">#</th>
                 <th class="text-center" rowspan="2">Bidang</th>
                 <th class="text-center" rowspan="2">Unit Kerja</th>
-                <th class="text-center" colspan="4">Belum Selesai</th>
-                <th class="text-center" colspan="4">Belum Ditindaklanjuti</th>
+                <th class="text-center" colspan="4">Belum Lewat Waktu</th>
+                <th class="text-center" colspan="4">Overdue</th>
                 <th class="text-center" rowspan="2">% Overdue</th>
                 <th class="text-center" rowspan="2">Jumlah</th>
             </tr>

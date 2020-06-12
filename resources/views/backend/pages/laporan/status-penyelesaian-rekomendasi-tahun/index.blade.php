@@ -29,8 +29,8 @@
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Pemeriksa</label>
                                         <div class="col-md-6">
-                                            <select class="select2 form-control" name="pemeriksa" id="pemeriksan" onchange="loaddata();getlhp(this.value)">
-                                                <option value="0">-Pilih-</option>
+                                            <select class="select2 form-control" data-plugin="select2" name="pemeriksa[]" id="pemeriksan" onchange="loaddata();getlhp()" multiple>
+                                                <option value="0" selected>Semua</option>
                                                 @foreach ($pemeriksa as $item)
                                                     <option value="{{$item->id}}">{{$item->code}} - {{$item->pemeriksa}}</option>
                                                 @endforeach
@@ -44,10 +44,21 @@
                                         </div>
                                     </div>
                                     <div class="form-group" style="margin-bottom:5px;">
+                                        <label for="my-input" class="col-md-3">Level Resiko</label>
+                                        <div class="col-md-6">
+                                            <select class="select2 form-control" name="level-resiko[]" id="level-resiko" onchange="loaddata()" multiple>
+                                                    <option value="0" selected>Semua</option>
+                                                    @foreach ($levelresiko as $item)
+                                                        <option value="{{$item->id}}">{{$item->level_resiko}}</option>
+                                                    @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Bidang</label>
                                         <div class="col-md-6">
-                                            <select class="select2 form-control" name="bidang" id="bidang" onchange="loaddata()">
-                                                <option value="0">-Pilih-</option>
+                                            <select class="select2 form-control" name="bidang[]" id="bidang" onchange="loaddata()" multiple>
+                                                <option value="0" selected>Semua</option>
                                                 @foreach ($bidang as $item)
                                                     <option value="{{$item->id}}">{{$item->nama_bidang}}</option>
                                                 @endforeach
@@ -57,8 +68,8 @@
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Unit Kerja</label>
                                         <div class="col-md-6">
-                                            <select class="select2 form-control" name="unitkerja" id="unitkerja" onchange="loaddata()">
-                                                <option value="0">-Pilih-</option>
+                                            <select class="select2 form-control" name="unit_kerja1[]" id="unit_kerja1" onchange="loaddata()" multiple>
+                                                <option value="0" selected>Semua</option>
                                                 @foreach ($unitkerja as $item)
                                                     <option value="{{$item->id}}">{{$item->nama_pic}}</option>
                                                 @endforeach
@@ -89,12 +100,12 @@
                                     </div>
 
                                     <div class="form-group" style="margin-bottom:5px;">
-                                        <label for="my-input" class="col-md-3">Pejabat Penanda Tangan</label>
+                                        <label for="my-input" class="col-md-3">Overdue</label>
                                         <div class="col-md-6">
-                                            <select class="select2 form-control" name="pejabat" id="pejabat">
-                                                @foreach ($pejabat as $item)
-                                                    <option value="{{$item->id}}">{{$item->jabatan}} : {{$item->nama}}</option>
-                                                @endforeach
+                                            <select class="select2 form-control" name="overdue" id="overdue" onchange="loaddata()">
+                                                <option value="2">Semua</option>
+                                                <option value="1">Ya</option>
+                                                <option value="0">Tidak</option>
                                             </select>
                                         </div>
                                     </div>
@@ -124,6 +135,7 @@
 		},3000);
 		$('.select2').select2();
         loaddata();
+        getlhp();
 
         function loaddata()
         {
@@ -134,11 +146,12 @@
             var tanggal_awal=$('#tanggal_awal').val();
             var tanggal_akhir=$('#tanggal_akhir').val();
             var pejabat=$('#pejabat').val();
-            var unitkerja=$('#unitkerja').val();
+            var unit_kerja1=$('#unit_kerja1').val();
+            var overdue=$('#overdue').val();
 
             $.ajax({
                 url : flagsUrl+'/laporan/status-penyelesaian-rekomendasi-tahun-data',
-                data : {unitkerja:unitkerja,bidang:bidang,pemeriksa: pemeriksa, no_lhp:no_lhp, tgl_awal: tanggal_awal, tgl_akhir: tanggal_akhir, pejabat:pejabat},
+                data : {unit_kerja1:unit_kerja1,bidang:bidang,pemeriksa: pemeriksa, no_lhp:no_lhp, tgl_awal: tanggal_awal, tgl_akhir: tanggal_akhir, level_resiko:level_resiko, overdue:overdue},
                 type : 'POST',
                 success : function(res){
                     $('#data').html(res);
@@ -146,8 +159,9 @@
             });
            
         }
-        function getlhp(idpemeriksa){
-            $('#div-lhp').load(flagsUrl+'/selectlhpbypemeriksa/'+idpemeriksa, function(){
+        function getlhp(){
+            var pemeriksa=$('#pemeriksan').val();
+            $('#div-lhp').load(flagsUrl+'/selectlhpbypemeriksa/'+pemeriksa+'/multiple', function(){
                 $('.select2').select2({
                     width:'100%'
                 });

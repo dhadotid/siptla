@@ -1,13 +1,13 @@
 @extends('backend.layouts.master')
 @section('title')
-    <title>Laporan Tindak Lanjut Per Bidang </title>
+    <title>Matriks Pemantauan Tindak Lanjut</title>
 @endsection
 
 @section('content')
 	<div class="col-md-12">
 		<div class="widget">
 			<header class="widget-header">
-				<span class="widget-title">Laporan Tindak Lanjut Per Bidang </span>
+				<span class="widget-title">Matriks Pemantauan Tindak Lanjut</span>
 			</header><!-- .widget-header -->
 			<hr class="widget-separator">
 			<div class="widget-body">
@@ -29,8 +29,8 @@
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Pemeriksa</label>
                                         <div class="col-md-6">
-                                            <select class="select2 form-control" name="pemeriksa" id="pemeriksan" onchange="loaddata()">
-                                                <option value="0">-Pilih-</option>
+                                        <select class="select2 form-control" data-plugin="select2" name="pemeriksa[]" id="pemeriksan" onchange="loaddata()" multiple>
+                                                <option value="0" selected>Semua</option>
                                                 @foreach ($pemeriksa as $item)
                                                     <option value="{{$item->id}}">{{$item->code}} - {{$item->pemeriksa}}</option>
                                                 @endforeach
@@ -40,23 +40,43 @@
                                     
                                   
                                     <div class="form-group" style="margin-bottom:5px;">
-                                        <label for="my-input" class="col-md-3">Unit Kerja</label>
+                                        <label for="my-input" class="col-md-3">Unit Kerja - 1</label>
                                         <div class="col-md-6">
-                                            <select class="select2 form-control" name="unit_kerja" id="unit_kerja" onchange="loaddata()">
-                                                <option value="0">-Pilih-</option>
+                                        <select class="select2 form-control" name="unit_kerja1[]" id="unit_kerja1" onchange="loaddata()" multiple>
+                                                <option value="0" selected>Semua</option>
                                                 @foreach ($unitkerja as $item)
                                                     <option value="{{$item->id}}">{{$item->nama_pic}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
-                                    
-                                  
+                                    <div class="form-group" style="margin-bottom:5px;">
+                                        <label for="my-input" class="col-md-3">Unit Kerja - 2<span class="ai-attachment-2"></span></label>
+                                        <div class="col-md-6">
+                                            <select class="select2 form-control" name="unit_kerja2[]" id="unit_kerja2" onchange="loaddata()" multiple>
+                                                <option value="0" selected>Semua</option>
+                                                @foreach ($unitkerja as $item)
+                                                    <option value="{{$item->id}}">{{$item->nama_pic}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom:5px;">
+                                        <label for="my-input" class="col-md-3">Level Resiko</label>
+                                        <div class="col-md-6">
+                                            <select class="select2 form-control" name="level-resiko[]" id="level-resiko" onchange="loaddata()" multiple>
+                                                    <option value="0" selected>Semua</option>
+                                                    @foreach ($levelresiko as $item)
+                                                        <option value="{{$item->id}}">{{$item->level_resiko}}</option>
+                                                    @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Status Rekomendasi</label>
                                         <div class="col-md-6">
-                                            <select class="select2 form-control" name="statusrekomendasi" id="statusrekomendasi" onchange="loaddata()">
-                                                <option value="0">-Pilih-</option>
+                                        <select class="select2 form-control" name="statusrekomendasi[]" id="statusrekomendasi" onchange="loaddata()" multiple>
+                                            <option value="0" selected>Semua</option>
                                                     @foreach ($statusrekomendasi as $item)
                                                         <option value="{{$item->id}}">{{$item->rekomendasi}}</option>
                                                     @endforeach
@@ -85,14 +105,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
                                     <div class="form-group" style="margin-bottom:5px;">
-                                        <label for="my-input" class="col-md-3">Pejabat Penanda Tangan</label>
+                                        <label for="my-input" class="col-md-3">Overdue</label>
                                         <div class="col-md-6">
-                                            <select class="select2 form-control" name="pejabat" id="pejabat">
-                                                @foreach ($pejabat as $item)
-                                                    <option value="{{$item->id}}">{{$item->jabatan}} : {{$item->nama}}</option>
-                                                @endforeach
+                                            <select class="select2 form-control" name="overdue" id="overdue" onchange="loaddata()">
+                                                <option value="2">Semua</option>
+                                                <option value="1">Ya</option>
+                                                <option value="0">Tidak</option>
                                             </select>
                                         </div>
                                     </div>
@@ -129,12 +148,14 @@
             var statusrekomendasi=$('#statusrekomendasi').val();
             var tanggal_awal=$('#tanggal_awal').val();
             var tanggal_akhir=$('#tanggal_akhir').val();
-            var pejabat=$('#pejabat').val();
-            var unit_kerja=$('#unit_kerja').val();
+            var unit_kerja1=$('#unit_kerja1').val();
+            var unit_kerja2=$('#unit_kerja2').val();
+            var level_resiko = $('#level-resiko').val();
+            var overdue = $('#overdue').val();
 
             $.ajax({
                 url : flagsUrl+'/laporan/tindak-lanjut-data',
-                data : {unit_kerja:unit_kerja,pemeriksa: pemeriksa, tgl_awal: tanggal_awal, tgl_akhir: tanggal_akhir, statusrekomendasi: statusrekomendasi, pejabat:pejabat},
+                data : {unit_kerja1:unit_kerja1,unit_kerja2:unit_kerja2,pemeriksa: pemeriksa, tgl_awal: tanggal_awal, tgl_akhir: tanggal_akhir, statusrekomendasi: statusrekomendasi, overdue:overdue, level_resiko:level_resiko},
                 type : 'POST',
                 success : function(res){
                     $('#data').html(res);

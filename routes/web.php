@@ -224,7 +224,13 @@ Route::group(['prefix'=>'laporan','middleware'=>'auth'],function(){
     Route::post('laporan-rekomendasi-overdue-data','LaporanController@laporan_rekomendasi_overdue_data');
     Route::post('laporan-rekomendasi-overdue-pdf','LaporanController@laporan_rekomendasi_overdue_pdf');
 
-   
+    Route::get('rekap-status-sesuai-tahun', 'LaporanController@rekap_status_sesuai_tahun');
+    Route::post('rekap-status-sesuai-tahun-data', 'LaporanController@rekap_status_sesuai_tahun_data');
+    Route::post('rekap-status-sesuai-tahun-pdf', 'LaporanController@rekap_status_sesuai_tahun_pdf');
+
+    Route::get('rekap-risiko-temuan','LaporanController@rekap_risiko_temuan');
+    Route::post('rekap-risiko-temuan-data','LaporanController@rekap_risiko_temuan_data');
+    Route::post('rekap-risiko-temuan-pdf','LaporanController@rekap_risiko_temuan_pdf');
 });
 
 // DATA LHP

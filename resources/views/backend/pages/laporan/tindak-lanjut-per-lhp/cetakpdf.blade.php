@@ -6,15 +6,13 @@
 <body style="padding:0px; margin:0px;">
     <div class="row" style="padding:0px; margin:0px;">
             <div class="col-md-12 text-center" style="text-align:center">
-                <h5>
-                    LAPORAN PEMANTAUAN TINDAK LANJUT PEMERIKSAAN <span style="font-weight: bold;text-decoration:underline" id="span_pemeriksa">{{strtoupper($npemeriksa ? $npemeriksa->pemeriksa : '')}}</span><br>
-                PERIODE <span style="font-weight: bold;text-decoration:underline" id="span_tgl_awal">{{tgl_indo($tgl_awal)}}</span> s.d. <span style="font-weight: bold;text-decoration:underline" id="span_tgl_akhir">{{tgl_indo($tgl_akhir)}}</span> <br>
-                <span style="font-weight: bold;text-decoration:underline" id="span_judul_lhp">{{isset($lhp[$no_lhp]) ? $lhp[$no_lhp]->judul_lhp : 'JUDUL LHP BERDASARKAN NO LHP YANG DIPILIH'}}</span><br>
-                NO. LHP <span 
-                    NO. LHP <span style="font-weight: bold;text-decoration:underline" id="span_unitkerja">{{isset($lhp[$no_lhp]) ? $lhp[$no_lhp]->no_lhp : 'NO. LHP'}}</span>
-                    &nbsp;
-                    TANGGAL LHP <span style="font-weight: bold;text-decoration:underline" id="span_unitkerja">{{tgl_indo($tgl_awal)}} s.d. {{tgl_indo($tgl_akhir)}}</span>
-                </h5>
+            <h5>
+            LAPORAN PEMANTAUAN TINDAK LANJUT PEMERIKSAAN <span style="font-weight: bold;" id="span_pemeriksa">{{$titlePemeriksa}}</span><br>
+                LAPORAN HASIL AUDIT PENGENDALIAN INTERNAL<br>
+                NO. LHP:@foreach($lhp as $k=>$v)<span style="font-weight: bold;" id="span_unitkerja_{{$k}}"> {{$v->no_lhp}}</span>@endforeach
+                &nbsp;
+                TANGGAL LHP: <span style="font-weight: bold;" id="span_unitkerja">{{tgl_indo($tgl_awal)}} s.d. {{tgl_indo($tgl_akhir)}}</span>
+            </h5>
             </div>
         </div>
         <table id="table" class="table table-striped table-bordered" cellspacing="0" width="100%" border="1">
@@ -29,13 +27,14 @@
 				<th class="text-center" rowspan="2">Overdue</th>
             </tr>
             <tr class="primary">
+                <th class="text-center">No. Temuan</th>
                 <th class="text-center">Temuan</th>
                 <th class="text-center">Nilai Temuan</th>
-                <th class="text-center">PIC Temuan</th>
+                <!-- <th class="text-center">PIC Temuan</th> -->
                 <th class="text-center">Level Resiko</th>
                 <th class="text-center">Nilai<br> Rekomendasi</th>
                 <th class="text-center">Saran dan<br>Rekomendasi</th>
-                <th class="text-center">Nilai<br>Rekomendasi</th>
+                <th class="text-center">No.<br>Rekomendasi</th>
                 <th class="text-center">Status<br>Rekomendasi</th>
                 <th class="text-center">Tindak Lanjut</th>
                 <th class="text-center">Nilai<br>Tindak Lanjut</th>
@@ -59,9 +58,9 @@
                 @endphp
                 <tr>
                     <td class="text-center">{{$no}}</td>
+                    <td class="text-left">{{$item->no_temuan}}</td>
                     <td class="text-left">{{$item->temuan}}</td>
                     <td class="text-right">{{rupiah($item->nominal)}}</td>
-                    <td class="text-center">{{isset($pic_unit[$item->pic_temuan_id]) ? $pic_unit[$item->pic_temuan_id]->nama_pic : '-'}}</td>
                     <td class="text-center">{{$item->level_resiko}}</td>
                     <td class="text-right">{{rupiah($item->nilai_rekomendasi)}}</td>
                     <td class="text-left">{{$item->rekom}}</td>

@@ -3,25 +3,37 @@
         <div class="col-md-8">&nbsp;</div>
         <div class="col-md-1">&nbsp;</div>
         <div class="col-md-1 text-right">
-            <form action="{{url('laporan/tindaklanjut-per-bidang-pdf')}}" method="post" id="cetakpdf" target="_blank">
+            <form action="{{url('laporan/tindaklanjut-per-unitkerja-pdf')}}" method="post" id="cetakpdf" target="_blank">
                 @csrf
                 <input type="hidden" name="pemeriksa" value="{{implode(',', $request->pemeriksa)}}">
                 <input type="hidden" name="no_lhp" value="{{implode(',', $no_lhp)}}">
                 <input type="hidden" name="statusrekomendasi" value="{{implode(',', $request->statusrekomendasi)}}">
                 <input type="hidden" name="bidang" value="{{implode(',', $request->bidang)}}">
                 <input type="hidden" name="level_resiko" value="{{implode(',', $request->level_resiko)}}">
+                <input type="hidden" name="unit_kerja1" value="{{implode(',', $unit_kerja1)}}">
+                <input type="hidden" name="unit_kerja2" value="{{implode(',', $unit_kerja2)}}">
                 <input type="hidden" name="tanggal_awal" value="{{$request->tgl_awal}}">
                 <input type="hidden" name="tanggal_akhir" value="{{$request->tgl_akhir}}">
                 <input type="hidden" name="overdue" value="{{$request->overdue}}">
-                <input type="hidden" name="unit_kerja1" value="{{implode(',', $unit_kerja1)}}">
-                <input type="hidden" name="unit_kerja2" value="{{implode(',', $unit_kerja2)}}">
+                <input type="hidden" name="export" value="pdf">
                 <button type="submit" class="btn btn-xs btn-primary"><i class="fa fa-print"></i> Cetak Data</button>
             </form>
         </div>
         <div class="col-md-1 text-right">
-            <form action="{{url('laporan/temuan-per-unitkerja-xls')}}" method="post" id="cetakxls" target="_blank">
+            <form action="{{url('laporan/temuan-per-unitkerja-pdf')}}" method="post" id="cetakxls" target="_blank">
                 @csrf
-                <button class="btn btn-xs btn-success" onclick="xls()"> <i class="fa fa-file-excel-o"></i> Export Ke Excel</button>
+                <input type="hidden" name="pemeriksa" value="{{implode(',', $request->pemeriksa)}}">
+                <input type="hidden" name="no_lhp" value="{{implode(',', $no_lhp)}}">
+                <input type="hidden" name="statusrekomendasi" value="{{implode(',', $request->statusrekomendasi)}}">
+                <input type="hidden" name="bidang" value="{{implode(',', $request->bidang)}}">
+                <input type="hidden" name="level_resiko" value="{{implode(',', $request->level_resiko)}}">
+                <input type="hidden" name="unit_kerja1" value="{{implode(',', $unit_kerja1)}}">
+                <input type="hidden" name="unit_kerja2" value="{{implode(',', $unit_kerja2)}}">
+                <input type="hidden" name="tanggal_awal" value="{{$request->tgl_awal}}">
+                <input type="hidden" name="tanggal_akhir" value="{{$request->tgl_akhir}}">
+                <input type="hidden" name="overdue" value="{{$request->overdue}}">
+                <input type="hidden" name="export" value="xls">
+                <button class="btn btn-xs btn-success"> <i class="fa fa-file-excel-o"></i> Export Ke Excel</button>
             </form>
         </div>
     </div>
@@ -53,7 +65,8 @@
                 <th class="text-center" colspan="2">LHP</th>
                 <th class="text-center" colspan="4">Temuan Pemeriksa</th>
                 <th class="text-center" colspan="4">Rekomendasi</th>
-                <th class="text-center" colspan="4">Tindak Lanjut</th>
+                <th class="text-center" colspan="5">Tindak Lanjut</th>
+                <th class="text-center" rowspan="2">Review SPI</th>
                 <th class="text-center" rowspan="2">Waktu Penyelesaian</th>
 				<th class="text-center" rowspan="2">Overdue</th>
             </tr>
@@ -71,7 +84,8 @@
                 <th class="text-center">Tindak Lanjut</th>
                 <th class="text-center">Nilai<br>Tindak Lanjut</th>
                 <th class="text-center">Dokumen<br>Pendukung</th>
-                <th class="text-center">Unit Kerja</th>
+                <th class="text-center">Unit Kerja - 1</th>
+                <th class="text-center">Unit Kerja - 2</th>
             </tr>
         </thead>
         <tbody>
@@ -80,7 +94,7 @@
             @endphp
             @foreach ($rekomendasi as $k=> $item)
                 @php
-                    $dtindaklanjut=$ntindaklanjut=$doktindaklanjut=$unitkerja='';
+                    $dtindaklanjut=$ntindaklanjut=$doktindaklanjut=$unitkerja=$unitkerja2='';
                     if(isset($tindaklanjut[$item->id_rekom]))
                     {
                         foreach ($tindaklanjut[$item->id_rekom] as $key => $value) {
@@ -89,11 +103,13 @@
                     }
                     if(isset($pic_unit[$item->pic_1_temuan_id]))
                     {
-                        $unitkerja.='PIC 1 : <br>';
                         $unitkerja.='<b>'.$pic_unit[$item->pic_1_temuan_id]->nama_pic.'</b>';
                     }
                     else
                         $unitkerja.='-';
+                    if($item->pic_2_temuan_id != '' && isset($pic_unit[$item->pic_2_temuan_id])){
+                        $unitkerja2.='<b>'.$pic_unit[$item->pic_2_temuan_id]->nama_pic.'</b>';
+                    }else $unitkerja2.='-';
                 @endphp
                 <tr>
                     <td class="text-center">{{$no}}</td>
@@ -111,6 +127,8 @@
                     <td class="text-right"><ul>{!!$ntindaklanjut!!}</ul></td>
                     <td class="text-center"><ul>{!!$doktindaklanjut!!}</ul></td>
                     <td class="text-left"><div style="width:100px;">{!!$unitkerja!!}</div></td>
+                    <td class="text-left"><div style="width:100px;">{!!$unitkerja2!!}</div></td>
+                    <td class="text-center">{{$item->review_spi}}</td>
                    
                     @if ($item->tanggal_penyelesaian=='')
                         <td class="text-center">-</td>

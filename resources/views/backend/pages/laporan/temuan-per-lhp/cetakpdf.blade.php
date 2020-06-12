@@ -8,11 +8,11 @@
             <div class="col-md-12 text-center" style="text-align:center">
                 <h5>
                 REKAPITULASI PEMERIKSAAN – LHP<br>
-                Periode: <span style="font-weight: bold;" id="span_tgl_awal">{{tgl_indo($tgl_awal)}}</span> s.d. <span style="font-weight: bold;" id="span_tgl_akhir">{{tgl_indo($tgl_akhir)}}</span> <br>
+                PERIODE: <span style="font-weight: bold;" id="span_tgl_awal">{{tgl_indo($tgl_awal)}}</span> s.d. <span style="font-weight: bold;" id="span_tgl_akhir">{{tgl_indo($tgl_akhir)}}</span> <br>
                 {{--<span style="font-weight: bold;" id="span_judul_lhp">{{isset($lhp[$no_lhp]) ? $lhp[$no_lhp]->judul_lhp : 'JUDUL LHP BERDASARKAN NO LHP YANG DIPILIH'}}</span><br>--}}
-                No. LHP:@foreach($lhp as $k=>$v)<span style="font-weight: bold;" id="span_unitkerja"> {{$v->no_lhp}}</span>@endforeach
+                NO. LHP:@foreach($lhp as $k=>$v)<span style="font-weight: bold;" id="span_no_lhp_{{$k}}"> {{$v->no_lhp}}</span>@endforeach
                 &nbsp;
-                Tanggal LHP: <span style="font-weight: bold;" id="span_unitkerja">{{tgl_indo($request->tgl_awal)}} s.d. {{tgl_indo($request->tgl_akhir)}}</span>
+                TANGGAL LHP: <span style="font-weight: bold;" id="span_tanggal_lhp">{{tgl_indo($request->tgl_awal)}} s.d. {{tgl_indo($request->tgl_akhir)}}</span>
                 </h5>
             </div>
         </div>

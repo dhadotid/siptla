@@ -1,13 +1,13 @@
 @extends('backend.layouts.master')
 @section('title')
-    <title>{{strtoupper('Laporan Rekomendasi Overdue')}}</title>
+    <title>{{strtoupper('Laporan Status Penyelesaian Rekomendasi - Tahun')}}</title>
 @endsection
 
 @section('content')
 	<div class="col-md-12">
 		<div class="widget">
 			<header class="widget-header">
-				<span class="widget-title">{{strtoupper('Laporan Rekomendasi Overdue')}}</span>
+				<span class="widget-title">{{strtoupper('Laporan Status Penyelesaian Rekomendasi - Tahun')}}</span>
 			</header><!-- .widget-header -->
 			<hr class="widget-separator">
 			<div class="widget-body">
@@ -29,8 +29,8 @@
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Pemeriksa</label>
                                         <div class="col-md-6">
-                                            <select class="select2 form-control" name="pemeriksa" id="pemeriksan" onchange="loaddata();getlhp(this.value)">
-                                                <option value="0">-Pilih-</option>
+                                            <select class="select2 form-control" data-plugin="select2" name="pemeriksa[]" id="pemeriksan" onchange="loaddata();getlhp()" multiple>
+                                                <option value="0" selected>Semua</option>
                                                 @foreach ($pemeriksa as $item)
                                                     <option value="{{$item->id}}">{{$item->code}} - {{$item->pemeriksa}}</option>
                                                 @endforeach
@@ -46,8 +46,8 @@
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Bidang</label>
                                         <div class="col-md-6">
-                                            <select class="select2 form-control" name="bidang" id="bidang" onchange="loaddata()">
-                                                <option value="0">-Pilih-</option>
+                                            <select class="select2 form-control" name="bidang[]" id="bidang" onchange="loaddata()" multiple>
+                                                <option value="0" selected>Semua</option>
                                                 @foreach ($bidang as $item)
                                                     <option value="{{$item->id}}">{{$item->nama_bidang}}</option>
                                                 @endforeach
@@ -57,8 +57,8 @@
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Unit Kerja</label>
                                         <div class="col-md-6">
-                                            <select class="select2 form-control" name="unitkerja" id="unitkerja" onchange="loaddata()">
-                                                <option value="0">-Pilih-</option>
+                                            <select class="select2 form-control" name="unit_kerja1[]" id="unit_kerja1" onchange="loaddata()" multiple>
+                                                <option value="0" selected>Semua</option>
                                                 @foreach ($unitkerja as $item)
                                                     <option value="{{$item->id}}">{{$item->nama_pic}}</option>
                                                 @endforeach
@@ -87,17 +87,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="form-group" style="margin-bottom:5px;">
-                                        <label for="my-input" class="col-md-3">Pejabat Penanda Tangan</label>
-                                        <div class="col-md-6">
-                                            <select class="select2 form-control" name="pejabat" id="pejabat">
-                                                @foreach ($pejabat as $item)
-                                                    <option value="{{$item->id}}">{{$item->jabatan}} : {{$item->nama}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
                                 </div>
 							</div>
 						</div>
@@ -124,6 +113,7 @@
 		},3000);
 		$('.select2').select2();
         loaddata();
+        getlhp();
 
         function loaddata()
         {
@@ -133,12 +123,11 @@
             var bidang=$('#bidang').val();
             var tanggal_awal=$('#tanggal_awal').val();
             var tanggal_akhir=$('#tanggal_akhir').val();
-            var pejabat=$('#pejabat').val();
-            var unitkerja=$('#unitkerja').val();
+            var unit_kerja1=$('#unit_kerja1').val();
 
             $.ajax({
                 url : flagsUrl+'/laporan/laporan-rekomendasi-overdue-data',
-                data : {unitkerja:unitkerja,bidang:bidang,pemeriksa: pemeriksa, no_lhp:no_lhp, tgl_awal: tanggal_awal, tgl_akhir: tanggal_akhir, pejabat:pejabat},
+                data : {unit_kerja1:unit_kerja1,bidang:bidang,pemeriksa: pemeriksa, no_lhp:no_lhp, tgl_awal: tanggal_awal, tgl_akhir: tanggal_akhir},
                 type : 'POST',
                 success : function(res){
                     $('#data').html(res);
@@ -146,8 +135,9 @@
             });
            
         }
-        function getlhp(idpemeriksa){
-            $('#div-lhp').load(flagsUrl+'/selectlhpbypemeriksa/'+idpemeriksa, function(){
+        function getlhp(){
+            var pemeriksa=$('#pemeriksan').val();
+            $('#div-lhp').load(flagsUrl+'/selectlhpbypemeriksa/'+pemeriksa+'/multiple', function(){
                 $('.select2').select2({
                     width:'100%'
                 });

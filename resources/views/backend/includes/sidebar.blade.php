@@ -225,6 +225,12 @@
               <li class="{{$url=='laporan/rekap-risiko-temuan' ? 'active' : ''}}">
                 <a href="{{url('laporan/rekap-risiko-temuan')}}"><span class="menu-text">Rekapitulasi Risiko Temuan</span></a>
               </li>
+              <li class="{{$url=='laporan/laporan-jenis-temuan' ? 'active' : ''}}">
+                <a href="{{url('laporan/laporan-jenis-temuan')}}"><span class="menu-text">Laporan Jenis Temuan</span></a>
+              </li>
+              <li class="{{$url=='laporan/laporan-jenis-audit' ? 'active' : ''}}">
+                <a href="{{url('laporan/laporan-jenis-audit')}}"><span class="menu-text">Laporan Jenis Audit</span></a>
+              </li>
             {{-- <li class="{{strpos($url,'rekap-lhp')!==false ? 'active' : ''}}">
               <a href="{{url('laporan/rekap-lhp')}}"><span class="menu-text">Rekap LHP</span></a>
             </li>

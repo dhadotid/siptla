@@ -164,7 +164,7 @@ Route::group(['middleware'=>['auth','checkstatus']],function(){
     Route::post('simpan-monev-pic','TindakLanjutController@simpan_monev_pic');
     Route::get('detail-catatan/{id}','TindakLanjutController@detail_catatan');
 
-    Route::get('selectlhpbypemeriksa/{idpemeriksa}/{multiple?}','DaftarTemuanController@selectlhpbypemeriksa');
+    Route::get('selectlhpbypemeriksa/{idpemeriksa}/{multiple?}/{showkode?}','DaftarTemuanController@selectlhpbypemeriksa');
 });
 
 Route::group(['prefix'=>'laporan','middleware'=>'auth'],function(){
@@ -231,6 +231,14 @@ Route::group(['prefix'=>'laporan','middleware'=>'auth'],function(){
     Route::get('rekap-risiko-temuan','LaporanController@rekap_risiko_temuan');
     Route::post('rekap-risiko-temuan-data','LaporanController@rekap_risiko_temuan_data');
     Route::post('rekap-risiko-temuan-pdf','LaporanController@rekap_risiko_temuan_pdf');
+
+    Route::get('laporan-jenis-temuan','LaporanController@laporan_jenis_temuan');
+    Route::post('laporan-jenis-temuan-data','LaporanController@laporan_jenis_temuan_data');
+    Route::post('laporan-jenis-temuan-pdf','LaporanController@laporan_jenis_temuan_pdf');
+
+    Route::get('laporan-jenis-audit','LaporanController@laporan_jenis_audit');
+    Route::post('laporan-jenis-audit-data','LaporanController@laporan_jenis_audit_data');
+    Route::post('laporan-jenis-audit-pdf','LaporanController@laporan_jenis_audit_pdf');
 });
 
 // DATA LHP

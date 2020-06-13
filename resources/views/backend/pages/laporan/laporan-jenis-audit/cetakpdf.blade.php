@@ -7,8 +7,8 @@
     <div class="row" style="padding:0px; margin:0px;">
             <div class="col-md-12 text-center" style="text-align:center">
             <h5>
-            REKAPITULASI RISIKO TEMUAN<br>
-            UNTUK PERIODE LHP: <span style="font-weight: bold;" id="span_tgl_awal">{{tgl_indo($tgl_awal)}}</span> s.d. <span style="font-weight: bold;" id="span_tgl_akhir">{{tgl_indo($tgl_akhir)}}</span> <br>
+            Laporan Jenis Audit<br>
+                Periode: <span style="font-weight: bold;" id="span_tgl_awal">{{tgl_indo($tgl_awal)}}</span> s.d. <span style="font-weight: bold;" id="span_tgl_akhir">{{tgl_indo($tgl_akhir)}}</span> <br>
             </h5>
             </div>
         </div>
@@ -16,12 +16,12 @@
         <thead>
 			<tr class="primary">
 				<th class="text-center" style="width:15px;">#</th>
-                <th class="text-center">Bidang</th>
-                <th class="text-center">Unit Kerja</th>
-                <th class="text-center">High</th>
-                <th class="text-center">Medium</th>
-                <th class="text-center">Low</th>
-                <th class="text-center">Jumlah</th>
+                <th class="text-center">Pemeriksa</th>
+                <th class="text-center">Jenis Audit</th>
+                <th class="text-center">Kode LHP</th>
+                <th class="text-center">No. LHP</th>
+                <th class="text-center">Jumlah Temuan</th>
+                <th class="text-center">Jumlah Rekomendasi</th>
 			</tr>
         </thead>
         <tbody>
@@ -31,12 +31,12 @@
             @foreach($finalData as $k=>$v)
                 <tr>
                     <td class="text-center">{{$no}}</td>
-                    <td class="text-center">{{$v['bidang']}}</td>
-                    <td class="text-center">{{$v['nama_pic']}}</td>
-                    <td class="text-center">{{$v['high']}}</td>
-                    <td class="text-center">{{$v['medium']}}</td>
-                    <td class="text-center">{{$v['low']}}</td>
-                    <td class="text-center">{{$v['total']}}</td>
+                    <td class="text-center">{{$v['pemeriksa']}}</td>
+                    <td class="text-center">{{$v['jenis_audit']}}</td>
+                    <td class="text-center">{{$v['kode_lhp']}}</td>
+                    <td class="text-center">{{$v['no_lhp']}}</td>
+                    <td class="text-center">{{$v['jumlah_temuan']}}</td>
+                    <td class="text-center">{{$v['jumlah_rekomendasi']}}</td>
                 </tr> 
                 @php
                     $no++;

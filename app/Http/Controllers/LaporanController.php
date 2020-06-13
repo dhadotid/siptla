@@ -13,6 +13,9 @@ use App\Models\StatusRekomendasi;
 use App\Models\TindakLanjutTemuan;
 use App\Models\LevelPIC;
 use App\Models\DataTemuan;
+use App\Models\MasterTemuan;
+use App\Models\JenisAudit;
+use App\Models\DataRekomendasi;
 use PDF;
 use Excel;
 class LaporanController extends Controller
@@ -5884,6 +5887,8 @@ class LaporanController extends Controller
         
         return view('backend.pages.laporan.rekap-risiko-temuan.data')
                     ->with('finalData',$finalData)
+                    ->with('tgl_awal',$tgl_awal)
+                    ->with('tgl_akhir',$tgl_akhir)
                     ->with('request',$request);
     }
 
@@ -5935,11 +5940,417 @@ class LaporanController extends Controller
         }
         $data['finalData']=$finalData;
         $data['request']=$request;
+        $data['tgl_awal']=$tgl_awal;
+        $data['tgl_akhir']=$tgl_akhir;
         if($request->export == 'pdf'){
             $pdf = PDF::loadView('backend.pages.laporan.rekap-risiko-temuan.cetakpdf', $data)->setPaper('a4', 'landscape');
         return $pdf->download('rekap-risiko-temuan.pdf');
         }elseif($request->export == 'xls'){
             return Excel::download(new LaporanExportController('backend.pages.laporan.rekap-risiko-temuan.cetakpdf', $data), 'rekap-risiko-temuan.xlsx');
+        }
+    }
+
+    public function laporan_jenis_temuan(){
+        $pemeriksa=Pemeriksa::orderBy('pemeriksa')->get();
+        $statusrekomendasi=StatusRekomendasi::orderBy('rekomendasi')->get();
+        $unitkerja=PICUnit::all();
+        $jenistemuan=MasterTemuan::orderBy('temuan')->get();
+        $levelresiko=LevelResiko::orderBy('level_resiko')->get();
+        return view('backend.pages.laporan.laporan-jenis-temuan.index')
+                ->with('pemeriksa',$pemeriksa)
+                ->with('statusrekomendasi',$statusrekomendasi)
+                ->with('unitkerja',$unitkerja)
+                ->with('levelresiko',$levelresiko)
+                ->with('jenistemuan',$jenistemuan);
+    }
+
+    public function laporan_jenis_temuan_data(Request $request){
+        list($tg1,$bl1,$th1)=explode('/',$request->tgl_awal);
+        list($tg2,$bl2,$th2)=explode('/',$request->tgl_akhir);
+
+        $tgl_awal = $th1.'-'.$bl1.'-'.$tg1;
+        $tgl_akhir = $th2.'-'.$bl2.'-'.$tg2;
+
+        $arrayPemeriksa = array();
+        if($request->pemeriksa != '' && $request->pemeriksa!=0){
+            $pemeriksa = $request->pemeriksa;
+            $pemeriksa = implode(',', $pemeriksa);
+            foreach(explode(',',$pemeriksa) as $v){
+                $arrayPemeriksa[] = $v;
+            }
+        }
+        
+        $arrayLevelResiko = array();
+        if($request->level_resiko != '' && $request->level_resiko!=0){
+            $level_resiko = $request->level_resiko;
+            $level_resiko = implode(',', $level_resiko);
+            foreach(explode(',',$level_resiko) as $v){
+                $arrayLevelResiko[] = $v;
+            }
+        }
+
+        $arrayJenisTemuan = array();
+        if($request->jenis_temuan != '' && $request->jenis_temuan!=0){
+            $jenis_temuan = $request->jenis_temuan;
+            $jenis_temuan = implode(',', $jenis_temuan);
+            foreach(explode(',',$jenis_temuan) as $v){
+                $arrayJenisTemuan[] = $v;
+            }
+        }
+
+        $arrayKodeLHP = array();
+        if($request->kode_lhp != '' && $request->kode_lhp!=0){
+            $kode_lhp = $request->kode_lhp;
+            $kode_lhp = implode(',', $kode_lhp);
+            foreach(explode(',',$kode_lhp) as $v){
+                $arrayKodeLHP[] = $v;
+            }
+        }
+
+        $arrayNoLHP = array();
+        if($request->no_lhp != '' && $request->no_lhp!=0){
+            $no_lhp = $request->no_lhp;
+            $no_lhp = implode(',', $no_lhp);
+            foreach(explode(',',$no_lhp) as $v){
+                $arrayNoLHP[] = $v;
+            }
+        }
+        $arrayUnitKerja1 = array();
+        if($request->unit_kerja1 != '' && $request->unit_kerja1!=0){
+            $unit_kerja1 = $request->unit_kerja1;
+            $unit_kerja1 = implode(',', $unit_kerja1);
+            foreach(explode(',',$unit_kerja1) as $v){
+                $arrayUnitKerja1[] = $v;
+            }
+        }
+        $arrayStatusRekom = array();
+        if($request->status_rekomendasi != '' && $request->status_rekomendasi!=0){
+            $status_rekomendasi = $request->status_rekomendasi;
+            $status_rekomendasi = implode(',', $status_rekomendasi);
+            foreach(explode(',',$status_rekomendasi) as $v){
+                $arrayStatusRekom[] = $v;
+            }
+        }
+        $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+                                    ->select('data_rekomendasi.id as id_rekom', 'level_resiko.level_resiko', 'pemeriksa.pemeriksa', 'master_temuan.temuan as jenis_temuan',
+                                    'daftar_lhp.kode_lhp', 'daftar_lhp.no_lhp', 'pic_unit.nama_pic', 'data_temuan.no_temuan', 'data_temuan.temuan',
+                                    'data_rekomendasi.nomor_rekomendasi','data_rekomendasi.rekomendasi', 'status_rekomendasi.rekomendasi as status_rekom')
+                                    ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                                    ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                                    ->join('pemeriksa','daftar_lhp.pemeriksa_id','=','pemeriksa.id')
+                                    ->join('level_resiko','data_temuan.level_resiko_id','=','level_resiko.id')
+                                    ->leftjoin('status_rekomendasi','data_rekomendasi.status_rekomendasi_id', '=', 'status_rekomendasi.id')
+                                    ->leftjoin('master_temuan','data_temuan.jenis_temuan_id', '=', 'master_temuan.id')
+                                    ->join('pic_unit', 'pic_unit.id', '=','data_temuan.pic_temuan_id')
+                                    ->leftjoin('bidang', 'bidang.id', '=', 'pic_unit.bidang')
+                                    ->leftjoin('level_pic', 'level_pic.id', '=', 'pic_unit.level_pic')
+                                    ->whereBetween('daftar_lhp.tanggal_lhp', [$tgl_awal, $tgl_akhir])
+                                    ->where('daftar_lhp.status_lhp','Publish LHP');
+                                    if(count($arrayPemeriksa)>0 && !in_array(0, $arrayPemeriksa)){
+                                        $alldata = $alldata->whereIn('daftar_lhp.pemeriksa_id', $arrayPemeriksa);
+                                    }
+                                    if(count($arrayLevelResiko)>0 && !in_array(0, $arrayLevelResiko)){
+                                        $alldata = $alldata->whereIn('data_temuan.level_resiko_id', $arrayLevelResiko);
+                                    }
+                                    if(count($arrayJenisTemuan)>0 && !in_array(0, $arrayJenisTemuan)){
+                                        $alldata = $alldata->whereIn('data_temuan.jenis_temuan_id', $arrayJenisTemuan);
+                                    }
+                                    if(count($arrayKodeLHP)>0 && !in_array(0, $arrayKodeLHP)){
+                                        $alldata = $alldata->whereIn('daftar_lhp.kode_lhp', $arrayKodeLHP);
+                                    }
+                                    if(count($arrayNoLHP)>0 && !in_array(0, $arrayNoLHP)){
+                                        $alldata = $alldata->whereIn('daftar_lhp.no_lhp', $arrayNoLHP);
+                                    }
+                                    if(count($arrayUnitKerja1)>0 && !in_array(0, $arrayUnitKerja1)){
+                                        $alldata = $alldata->whereIn('data_rekomendasi.pic_1_temuan_id', $arrayUnitKerja1)
+                                        ->orWhereIn('data_rekomendasi.pic_2_temuan_id','like', "%$arrayUnitKerja1%,");
+                                    }
+                                    if(count($arrayStatusRekom)>0 && !in_array(0, $arrayStatusRekom)){
+                                        $alldata = $alldata->whereIn('data_rekomendasi.status_rekomendasi_id', $arrayStatusRekom);
+                                    }
+        $alldata = $alldata->whereNull('data_rekomendasi.deleted_at')->get();
+
+        // return json_encode($alldata);
+        return view('backend.pages.laporan.laporan-jenis-temuan.data')
+                ->with('alldata',$alldata)
+                ->with('tgl_awal',$tgl_awal)
+                ->with('tgl_akhir',$tgl_akhir)
+                ->with('request',$request)
+                ->with('no_lhp',$arrayNoLHP)
+                ->with('kode_lhp',$arrayKodeLHP);
+    }
+
+    public function laporan_jenis_temuan_pdf(Request $request){
+        list($tg1,$bl1,$th1)=explode('/',$request->tanggal_awal);
+        list($tg2,$bl2,$th2)=explode('/',$request->tanggal_akhir);
+
+        $tgl_awal = $th1.'-'.$bl1.'-'.$tg1;
+        $tgl_akhir = $th2.'-'.$bl2.'-'.$tg2;
+
+        $arrayPemeriksa = array();
+        if($request->pemeriksa != '' && $request->pemeriksa!=0){
+            $pemeriksa = $request->pemeriksa;
+            foreach(explode(',',$pemeriksa) as $v){
+                $arrayPemeriksa[] = $v;
+            }
+        }
+        
+        $arrayLevelResiko = array();
+        if($request->level_resiko != '' && $request->level_resiko!=0){
+            $level_resiko = $request->level_resiko;
+            foreach(explode(',',$level_resiko) as $v){
+                $arrayLevelResiko[] = $v;
+            }
+        }
+
+        $arrayJenisTemuan = array();
+        if($request->jenis_temuan != '' && $request->jenis_temuan!=0){
+            $jenis_temuan = $request->jenis_temuan;
+            foreach(explode(',',$jenis_temuan) as $v){
+                $arrayJenisTemuan[] = $v;
+            }
+        }
+
+        $arrayKodeLHP = array();
+        if($request->kode_lhp != '' && $request->kode_lhp!=0){
+            $kode_lhp = $request->kode_lhp;
+            foreach(explode(',',$kode_lhp) as $v){
+                $arrayKodeLHP[] = $v;
+            }
+        }
+
+        $arrayNoLHP = array();
+        if($request->no_lhp != '' && $request->no_lhp!=0){
+            $no_lhp = $request->no_lhp;
+            foreach(explode(',',$no_lhp) as $v){
+                $arrayNoLHP[] = $v;
+            }
+        }
+        $arrayUnitKerja1 = array();
+        if($request->unit_kerja1 != '' && $request->unit_kerja1!=0){
+            $unit_kerja1 = $request->unit_kerja1;
+            foreach(explode(',',$unit_kerja1) as $v){
+                $arrayUnitKerja1[] = $v;
+            }
+        }
+        $arrayStatusRekom = array();
+        if($request->status_rekomendasi != '' && $request->status_rekomendasi!=0){
+            $status_rekomendasi = $request->status_rekomendasi;
+            foreach(explode(',',$status_rekomendasi) as $v){
+                $arrayStatusRekom[] = $v;
+            }
+        }
+        $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+                                    ->select('data_rekomendasi.id as id_rekom', 'level_resiko.level_resiko', 'pemeriksa.pemeriksa', 'master_temuan.temuan as jenis_temuan',
+                                    'daftar_lhp.kode_lhp', 'daftar_lhp.no_lhp', 'pic_unit.nama_pic', 'data_temuan.no_temuan', 'data_temuan.temuan',
+                                    'data_rekomendasi.nomor_rekomendasi','data_rekomendasi.rekomendasi', 'status_rekomendasi.rekomendasi as status_rekom')
+                                    ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                                    ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                                    ->join('pemeriksa','daftar_lhp.pemeriksa_id','=','pemeriksa.id')
+                                    ->join('level_resiko','data_temuan.level_resiko_id','=','level_resiko.id')
+                                    ->leftjoin('status_rekomendasi','data_rekomendasi.status_rekomendasi_id', '=', 'status_rekomendasi.id')
+                                    ->leftjoin('master_temuan','data_temuan.jenis_temuan_id', '=', 'master_temuan.id')
+                                    ->join('pic_unit', 'pic_unit.id', '=','data_temuan.pic_temuan_id')
+                                    ->leftjoin('bidang', 'bidang.id', '=', 'pic_unit.bidang')
+                                    ->leftjoin('level_pic', 'level_pic.id', '=', 'pic_unit.level_pic')
+                                    ->whereBetween('daftar_lhp.tanggal_lhp', [$tgl_awal, $tgl_akhir])
+                                    ->where('daftar_lhp.status_lhp','Publish LHP');
+                                    if(count($arrayPemeriksa)>0 && !in_array(0, $arrayPemeriksa)){
+                                        $alldata = $alldata->whereIn('daftar_lhp.pemeriksa_id', $arrayPemeriksa);
+                                    }
+                                    if(count($arrayLevelResiko)>0 && !in_array(0, $arrayLevelResiko)){
+                                        $alldata = $alldata->whereIn('data_temuan.level_resiko_id', $arrayLevelResiko);
+                                    }
+                                    if(count($arrayJenisTemuan)>0 && !in_array(0, $arrayJenisTemuan)){
+                                        $alldata = $alldata->whereIn('data_temuan.jenis_temuan_id', $arrayJenisTemuan);
+                                    }
+                                    if(count($arrayKodeLHP)>0 && !in_array(0, $arrayKodeLHP)){
+                                        $alldata = $alldata->whereIn('daftar_lhp.kode_lhp', $arrayKodeLHP);
+                                    }
+                                    if(count($arrayNoLHP)>0 && !in_array(0, $arrayNoLHP)){
+                                        $alldata = $alldata->whereIn('daftar_lhp.no_lhp', $arrayNoLHP);
+                                    }
+                                    if(count($arrayUnitKerja1)>0 && !in_array(0, $arrayUnitKerja1)){
+                                        $alldata = $alldata->whereIn('data_rekomendasi.pic_1_temuan_id', $arrayUnitKerja1)
+                                        ->orWhereIn('data_rekomendasi.pic_2_temuan_id','like', "%$arrayUnitKerja1%,");
+                                    }
+                                    if(count($arrayStatusRekom)>0 && !in_array(0, $arrayStatusRekom)){
+                                        $alldata = $alldata->whereIn('data_rekomendasi.status_rekomendasi_id', $arrayStatusRekom);
+                                    }
+        $alldata = $alldata->whereNull('data_rekomendasi.deleted_at')->get();
+
+        $data['alldata']=$alldata;
+        $data['tgl_awal']=$tgl_awal;
+        $data['tgl_akhir']=$tgl_akhir;
+        if($request->export == 'pdf'){
+            $pdf = PDF::loadView('backend.pages.laporan.laporan-jenis-temuan.cetakpdf', $data)->setPaper('a4', 'landscape');
+        return $pdf->download('laporan-jenis-temuan.pdf');
+        }elseif($request->export == 'xls'){
+            return Excel::download(new LaporanExportController('backend.pages.laporan.laporan-jenis-temuan.cetakpdf', $data), 'laporan-jenis-temuan.xlsx');
+        }
+    }
+
+    public function laporan_jenis_audit(){
+        $pemeriksa=Pemeriksa::orderBy('pemeriksa')->get();
+        $jenisaudit=JenisAudit::orderBy('jenis_audit')->get();
+        return view('backend.pages.laporan.laporan-jenis-audit.index')
+                ->with('pemeriksa',$pemeriksa)
+                ->with('jenisaudit',$jenisaudit);
+    }
+
+    public function laporan_jenis_audit_data(Request $request){
+        list($tg1,$bl1,$th1)=explode('/',$request->tgl_awal);
+        list($tg2,$bl2,$th2)=explode('/',$request->tgl_akhir);
+        
+        $tgl_awal = $th1.'-'.$bl1.'-'.$tg1;
+        $tgl_akhir = $th2.'-'.$bl2.'-'.$tg2;
+        
+        $arrayPemeriksa = array();
+        if($request->pemeriksa != '' && $request->pemeriksa!=0){
+            $pemeriksa = $request->pemeriksa;
+            $pemeriksa = implode(',', $pemeriksa);
+            foreach(explode(',',$pemeriksa) as $v){
+                $arrayPemeriksa[] = $v;
+            }
+        }
+
+        $arrayJenisAudit = array();
+        if($request->jenis_audit != '' && $request->jenis_audit!=0){
+            $jenis_audit = $request->jenis_audit;
+            $jenis_audit = implode(',', $jenis_audit);
+            foreach(explode(',',$jenis_audit) as $v){
+                $arrayJenisAudit[] = $v;
+            }
+        }
+
+        $arrayKodeLHP = array();
+        if($request->kode_lhp != '' && $request->kode_lhp!=0){
+            $kode_lhp = $request->kode_lhp;
+            $kode_lhp = implode(',', $kode_lhp);
+            foreach(explode(',',$kode_lhp) as $v){
+                $arrayKodeLHP[] = $v;
+            }
+        }
+
+        $arrayNoLHP = array();
+        if($request->no_lhp != '' && $request->no_lhp!=0){
+            $no_lhp = $request->no_lhp;
+            $no_lhp = implode(',', $no_lhp);
+            foreach(explode(',',$no_lhp) as $v){
+                $arrayNoLHP[] = $v;
+            }
+        }
+        $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+                                    ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                                    ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                                    ->join('pemeriksa','daftar_lhp.pemeriksa_id','=','pemeriksa.id')
+                                    ->leftJoin('jenis_audit', 'daftar_lhp.jenis_audit_id','=','jenis_audit.id')
+                                    ->whereBetween('daftar_lhp.tanggal_lhp', [$tgl_awal, $tgl_akhir])
+                                    ->where('daftar_lhp.status_lhp','Publish LHP');
+                                    if(count($arrayPemeriksa)>0 && !in_array(0, $arrayPemeriksa)){
+                                        $alldata = $alldata->whereIn('daftar_lhp.pemeriksa_id', $arrayPemeriksa);
+                                    }
+        $alldata = $alldata->groupBy('daftar_lhp.no_lhp')->get();
+        
+        $finalData = array();
+        foreach($alldata as $k=>$v){
+            $finalData[$k]['pemeriksa'] = $v->pemeriksa;
+            $finalData[$k]['jenis_audit'] = $v->jenis_audit;
+            $finalData[$k]['kode_lhp'] = $v->kode_lhp;
+            $finalData[$k]['no_lhp'] = $v->no_lhp;
+
+            $temuanData = DataTemuan::where('id_lhp',$v->id_lhp)->whereNull('deleted_at')->get();
+            $totalRekom = 0;
+            foreach($temuanData as $td){
+                $totalRekom += DataRekomendasi::where('id_temuan', $td->id)->whereNull('deleted_at')->get()->count();
+            }
+            
+            $finalData[$k]['jumlah_temuan'] = $temuanData->count();
+            $finalData[$k]['jumlah_rekomendasi'] = $totalRekom;
+        }
+        return view('backend.pages.laporan.laporan-jenis-audit.data')
+                ->with('finalData',$finalData)
+                ->with('tgl_awal',$tgl_awal)
+                ->with('tgl_akhir',$tgl_akhir)
+                ->with('request',$request)
+                ->with('no_lhp',$arrayNoLHP)
+                ->with('kode_lhp',$arrayKodeLHP);
+    }
+
+    public function laporan_jenis_audit_pdf(Request $request){
+        list($tg1,$bl1,$th1)=explode('/',$request->tanggal_awal);
+        list($tg2,$bl2,$th2)=explode('/',$request->tanggal_akhir);
+        
+        $tgl_awal = $th1.'-'.$bl1.'-'.$tg1;
+        $tgl_akhir = $th2.'-'.$bl2.'-'.$tg2;
+        
+        $arrayPemeriksa = array();
+        if($request->pemeriksa != '' && $request->pemeriksa!=0){
+            $pemeriksa = $request->pemeriksa;
+            foreach(explode(',',$pemeriksa) as $v){
+                $arrayPemeriksa[] = $v;
+            }
+        }
+
+        $arrayJenisAudit = array();
+        if($request->jenis_audit != '' && $request->jenis_audit!=0){
+            $jenis_audit = $request->jenis_audit;
+            foreach(explode(',',$jenis_audit) as $v){
+                $arrayJenisAudit[] = $v;
+            }
+        }
+
+        $arrayKodeLHP = array();
+        if($request->kode_lhp != '' && $request->kode_lhp!=0){
+            $kode_lhp = $request->kode_lhp;
+            foreach(explode(',',$kode_lhp) as $v){
+                $arrayKodeLHP[] = $v;
+            }
+        }
+
+        $arrayNoLHP = array();
+        if($request->no_lhp != '' && $request->no_lhp!=0){
+            $no_lhp = $request->no_lhp;
+            foreach(explode(',',$no_lhp) as $v){
+                $arrayNoLHP[] = $v;
+            }
+        }
+        $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+                                    ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                                    ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                                    ->join('pemeriksa','daftar_lhp.pemeriksa_id','=','pemeriksa.id')
+                                    ->leftJoin('jenis_audit', 'daftar_lhp.jenis_audit_id','=','jenis_audit.id')
+                                    ->whereBetween('daftar_lhp.tanggal_lhp', [$tgl_awal, $tgl_akhir])
+                                    ->where('daftar_lhp.status_lhp','Publish LHP');
+                                    if(count($arrayPemeriksa)>0 && !in_array(0, $arrayPemeriksa)){
+                                        $alldata = $alldata->whereIn('daftar_lhp.pemeriksa_id', $arrayPemeriksa);
+                                    }
+        $alldata = $alldata->groupBy('daftar_lhp.no_lhp')->get();
+        
+        $finalData = array();
+        foreach($alldata as $k=>$v){
+            $finalData[$k]['pemeriksa'] = $v->pemeriksa;
+            $finalData[$k]['jenis_audit'] = $v->jenis_audit;
+            $finalData[$k]['kode_lhp'] = $v->kode_lhp;
+            $finalData[$k]['no_lhp'] = $v->no_lhp;
+
+            $temuanData = DataTemuan::where('id_lhp',$v->id_lhp)->whereNull('deleted_at')->get();
+            $totalRekom = 0;
+            foreach($temuanData as $td){
+                $totalRekom += DataRekomendasi::where('id_temuan', $td->id)->whereNull('deleted_at')->get()->count();
+            }
+            
+            $finalData[$k]['jumlah_temuan'] = $temuanData->count();
+            $finalData[$k]['jumlah_rekomendasi'] = $totalRekom;
+        }
+        $data['finalData']=$finalData;
+        $data['tgl_awal']=$tgl_awal;
+        $data['tgl_akhir']=$tgl_akhir;
+        if($request->export == 'pdf'){
+            $pdf = PDF::loadView('backend.pages.laporan.laporan-jenis-audit.cetakpdf', $data)->setPaper('a4', 'landscape');
+        return $pdf->download('laporan-jenis-audit.pdf');
+        }elseif($request->export == 'xls'){
+            return Excel::download(new LaporanExportController('backend.pages.laporan.laporan-jenis-audit.cetakpdf', $data), 'laporan-jenis-audit.xlsx');
         }
     }
 }

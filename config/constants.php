@@ -15,5 +15,21 @@ return [
         'nonsetoran' => 'Rincian Nilai – Rekomendasi Non Setoran',
         'nonsetoranumum' => 'Rincian Nilai – Rekomendasi Umum (Non Setoran)',
         'nonsetoranpertanggungjawabanuangmuka' => 'Rincian Nilai – Rekomendasi Pertanggungjawaban Uang Muka'
+    ],
+
+    'rincian_val' => [
+        'sewa' => 'Pembayaran Sewa',
+        'uangmuka' => 'Pengembalian Sisa Uang Muka',
+        'listrik' => 'Biaya Listrik',
+        'piutang' => 'Piutang',
+        'piutangkaryawan' => 'Piutang Karyawan',
+        'hutangtitipan' => 'Hutang Titipan',
+        'penutupanrekening' => 'Non Setoran – Penutupan Rekening',
+        'umum' => 'Umum - Setoran',
+        'kontribusi' => 'Kontribusi',
+        'nonsetoranperjanjiankerjasama' => 'Non Setoran – Perjanjian Kerjasama',
+        'nonsetoran' => 'Non Setoran',
+        'nonsetoranumum' => 'Umum - Non Setoran',
+        'nonsetoranpertanggungjawabanuangmuka' => 'Pertanggungjawaban Uang Muka'
     ]
 ];

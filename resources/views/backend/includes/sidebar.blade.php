@@ -109,6 +109,12 @@
                 <i class="menu-icon fa fa-list"></i>
                 <span class="menu-text">Data Tindak Lanjut</span>
               </a>
+              <li class="{{$url=='data-repository' ? 'active' : ''}}">
+              <a href="{{url('data-repository')}}">
+                  <i class="menu-icon fa fa-list"></i>
+                  <span class="menu-text">Repository</span>
+                </a>
+            </li>
             @endif
           </li>
         @endif
@@ -125,6 +131,12 @@
                 <span class="menu-text">Data Tindak Lanjut</span>
               </a>
           </li>
+          <li class="{{$url=='data-repository' ? 'active' : ''}}">
+          <a href="{{url('data-repository')}}">
+              <i class="menu-icon fa fa-list"></i>
+              <span class="menu-text">Repository</span>
+            </a>
+        </li>
           {{-- <li class="has-submenu {{strpos($url,'data-lhp')!==false ? 'active open' : ''}}">
             <a href="javascript:void(0)" class="submenu-toggle">
               <i class="menu-icon fa fa-archive"></i>
@@ -150,6 +162,12 @@
                 <span class="menu-text">Data Tindak Lanjut</span>
               </a>
           </li>
+          <li class="{{$url=='data-repository' ? 'active' : ''}}">
+          <a href="{{url('data-repository')}}">
+              <i class="menu-icon fa fa-list"></i>
+              <span class="menu-text">Repository</span>
+            </a>
+        </li>
           @endif
         @if (Auth::user()->level!='pic-unit')
         <li class="has-submenu {{strpos($url,'laporan')!==false ? 'active open' : ''}}">

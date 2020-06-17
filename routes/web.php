@@ -126,6 +126,12 @@ Route::group(['middleware'=>['auth','checkstatus']],function(){
 
     // END SUPER USER
 
+    Route::get('data-repository/{tahun?}','RepositoryController@index');
+    Route::get('data-repository-list/{tahun?}','RepositoryController@data');
+    Route::get('detail-repository/{idlhp}','RepositoryController@detail_repository');
+    Route::get('data-repository-tindaklanjut-rincian/{rekom_id}/{idtemuan}','RepositoryController@tindaklanjut_rincian');
+    Route::get('data-repository-tindaklanjut-dokumen/{rekom_id}/{idtemuan}','RepositoryController@document_tindaklanjut');
+
     Route::get('data-tindaklanjut/{tahun?}/{rekom_id?}/{temuan_id?}','TindakLanjutController@junior_index');
     Route::get('data-tindaklanjut-unitkerja/{tahun?}/{rekom_id?}/{temuan_id?}','TindakLanjutController@unitkerja_index');
     Route::post('data-tindaklanjut-list','TindakLanjutController@junior_list');

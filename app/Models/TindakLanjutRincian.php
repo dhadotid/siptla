@@ -26,6 +26,10 @@ class TindakLanjutRincian extends Model
     {
         return $this->belongsTo('App\Models\PICUnit','pic_1_id');
     }
+    function unit_kerja()
+    {
+        return $this->belongsTo('App\Models\PICUnit','unit_kerja_id');
+    }
     function pic2()
     {
         return $this->belongsTo('App\Models\PICUnit','pic_2_id');

@@ -111,10 +111,6 @@
                                                     <div style="text-align:center;width:50px;">{{$no}}</div>
                                                 </td>
                                                 <td class="text-left">{!!$item->temuan!!}</td>
-                                                {{-- <td class="text-center">{{isset($item->jenistemuan->temuan) ? $item->jenistemuan->temuan: '-'}}</td>
-                                                <td class="text-center">{{isset($item->picunit->nama_pic) ? $item->picunit->nama_pic: '-'}}</td>
-                                                <td class="text-right">{{number_format($item->nominal,2,',','.')}}</td>
-                                                <td class="text-center">{{isset($item->levelresiko->level_resiko) ? $item->levelresiko->level_resiko: '-'}}</td> --}}
                                                 @foreach ($statusrekomendasi as $vst)
                                                     <td class="text-center">
                                                         <div style="width:100px;">

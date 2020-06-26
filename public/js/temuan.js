@@ -271,10 +271,7 @@ $('#datatable-temuan tbody').on('click', 'span.rekomendasi-detail', function () 
         tr.addClass('shown').attr('id', 'row_' + id);
     }
 });
-// function showchildetable(id)
-// {
 
-// }
 function rekomsetujui(idtemuan, idrekom, status_rekom) {
     swal({
         title: "Apakah Anda Yakin ?",

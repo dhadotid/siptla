@@ -325,7 +325,8 @@ class DataRekomendasiController extends Controller
                     $rekom = $rekom->where('data_rekomendasi.tanggal_penyelesaian', '<', $now);
                 }
 
-            $rekom = $rekom->where($wh)->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
+            $rekom = $rekom->where($wh)//->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
+                    ->whereNull('data_rekomendasi.deleted_at')
                     ->where('data_rekomendasi.id_temuan',$idtemuan)
                     ->where('data_rekomendasi.status_rekomendasi_id',$status_rekom)
                     ->with('picunit1')
@@ -345,9 +346,10 @@ class DataRekomendasiController extends Controller
                 if($request->key=='belum-masuk-batas-waktu-penyelesaian'){
                     $rekomQuery = $rekomQuery->where('data_rekomendasi.tanggal_penyelesaian', '<', $now);
                 }
-        $rekomQuery = $rekomQuery->where($wh)->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
+        $rekomQuery = $rekomQuery->where($wh)//->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
             ->where('data_rekomendasi.id_temuan',$idtemuan)
             ->where('data_rekomendasi.status_rekomendasi_id',$status_rekom)
+            ->whereNull('data_rekomendasi.deleted_at')
             // ->where('data_rekomendasi.senior_user_id', Auth::id())
             ->with('picunit1')
             ->with('picunit2')
@@ -384,14 +386,14 @@ class DataRekomendasiController extends Controller
 
                 $table.='<li style="margin-bottom:10px;padding:10px 0;border-bottom:1px solid #bbb;">';
 
-                if($v->senior_publish!=1 && Auth::user()->level != 'pic-unit')
+                if($v->senior_publish!=1 && Auth::user()->level != 'pic-unit' && $v->status_rekomendasi_id != 1)
                 {
                     $table.='<a href="javascript:hapusrekomendasi(\''.$v->id_temuan.'\',\''.$v->id.'\')" class="btn btn-danger btn-xs pull-right"><i class="fa fa-trash"></i> Hapus Rekomendasi</a>
                     <a href="javascript:rekomedit(\''.$v->id_temuan.'\',\''.$v->id.'\')" class="btn btn-info btn-xs pull-right"><i class="fa fa-edit"></i> Edit Rekomendasi</a>';
                 }
                 if(Auth::user()->level=='auditor-senior' || Auth::user()->level=='super-user')
                 {
-                    if($v->senior_publish==0)
+                    if($v->senior_publish==0 && $v->status_rekomendasi_id != 1)
                     {
                         // $table.='<a href="javascript:rekomsetujui(\''.$v->id_temuan.'\',\''.$v->rekom_id.'\',\''.$v->status_rekomendasi_id.'\')" class="btn btn-success btn-xs pull-right"><i class="fa fa-edit"></i> Setujui Rekomendasi</a>';
                         $table.='<a href="javascript:rekomsetujui(\''.$v->id_temuan.'\',\''.$v->id.'\',\''.$v->status_rekomendasi_id.'\')" class="btn btn-success btn-xs pull-right"><i class="fa fa-edit"></i> Setujui Rekomendasi</a>';
@@ -427,7 +429,6 @@ class DataRekomendasiController extends Controller
         {
             // $table.='<tr><td style="background:#fff;font-weight:bold" colspan="7" class="text-center">Rekomendasi Masih Kosong</td></tr>';
         }
-        // $table.='</tbody>';
         $table.='</ol>';
 
         return $table;

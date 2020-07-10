@@ -96,7 +96,7 @@
                                             @foreach ($statusrekomendasi as $item)
                                                 <th class="text-center primary" rowspan="2">{{$item->rekomendasi}}</th>    
                                             @endforeach
-                                            <th class="text-center primary" colspan="2">Jumlah Rekomendasi (Rp)</th>
+                                            <th class="text-center primary" colspan="2">Jumlah Rekomendasi</th>
                                             <th class="text-center primary" rowspan="2">Aksi</th>
                                         
                                         </tr>

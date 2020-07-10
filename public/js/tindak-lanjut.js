@@ -71,7 +71,16 @@ $('.btn-add').on('click',function(){
     var lhp_id=d[0];
     closerightdiv();
     $('#konten-add-form').load(flagsUrl + '/tindak-lanjut-unitkerja-form-add/' + lhp_id + '/' + temuan_id + '/' + rekom_id + '/' + rrk[0],function(){
-        CKEDITOR.replace('action_plan');
+        // CKEDITOR.replace('action_plan');
+        var editor = CKEDITOR.replace( 'action_plan', {
+            language: 'en',
+            extraPlugins: 'notification'
+        });
+        editor.on( 'required', function( evt ) {
+            editor.showNotification( 'Rencana Tindak Lanjut harus diisi.', 'warning' );
+            evt.cancel();
+        } );
+
     });
 });
 
@@ -83,7 +92,15 @@ function othertemuan(id)
     var rekom_id = d[2];
     var lhp_id = d[0];
     $('#konten-add-form').load(flagsUrl + '/tindak-lanjut-unitkerja-form-add/' + lhp_id + '/' + temuan_id + '/' + rekom_id,function(){
-        CKEDITOR.replace('action_plan');
+        // CKEDITOR.replace('action_plan');
+        var editor = CKEDITOR.replace( 'action_plan', {
+            language: 'en',
+            extraPlugins: 'notification'
+        });
+        editor.on( 'required', function( evt ) {
+            editor.showNotification( 'Rencana Tindak Lanjut harus diisi.', 'warning' );
+            evt.cancel();
+        } );
     });
 }
 
@@ -95,7 +112,15 @@ function othertemuan_unitkerja(id)
     var rekom_id = d[2];
     var lhp_id = d[0];
     $('#konten-add-form').load(flagsUrl + '/tindak-lanjut-unitkerja-form-add/' + lhp_id + '/' + temuan_id + '/' + rekom_id,function(){
-        CKEDITOR.replace('action_plan');
+        // CKEDITOR.replace('action_plan');
+        var editor = CKEDITOR.replace( 'action_plan', {
+            language: 'en',
+            extraPlugins: 'notification'
+        });
+        editor.on( 'required', function( evt ) {
+            editor.showNotification( 'Rencana Tindak Lanjut harus diisi.', 'warning' );
+            evt.cancel();
+        } );
     });
 }
 
@@ -506,15 +531,15 @@ function validasikontribusi() {
         notif('error', 'Format tahun salah');
     }
     else {
-        var totalnilai = parseFloat($('#total_nilai').val())
+        var totalNilai = parseFloat(getCookie('total_nilai').replace(/\./g, ""));
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(jumlah_rekomendasi.val().replace(/\./g, ""));
         if(!isValidNilai(nil) && idRekomendasi != '2')
             return notif('error', 'Nilai melebihi total rekomendasi');
-        if (totalnilai != 0) {
+        if (totalNilai != 0) {
             // alert((totalnilai + nil) +'--'+nilairekom)
-            if ((totalnilai + nil) > nilairekom) {
+            if (nil>nilairekom || (totalNilai + nil) > nilairekom) {
                 notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
 
             }
@@ -593,7 +618,13 @@ function validasiformsewa() {
     // else if (masa_berlaku.val() == '')
     //     notif('error', 'Masa Kontrak Belum Dipilih');
     else {
+        var totalNilai = parseFloat(getCookie('total_nilai').replace(/\./g, ""));
+        var nilairekom = $('input.nilai_rekomendasi').val()
+        nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(nilai_perjanjian.val().replace(/\./g, ""));
+        if (nil>nilairekom || (totalNilai + nil) > nilairekom) {
+            return notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
+        }
         if(!isValidNilai(nil) && idRekomendasi != '2')
             return notif('error', 'Nilai melebihi total rekomendasi');
         $.ajax({
@@ -631,14 +662,16 @@ function validasiformuangmuka() {
     
     if (unit_kerja.val() == '')
         notif('error', 'Unit Kerja Belum Dipilih');
-    // else if (no_invoice.val() == '')
-    //     notif('error', 'Nomor Invoice Belum Diisi');
-    // else if (tgl_pum.val() == '')
-    //     notif('error', 'Tanggal PUM Belum Dipilih');
     else if (jumlah_um.val() == '')
         notif('error', 'Jumlah UM Belum Diisi');
     else {
+        var totalNilai = parseFloat(getCookie('total_nilai').replace(/\./g, ""));
+        var nilairekom = $('input.nilai_rekomendasi').val()
+        nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(jumlah_um.val().replace(/\./g, ""));
+        if (nil>nilairekom || (totalNilai + nil) > nilairekom) {
+            return notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
+        }
         if(!isValidNilai(nil) && idRekomendasi != '2')
             return notif('error', 'Nilai melebihi total rekomendasi');
         $.ajax({
@@ -683,7 +716,13 @@ function validasiformlistrik() {
     else if (tagihan.val() == '')
         notif('error', 'Jumlah Tagihan Belum Diisi');
     else {
+        var totalNilai = parseFloat(getCookie('total_nilai').replace(/\./g, ""));
+        var nilairekom = $('input.nilai_rekomendasi').val()
+        nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(tagihan.val().replace(/\./g, ""));
+        if (nil>nilairekom || (totalNilai + nil) > nilairekom) {
+            return notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
+        }
         if(!isValidNilai(nil) && idRekomendasi != '2')
             return notif('error', 'Nilai melebihi total rekomendasi');
         $.ajax({
@@ -725,7 +764,12 @@ function validasiformpiutang() {
     else if (tagihan.val() == '')
         notif('error', 'Jumlah Tagihan Belum Diisi');
     else {
+        var totalNilai = parseFloat(getCookie('total_nilai').replace(/\./g, ""));
+        var nilairekom = $('input.nilai_rekomendasi').val()
+        nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(tagihan.val().replace(/\./g, ""));
+        if (nil>nilairekom || (totalNilai + nil) > nilairekom)
+            return notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
         if(!isValidNilai(nil) && idRekomendasi != '2')
             return notif('error', 'Nilai melebihi total rekomendasi');
         $.ajax({
@@ -767,7 +811,12 @@ function validasiformpiutangkaryawan() {
     else if (pinjaman.val() == '')
         notif('error', 'Jumlah Pinjaman Belum Diisi');
     else {
+        var totalNilai = parseFloat(getCookie('total_nilai').replace(/\./g, ""));
+        var nilairekom = $('input.nilai_rekomendasi').val()
+        nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(pinjaman.val().replace(/\./g, ""));
+        if (nil>nilairekom || (totalNilai + nil) > nilairekom)
+            return notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
         if(!isValidNilai(nil) && idRekomendasi != '2')
             return notif('error', 'Nilai melebihi total rekomendasi');
         $.ajax({
@@ -898,7 +947,12 @@ function validasiumum() {
     else if (jumlah_rekomendasi.val() == '')
         notif('error', 'Nilai Rekomendasi (Rp) Belum Diisi');
     else {
+        var totalNilai = parseFloat(getCookie('total_nilai').replace(/\./g, ""));
+        var nilairekom = $('input.nilai_rekomendasi').val()
+        nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(jumlah_rekomendasi.val().replace(/\./g, ""));
+        if (nil>nilairekom || (totalNilai + nil) > nilairekom)
+            return notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
         if(!isValidNilai(nil) && idRekomendasi != '2')
             return notif('error', 'Nilai melebihi total rekomendasi');
         $.ajax({
@@ -1247,7 +1301,15 @@ function edittl(tl_id,rekomendasi_id,temuan_id,lhp_id)
 {
 
     $('#konten-edit-form').load(flagsUrl + '/tindak-lanjut-unitkerja-form-edit/' + lhp_id + '/' + temuan_id + '/' + rekomendasi_id + '/' + tl_id, function () {
-        CKEDITOR.replace('action_plan');
+        // CKEDITOR.replace('action_plan');
+        var editor = CKEDITOR.replace( 'action_plan', {
+            language: 'en',
+            extraPlugins: 'notification'
+        });
+        editor.on( 'required', function( evt ) {
+            editor.showNotification( 'Rencana Tindak Lanjut harus diisi.', 'warning' );
+            evt.cancel();
+        } );
     });
     
     $('#modaledittindaklanjut').modal('show');

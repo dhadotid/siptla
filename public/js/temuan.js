@@ -28,7 +28,7 @@ $('.nilai_rekomendasi').on('input', function(){
     var nominal = parseFloat(this.value.replace(/\./g, ""));
     if ($('#butuh_rincian').is(':checked') && getCookie('total_nilai')!=null){ 
         var total_nilai = parseFloat(getCookie('total_nilai').replace(/\./g, ""));
-        if(nominal >= total_nilai)
+        if(total_nilai > nominal)
             return notif('error', 'Nilai rekomendasi melebihi total rincian');
     }
 });
@@ -46,7 +46,7 @@ function validasirekom(act) {
 
     if ($('#butuh_rincian').is(':checked') && getCookie('total_nilai')!=null){ 
         var total_nilai = parseFloat(getCookie('total_nilai').replace(/\./g, ""));
-        if(nominal >= total_nilai)
+        if(total_nilai > nominal)
             return notif('error', 'Nilai rekomendasi melebihi total rincian');
     }else{
         eraseCookie('total_nilai');
@@ -546,10 +546,12 @@ function gettablerincianold(jenis, idtemuan, idrekom, action)
                 responsive: true
             } );
 
-            var totalNilai = parseFloat($(this).parent().find('input[type="hidden"][name="total_nilai"]').val());
-            var nominal = parseFloat($('#'+action+'_nilai_rekomendasi').val().replace(/\./g, ""));
-            if(nominal >= totalNilai && totalNilai != '-1')
-                return notif('error', 'Nilai rekomendasi melebihi total rincian');
+            if(getCookie('total_nilai')!=null){
+                var totalNilai = parseFloat(getCookie('total_nilai').replace(/\./g, ""));
+                var nominal = parseFloat($('#'+action+'_nilai_rekomendasi').val().replace(/\./g, ""));
+                if(totalNilai > nominal && totalNilai != '-1')
+                    return notif('error', 'Nilai rekomendasi melebihi total rincian');
+            }
         });
     }
 }
@@ -575,7 +577,8 @@ function getCookie(name) {
 }
 function isValidNilai(inputValue){
     var totalNilai = parseFloat(getCookie('total_nilai').replace(/\./g, ""));
-    if(inputValue > totalNilai)
+    var max_rekom = parseFloat(getCookie('max_rekomendasi').replace(/\./g, ""));
+    if((inputValue + totalNilai) > max_rekom)
         return false;
     return true;
 }

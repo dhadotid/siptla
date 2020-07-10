@@ -45,6 +45,7 @@ class DashboardController extends Controller
                         ->join('status_rekomendasi', 'status_rekomendasi.id', '=', 'data_rekomendasi.status_rekomendasi_id')
                         ->where('bidang.id', $bidang->id)
                         ->where('daftar_lhp.tahun_pemeriksa',$thn)
+                        // ->whereIn('level_pic.keterangan', '!=', ['','UKK'])
                         ->whereNull('data_rekomendasi.deleted_at')
                         ->orderBy('data_rekomendasi.nomor_rekomendasi')
                         ->get();
@@ -60,6 +61,7 @@ class DashboardController extends Controller
                         ->join('status_rekomendasi', 'status_rekomendasi.id', '=', 'data_rekomendasi.status_rekomendasi_id')
                         ->where('level_pic.id', $bidang->id)
                         ->where('daftar_lhp.tahun_pemeriksa',$thn)
+                        // ->whereIn('level_pic.keterangan', '!=', ['','UKK'])
                         ->whereNull('data_rekomendasi.deleted_at')
                         ->orderBy('data_rekomendasi.nomor_rekomendasi')
                         ->get();
@@ -73,12 +75,14 @@ class DashboardController extends Controller
                         ->join('bidang', 'bidang.id', '=', 'pic_unit.bidang')
                         ->join('status_rekomendasi', 'status_rekomendasi.id', '=', 'data_rekomendasi.status_rekomendasi_id')
                         ->where('daftar_lhp.tahun_pemeriksa',$thn)
+                        // ->whereIn('level_pic.keterangan', '!=', ['','UKK'])
                         ->whereNull('data_rekomendasi.deleted_at')
                         ->orderBy('data_rekomendasi.nomor_rekomendasi')
                         ->get();
         }
         $statusRekomendasi = StatusRekomendasi::all();
-        $levelPIC = LevelPIC::all();
+        $levelPIC = LevelPIC::where('keterangan', '!=', 'UKK')->get();
+        // return json_encode($levelPIC);
         $temuans = $bidangfinal = array();
         $totalDataPerbidang = 0;
         foreach($statusRekomendasi as $s=>$r){

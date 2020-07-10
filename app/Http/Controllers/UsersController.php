@@ -79,6 +79,17 @@ class UsersController extends Controller
         {
             $insert->name = $request->name;
         }
+
+        if($request->hasFile('surat_tugas')){
+            $file = $request->file('surat_tugas');
+            $filenameWithExt = $request->file('surat_tugas')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('surat_tugas')->getClientOriginalExtension();
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $path = $request->file('surat_tugas')->storeAs('public/dokumen',$fileNameToStore);
+            $insert->surat_tugas = $path;
+        }
+
         $insert->email = $request->email;
         $insert->password = bcrypt($request->password);
         $insert->level = $request->level;
@@ -111,6 +122,7 @@ class UsersController extends Controller
         $data['updated_at']=$user->updated_at;
         $data['deleted_at']=$user->deleted_at;
         $data['pic_unit_id']=$user->pic_unit_id;
+        $data['surat_tugas'] = $user->surat_tugas;
         if($pisunit){
             $data['nama_pic']=$pisunit->nama_pic;
             $data['picunit']=$pisunit->id.'__'.$pisunit->nama_pic;
@@ -148,6 +160,17 @@ class UsersController extends Controller
             {
                 $update->name = $request->name;
             }
+
+            if($request->hasFile('surat_tugas')){
+                $file = $request->file('surat_tugas');
+                $filenameWithExt = $request->file('surat_tugas')->getClientOriginalName();
+                $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                $extension = $request->file('surat_tugas')->getClientOriginalExtension();
+                $fileNameToStore = $filename.'_'.time().'.'.$extension;
+                $path = $request->file('surat_tugas')->storeAs('public/dokumen',$fileNameToStore);
+                $update->surat_tugas = $path;
+            }
+
             $update->email = $request->email;
             $update->level = $request->level;
             $update->flag = $request->flag;

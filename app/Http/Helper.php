@@ -67,7 +67,7 @@ function jenis_level()
             'auditor-senior'=>'Auditor Senior',
             'kepala-spi'=>'Kepala SPI',
             'pic-unit'=>'PIC Unit',
-            'super-user'=>'Super User',
+            'super-user'=>'Senior Auditor 2',
             'pimpinan-kepala-spi'=>'Pimpinan Kepala SPI',
             'pimpinan-kepala-bidang'=>'Pimpinan Kepala Bidang'
         ];

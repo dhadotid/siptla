@@ -12,7 +12,7 @@
 					<h4 class="modal-title">Tambah Data Pengguna</h4>
 				</div>
 				<div class="modal-body">
-					<form action="{{ route('pengguna.store') }}" method="POST">
+					<form action="{{ route('pengguna.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-md-12">
@@ -83,6 +83,11 @@
 										<option value="0">Tidak Aktif</option>
 									</select>
 								</div>
+								<input type="hidden" id="csrf_token" name="csrf_token" value="{{csrf_token()}}">
+								<div class="form-group">
+									<label>Surat Tugas</label>
+									<input type="file" class="form-control" onchange="#" id="surat_tugas"  name="surat_tugas"  placeholder="Surat Tugas" accept=".doc,.docx,.pdf,.xls,.xlsx">
+								</div>
                             </div>
                         </div>
 						
@@ -104,7 +109,7 @@
 					<h4 class="modal-title">Ubah Data Pengguna</h4>
 				</div>
 				<div class="modal-body">
-					<form id="form-update" method="POST">
+					<form id="form-update" method="POST" enctype="multipart/form-data">
 						@csrf
                         @method('PUT')
                         <div class="row">
@@ -179,6 +184,13 @@
 										<option value="1">Aktif</option>
 										<option value="0">Tidak Aktif</option>
 									</select>
+								</div>
+								<input type="hidden" id="csrf_token" name="csrf_token" value="{{csrf_token()}}">
+								<div class="form-group">
+									<div class="field_wrapper_surat_tugas">
+										<label>Surat Tugas</label>
+									</div>
+									<input type="file" class="form-control" onchange="#" id="surat_tugas"  name="surat_tugas"  placeholder="Surat Tugas" accept=".doc,.docx,.pdf,.xls,.xlsx">
 								</div>
                             </div>
                         </div>
@@ -346,6 +358,7 @@
 					$('#level').val(res.level)
 					$('#level-edit').val(res.level)
 					$('#flag').val(res.flag)
+					console.log('jajaja '+res.surat_tugas)
 					if(res.level=='pic-unit')
 					{
 						$('#edit-name-txt').css('display','none');
@@ -361,7 +374,12 @@
 						$('#edit-name-bidang').css('display','none');
 					}
 					$('.select2').select2().trigger('change');
-                }
+
+					var wrapper = $('.field_wrapper_surat_tugas');
+					var fieldHTML = '&nbsp;&nbsp;<a href="{{url('read-pdf/')}}/'+res.surat_tugas+'" target="_blank" ><i class="fa fa-search">&nbsp;&nbsp;'+res.surat_tugas.replace('public/dokumen/', '')+'</i></a>';
+					$(wrapper).append(fieldHTML);
+				}
+	
             })
         })
 

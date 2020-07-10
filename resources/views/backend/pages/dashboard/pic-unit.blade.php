@@ -191,9 +191,9 @@
 										<a>{{$item}} ({{isset($doverdue['datasets'][0]['data'][$idx]) ? $doverdue['datasets'][0]['data'][$idx] : 0}})</a>
 										@if(isset($doverdue['datasets'][0]['data'][$idx]) ? $doverdue['datasets'][0]['data'][$idx] : 0 != 0)
 										<div class="dropdown-content">
-										<a @if(isset($doverdue['datasets'][0]['priority_low'][$idx]) ? $doverdue['datasets'][0]['priority_low'][$idx] : 0 != 0) href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}&priority=2" @endif>Low ({{isset($doverdue['datasets'][0]['priority_low'][$idx]) ? $doverdue['datasets'][0]['priority_low'][$idx] : 0}})</a>
-											<a @if(isset($doverdue['datasets'][0]['priority_med'][$idx]) ? $doverdue['datasets'][0]['priority_med'][$idx] : 0 != 0) href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}&priority=3" @endif>Medium ({{isset($doverdue['datasets'][0]['priority_med'][$idx]) ? $doverdue['datasets'][0]['priority_med'][$idx] : 0}})</a>
-											<a @if(isset($doverdue['datasets'][0]['priority_high'][$idx]) ? $doverdue['datasets'][0]['priority_high'][$idx] : 0 != 0)  href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}&priority=4"@endif>High ({{isset($doverdue['datasets'][0]['priority_high'][$idx]) ? $doverdue['datasets'][0]['priority_high'][$idx] : 0}})</a>
+										<a @if(isset($doverdue['datasets'][0]['priority_low'][$idx]) ? $doverdue['datasets'][0]['priority_low'][$idx] : 0 != 0) href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}&priority=2" @endif>Rendah ({{isset($doverdue['datasets'][0]['priority_low'][$idx]) ? $doverdue['datasets'][0]['priority_low'][$idx] : 0}})</a>
+											<a @if(isset($doverdue['datasets'][0]['priority_med'][$idx]) ? $doverdue['datasets'][0]['priority_med'][$idx] : 0 != 0) href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}&priority=3" @endif>Menengah ({{isset($doverdue['datasets'][0]['priority_med'][$idx]) ? $doverdue['datasets'][0]['priority_med'][$idx] : 0}})</a>
+											<a @if(isset($doverdue['datasets'][0]['priority_high'][$idx]) ? $doverdue['datasets'][0]['priority_high'][$idx] : 0 != 0)  href="{{url('data-tindaklanjut/'.$tahun)}}?key={{str_slug($item)}}&priority=4"@endif>Tinggi ({{isset($doverdue['datasets'][0]['priority_high'][$idx]) ? $doverdue['datasets'][0]['priority_high'][$idx] : 0}})</a>
 										</div>
 										@endif
 									</li>

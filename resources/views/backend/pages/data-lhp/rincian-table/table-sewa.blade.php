@@ -1,4 +1,12 @@
-<h3 class="text-center">Rincian Nilai – Rekomendasi Pembayaran Sewa</h3><table class="table table-bordered" id="table-rincian-sewa">
+<h3 class="text-center">Rincian Nilai - Rekomendasi Pembayaran Sewa</h3>
+@php
+    $totalRekom = 0;
+    foreach($rincian as $val){
+        $totalRekom += $val->nilai_pekerjaan;
+    }
+@endphp
+<h5 class="text-center">Total Rekomendasi : Rp {{rupiah($totalRekom)}}</h5>
+<table class="table table-bordered" id="table-rincian-sewa">
     <thead>
         <tr class="inverse">
             <th class="text-center">No</th>

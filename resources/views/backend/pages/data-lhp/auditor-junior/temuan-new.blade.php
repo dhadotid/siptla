@@ -47,7 +47,7 @@
                         <div class="col-md-7">&nbsp;</div>
                          <div class="col-md-3 text-right">
                              <a href="{{ URL::previous() }}" class="btn btn-sm btn-primary">< Kembali </a>&nbsp;
-                             @if (Auth::user()->level != 'pic-unit')
+                             @if (Auth::user()->level != 'pic-unit' && $data->status_lhp != 'Publish LHP')
                              <a href="" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#modaltambah">+ Tambah Data</a>
                              @endif
                         </div>

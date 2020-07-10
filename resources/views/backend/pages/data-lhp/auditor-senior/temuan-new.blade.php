@@ -47,7 +47,9 @@
                         <div class="col-md-7">&nbsp;</div>
                          <div class="col-md-3 text-right">
                              <a href="{{ URL::previous() }}" class="btn btn-sm btn-primary">< Kembali </a>&nbsp;
+                             @if ($data->status_lhp != 'Publish LHP')
                              <a href="" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#modaltambah">+ Tambah Data</a>
+                             @endif
                         </div>
                     </div>
                     
@@ -167,11 +169,11 @@
                                                                     <li>
                                                                         <a href="#" class="btn-edit-temuan" data-toggle="modal" data-target="#modalubah" data-value="{{ $item->temuan_id }}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit Temuan</a>
                                                                     </li>
-                                                                    @if ($jlhrekomendasi==0)
+                                                                    {{--@if ($jlhrekomendasi==0)--}}
                                                                         <li>
                                                                             <a class="btn-delete-temuan" data-toggle="modal" data-target="{{isset($drekom[$item->temuan_id]) ? '#' : '#modalhapus'}}" data-value="{{ $item->id }}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus Temuan</a>
                                                                         </li>
-                                                                    @endif
+                                                                    {{--@endif--}}
                                                                 @endif
                                                                 <li>
                                                                     <a href="#" class="btn-detail-temuan" data-toggle="modal" data-target="#modaldetail" data-value="{{$item->temuan_id}}"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Temuan</a>

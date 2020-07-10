@@ -1,3 +1,12 @@
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 <div class="row" style="padding:0 10px;">
     <div class="col-md-12" style="border:1px solid #bbb;border-radius:5px;padding:5px 20px 0px 20px;background:#eee;">
             <input type="hidden" name="idlhp" id="idlhp" value="{{$data->id}}">
@@ -116,14 +125,14 @@
                         }
                     }
                 @endphp
-                <textarea class="form-control"  name="action_plan" placeholder="Rencana Tindak Lanjut" id="action_plan">{{$action_plan}}</textarea>
+                <textarea class="form-control"  name="action_plan" placeholder="Rencana Tindak Lanjut" id="action_plan" required>{{$action_plan}}</textarea>
             </div>
         </div>
        <div class="form-group" style="margin-top:-20px;">
             <label for="exampleTextInput1" class="col-sm-12 control-label text-left">Tindak Lanjut:
             </label>
             <div class="col-sm-12">
-                <textarea class="form-control"  name="tindak_lanjut" placeholder="Tindak Lanjut" id="tindak_lanjut"></textarea>
+                <textarea class="form-control"  name="tindak_lanjut" placeholder="Tindak Lanjut" id="tindak_lanjut" required></textarea>
             </div>
         </div>
         @php

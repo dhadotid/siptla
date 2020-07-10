@@ -165,6 +165,12 @@ class DataTemuanController extends Controller
     }
     public function lhp_delete(Request $request,$id)
     {
+        //cek data temuan dulu apakah ada temuan kalo ada failed delete
+        $temuan = DataTemuan::where('id_lhp',$id)->first();
+        if($temuan){
+            return redirect('data-lhp')->with('error','Data LHP tidak bisa dihapus karena masih ada Temuan pada Data LHP');
+        }
+
         DaftarTemuan::destroy($id);
         return redirect('data-lhp')
             ->with('success', 'Anda telah menghapus data LHP.');
@@ -406,7 +412,9 @@ class DataTemuanController extends Controller
             }
 
             foreach ($data as $key => $value) {
-                $count[$value->lhp_id]  = DataTemuan::where('id_lhp', $value->lhp_id)->count();
+                $dataTemuan = DataTemuan::select('id')->where('id_lhp', $value->lhp_id)->get();
+                $count[$value->lhp_id]  = $dataTemuan->count();
+                $rekom_publish[$value->lhp_id] = DataRekomendasi::whereIn('id_temuan', $dataTemuan)->where('senior_publish', 0)->count();
             }
 
             return view('backend.pages.data-lhp.super-user.data')
@@ -416,7 +424,8 @@ class DataTemuanController extends Controller
                 ->with('arraylhp',$arraylhp)
                 ->with('statusrekom',$statusrekom)
                 ->with('count',$count)
-                ->with('drekom',$drekom);
+                ->with('drekom',$drekom)
+                ->with('rekom_publish', $rekom_publish);
         }
         elseif(Auth::user()->level=='pic-unit')
         {
@@ -752,8 +761,8 @@ class DataTemuanController extends Controller
             $keyparam = '_?key='.$request->key.'_priority='.$request->priority;
         }
         if(Auth::user()->level=='auditor-junior'){
-                    $dt['data']=$data=DaftarTemuan::where('user_input_id',Auth::user()->id)
-                    ->where('daftar_lhp.id',$idlhp)->with('dpemeriksa')->with('djenisaudit')->first();
+                    $dt['data']=$data=DaftarTemuan::where('daftar_lhp.id',$idlhp)->with('dpemeriksa')->with('djenisaudit')->first();
+                    //where('user_input_id',Auth::user()->id)
         }else{
             $dt['data']=$data=DaftarTemuan::where('id',$idlhp)->with('dpemeriksa')->with('djenisaudit')->first();
         }
@@ -869,7 +878,7 @@ class DataTemuanController extends Controller
         $dt['temuan']=$dtem;
 
         $senior=User::where('level','auditor-senior')->get();
-        // return $dtem;
+        
         if($data)
         {
             $jlhsetujurekom=$this->cekstrekomsenior();

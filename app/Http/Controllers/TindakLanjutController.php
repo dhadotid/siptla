@@ -29,6 +29,7 @@ use App\Models\RincianNonSetoranPertanggungjawabanUangMuka;
 use Auth;
 use App\Models\BankList;
 use Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class TindakLanjutController extends Controller
 {
@@ -1101,6 +1102,13 @@ class TindakLanjutController extends Controller
 
     public function unitkerja_tindak_lanjut_simpan(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'action_plan' => 'required',
+            'tindak_lanjut' => 'required'
+        ]);
+        if (!$validator->passes()) {
+            return response()->json(['errors'=>$validator->errors()->all()]);
+        }
         // return $request->all();
         $rekom=DataRekomendasi::where('id',$request->rekomendasi_id)->with('dtemuan')->first();
         $user_pic=PICUnit::where('id_user',Auth::user()->id)->first();
@@ -1238,6 +1246,7 @@ class TindakLanjutController extends Controller
             return view('backend.pages.data-lhp.rincian-form.pic-unit.form-sewa')
                     ->with('idrincian',$idrincian)
                     ->with('idform',$idform)
+                    ->with('bank', $bank)
                     ->with('jenis',$jenis);
         }
         elseif($jenis=='uangmuka')
@@ -1255,6 +1264,7 @@ class TindakLanjutController extends Controller
             return view('backend.pages.data-lhp.rincian-form.pic-unit.form-listrik')
                     ->with('idrincian',$idrincian)
                     ->with('idform',$idform)
+                    ->with('bank', $bank)
                     ->with('jenis',$jenis);
         }
         elseif($jenis=='piutang')
@@ -1272,6 +1282,7 @@ class TindakLanjutController extends Controller
             return view('backend.pages.data-lhp.rincian-form.pic-unit.form-piutangkaryawan')
                     ->with('idrincian',$idrincian)
                     ->with('idform',$idform)
+                    ->with('bank', $bank)
                     ->with('jenis',$jenis);
         }
         elseif($jenis=='hutangtitipan')
@@ -1280,6 +1291,7 @@ class TindakLanjutController extends Controller
             return view('backend.pages.data-lhp.rincian-form.pic-unit.form-hutangtitipan')
                     ->with('idrincian',$idrincian)
                     ->with('idform',$idform)
+                    ->with('bank', $bank)
                     ->with('jenis',$jenis);
         }
         elseif($jenis=='penutupanrekening')
@@ -1288,6 +1300,7 @@ class TindakLanjutController extends Controller
             return view('backend.pages.data-lhp.rincian-form.pic-unit.form-penutupanrekening')
                     ->with('idrincian',$idrincian)
                     ->with('idform',$idform)
+                    ->with('bank', $bank)
                     ->with('jenis',$jenis);
         }
         elseif($jenis=='umum')
@@ -1304,6 +1317,7 @@ class TindakLanjutController extends Controller
             return view('backend.pages.data-lhp.rincian-form.form-kontribusi')
                     ->with('idrincian',$idrincian)
                     ->with('idform',$idform)
+                    ->with('bank', $bank)
                     ->with('jenis',$jenis);
         }
         else if($jenis=='nonsetoranperjanjiankerjasama'){
@@ -1311,24 +1325,28 @@ class TindakLanjutController extends Controller
             return view('backend.pages.data-lhp.rincian-form.form-nonsetoranperjanjiankerjasama')
                     ->with('idrincian',$idrincian)
                     ->with('idform',$idform)
+                    ->with('bank', $bank)
                     ->with('jenis',$jenis);
         }elseif($jenis=='nonsetoran'){
             $idform=abs(crc32(sha1(md5(rand()))));
             return view('backend.pages.data-lhp.rincian-form.form-nonsetoran')
                     ->with('idrincian',$idrincian)
                     ->with('idform',$idform)
+                    ->with('bank', $bank)
                     ->with('jenis',$jenis);
         }elseif($jenis=='nonsetoranumum'){
             $idform=abs(crc32(sha1(md5(rand()))));
             return view('backend.pages.data-lhp.rincian-form.form-nonsetoranumum')
                     ->with('idrincian',$idrincian)
                     ->with('idform',$idform)
+                    ->with('bank', $bank)
                     ->with('jenis',$jenis);
         }elseif($jenis=='nonsetoranpertanggungjawabanuangmuka'){
             $idform=abs(crc32(sha1(md5(rand()))));
             return view('backend.pages.data-lhp.rincian-form.form-nonsetoranpertanggungjawabanuangmuka')
                     ->with('idrincian',$idrincian)
                     ->with('idform',$idform)
+                    ->with('bank', $bank)
                     ->with('jenis',$jenis);
         }
     }

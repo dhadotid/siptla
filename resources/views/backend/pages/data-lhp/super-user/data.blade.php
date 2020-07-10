@@ -87,13 +87,11 @@
                                                 <li>
                                                     <a href="#" data-toggle="modal" data-target="#modaladdreview" data-value="{{$item->lhp_id}}" class="btn-add-review"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Tanggapan dan Review LHP</a>
                                                 </li>
+
+                                                <li>
+                                                    <a href="#" class="btn-edit" data-toggle="modal" data-target="#modalubah" data-value="{{$item->lhp_id}}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit LHP</a>
+                                                </li>
                                             @endif    
-                                        <li>
-                                            <a href="#" class="btn-edit" data-toggle="modal" data-target="#modalubah" data-value="{{$item->lhp_id}}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit LHP</a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="btn-delete" data-toggle="modal" data-target="{{$count[$item->lhp_id]==0 ? '#modalhapus' : '#'}}" data-value="{{$item->lhp_id}}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus LHP</a>
-                                        </li>
                                     </ul>
                                 </div>
                             </td>
@@ -169,20 +167,18 @@
                                             <li>
                                                 <a href="#" data-toggle="modal" data-target="#modaladdreview" data-value="{{$item->lhp_id}}" class="btn-add-review"><i class="fa fa-plus-circle"></i> &nbsp;&nbsp;Tambah Tanggapan dan Review LHP</a>
                                             </li>
-                                            @if($item->senior_publish!=''&&$item->senior_publish!=0)
+                                            {{--@if($item->senior_publish!=''&&$item->senior_publish!=0)--}}
+                                            @if($rekom_publish[$item->id] == 0)
                                             <li>
                                                 <a href="javascript:publishlhp({{$item->lhp_id}})"><i class="glyphicon glyphicon-check"></i> &nbsp;&nbsp;Publish LHP</a>
                                             </li>
                                             @else
                                                 <!-- <li><a href="#" style="font-size:11px;"><i class="glyphicon glyphicon-ok"></i> &nbsp;&nbsp;Masih ada rekomendasi belum disetujui Senior</a></li> -->
                                             @endif
+                                            <li>
+                                                <a href="#" class="btn-edit" data-toggle="modal" data-target="#modalubah" data-value="{{$item->lhp_id}}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit LHP</a>
+                                            </li>
                                         @endif    
-                                    <li>
-                                        <a href="#" class="btn-edit" data-toggle="modal" data-target="#modalubah" data-value="{{$item->lhp_id}}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit LHP</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="btn-delete" data-toggle="modal" data-target="{{$count[$item->lhp_id]==0 ? '#modalhapus' : '#'}}" data-value="{{$item->lhp_id}}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus LHP</a>
-                                    </li>
                                 </ul>
                             </div>
                         </td>

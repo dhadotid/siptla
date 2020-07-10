@@ -13,7 +13,7 @@ class CreateTableRekomendasiMappingNotification extends Migration
      */
     public function up()
     {
-        Schema::table('rekomendasi_mapping_notification', function (Blueprint $table) {
+        Schema::create('rekomendasi_mapping_notification', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('id_lhp')->nullable()->default(0);
             $table->integer('id_temuan')->nullable()->default(0);
@@ -31,13 +31,6 @@ class CreateTableRekomendasiMappingNotification extends Migration
      */
     public function down()
     {
-        Schema::table('rekomendasi_mapping_notification', function (Blueprint $table) {
-            $table->dropColumn('id');
-            $table->dropColumn('id_lhp');
-            $table->dropColumn('id_temuan');
-            $table->dropColumn('id_rekomendasi');
-            $table->dropColumn('user_id');
-            $table->dropColumn('is_read');
-        });
+        Schema::dropIfExists('rekomendasi_mapping_notification');
     }
 }

@@ -18,7 +18,7 @@ class CreateTindakLanjutTemuansTable extends Migration
             $table->integer('rekomendasi_id')->nullable()->default(0);
             $table->integer('temuan_id')->nullable()->default(0);
             $table->integer('lhp_id')->nullable()->default(0);
-            $table->longText('tindak_lanjut')->nullable()->default(0);
+            // $table->longText('tindak_lanjut')->nullable()->default(0);
             $table->string('pic_1_id')->nullable()->default(0);
             $table->string('pic_2_id')->nullable()->default(0);
             $table->double('nilai')->nullable()->default(0);

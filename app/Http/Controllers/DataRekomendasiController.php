@@ -945,6 +945,7 @@ class DataRekomendasiController extends Controller
                 $arrayPIC[] = $v->unit_kerja_id;
             }
             echo "<script> setCookie('total_nilai',$totalnilai,1); </script>";
+            echo "<script> setCookie('max_rekomendasi', $rekom->nominal_rekomendasi, 1); </script>";
             $table.='<input type="hidden" id="total_nilai" name="total_nilai" value="'.$totalnilai.'">';
 
             $table.='</tbody>';
@@ -1026,8 +1027,8 @@ class DataRekomendasiController extends Controller
                 $arrayPIC[] = $v->unit_kerja_id;
             }
             echo "<script> setCookie('total_nilai',$totalnilai,1); </script>";
+            echo "<script> setCookie('max_rekomendasi', $rekom->nominal_rekomendasi, 1); </script>";
             $table.='<input type="hidden" id="total_nilai" name="total_nilai" value="'.$totalnilai.'">';
-
             
             $table.='</tbody>';
             $table.='</table>';
@@ -1100,6 +1101,7 @@ class DataRekomendasiController extends Controller
                 $arrayPIC[] = $v->unit_kerja_id;
             }
             echo "<script> setCookie('total_nilai',$totalnilai,1); </script>";
+            echo "<script> setCookie('max_rekomendasi', $rekom->nominal_rekomendasi, 1); </script>";
             $table.='<input type="hidden" id="total_nilai" name="total_nilai" value="'.$totalnilai.'">';
             $table.='</tbody>';
             $table.='</table>';
@@ -1169,6 +1171,7 @@ class DataRekomendasiController extends Controller
                 $arrayPIC[] = $v->unit_kerja_id;
             }
             echo "<script> setCookie('total_nilai',$totalnilai,1); </script>";
+            echo "<script> setCookie('max_rekomendasi', $rekom->nominal_rekomendasi, 1); </script>";
             $table.='<input type="hidden" id="total_nilai" name="total_nilai" value="'.$totalnilai.'">';
             
             $table.='</tbody>';
@@ -1238,6 +1241,7 @@ class DataRekomendasiController extends Controller
                 $arrayPIC[] = $v->unit_kerja_id;
             }
             echo "<script> setCookie('total_nilai',$totalnilai,1); </script>";
+            echo "<script> setCookie('max_rekomendasi', $rekom->nominal_rekomendasi, 1); </script>";
             $table.='<input type="hidden" id="total_nilai" name="total_nilai" value="'.$totalnilai.'">';
 
             $table.='</tbody>';
@@ -1307,6 +1311,7 @@ class DataRekomendasiController extends Controller
                 $arrayPIC[] = $v->unit_kerja_id;
             }
             echo "<script> eraseCookie('total_nilai'); </script>";
+            echo "<script> eraseCookie('max_rekomendasi'); </script>";
             $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
 
             $table.='</tbody>';
@@ -1384,6 +1389,7 @@ class DataRekomendasiController extends Controller
                 $arrayPIC[] = $v->unit_kerja_id;
             }
             echo "<script> eraseCookie('total_nilai'); </script>";
+            echo "<script> eraseCookie('max_rekomendasi'); </script>";
             // $table.='<input type="hidden" id="total_nilai" value="'.$totalnilai.'">';
             $table.='<input type="hidden" id="total_nilai" name="total_nilai" value="-1">';
 
@@ -1453,6 +1459,7 @@ class DataRekomendasiController extends Controller
                 $arrayPIC[] = $v->unit_kerja_id;
             }
             echo "<script> setCookie('total_nilai',$totalnilai,1); </script>";
+            echo "<script> setCookie('max_rekomendasi', $rekom->nominal_rekomendasi, 1); </script>";
             $table.='<input type="hidden" id="total_nilai" name="total_nilai" value="'.$totalnilai.'">';
             $table.='</tbody>';
             $table.='</table>';
@@ -1521,6 +1528,7 @@ class DataRekomendasiController extends Controller
                 $arrayPIC[] = $v->unit_kerja_id;
             }
             echo "<script> setCookie('total_nilai',$totalnilai,1); </script>";
+            echo "<script> setCookie('max_rekomendasi', $rekom->nominal_rekomendasi, 1); </script>";
             $table.='<input type="hidden" id="total_nilai" name="total_nilai" value="'.$totalnilai.'">';
             $table.='</tbody>';
             $table.='</table>';
@@ -1587,6 +1595,7 @@ class DataRekomendasiController extends Controller
                 $arrayPIC[] = $v->unit_kerja_id;
             }
             echo "<script> eraseCookie('total_nilai'); </script>";
+            echo "<script> eraseCookie('max_rekomendasi'); </script>";
             $table.='<input type="hidden" id="total_nilai" name="total_nilai" value="-1">';
             $table.='</tbody>';
             $table.='</table>';
@@ -1653,6 +1662,7 @@ class DataRekomendasiController extends Controller
                 $arrayPIC[] = $v->unit_kerja_id;
             }
             echo "<script> setCookie('total_nilai',$totalnilai,1); </script>";
+            echo "<script> setCookie('max_rekomendasi', $rekom->nominal_rekomendasi, 1); </script>";
             $table.='<input type="hidden" id="total_nilai" value="-1">';
             $table.='</tbody>';
             $table.='</table>';
@@ -1712,6 +1722,7 @@ class DataRekomendasiController extends Controller
                 $arrayPIC[] = $v->unit_kerja_id;
             }
             echo "<script> eraseCookie('total_nilai'); </script>";
+            echo "<script> eraseCookie('max_rekomendasi'); </script>";
             $table.='<input type="hidden" id="total_nilai" name="total_nilai" value="-1">';
             $table.='</tbody>';
             $table.='</table>';
@@ -1777,6 +1788,7 @@ class DataRekomendasiController extends Controller
                 $arrayPIC[] = $v->unit_kerja_id;
             }
             echo "<script> eraseCookie('total_nilai'); </script>";
+            echo "<script> eraseCookie('max_rekomendasi'); </script>";
             $table.='<input type="hidden" id="total_nilai" name="total_nilai" value="-1">';
             $table.='</tbody>';
             $table.='</table>';

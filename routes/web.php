@@ -38,7 +38,7 @@ Route::group(['middleware'=>['auth','checkstatus']],function(){
     Route::resource('jenis-temuan','MasterTemuanController');
     Route::resource('rekanan','RekananController');
     Route::resource('level-resiko','LevelResikoController');
-    Route::resource('pejabat-penandatangan','PejabatTandatanganController');
+    // Route::resource('pejabat-penandatangan','PejabatTandatanganController');
     Route::resource('periode-review','PeriodeReviewController');
     
     Route::get('status-periode/{id}/{st}','PeriodeReviewController@ubah_status');

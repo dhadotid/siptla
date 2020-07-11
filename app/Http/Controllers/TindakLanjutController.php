@@ -1170,6 +1170,19 @@ class TindakLanjutController extends Controller
         $tahun=$lhp->tahun_pemeriksa;
         if($sv)
         {
+            $temuanData = DataTemuan::where('id',$rekom->id_temuan)->first();
+            $temuan=DaftarTemuan::where('id',$temuanData->id_lhp)->first();
+            $this->createNotification($temuan->id, $request->rekomendasi_id, $temuan->user_input_id, $temuanData->id,
+            Auth::user()->name .' telah mengisi tindak lanjut audit');
+            $su = User::where('level', 'super-user')->get();
+            $sorted = array();
+            $this->createNotification($temuan->id, $request->rekomendasi_id, $rekom->senior_user_id, $temuanData->id, 
+            Auth::user()->name .' telah mengisi tindak lanjut audit');
+            foreach($su as $a=>$s){
+                $this->createNotification($temuan->id, $request->rekomendasi_id, $s->id, $temuanData->id,
+                Auth::user()->name .' telah mengisi tindak lanjut audit');
+            }
+
             return redirect('data-tindaklanjut-unitkerja/'.$tahun)
                 ->with('success', 'Anda telah Berhasil Menambah data Tindak Lanjut ');
         }
@@ -2067,8 +2080,19 @@ class TindakLanjutController extends Controller
         }
         else
         {
-            if($save)
+            if($save){
+                $temuanData = DataTemuan::where('id',$rekom->id_temuan)->first();
+                $temuan=DaftarTemuan::where('id',$temuanData->id_lhp)->first();
+                $this->createNotification($temuan->id, $request->idrekomendasi, $rekom->senior_user_id, $temuanData->id, 
+                Auth::user()->name .' telah mengirim Review Tindak Lanjut dan Penetapan Status Rekomendasi');
+                $su = User::where('level', 'super-user')->get();
+                foreach($su as $a=>$s){
+                    $this->createNotification($temuan->id, $request->idrekomendasi, $s->id, $temuanData->id, Auth::user()->name .
+                    ' telah mengirim Review Tindak Lanjut dan Penetapan Status Rekomendasi');
+                }
+
                 return redirect('data-tindaklanjut/'.$tahun)->with('success','Data Review Berhasil Di Simpan dan Di Publish Ke Auditor Senior');
+            }
             else
                 return redirect('data-tindaklanjut/'.$tahun)->with('error','Data Review Gagal Di Simpan');
         }
@@ -2217,5 +2241,16 @@ class TindakLanjutController extends Controller
     {
         $tindaklanjut=TindakLanjutRincian::where('id_temuan',$temuan_id)->where('id_rekomendasi',$rekom_id)->get();
         return $tindaklanjut->count();
+    }
+
+    public function createNotification($idlhp, $idrekom, $userId, $idtemuan,$status=null, $navigate=null){
+        $notification = new MappingRekomendasiNotifikasi();
+        $notification->id_lhp = $idlhp;
+        $notification->id_rekomendasi = $idrekom;
+        $notification->user_id = $userId;
+        $notification->id_temuan = $idtemuan;
+        $notification->status = $status;
+        $notification->navigate = $navigate;
+        $notification->save();
     }
 }

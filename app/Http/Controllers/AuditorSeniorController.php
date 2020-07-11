@@ -222,19 +222,40 @@ class AuditorSeniorController extends Controller
         $rekom->rekom_publish=$request->publish;
         $save=$rekom->save();
 
-        if($request->publish==0)
-        {
-            if($save)
+        if($save){
+            if($request->publish==0){
                 return redirect('data-tindaklanjut-senior/'.$tahun)->with('success','Data Review Berhasil Di Simpan Sebagai Draft');
-            else
-                return redirect('data-tindaklanjut-senior/'.$tahun)->with('error','Data Review Gagal Di Simpan Sebagai Draft');
-        }
-        else
-        {
-            if($save)
+            }else{
+                $temuanData = DataTemuan::where('id',$rekom->id_temuan)->first();
+                $temuan=DaftarTemuan::where('id',$temuanData->id_lhp)->first();
+                $su = User::where('level', 'super-user')->get();
+                $sorted = array();
+
+                $pic = explode(',', $rekom->pic_2_temuan_id);
+                array_push($pic, $rekom->pic_1_temuan_id);
+                array_push($pic, $temuanData->pic_temuan_id);
+                foreach($pic as $s=>$p){
+                    $this->createNotification($temuan->id, $rekom->id, $p, $temuanData->id,Auth::user()->name .' telah mengirimkan Review dan Perubahan Status Rekomendasi');
+                }
+
+                foreach($su as $k=>$v){
+                    if(!isset($sorted[$v->id])){
+                        $sorted[$v->id][] = $v;
+                        $this->createNotification($temuan->id, $rekom->id, $v->id, $temuanData->id,
+                        Auth::user()->name .' telah mengirimkan Review dan Perubahan Status Rekomendasi');
+                    }else{
+                        $sorted[$v->id] = array($v);
+                    }
+                }
+                
                 return redirect('data-tindaklanjut-senior/'.$tahun)->with('success','Data Review Berhasil Di Simpan dan Di Publish Ke Super User');
-            else
+            }
+        }else{
+            if($request->publish==0){
+                return redirect('data-tindaklanjut-senior/'.$tahun)->with('error','Data Review Gagal Di Simpan Sebagai Draft');
+            }else{
                 return redirect('data-tindaklanjut-senior/'.$tahun)->with('error','Data Review Gagal Di Simpan');
+            }
         }
     }
 
@@ -443,5 +464,16 @@ class AuditorSeniorController extends Controller
             else
                 return redirect('data-tindaklanjut-su/'.$tahun)->with('error','Data Review Gagal Di Simpan');
         }
+    }
+
+    public function createNotification($idlhp, $idrekom, $userId, $idtemuan,$status=null, $navigate=null){
+        $notification = new MappingRekomendasiNotifikasi();
+        $notification->id_lhp = $idlhp;
+        $notification->id_rekomendasi = $idrekom;
+        $notification->user_id = $userId;
+        $notification->id_temuan = $idtemuan;
+        $notification->status = $status;
+        $notification->navigate = $navigate;
+        $notification->save();
     }
 }

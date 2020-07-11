@@ -2289,8 +2289,23 @@ class DataRekomendasiController extends Controller
         $rekom=DataRekomendasi::find($idrekomendasi);
         $rekom->publish_pic_1=1;
         $c=$rekom->save();
-        if($c)
+        if($c){
+
+            $temuanData = DataTemuan::where('id',$rekom->id_temuan)->first();
+            $temuan=DaftarTemuan::where('id',$temuanData->id_lhp)->first();
+            $this->createNotification($temuan->id, $idrekomendasi, $temuan->user_input_id, $temuanData->id,
+            Auth::user()->name .' telah mempublish ke auditor');
+            $su = User::where('level', 'super-user')->get();
+            $sorted = array();
+            $this->createNotification($temuan->id, $idrekomendasi, $rekom->senior_user_id, $temuanData->id, 
+            Auth::user()->name .' telah mempublish ke auditor');
+            foreach($su as $a=>$s){
+                $this->createNotification($temuan->id, $idrekomendasi, $s->id, $temuanData->id,
+                Auth::user()->name .' telah mempublish ke auditor');
+            }
+
             echo 1;
+        }
         else
             echo 0;
     }
@@ -2455,13 +2470,14 @@ class DataRekomendasiController extends Controller
         }
     }
 
-    public function createNotification($idlhp, $idrekom, $userId, $idtemuan,$status=null){
+    public function createNotification($idlhp, $idrekom, $userId, $idtemuan,$status=null, $navigate=null){
         $notification = new MappingRekomendasiNotifikasi();
         $notification->id_lhp = $idlhp;
         $notification->id_rekomendasi = $idrekom;
         $notification->user_id = $userId;
         $notification->id_temuan = $idtemuan;
         $notification->status = $status;
+        $notification->navigate = $navigate;
         $notification->save();
     }
 }

@@ -1416,9 +1416,9 @@ class TindakLanjutController extends Controller
             $unitkerja=PICUnit::find($rincian->unit_kerja_id);
             $rinciantindaklanjut=TindakLanjutRincian::where('id_temuan',$rincian->id_temuan)
                     ->where('id_rekomendasi',$rincian->id_rekomendasi)
-                    ->where('unit_kerja_id',($rincian ? $rincian->unit_kerja_id : 0))
+                    ->where('unit_kerja_id',$rincian->unit_kerja_id)
                     ->where('jenis', $jenis)
-                    ->join('bank', 'tindak_lanjut_rincian.bank_tujuan', '=', 'bank.id')
+                    ->leftjoin('bank', 'tindak_lanjut_rincian.bank_tujuan', '=', 'bank.id')
                     ->get(['tindak_lanjut_rincian.*', 'bank.bank as bank_tujuan_name']);
 
         }

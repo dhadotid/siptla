@@ -26,6 +26,7 @@ use App\Models\RincianNonSetoranPerpanjanganPerjanjianKerjasama;
 use App\Models\RincianNonSetoran;
 use App\Models\RincianNonSetoranUmum;
 use App\Models\RincianNonSetoranPertanggungjawabanUangMuka;
+use App\Models\MappingRincianTindakLanjutDetail;
 use Auth;
 use App\Models\BankList;
 use Validator;
@@ -1414,12 +1415,13 @@ class TindakLanjutController extends Controller
         if($rincian)
         {
             $unitkerja=PICUnit::find($rincian->unit_kerja_id);
-            $rinciantindaklanjut=TindakLanjutRincian::where('id_temuan',$rincian->id_temuan)
-                    ->where('id_rekomendasi',$rincian->id_rekomendasi)
-                    ->where('unit_kerja_id',$rincian->unit_kerja_id)
-                    ->where('tindak_lanjut_rincian.id', $rincian->id_tindak_lanjut)
+            $rinciantindaklanjut=TindakLanjutRincian::where('tindak_lanjut_rincian.id_temuan','=',$rincian->id_temuan)
+                    ->where('tindak_lanjut_rincian.id_rekomendasi','=',$rincian->id_rekomendasi)
+                    ->where('tindak_lanjut_rincian.unit_kerja_id','=',$rincian->unit_kerja_id)
                     ->where('jenis', $jenis)
+                    ->leftjoin('mapping_rincian_tindak_lanjut_detail', 'tindak_lanjut_rincian.id', '=', 'mapping_rincian_tindak_lanjut_detail.id_tindak_lanjut_rincian')
                     ->leftjoin('bank', 'tindak_lanjut_rincian.bank_tujuan', '=', 'bank.id')
+                    ->where('mapping_rincian_tindak_lanjut_detail.id_rincian', $rincian->id)
                     ->get(['tindak_lanjut_rincian.*', 'bank.bank as bank_tujuan_name']);
 
         }
@@ -1682,9 +1684,16 @@ class TindakLanjutController extends Controller
         }
 
         $insert->save();
-        
+        // return response()->json(['errors'=>$rincian]);
         $rincian->id_tindak_lanjut=$insert->id;
         $rincian->save();
+        
+        $mapping_rincian = new MappingRincianTindakLanjutDetail;
+        $mapping_rincian->id_temuan = $rincian->id_temuan;
+        $mapping_rincian->id_rekomendasi = $rincian->id_rekomendasi;
+        $mapping_rincian->id_rincian = $rincian->id;
+        $mapping_rincian->id_tindak_lanjut_rincian = $insert->id;
+        $mapping_rincian->save();
 
         $data['jenis']=$insert->jenis;
         $data['temuan_id']=$insert->id_temuan;

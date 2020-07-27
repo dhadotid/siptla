@@ -1417,6 +1417,7 @@ class TindakLanjutController extends Controller
             $rinciantindaklanjut=TindakLanjutRincian::where('id_temuan',$rincian->id_temuan)
                     ->where('id_rekomendasi',$rincian->id_rekomendasi)
                     ->where('unit_kerja_id',$rincian->unit_kerja_id)
+                    ->where('tindak_lanjut_rincian.id', $rincian->id_tindak_lanjut)
                     ->where('jenis', $jenis)
                     ->leftjoin('bank', 'tindak_lanjut_rincian.bank_tujuan', '=', 'bank.id')
                     ->get(['tindak_lanjut_rincian.*', 'bank.bank as bank_tujuan_name']);

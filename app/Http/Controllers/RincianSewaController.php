@@ -1031,7 +1031,7 @@ class RincianSewaController extends Controller
         elseif($jenis=='nonsetoranpertanggungjawabanuangmuka')
             $data=RincianNonSetoranPertanggungjawabanUangMuka::find($id);
 
-        $dt['jenis']=$data->jenis;
+        // $dt['jenis']=$data->jenis;
         $dt['idtemuan']=$data->id_temuan;
         $dt['idrekomendasi']=$data->id_rekomendasi;
         $data->delete();

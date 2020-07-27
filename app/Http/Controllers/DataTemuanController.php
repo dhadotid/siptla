@@ -276,7 +276,7 @@ class DataTemuanController extends Controller
 
         if(Auth::user()->level=='auditor-junior')
         {
-            $data=DaftarTemuan::selectRaw('*,daftar_lhp.id as lhp_id')
+            $query=DaftarTemuan::selectRaw('*,daftar_lhp.id as lhp_id')
                     ->select('daftar_lhp.id', 'daftar_lhp.id as lhp_id', 'daftar_lhp.no_lhp',
                     'daftar_lhp.flag_tindaklanjut_id', 'daftar_lhp.kode_lhp', 'daftar_lhp.review',
                     'daftar_lhp.user_input_id','daftar_lhp.judul_lhp','daftar_lhp.pemeriksa_id','daftar_lhp.tanggal_lhp',
@@ -288,16 +288,16 @@ class DataTemuanController extends Controller
                     ->leftJoin('data_temuan', 'data_temuan.id_lhp', '=', 'daftar_lhp.id')
                     ->leftJoin('data_rekomendasi', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id');
                     if($request->key == 'sudah-masuk-batas-waktu-penyelesaian'){
-                        $data = $data->where('data_rekomendasi.tanggal_penyelesaian', '=', $now);
+                        $query = $query->where('data_rekomendasi.tanggal_penyelesaian', '=', $now);
                     }
                     if($request->key == 'melewati-batas-waktu-penyelesaian'){
-                        $data = $data->where('data_rekomendasi.tanggal_penyelesaian', '>', $now);
+                        $query = $query->where('data_rekomendasi.tanggal_penyelesaian', '>', $now);
                     }
                     if($request->key=='belum-masuk-batas-waktu-penyelesaian'){
-                        $data = $data->where('data_rekomendasi.tanggal_penyelesaian', '<', $now);
+                        $query = $query->where('data_rekomendasi.tanggal_penyelesaian', '<', $now);
                     }
                     // ->where('data_rekomendasi.tanggal_penyelesaian', '=', $now)
-            $data = $data->where($wh)
+            $query = $query->where($wh)
                     ->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
                     ->where('daftar_lhp.user_input_id',Auth::user()->id)
                     ->whereNull('daftar_lhp.deleted_at')
@@ -305,7 +305,18 @@ class DataTemuanController extends Controller
                     ->with('djenisaudit')
                     ->groupBy('daftar_lhp.id')
                     ->orderBy('tanggal_lhp','desc')->get();
-// return $data;
+
+            $data = $sorted = array();
+            foreach($query as $key=>$v){
+                if($v->user_input_id == Auth::user()->id){
+                    if(!isset($sorted[$v->id])){
+                        $sorted[$v->id][] = $v;
+                        array_push($data, $v);
+                    }else{
+                        $sorted[$v->id] = array($v);
+                    }
+                }
+            }
             
         }
         elseif(Auth::user()->level=='auditor-senior')

@@ -34,6 +34,9 @@
                 @endif
                 </tr>
             </thead>
+            @php
+            $totalTemuan=$totalRekomendasi=0;
+            @endphp
             <tbody>
                 @php
                     $no=1;
@@ -49,8 +52,8 @@
                     <td class="text-center">{{$item->level_resiko}}</td>
                     <td class="text-left">{{$item->rekomendasi}}</td>
                     <td class="text-right">{{rupiah($item->nilai_rekomendasi)}}</td>
-                    <td class="text-right">{{($item->nilai_rekomendasi)}}</td>
-                    <td class="text-right">{{($item->nilai_rekomendasi)}}</td>
+                    <td class="text-right">{{($item->nama_pic)}}</td>
+                    <td class="text-right"></td>
                     @if ($tampilkanwaktupenyelesaian==1)
                         @if ($item->tanggal_penyelesaian!='')
                             <td class="text-center">{{tgl_indo($item->tanggal_penyelesaian)}}</td>
@@ -61,10 +64,30 @@
                 </tr> 
                
                 @php
+                    $totalTemuan += $item->nominal;
+                    $totalRekomendasi += $item->nilai_rekomendasi;
                     $no++;
                 @endphp
             @endforeach
             </tbody>
+
+            <tfoot>
+            <tr>
+                <th style="text-align:left">Total:</th>
+                @if ($tampilkannilai==1)
+                <th></th>
+                @endif
+                <th colspan="2" style="text-align:left"></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                @if ($tampilkanwaktupenyelesaian==1)
+                <th></th>
+                @endif
+            </tr>
+        </tfoot>
+
         </table>
         <style>
             th,td

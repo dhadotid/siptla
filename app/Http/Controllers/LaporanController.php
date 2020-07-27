@@ -535,6 +535,7 @@ class LaporanController extends Controller
                                     ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
                                     ->join('pemeriksa','daftar_lhp.pemeriksa_id','=','pemeriksa.id')
                                     ->join('level_resiko','data_temuan.level_resiko_id','=','level_resiko.id')
+                                    ->rightjoin('pic_unit', 'data_rekomendasi.pic_1_temuan_id', '=', 'pic_unit.id')
                                     ->whereBetween('daftar_lhp.tanggal_lhp', [$tgl_awal, $tgl_akhir])
                                     ->where('daftar_lhp.status_lhp','Publish LHP');
                                     if(count($arrayLevelResiko)>0 && !in_array(0, $arrayLevelResiko)){
@@ -734,6 +735,7 @@ class LaporanController extends Controller
                                     ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
                                     ->join('pemeriksa','daftar_lhp.pemeriksa_id','=','pemeriksa.id')
                                     ->join('level_resiko','data_temuan.level_resiko_id','=','level_resiko.id')
+                                    ->rightjoin('pic_unit', 'data_rekomendasi.pic_1_temuan_id', '=', 'pic_unit.id')
                                     ->whereBetween('daftar_lhp.tanggal_lhp', [$tgl_awal, $tgl_akhir])
                                     ->where('daftar_lhp.status_lhp','Publish LHP');
                                     if(count($arrayLevelResiko)>0 && !in_array(0, $arrayLevelResiko)){
@@ -932,6 +934,7 @@ class LaporanController extends Controller
                                     ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
                                     ->join('pemeriksa','daftar_lhp.pemeriksa_id','=','pemeriksa.id')
                                     ->join('level_resiko','data_temuan.level_resiko_id','=','level_resiko.id')
+                                    ->rightjoin('pic_unit', 'data_rekomendasi.pic_1_temuan_id', '=', 'pic_unit.id')
                                     ->whereBetween('daftar_lhp.tanggal_lhp', [$tgl_awal, $tgl_akhir])
                                     ->where('daftar_lhp.status_lhp','Publish LHP');
                                     if(count($arrayLevelResiko)>0 && !in_array(0, $arrayLevelResiko)){
@@ -1010,6 +1013,7 @@ class LaporanController extends Controller
             $rekomendasi[$v->id_rekom]=$v;
             // $rekomendasi[$v->id_temuan][$v->id_rekom]=$v;
         }
+        
         return view('backend.pages.laporan.temuan-per-lhp.data')
                     ->with('pic_unit',$pic_unit)
                     ->with('alldata',$alldata)
@@ -1103,6 +1107,7 @@ class LaporanController extends Controller
                                     ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
                                     ->join('pemeriksa','daftar_lhp.pemeriksa_id','=','pemeriksa.id')
                                     ->join('level_resiko','data_temuan.level_resiko_id','=','level_resiko.id')
+                                    ->rightjoin('pic_unit', 'data_rekomendasi.pic_1_temuan_id', '=', 'pic_unit.id')
                                     ->whereBetween('daftar_lhp.tanggal_lhp', [$tgl_awal, $tgl_akhir])
                                     ->where('daftar_lhp.status_lhp','Publish LHP');
                                     if(count($arrayLevelResiko)>0 && !in_array(0, $arrayLevelResiko)){

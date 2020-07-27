@@ -72,7 +72,7 @@
             @php
                 $no=1;
             @endphp
-            @foreach ($rekomendasi as $k=> $item)
+            @foreach ($alldata as $k=> $item)
                 
                 <tr>
                     <td class="text-center">{{$no}}</td>
@@ -84,9 +84,9 @@
                     @endif
                     <td class="text-center">{{$item->level_resiko}}</td>
                     <td class="text-left">{{$item->rekomendasi}}</td>
-                    <td class="text-right">{{rupiah($item->nilai_rekomendasi)}}</td>
-                    <td class="text-right">{{($item->nilai_rekomendasi)}}</td>
-                    <td class="text-right">{{($item->nilai_rekomendasi)}}</td>
+                    <td class="text-right">{{rupiah($item->nominal_rekomendasi)}}</td>
+                    <td class="text-right">{{($item->nama_pic)}}</td>
+                    <td class="text-right"> </td>
                     @if ($tampilkanwaktupenyelesaian==1)
                         <td class="text-center">{{tgl_indo($item->tanggal_penyelesaian)}}</td>
                     @endif
@@ -97,9 +97,78 @@
                 @endphp
             @endforeach
         </tbody>
+
+        <tfoot>
+            <tr>
+                <th colspan="4" style="text-align:left">Total:</th>
+                @if ($tampilkannilai==1)
+                <th></th>
+                @endif
+                <th colspan="2" style="text-align:left"></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                @if ($tampilkanwaktupenyelesaian==1)
+                <th></th>
+                @endif
+            </tr>
+        </tfoot>
+
     </table>
 </div>
 <script>
-    $('#table').DataTable();
+    $('#table').DataTable({
+        "footerCallback": function ( row, data, start, end, display ) {
+            var api = this.api(), data;
+ 
+            // Remove the formatting to get integer data for summation
+            var intVal = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[\.,]/g, '')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+            var columnRekom = 7;
+            if( {!! $tampilkannilai !!} == 1 ){
+                totalTemuan = api
+                    .column( 4 )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+                pageTotalTemuan = api
+                    .column( 4, { page: 'current'} )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+                $( api.column( 4 ).footer() ).html(
+                    formatRupiah(pageTotalTemuan, 'Rp.') +' (Total: '+ formatRupiah(totalTemuan, 'Rp.') +')'
+                );
+            }else {
+                columnRekom = 6;
+            }
+
+            // Total over all pages
+            totalRekomendasi = api
+                .column( columnRekom )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+            // Total over this page
+            pageTotalRekomendasi = api
+                .column( columnRekom, { page: 'current'} )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+            $( api.column( columnRekom ).footer() ).html(
+                formatRupiah(pageTotalRekomendasi,'Rp.') +' (Total: '+ formatRupiah(totalRekomendasi,'Rp.') +')'
+            );
+        }
+    });
     $('[data-toggle="tooltip"]').tooltip();
 </script>

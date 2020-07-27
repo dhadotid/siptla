@@ -45,6 +45,7 @@
               <a href="{{url('read-notification/'.$data->id_lhp.'/'.$data->id_rekomendasi.'/'.$data->id)}}">
               {{--<a href="{{url('data-temuan-lhp/'.$lhp_id)}}">--}}
               <span style="display: inline-block; width: 380px; white-space: nowrap; overflow: hidden !important; text-overflow: ellipsis;">{{ $data->status }}</span>
+              <span class="media-annotation pull-right">{{ \Carbon\Carbon::parse($data->created_at)->diffForHumans() }}</span>
               </a>
             </li>
             @endforeach
@@ -57,7 +58,7 @@
             </li>
             @endif
           </ul>
-          {{--<span class="media-annotation pull-right">{{ \Carbon\Carbon::parse($data->updated_at)->diffForHumans() }}</span>--}}
+          {{--<span class="media-annotation pull-right">{{ \Carbon\Carbon::parse($data->created_at)->diffForHumans() }}</span>--}}
           @endif
         </li>
 

@@ -1512,9 +1512,7 @@ class TindakLanjutController extends Controller
     public function simpan_tindaklanjut_rincian(Request $request)
     {
         $isUpdate = $request->isupdate;
-        if($request->totalnilai!=-1){
-            return response()->json(['errors'=>['Nilai melebihi total nilai.']]);
-        }
+        
         $validator = Validator::make($request->all(), [
             'tanggal' => 'required'
         ]);
@@ -1619,6 +1617,9 @@ class TindakLanjutController extends Controller
 
         if($jenis=='kontribusi' || $jenis=='sewa' || $jenis=='listrik' || $jenis=='piutang' || $jenis=='piutangkaryawan' || $jenis=='hutangtitipan')
         {
+            if(str_replace('.','',$request->nilai) > $request->totalnilai){
+                return response()->json(['errors'=>['Nilai melebihi total nilai.']]);
+            }
             $insert->tindak_lanjut_rincian = $request->tindak_lanjut;
             $insert->nilai = str_replace('.','',$request->nilai);
             $insert->tanggal = $request->tanggal;
@@ -1630,6 +1631,9 @@ class TindakLanjutController extends Controller
 
         if($jenis=='uangmuka')
         {
+            if(str_replace('.','',$request->nilai) > $request->totalnilai){
+                return response()->json(['errors'=>['Nilai melebihi total nilai.']]);
+            }
             $insert->tindak_lanjut_rincian = $request->tindak_lanjut;
             $insert->nilai = str_replace('.','',$request->nilai);
             $insert->tanggal = $request->tanggal;
@@ -1651,6 +1655,9 @@ class TindakLanjutController extends Controller
 
         if($jenis=='umum')
         {
+            if(str_replace('.','',$request->nilai) > $request->totalnilai){
+                return response()->json(['errors'=>['Nilai melebihi total nilai.']]);
+            }
             $insert->tindak_lanjut_rincian = $request->tindak_lanjut;
             $insert->nilai = str_replace('.','',$request->nilai);
             $insert->tanggal = $request->tanggal;

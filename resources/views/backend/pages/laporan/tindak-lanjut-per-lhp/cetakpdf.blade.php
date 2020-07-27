@@ -42,6 +42,9 @@
                 <th class="text-center">PIC</th>
             </tr>
         </thead>
+        @php
+            $totalTemuan=$totalRekomendasi=$totalTdklanjut=0;
+        @endphp
         <tbody>
             @php
                 $no=1;
@@ -55,6 +58,9 @@
                             $dtindaklanjut.='<li>'.$value->tindak_lanjut.'</li>';
                         }
                     }
+                    $totalTemuan += $item->nominal;
+                    $totalRekomendasi += $item->nilai_rekomendasi;
+                    $totalTdklanjut += $ntindaklanjut;
                 @endphp
                 <tr>
                     <td class="text-center">{{$no}}</td>
@@ -90,6 +96,19 @@
                 @endphp
             @endforeach
         </tbody>
+
+        <tfoot>
+            <tr>
+                <th colspan="3" style="text-align:left">Total:</th>
+                <th>{{rupiah($totalTemuan)}}</th>
+                <th></th>
+                <th>{{rupiah($totalRekomendasi)}}</th>
+                <th colspan="4" style="text-align:left"></th>
+                <th>{{rupiah($totalTdklanjut)}}</th>
+                <th colspan="5" style="text-align:left"></th>
+            </tr>
+        </tfoot>
+        
         </table>
         <style>
             th,td

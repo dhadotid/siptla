@@ -46,7 +46,8 @@
                         </div>
                         <div class="col-md-7">&nbsp;</div>
                          <div class="col-md-3 text-right">
-                             <a href="{{ URL::previous() }}" class="btn btn-sm btn-primary">< Kembali </a>&nbsp;
+                             {{--<a href="{{ URL::previous() }}" class="btn btn-sm btn-primary">< Kembali </a>&nbsp;--}}
+                             <a href="{{url('data-lhp')}}" class="btn btn-sm btn-primary">< Kembali </a>&nbsp;
                              @if ($data->status_lhp != 'Publish LHP')
                              <a href="" class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#modaltambah">+ Tambah Data</a>
                              @endif
@@ -142,14 +143,14 @@
                                                 @endforeach
                                                 <td class="text-center" style="width:30px">
                                                         @if (isset($jlhsetujurekom[Auth::user()->id][$idlhp][$item->temuan_id]['setuju']))
-                                                            <span class="label label-success" style="font-size:13px !important;">{{count($jlhsetujurekom[Auth::user()->id][$idlhp][$item->temuan_id]['setuju'])}}</span>
+                                                            <span class="label label-success rekomendasi-detail" style="font-size:13px !important;" data-value="{{ $item->id.'_' . 'setuju'}}">{{count($jlhsetujurekom[Auth::user()->id][$idlhp][$item->temuan_id]['setuju'])}}</span>
                                                         @else
                                                             <span class="label label-danger" style="font-size:13px !important;">0</span>
                                                         @endif
                                                 </td>
                                                 <td class="text-center" style="width:30px">
                                                         @if (isset($jlhsetujurekom[Auth::user()->id][$idlhp][$item->temuan_id]['belum']))
-                                                            <span class="label label-success" style="font-size:13px !important;">{{count($jlhsetujurekom[Auth::user()->id][$idlhp][$item->temuan_id]['belum'])}}</span>
+                                                            <span class="label label-success rekomendasi-detail" style="font-size:13px !important;" data-value="{{ $item->id.'_' . 'belum'}}">{{count($jlhsetujurekom[Auth::user()->id][$idlhp][$item->temuan_id]['belum'])}}</span>
                                                         @else
                                                             <span class="label label-danger" style="font-size:13px !important;">0</span>
                                                         @endif
@@ -169,11 +170,11 @@
                                                                     <li>
                                                                         <a href="#" class="btn-edit-temuan" data-toggle="modal" data-target="#modalubah" data-value="{{ $item->temuan_id }}"><i class="glyphicon glyphicon-edit"></i> &nbsp;&nbsp;Edit Temuan</a>
                                                                     </li>
-                                                                    {{--@if ($jlhrekomendasi==0)--}}
+                                                                    @if ($jlhrekomendasi==0)
                                                                         <li>
                                                                             <a class="btn-delete-temuan" data-toggle="modal" data-target="{{isset($drekom[$item->temuan_id]) ? '#' : '#modalhapus'}}" data-value="{{ $item->id }}"><i class="glyphicon glyphicon-trash"></i> &nbsp;&nbsp;Hapus Temuan</a>
                                                                         </li>
-                                                                    {{--@endif--}}
+                                                                    @endif
                                                                 @endif
                                                                 <li>
                                                                     <a href="#" class="btn-detail-temuan" data-toggle="modal" data-target="#modaldetail" data-value="{{$item->temuan_id}}"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Temuan</a>

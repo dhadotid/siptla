@@ -308,6 +308,13 @@ class DataRekomendasiController extends Controller
         if(isset($request->key) && isset($request->priority)){
             $wh['data_temuan.level_resiko_id']=$request->priority;
         }
+        if($status_rekom == 'setuju'){
+            $wh['data_rekomendasi.senior_publish'] = '1';
+        }elseif($status_rekom == 'belum'){
+            $wh['data_rekomendasi.senior_publish'] = '0';
+        }else{
+            $wh['data_rekomendasi.status_rekomendasi_id'] = $status_rekom;
+        }
 
         $table='<ol style="list-style-type:upper-roman !important;padding-left:20px;">';
         $picunit=PICUnit::all();
@@ -328,7 +335,6 @@ class DataRekomendasiController extends Controller
             $rekom = $rekom->where($wh)//->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
                     ->whereNull('data_rekomendasi.deleted_at')
                     ->where('data_rekomendasi.id_temuan',$idtemuan)
-                    ->where('data_rekomendasi.status_rekomendasi_id',$status_rekom)
                     ->with('picunit1')
                     ->with('picunit2')
                     ->with('statusrekomendasi')
@@ -348,7 +354,7 @@ class DataRekomendasiController extends Controller
                 }
         $rekomQuery = $rekomQuery->where($wh)//->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
             ->where('data_rekomendasi.id_temuan',$idtemuan)
-            ->where('data_rekomendasi.status_rekomendasi_id',$status_rekom)
+            // ->where('data_rekomendasi.status_rekomendasi_id',$status_rekom)
             ->whereNull('data_rekomendasi.deleted_at')
             // ->where('data_rekomendasi.senior_user_id', Auth::id())
             ->with('picunit1')
@@ -399,8 +405,9 @@ class DataRekomendasiController extends Controller
                         $table.='<a href="javascript:rekomsetujui(\''.$v->id_temuan.'\',\''.$v->id.'\',\''.$v->status_rekomendasi_id.'\')" class="btn btn-success btn-xs pull-right"><i class="fa fa-edit"></i> Setujui Rekomendasi</a>';
                     }
                 }
-                    
+                    $seniorTujuan = User::where('id', '=', $v->senior_user_id)->first();
                 $table.='<u>Nomor Rekomendasi :</u><br><h5><span class="text-primary">'.$v->nomor_rekomendasi.'</span></h5>
+                <u>Senior Yang Dituju :</u><br><h5><span class="text-primary">'.$seniorTujuan->name.'</span></h5>
                 <u>Nilai Rekomendasi :</u><br><h5><span class="text-primary">Rp.'.number_format($v->nominal_rekomendasi,2,',','.').'</span></h5>
                     <br>
                     <u>Rekomendasi : </u><br><h4>'.$v->rekomendasi.'</h4><br>
@@ -562,7 +569,7 @@ class DataRekomendasiController extends Controller
             $temuanData = DataTemuan::where('id',$idtemuan)->first();
             $temuan=DaftarTemuan::where('id',$temuanData->id_lhp)->first();
             $this->createNotification($temuan->id, $idrekom, $temuan->user_input_id, $idtemuan,
-            Auth::user()->name .' telah '.$statusAction.' rekomendasi baru');
+            Auth::user()->name .' telah menghapus rekomendasi baru');
             $su = User::where('level', 'super-user')->get();
             $sorted = array();
             foreach($su as $k=>$v){

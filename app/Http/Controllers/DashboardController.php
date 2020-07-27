@@ -550,7 +550,7 @@ class DashboardController extends Controller
             {
                 $dtl['labels'][]=$v;
                 $dtl['datasets'][0]['data'][]=$totalTindaklanjut[$k];
-                $dtl['datasets'][0]['backgroundColor'][]=$colorlhp[str_slug($k-1)]=generate_color_one();
+                $dtl['datasets'][0]['backgroundColor'][]=$colorlhp[str_slug($k-1)]=generate_color_tindak_lanjut($k);
                 $datatl[str_slug($k-1)][]=$v;
             }
             $colorBoxTindakLanjut = $dtl['datasets'][0]['backgroundColor'];
@@ -596,7 +596,7 @@ class DashboardController extends Controller
             {
                 $rekom['labels'][]=$v->rekomendasi;
                 $rekom['datasets'][0]['data'][]=isset($rekomendasi[$v->id]) ? count($rekomendasi[$v->id]) : 0;
-                $rekom['datasets'][0]['backgroundColor'][]=$colorrekom[str_slug($v->rekomendasi)]=generate_color_one();
+                $rekom['datasets'][0]['backgroundColor'][]=$colorrekom[str_slug($v->rekomendasi)]=generate_color_status($k+1);
                 $dstatus[str_slug($v->rekomendasi)]=$v;
             }
             $color['colorrekom']=$colorrekom;
@@ -649,6 +649,7 @@ class DashboardController extends Controller
                     $doverdue=array();
                     $bataswaktu=bataswaktu();
                     $colorbataswaktu=array();
+                    $i = 0;
                     foreach($bataswaktu as $k=>$v)
                     {
                         $doverdue['labels'][]=$bataswaktu[$k];
@@ -656,7 +657,8 @@ class DashboardController extends Controller
                         $doverdue['datasets'][0]['priority_low'][]=isset($arrayBts['low'][$k]) ? count($arrayBts['low'][$k]) : 0;
                         $doverdue['datasets'][0]['priority_med'][]=isset($arrayBts['med'][$k]) ? count($arrayBts['med'][$k]) : 0;
                         $doverdue['datasets'][0]['priority_high'][]=isset($arrayBts['high'][$k]) ? count($arrayBts['high'][$k]) : 0;
-                        $doverdue['datasets'][0]['backgroundColor'][]=$colorbataswaktu[($k)]=generate_color_one();
+                        $doverdue['datasets'][0]['backgroundColor'][]=$colorbataswaktu[($k)]=generate_color_tindak_lanjut($i);
+                        $i++;
                     }
 
                     $color['colorbataswaktu']=$colorbataswaktu;
@@ -747,7 +749,7 @@ class DashboardController extends Controller
             {
                 $dtl['labels'][]=$v;
                 $dtl['datasets'][0]['data'][]=$totalTindaklanjut[$k];
-                $dtl['datasets'][0]['backgroundColor'][]=$colorlhp[str_slug($k-1)]=generate_color_one();
+                $dtl['datasets'][0]['backgroundColor'][]=$colorlhp[str_slug($k-1)]=generate_color_tindak_lanjut($k);
                 $datatl[str_slug($k-1)][]=$v;
             }
             $colorBoxTindakLanjut = $dtl['datasets'][0]['backgroundColor'];
@@ -760,6 +762,7 @@ class DashboardController extends Controller
 
             foreach($data_rekom as $k=>$v)
             {
+                // return $v->dtemuan->temuan;
                 if(isset($v->dtemuan->temuan))
                 {
                     // return $v->dtemuan->totemuan;
@@ -797,7 +800,7 @@ class DashboardController extends Controller
             {
                 $rekom['labels'][]=$v->rekomendasi;
                 $rekom['datasets'][0]['data'][]=isset($rekomendasi[$v->id]) ? count($rekomendasi[$v->id]) : 0;
-                $rekom['datasets'][0]['backgroundColor'][]=$colorrekom[str_slug($v->rekomendasi)]=generate_color_one();
+                $rekom['datasets'][0]['backgroundColor'][]=$colorrekom[str_slug($v->rekomendasi)]=generate_color_status($k+1);
                 $dstatus[str_slug($v->rekomendasi)]=$v;
             }
             $color['colorrekom']=$colorrekom;
@@ -850,6 +853,7 @@ class DashboardController extends Controller
                     $doverdue=array();
                     $bataswaktu=bataswaktu();
                     $colorbataswaktu=array();
+                    $i=0;
                     foreach($bataswaktu as $k=>$v)
                     {
                         $doverdue['labels'][]=$bataswaktu[$k];
@@ -857,7 +861,8 @@ class DashboardController extends Controller
                         $doverdue['datasets'][0]['priority_low'][]=isset($arrayBts['low'][$k]) ? count($arrayBts['low'][$k]) : 0;
                         $doverdue['datasets'][0]['priority_med'][]=isset($arrayBts['med'][$k]) ? count($arrayBts['med'][$k]) : 0;
                         $doverdue['datasets'][0]['priority_high'][]=isset($arrayBts['high'][$k]) ? count($arrayBts['high'][$k]) : 0;
-                        $doverdue['datasets'][0]['backgroundColor'][]=$colorbataswaktu[($k)]=generate_color_one();
+                        $doverdue['datasets'][0]['backgroundColor'][]=$colorbataswaktu[($k)]=generate_color_tindak_lanjut($i);
+                        $i++;
                     }
 
                     $color['colorbataswaktu']=$colorbataswaktu;
@@ -922,6 +927,7 @@ class DashboardController extends Controller
             {
                 if(isset($v->dtemuan->temuan))
                 {
+                    // return $v->dtemuan->totemuan->tanggal_lhp;
                     list($th,$bl,$tg)=explode('-',$v->dtemuan->totemuan->tanggal_lhp);
                     if($th==$thn)
                     {
@@ -954,7 +960,7 @@ class DashboardController extends Controller
             {
                 $rekom['labels'][]=$v->rekomendasi;
                 $rekom['datasets'][0]['data'][]=isset($rekomendasi[$v->id]) ? count($rekomendasi[$v->id]) : 0;
-                $rekom['datasets'][0]['backgroundColor'][]=$colorrekom[str_slug($v->rekomendasi)]=generate_color_one();
+                $rekom['datasets'][0]['backgroundColor'][]=$colorrekom[str_slug($v->rekomendasi)]=generate_color_status($k+1);
                 $dstatus[str_slug($v->rekomendasi)]=$v;
             }
             $color['colorrekom']=$colorrekom;
@@ -1010,7 +1016,7 @@ class DashboardController extends Controller
             {
                 $dtl['labels'][]=$v;
                 $dtl['datasets'][0]['data'][]=$totalTindaklanjut[$k];
-                $dtl['datasets'][0]['backgroundColor'][]=$colorlhp[str_slug($k-1)]=generate_color_one();
+                $dtl['datasets'][0]['backgroundColor'][]=$colorlhp[str_slug($k-1)]=generate_color_tindak_lanjut($k);
                 $datatl[str_slug($k-1)][]=$v;
             }
             $colorBoxTindakLanjut = $dtl['datasets'][0]['backgroundColor'];
@@ -1075,6 +1081,7 @@ class DashboardController extends Controller
                     $doverdue=array();
                     $bataswaktu=bataswaktu();
                     $colorbataswaktu=array();
+                    $i = 0;
                     foreach($bataswaktu as $k=>$v)
                     {
                         $doverdue['labels'][]=$bataswaktu[$k];
@@ -1082,10 +1089,10 @@ class DashboardController extends Controller
                         $doverdue['datasets'][0]['priority_low'][]=isset($arrayBts['low'][$k]) ? count($arrayBts['low'][$k]) : 0;
                         $doverdue['datasets'][0]['priority_med'][]=isset($arrayBts['med'][$k]) ? count($arrayBts['med'][$k]) : 0;
                         $doverdue['datasets'][0]['priority_high'][]=isset($arrayBts['high'][$k]) ? count($arrayBts['high'][$k]) : 0;
-                        $doverdue['datasets'][0]['backgroundColor'][]=$colorbataswaktu[($k)]=generate_color_one();
+                        $doverdue['datasets'][0]['backgroundColor'][]=$colorbataswaktu[($k)]=generate_color_tindak_lanjut($i);
+                        $i++;
                     }
                     $color['colorbataswaktu']=$colorbataswaktu;
-            // return $doverdue;
             return view('backend.pages.dashboard.auditor-senior')
                     // ->with('lhp',$lhp)
                     ->with('colorBoxTindakLanjut', $colorBoxTindakLanjut)

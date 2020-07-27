@@ -41,6 +41,9 @@
                 <th class="text-center">Dokumen<br>Pendukung</th>
             </tr>
         </thead>
+        @php
+        $totalTemuan=$totalRekomendasi=$totalTdklanjut=0;
+        @endphp
         <tbody>
             @php
                 $no=1;
@@ -92,6 +95,19 @@
                 @endphp
             @endforeach
         </tbody>
+
+        <tfoot>
+            <tr>
+                <th colspan="5" style="text-align:left">Total:</th>
+                <th>{{rupiah($totalTemuan)}}</th>
+                <th ></th>
+                <th>{{rupiah($totalRekomendasi)}}</th>
+                <th colspan="4"></th>
+                <th>{{rupiah($totalTdklanjut)}}</th>
+                <th colspan="4"></th>
+            </tr>
+        </tfoot>
+
         </table>
         <style>
             th,td

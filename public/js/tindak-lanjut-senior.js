@@ -396,7 +396,7 @@ function validasiformsewa() {
         var nil = parseFloat(nilai_perjanjian.val().replace(/\./g, ""));
         if (nil>nilairekom || (totalNilai + nil) > nilairekom)
             return notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
-        if(!isValidNilai(nil) && idRekomendasi != '2')
+        if(!isValidNilai(nil, idRekomendasi))
             return notif('error', 'Nilai melebihi total rekomendasi');
         //formrinciansewa
         $.ajax({
@@ -411,7 +411,7 @@ function validasiformsewa() {
                     $('#modalrinciansewa').modal('hide');
                     // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
                     notif('success', 'Data Rincian Berhasil Di Simpan');
-                    gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                    gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                     setTimeout(function () {
                         $('#formrinciansewa').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
                         if(res.id==-1)
@@ -447,7 +447,7 @@ function validasiformuangmuka() {
         var nil = parseFloat(jumlah_um.val().replace(/\./g, ""));
         if (nil>nilairekom || (totalNilai + nil) > nilairekom)
             return notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
-        if(!isValidNilai(nil) && idRekomendasi != '2')
+        if(!isValidNilai(nil, idRekomendasi))
             return notif('error', 'Nilai melebihi total rekomendasi');
         //formrinciansewa
         $.ajax({
@@ -462,7 +462,7 @@ function validasiformuangmuka() {
                     $('#modalrincianuangmuka').modal('hide');
                     // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
                     notif('success', 'Data Rincian Berhasil Di Simpan');
-                    gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                    gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                     setTimeout(function () {
                         $('#formrincianuangmuka').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
                         if(res.id==-1)
@@ -499,7 +499,7 @@ function validasiformlistrik() {
         if (nil>nilairekom || (totalNilai + nil) > nilairekom)
             return notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
         
-        if(!isValidNilai(nil) && idRekomendasi != '2')
+        if(!isValidNilai(nil, idRekomendasi))
             return notif('error', 'Nilai melebihi total rekomendasi');
         //formrinciansewa
         $.ajax({
@@ -514,7 +514,7 @@ function validasiformlistrik() {
                     $('#modalrincianlistrik').modal('hide');
                     // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
                     notif('success', 'Data Rincian Berhasil Di Simpan');
-                    gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                    gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                     setTimeout(function () {
                         $('#formrincianlistrik').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
                         if(res.id==-1)
@@ -548,7 +548,7 @@ function validasiformpiutang() {
         if (nil>nilairekom || (totalNilai + nil) > nilairekom)
             return notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
         
-        if(!isValidNilai(nil) && idRekomendasi != '2')
+        if(!isValidNilai(nil, idRekomendasi))
             return notif('error', 'Nilai melebihi total rekomendasi');
         //formrinciansewa
         $.ajax({
@@ -563,7 +563,7 @@ function validasiformpiutang() {
                     $('#modalrincianpiutang').modal('hide');
                     // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
                     notif('success', 'Data Rincian Berhasil Di Simpan');
-                    gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                    gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                     setTimeout(function () {
                         $('#formrincianpiutang').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
                         if(res.id==-1)
@@ -597,7 +597,7 @@ function validasiformpiutangkaryawan() {
         if (nil>nilairekom || (totalNilai + nil) > nilairekom)
             return notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
         
-        if(!isValidNilai(nil) && idRekomendasi != '2')
+        if(!isValidNilai(nil, idRekomendasi))
             return notif('error', 'Nilai melebihi total rekomendasi');
         //formrinciansewa
         $.ajax({
@@ -612,7 +612,7 @@ function validasiformpiutangkaryawan() {
                     $('#modalrincianpiutangkaryawan').modal('hide');
                     // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
                     notif('success', 'Data Rincian Berhasil Di Simpan');
-                    gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                    gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                     setTimeout(function () {
                         $('#formrincianpiutangkaryawan').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
                         if(res.id==-1)
@@ -643,7 +643,7 @@ function validasihutangtitipan() {
         notif('error', 'Jumlah Sisa Setor Belum Diisi');
     else {
         var nil = parseFloat(sisa_hutang.val().replace(/\./g, ""));
-        if(!isValidNilai(nil) && idRekomendasi != '2')
+        if(!isValidNilai(nil, idRekomendasi))
             return notif('error', 'Nilai melebihi total rekomendasi');
         //formrinciansewa
         $.ajax({
@@ -658,7 +658,7 @@ function validasihutangtitipan() {
                     $('#modalrincianhutangtitipan').modal('hide');
                     // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
                     notif('success', 'Data Rincian Berhasil Di Simpan');
-                    gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                    gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                     setTimeout(function () {
                         $('#formrincianhutangtitipan').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
                         if(res.id==-1)
@@ -703,7 +703,7 @@ function validasipenutupanrekening() {
                     $('#modalrincianpenutupanrekening').modal('hide');
                     // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
                     notif('success', 'Data Rincian Berhasil Di Simpan');
-                    gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                    gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                     setTimeout(function () {
                         $('#formrincianpenutupanrekening').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
                         if(res.id==-1)
@@ -737,7 +737,7 @@ function validasiumum() {
         if (nil>nilairekom || (totalNilai + nil) > nilairekom)
             return notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
         
-        if(!isValidNilai(nil) && idRekomendasi != '2')
+        if(!isValidNilai(nil, idRekomendasi))
             return notif('error', 'Nilai melebihi total rekomendasi');
         //formrinciansewa
         $.ajax({
@@ -752,7 +752,7 @@ function validasiumum() {
                     $('#modalrincianumum').modal('hide');
                     // swal("Berhasil", "Data Rincian Berhasil Di Simpan", "success");
                     notif('success', 'Data Rincian Berhasil Di Simpan');
-                    gettablerincian(res.jenis, res.idtemuan, res.idrekomendasi);
+                    gettablerincianold(res.jenis, res.idtemuan, res.idrekomendasi);
                     setTimeout(function () {
                         $('#formrincianumum').attr('action', flagsUrl + '/rincian-simpan/' + idlhp);
                         if(res.id==-1)
@@ -792,7 +792,7 @@ function validasikontribusi() {
         if (nil>nilairekom || (totalNilai + nil) > nilairekom)
             return notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
         
-        if(!isValidNilai(nil) && idRekomendasi != '2')
+        if(!isValidNilai(nil, idRekomendasi))
             return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalNilai != 0) {
             // alert((totalnilai + nil) +'--'+nilairekom)
@@ -873,7 +873,7 @@ function hapusrincian(id, jenis) {
                 dataType: 'JSON',
                 success: function (res) {
                     swal("Berhasil", "Data Rincian Berhasil Di Hapus", "success");
-                    gettablerincian(jenis, res.idtemuan, res.idrekomendasi);
+                    gettablerincianold(jenis, res.idtemuan, res.idrekomendasi);
                 }
             })
         }

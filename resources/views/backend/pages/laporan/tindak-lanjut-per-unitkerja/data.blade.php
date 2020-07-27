@@ -148,9 +148,86 @@
                 @endphp
             @endforeach
         </tbody>
+
+        <tfoot>
+            <tr>
+                <th colspan="4" style="text-align:left">Total:</th>
+                <th></th>
+                <th colspan="2"></th>
+                <th></th>
+                <th colspan="4"></th>
+                <th></th>
+                <th colspan="6"></th>
+            </tr>
+        </tfoot>
+
     </table>
 </div>
 <script>
-    $('#table').DataTable();
+    $('#table').DataTable({
+        "footerCallback": function ( row, data, start, end, display ) {
+            var api = this.api(), data;
+ 
+            // Remove the formatting to get integer data for summation
+            var intVal = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[\.,]/g, '')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+            var columnTindaklanjut = 12;
+            var columnRekom = 7;
+            var columnTemuan = 4;
+            totalTemuan = api
+                .column( columnTemuan )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+            pageTotalTemuan = api
+                .column( columnTemuan, { page: 'current'} )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+            $( api.column( columnTemuan ).footer() ).html(
+                formatRupiah(pageTotalTemuan, 'Rp.') +' (Total: '+ formatRupiah(totalTemuan, 'Rp.') +')'
+            );
+
+            totalRekomendasi = api
+                .column( columnRekom )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+            pageTotalRekomendasi = api
+                .column( columnRekom, { page: 'current'} )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+            $( api.column( columnRekom ).footer() ).html(
+                formatRupiah(pageTotalRekomendasi,'Rp.') +' (Total: '+ formatRupiah(totalRekomendasi,'Rp.') +')'
+            );
+
+            totalTdklanjut = api
+                .column( columnTindaklanjut )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+            pageTotalTdklanjut = api
+                .column( columnTindaklanjut, { page: 'current'} )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+            $( api.column( columnTindaklanjut ).footer() ).html(
+                formatRupiah(pageTotalTdklanjut,'Rp.') +' (Total: '+ formatRupiah(totalTdklanjut,'Rp.') +')'
+            );
+        }
+    });
     $('[data-toggle="tooltip"]').tooltip();
 </script>

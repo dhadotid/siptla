@@ -320,9 +320,14 @@ function formatdatatable(idtemuan) {
 }
 function formatdatatablenew(idtemuan_statusrekom) {
     var txt = idtemuan_statusrekom.split('_');
-    var defaultURL = flagsUrl + '/rekomendasi-data-new/' + txt[0]+'/'+txt[1];
-    if(txt.length>3){
+    console.log(txt);
+    var defaultURL ='';
+    if(txt[1] == 'setuju' || txt[1] == 'belum'){
+        defaultURL = flagsUrl + '/rekomendasi-data-new/' + txt[0]+'/'+txt[1];
+    }else if(txt.length>3){
         defaultURL = flagsUrl + '/rekomendasi-data-new/' + txt[0]+'/'+txt[1]+txt[2]+'&'+txt[3];
+    }else{
+        defaultURL = flagsUrl + '/rekomendasi-data-new/' + txt[0]+'/'+txt[1];
     }
     console.log('url: '+defaultURL)
     var div = $('<div/>')
@@ -575,11 +580,16 @@ function getCookie(name) {
     }
     return null;
 }
-function isValidNilai(inputValue){
+function isValidNilai(inputValue, idrekom = 2){
     var totalNilai = parseFloat(getCookie('total_nilai').replace(/\./g, ""));
     var max_rekom = parseFloat(getCookie('max_rekomendasi').replace(/\./g, ""));
-    if((inputValue + totalNilai) > max_rekom)
-        return false;
+    if(idrekom == 2){
+        if((inputValue + totalNilai) > max_rekom)
+            return false;
+    }else{
+        if(inputValue > max_rekom)
+            return false;
+    }
     return true;
 }
 function eraseCookie(name) {   

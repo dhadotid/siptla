@@ -55,6 +55,9 @@
                 <th class="text-center">Unit Kerja - 2</th>
             </tr>
         </thead>
+        @php
+            $totalTemuan=$totalRekomendasi=$totalTdklanjut=0;
+        @endphp
         <tbody>
             @php
                 $no=1;
@@ -115,6 +118,19 @@
                 @endphp
             @endforeach
         </tbody>
+
+        <tfoot>
+            <tr>
+                <th colspan="4" style="text-align:left">Total:</th>
+                <th>{{rupiah($totalTemuan)}}</th>
+                <th colspan="2"></th>
+                <th>{{rupiah($totalRekomendasi)}}</th>
+                <th colspan="4"></th>
+                <th>{{rupiah($totalTdklanjut)}}</th>
+                <th colspan="6"></th>
+            </tr>
+        </tfoot>
+
         </table>
         <style>
             th,td

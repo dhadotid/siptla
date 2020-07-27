@@ -281,6 +281,7 @@
 								<th>Email</th>
 								<th>Telp</th>
 								<th>Jenis Level</th>
+								<th>Surat Tugas</th>
 								<th>Flag</th>
 								@if (Auth::user()->level=='0')
 								<th>Aksi</th>
@@ -304,6 +305,15 @@
 											<td>-</td>
 										@endif
 									@endif
+									
+									<td>
+									@if($us->surat_tugas=='')
+										-
+									@else
+										<a href="{{url('read-pdf/'.$us->surat_tugas)}}" target="#" ><i class="fa fa-search">&nbsp;&nbsp;{{ str_replace('public/dokumen/','',$us->surat_tugas ) }}</i></a>
+									@endif
+									</td>
+
                                     <td>
                                         @if ($us->flag==1)
                                             <span class="label label-primary">Aktif</span>

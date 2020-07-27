@@ -144,14 +144,14 @@
                                                 @endforeach
                                                 <td class="text-center">
                                                     @if (isset($jlhsetujurekom[$idlhp][$item->temuan_id]['setuju']))
-                                                        <span class="label label-success">{{count($jlhsetujurekom[$idlhp][$item->temuan_id]['setuju'])}}</span>
+                                                    <span class="label label-success rekomendasi-detail" style="font-size:13px !important;" data-value="{{ $item->id.'_' . 'setuju'}}">{{count($jlhsetujurekom[$idlhp][$item->temuan_id]['setuju'])}}</span>
                                                     @else
                                                         <span class="label label-danger">0</span>
                                                     @endif
                                                 </td>
                                                 <td class="text-center">
                                                     @if (isset($jlhsetujurekom[$idlhp][$item->temuan_id]['belum']))
-                                                        <span class="label label-success">{{count($jlhsetujurekom[$idlhp][$item->temuan_id]['belum'])}}</span>
+                                                    <span class="label label-success rekomendasi-detail" style="font-size:13px !important;" data-value="{{ $item->id.'_' . 'belum'}}">{{count($jlhsetujurekom[$idlhp][$item->temuan_id]['belum'])}}</span>
                                                     @else
                                                         <span class="label label-danger">0</span>
                                                     @endif

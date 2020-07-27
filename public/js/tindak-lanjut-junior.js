@@ -394,7 +394,7 @@ function validasiformsewa() {
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(nilai_perjanjian.val().replace(/\./g, ""));
-        if(!isValidNilai(nil) && idRekomendasi != '2')
+        if(!isValidNilai(nil, idRekomendasi))
             return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalNilai != 0) {
             // alert((totalnilai + nil) +'--'+nilairekom)
@@ -469,7 +469,7 @@ function validasiformuangmuka() {
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(jumlah_um.val().replace(/\./g, ""));
-        if(!isValidNilai(nil) && idRekomendasi != '2')
+        if(!isValidNilai(nil, idRekomendasi))
             return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalNilai != 0) {
             // alert((totalnilai + nil) +'--'+nilairekom)
@@ -549,7 +549,7 @@ function validasiformlistrik() {
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(tagihan.val().replace(/\./g, ""));
-        if(!isValidNilai(nil) && idRekomendasi != '2')
+        if(!isValidNilai(nil, idRekomendasi))
             return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalNilai != 0) {
             // alert((totalnilai + nil) +'--'+nilairekom)
@@ -627,7 +627,7 @@ function validasiformpiutang() {
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(tagihan.val().replace(/\./g, ""));
-        if(!isValidNilai(nil) && idRekomendasi != '2')
+        if(!isValidNilai(nil, idRekomendasi))
             return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalNilai != 0) {
             // alert((totalnilai + nil) +'--'+nilairekom)
@@ -708,7 +708,7 @@ function validasiformpiutangkaryawan() {
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(pinjaman.val().replace(/\./g, ""));
-        if(!isValidNilai(nil) && idRekomendasi != '2')
+        if(!isValidNilai(nil, idRekomendasi))
             return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalNilai != 0) {
             if (nil > nilairekom || (totalNilai + nil) > nilairekom) {
@@ -787,7 +787,7 @@ function validasihutangtitipan() {
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(sisa_setor.val().replace(/\./g, ""));
-        if(!isValidNilai(nil) && idRekomendasi != '2')
+        if(!isValidNilai(nil, idRekomendasi))
             return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalnilai != 0) {
             // alert((totalnilai + nil) +'--'+nilairekom)
@@ -947,7 +947,7 @@ function validasiumum() {
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(jumlah_rekomendasi.val().replace(/\./g, ""));
-        if(!isValidNilai(nil) && idRekomendasi != '2')
+        if(!isValidNilai(nil, idRekomendasi))
             return notif('error', 'Nilai melebihi total rekomendasi');
         // return console.log(jumlah_rekomendasi.val() +" "+ nil);
         if (totalNilai != 0) {
@@ -1031,7 +1031,7 @@ function validasikontribusi() {
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(jumlah_rekomendasi.val().replace(/\./g, ""));
-        if(!isValidNilai(nil) && idRekomendasi != '2')
+        if(!isValidNilai(nil, idRekomendasi))
             return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalNilai != 0) {
             // alert((totalnilai + nil) +'--'+nilairekom)

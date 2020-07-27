@@ -1327,7 +1327,7 @@ class TindakLanjutController extends Controller
         }
         else if($jenis=='kontribusi'){
             $idform=abs(crc32(sha1(md5(rand()))));
-            return view('backend.pages.data-lhp.rincian-form.form-kontribusi')
+            return view('backend.pages.data-lhp.rincian-form.pic-unit.form-kontribusi')
                     ->with('idrincian',$idrincian)
                     ->with('idform',$idform)
                     ->with('bank', $bank)
@@ -1335,28 +1335,28 @@ class TindakLanjutController extends Controller
         }
         else if($jenis=='nonsetoranperjanjiankerjasama'){
             $idform=abs(crc32(sha1(md5(rand()))));
-            return view('backend.pages.data-lhp.rincian-form.form-nonsetoranperjanjiankerjasama')
+            return view('backend.pages.data-lhp.rincian-form.pic-unit.form-nonsetoranperjanjiankerjasama')
                     ->with('idrincian',$idrincian)
                     ->with('idform',$idform)
                     ->with('bank', $bank)
                     ->with('jenis',$jenis);
         }elseif($jenis=='nonsetoran'){
             $idform=abs(crc32(sha1(md5(rand()))));
-            return view('backend.pages.data-lhp.rincian-form.form-nonsetoran')
+            return view('backend.pages.data-lhp.rincian-form.pic-unit.form-nonsetoran')
                     ->with('idrincian',$idrincian)
                     ->with('idform',$idform)
                     ->with('bank', $bank)
                     ->with('jenis',$jenis);
         }elseif($jenis=='nonsetoranumum'){
             $idform=abs(crc32(sha1(md5(rand()))));
-            return view('backend.pages.data-lhp.rincian-form.form-nonsetoranumum')
+            return view('backend.pages.data-lhp.rincian-form.pic-unit.form-nonsetoranumum')
                     ->with('idrincian',$idrincian)
                     ->with('idform',$idform)
                     ->with('bank', $bank)
                     ->with('jenis',$jenis);
         }elseif($jenis=='nonsetoranpertanggungjawabanuangmuka'){
             $idform=abs(crc32(sha1(md5(rand()))));
-            return view('backend.pages.data-lhp.rincian-form.form-nonsetoranpertanggungjawabanuangmuka')
+            return view('backend.pages.data-lhp.rincian-form.pic-unit.form-nonsetoranpertanggungjawabanuangmuka')
                     ->with('idrincian',$idrincian)
                     ->with('idform',$idform)
                     ->with('bank', $bank)

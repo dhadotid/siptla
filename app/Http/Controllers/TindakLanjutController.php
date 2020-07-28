@@ -675,7 +675,7 @@ class TindakLanjutController extends Controller
             $rinc[$v->id_rekomendasi][]=$v;
         }
 
-        // return $tindaklanjut;
+        // return $temuan;
         return view('backend.pages.data-lhp.pic-unit.tindaklanjut')
                 ->with('jumlahtl',$jlhtl)
                 ->with('jumlahrincian',$rinc)
@@ -904,6 +904,7 @@ class TindakLanjutController extends Controller
         {
             $rinc[$v->id_rekomendasi][]=$v;
         }
+        
         return view('backend.pages.data-lhp.pic-unit.tindaklanjut-list')
         ->with('jumlahtl',$jlhtl)
                 ->with('tahun',$tahun)

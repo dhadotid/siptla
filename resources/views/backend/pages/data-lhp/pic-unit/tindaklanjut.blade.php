@@ -465,13 +465,13 @@
                                                         if(in_array($user_pic->id,$listpic2))
                                                         {
                                                             $aksi.='<div class="row" style="height:140px;border-bottom:1px dotted #ddd;padding:5px 0;width:80px;">
-                                                                <div data-toggle="tooltip" title="Data Rekomendasi Sudah Publish Ke PIC 1" class="btn-group" style="'.$styleaksi.'" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
-                                                                    <button type="button" class="btn btn-success btn-xs" style="height:28px;"><i class="fa fa-check"></i></button>
+                                                                <div title="Data Rekomendasi Sudah Publish Ke PIC 1" class="btn-group" id="aksi_rekomendasi_'.$item->id_temuan.'_'.$v->id.'">
+                                                                    <button data-toggle="tooltip"  type="button" class="btn btn-success btn-xs" style="height:28px;"><i class="fa fa-check"></i></button>
                                                                     <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown" style="height:28px;">
                                                                         <span class="caret"></span>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu" style="right:0 !important;left:unset !important">';
-                                                            // print_r($listpic2);
+                                                            //print_r($listpic2);
                                                             $aksi.='<li><a href="javascript:detailtindaklanjut('.$v->id.')" style="font-size:11px;"><i class="glyphicon glyphicon-list"></i> &nbsp;&nbsp;Detail Tindak Lanjut</a></li>';
                                                             if($jlhrincian!=0)
                                                             {

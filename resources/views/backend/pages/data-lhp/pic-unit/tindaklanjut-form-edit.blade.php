@@ -87,9 +87,18 @@
         <div class="form-group" style="margin-top:-20px;">
             <label for="exampleTextInput1" class="col-sm-12 control-label text-left">Dokumen Pendukung:</label>
             <div class="col-sm-12">
-                <input type="file" class="form-control"  id="add-dokumen"  name="dokumen_pendukung"  placeholder="Dokumen Pendukung" accept=".doc,.docx,.pdf,.xls,.xlsx">
+                <input type="file" class="form-control"  id="add-dokumen-1" onchange="insertFile(1)" name="dokumen_pendukung_1"  placeholder="Dokumen Pendukung" accept=".doc,.docx,.pdf,.xls,.xlsx">
+
+                <br><div class="field_wrapper"></div>
+            
                 <small><i>*Biarkan Kosong Jika Tidak Ingin Di Ganti</i></small>
             </div>
+
+            <div class="col-sm-12"> 
+                    <div class="text-center"><a href="javascript:tindaklanjutAddColumn()" class="label label-info add_button"><i class="fa fa-plus"></i> Tambah Dokumen Baru</a></div>
+                </div>
+                <input type="hidden" class="form-control"  class="form-control"  name="total_file"  placeholder="Total File" id="total_file" value="0">
+
         </div>    
         
     </div>

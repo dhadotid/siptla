@@ -1274,6 +1274,7 @@ $('#form_tindaklanjut_edit').on('submit', function (event) {
         cache: false,
         processData: false,
         success: function (res) {
+            console.log(res);
             swal({
                 title: 'Berhasil!',
                 text: 'Data Tindak Lanjut Berhasil Di Edit',
@@ -1609,7 +1610,13 @@ function rincianAddColumn(){
         </div> ';
     $(wrapper).append(fieldHTML);
 }
-
+tindaklanjutFileQty=1;
+function tindaklanjutAddColumn(){
+    tindaklanjutFileQty++;
+    var wrapper = $('.field_wrapper');
+    var fieldHTML = '<input type="file" class="form-control"  id="add-dokumen-'+tindaklanjutFileQty+'" onchange="insertFile('+tindaklanjutFileQty+')" name="dokumen_pendukung_'+tindaklanjutFileQty+'"  placeholder="Dokumen Pendukung" accept=".doc,.docx,.pdf,.xls,.xlsx"><br>';
+    $(wrapper).append(fieldHTML);
+}
 function insertFile(val){
     $("#total_file").val(val);
 }

@@ -1151,21 +1151,6 @@ class TindakLanjutController extends Controller
             $v->id_tindak_lanjut_temuan=$idtindaklanjut;
             $v->save();
         }
-        // if($request->hasFile('dokumen_pendukung')){
-        //     $file = $request->file('dokumen_pendukung');
-        //     $filenameWithExt = $request->file('dokumen_pendukung')->getClientOriginalName();
-        //     $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-        //     $extension = $request->file('dokumen_pendukung')->getClientOriginalExtension();
-        //     // $fileNameToStore = $filename.'_'.time().'.'.$extension;
-        //     $fileNameToStore = time().'.'.$extension;
-        //     $path = $request->file('dokumen_pendukung')->storeAs('public/dokumen',$fileNameToStore);
-
-        //     $dokumen=new DokumenTindakLanjut;
-        //     $dokumen->id_tindak_lanjut_temuan=$idtindaklanjut;
-        //     $dokumen->nama_dokumen=$fileNameToStore;
-        //     $dokumen->path=$path;
-        //     $dokumen->save();
-        // }
 
         $lhp=DaftarTemuan::find($request->idlhp);
         $tahun=$lhp->tahun_pemeriksa;
@@ -1195,7 +1180,7 @@ class TindakLanjutController extends Controller
     }
     public function unitkerja_tindak_lanjut_edit_simpan(Request $request)
     {
-        // return $request->all();
+        // return $request->total_file;
         $idtl=$request->idtl;
         $tindaklanjut=TindakLanjutTemuan::find($idtl);
         $tindaklanjut->lhp_id = $request->idlhp;
@@ -1209,31 +1194,51 @@ class TindakLanjutController extends Controller
 
         $idtindaklanjut=$tindaklanjut->id;
 
-        if($request->hasFile('dokumen_pendukung')){
-            $file = $request->file('dokumen_pendukung');
-            $filenameWithExt = $request->file('dokumen_pendukung')->getClientOriginalName();
-            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-            $extension = $request->file('dokumen_pendukung')->getClientOriginalExtension();
-            $fileNameToStore = $filename.'_'.time().'.'.$extension;
-            $fileNameToStore = time().'.'.$extension;
-            $path = $request->file('dokumen_pendukung')->storeAs('public/dokumen',$fileNameToStore);
+        if((int)$request->total_file > 0){
+            for($i = 1; $i <= (int)$request->total_file; $i++){
+                if($request->hasFile('dokumen_pendukung_'.$i)){
+                    $file = $request->file('dokumen_pendukung_'.$i);
+                    $filenameWithExt = $request->file('dokumen_pendukung_'.$i)->getClientOriginalName();
+                    $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                    $extension = $request->file('dokumen_pendukung_'.$i)->getClientOriginalExtension();
+                    $fileNameToStore = $filename.'_'.time().'.'.$extension;
+                    $fileNameToStore = time().'.'.$extension;
+                    $path = $request->file('dokumen_pendukung_'.$i)->storeAs('public/dokumen',$fileNameToStore);
 
-            $dokumen=DokumenTindakLanjut::where('id_tindak_lanjut_temuan',$idtl)->first();
-            if($dokumen)
-            {
-                $dokumen->nama_dokumen=$fileNameToStore;
-                $dokumen->path=$path;
-                $dokumen->save();
-            }
-            else
-            {
-                $dokumen=new DokumenTindakLanjut;
-                $dokumen->id_tindak_lanjut_temuan=$idtl;
-                $dokumen->nama_dokumen=$fileNameToStore;
-                $dokumen->path=$path;
-                $dokumen->save();
+                    $dokumen=new DokumenTindakLanjut;
+                    $dokumen->id_tindak_lanjut_temuan=$idtl;
+                    $dokumen->nama_dokumen=$fileNameToStore;
+                    $dokumen->path=$path;
+                    $dokumen->save();
+                }
             }
         }
+
+        // if($request->hasFile('dokumen_pendukung')){
+        //     $file = $request->file('dokumen_pendukung');
+        //     $filenameWithExt = $request->file('dokumen_pendukung')->getClientOriginalName();
+        //     $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+        //     $extension = $request->file('dokumen_pendukung')->getClientOriginalExtension();
+        //     $fileNameToStore = $filename.'_'.time().'.'.$extension;
+        //     $fileNameToStore = time().'.'.$extension;
+        //     $path = $request->file('dokumen_pendukung')->storeAs('public/dokumen',$fileNameToStore);
+
+        //     $dokumen=DokumenTindakLanjut::where('id_tindak_lanjut_temuan',$idtl)->first();
+        //     if($dokumen)
+        //     {
+        //         $dokumen->nama_dokumen=$fileNameToStore;
+        //         $dokumen->path=$path;
+        //         $dokumen->save();
+        //     }
+        //     else
+        //     {
+        //         $dokumen=new DokumenTindakLanjut;
+        //         $dokumen->id_tindak_lanjut_temuan=$idtl;
+        //         $dokumen->nama_dokumen=$fileNameToStore;
+        //         $dokumen->path=$path;
+        //         $dokumen->save();
+        //     }
+        // }
 
         $lhp=DaftarTemuan::find($request->idlhp);
         $tahun=$lhp->tahun_pemeriksa;

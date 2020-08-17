@@ -16,6 +16,7 @@ use App\Models\DataTemuan;
 use App\Models\MasterTemuan;
 use App\Models\JenisAudit;
 use App\Models\DataRekomendasi;
+use Auth;
 use PDF;
 use Excel;
 class LaporanController extends Controller
@@ -1500,6 +1501,7 @@ class LaporanController extends Controller
                 ->with('statusrekomendasi',$statusrekomendasi)
                 ->with('levelresiko', $levelresiko);
     }
+
     public function tindaklanjut_per_bidang_data(Request $request)
     {
         // return $request->all();
@@ -1674,6 +1676,334 @@ class LaporanController extends Controller
                     ->with('bidangTitle', $bidangTitle);
     
     }
+
+    public function tindaklanjut_per_bidang_pimpinan(Request $request)
+    {
+        $title_form = '';
+        $bidang_filter = $pemeriksa_filter = 'Total';
+        $category_filter = 'Semua';
+        $tahun = '2020';
+        $statusoverdue = '';
+        $rekomstatus = '';
+        if($request->has('tahun')){
+            $tahun = $request->query('tahun');
+        }
+        if($request->has('category')){
+            $category_filter = $request->query('category');
+        }
+        if($request->has('bidang')){
+            $bidang_filter = $request->query('bidang');
+        }
+        if($request->has('title')){
+            $title_form = $request->query('title');
+        }
+        if($request->has('pemeriksa')){
+            $pemeriksa_filter = $request->query('pemeriksa');
+        }
+        if(Auth::user()->level=='pimpinan-kepala-bidang'){
+            list($idbidang,$category,$namabidang)=explode('__',Auth::user()->bidang);
+            $bidang_filter = $namabidang;
+        }
+        if($request->has('overduestatus')){
+            $statusoverdue = $request->query('overduestatus');
+        }
+        if($request->has('rekomstatus')){
+            $rekomstatus = $request->query('rekomstatus');
+        }
+        $pemeriksa=Pemeriksa::orderBy('pemeriksa')->get();
+        $statusrekomendasi=StatusRekomendasi::orderBy('rekomendasi')->get();
+        $pejabat=PejabatTandaTangan::all();
+        $bidang=Bidang::orderBy('nama_bidang')->get();
+        $levelresiko=LevelResiko::orderBy('level_resiko')->get();
+        
+        return view('backend.pages.laporan.pimpinan.tindak-lanjut-per-bidang.index')
+                ->with('pemeriksa',$pemeriksa)
+                ->with('bidang',$bidang)
+                ->with('pejabat',$pejabat)
+                ->with('statusrekomendasi',$statusrekomendasi)
+                ->with('levelresiko', $levelresiko)
+                ->with('bidang_filter', $bidang_filter)
+                ->with('category_filter', $category_filter)
+                ->with('tahun', $tahun)
+                ->with('title_form', $title_form)
+                ->with('pemeriksa_filter', $pemeriksa_filter)
+                ->with('overduestatus', $statusoverdue)
+                ->with('rekomstatus',$rekomstatus);
+    }
+
+    public function tindaklanjut_per_bidang_pimpinan_data(Request $request)
+    {
+        $now=date('Y-m-d');
+        list($tg1,$bl1,$th1)=explode('/',$request->tgl_awal);
+        list($tg2,$bl2,$th2)=explode('/',$request->tgl_akhir);
+
+        $tgl_awal = $th1.'-'.$bl1.'-'.$tg1;
+        $tgl_akhir = $th2.'-'.$bl2.'-'.$tg2;
+        
+        $statusrekomendasi = $request->statusrekomendasi;
+        $overdue = $request->overdue;
+        $rekomstatus = $request->rekomstatus;
+        $overduestatus = $request->overduestatus;
+
+        $arrayPemeriksa = array();
+        if($request->pemeriksa != '' && $request->pemeriksa!=0){
+            $pemeriksa = $request->pemeriksa;
+            $pemeriksa = implode(',', $pemeriksa);
+            foreach (explode(',', $pemeriksa) as $v ) {
+                $arrayPemeriksa[] = $v;
+            }
+        }
+        $arrayLHP = array();
+        if($request->no_lhp != '' && $request->no_lhp!=0){
+            $no_lhp = $request->no_lhp;
+            $no_lhp = implode(',', $no_lhp);
+            foreach (explode(',', $no_lhp) as $v ) {
+                $arrayLHP[] = $v;
+            }
+        }
+        
+        $arrayLevelResiko = array();
+        if($request->level_resiko != '' && $request->level_resiko!=0){
+            $level_resiko = $request->level_resiko;
+            $level_resiko = implode(',', $level_resiko);
+            foreach (explode(',', $level_resiko) as $v ) {
+                $arrayLevelResiko[] = $v;
+            }
+        }
+        
+        $arrayBidang = array();
+        if($request->bidang != '' && $request->bidang!=0){
+            $bidang = $request->bidang;
+            $bidang = implode(',', $bidang);
+            foreach (explode(',', $bidang) as $v ) {
+                $arrayBidang[] = $v;
+            }
+        }
+        $bidangTitle='';
+        if(count($arrayBidang)==0 || in_array(0, $arrayBidang)){
+            $bidangTitle.='Semua';
+        }else{
+            $nbidang=Bidang::whereIn('id', $arrayBidang)->get();
+            foreach($nbidang as $k=>$v){
+                $bidangTitle.=$v->nama_bidang.' ';
+            }
+        }
+
+        $arrayStatusRekom = array();
+        if($request->statusrekomendasi != '' && $request->statusrekomendasi!=0){
+            $statusrekomendasi = $request->statusrekomendasi;
+            $statusrekomendasi = implode(',', $statusrekomendasi);
+            foreach(explode(',',$statusrekomendasi) as $v){
+                $arrayStatusRekom[] = $v;
+            }
+        }
+        $pejabat=PejabatTandaTangan::find($request->pejabat);
+        
+        $picunit=PICUnit::all();
+        $unit=array();
+        $pic_unit=$bidunit=array();
+        foreach($picunit as $k=>$v)
+        {
+            $pic_unit[$v->id]=$v;
+            $bidunit[$v->bidang][$v->id]=$v->id;
+        }
+
+        if(Auth::user()->level=='pimpinan-kepala-bidang'){
+            list($idbidang,$category,$namabidang)=explode('__',Auth::user()->bidang);
+            if($category == 'Bidang'){
+                $bidang = Bidang::where('id',$idbidang)->first();
+                $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom,status_rekomendasi.rekomendasi as st_rekom,data_rekomendasi.rekomendasi as rekom')
+                        ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                        ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                        ->leftjoin('status_rekomendasi','status_rekomendasi.id','=','data_rekomendasi.status_rekomendasi_id')
+
+                        ->leftjoin('pic_unit', 'pic_unit.id', '=','data_temuan.pic_temuan_id')
+                        ->leftjoin('level_pic', 'level_pic.id', '=', 'pic_unit.fakultas')
+                        ->leftjoin('bidang', 'bidang.id', '=', 'pic_unit.bidang')
+
+                        ->where('bidang.id', $bidang->id)
+                        ->whereBetween('daftar_lhp.tanggal_lhp', [$tgl_awal, $tgl_akhir])
+                        ->whereNull('data_rekomendasi.deleted_at');
+                        // ->where('daftar_lhp.status_lhp','Publish LHP');
+                        if(count($arrayLevelResiko)>0 && !in_array(0, $arrayLevelResiko)){
+                            $alldata = $alldata->whereIn('data_temuan.level_resiko_id', $arrayLevelResiko);
+                        }
+                        if(count($arrayStatusRekom)>0 && !in_array(0, $arrayStatusRekom)){
+                            $alldata = $alldata->whereIn('data_rekomendasi.status_rekomendasi_id', $arrayStatusRekom);
+                        }
+            }else{
+                $bidang = LevelPIC::where('id',$idbidang)->first();
+                $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom,status_rekomendasi.rekomendasi as st_rekom,data_rekomendasi.rekomendasi as rekom')
+                        ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                        ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                        ->leftjoin('status_rekomendasi','status_rekomendasi.id','=','data_rekomendasi.status_rekomendasi_id')
+
+                        ->leftjoin('pic_unit', 'pic_unit.id', '=','data_temuan.pic_temuan_id')
+                        ->leftjoin('level_pic', 'level_pic.id', '=', 'pic_unit.fakultas')
+                        ->leftjoin('bidang', 'bidang.id', '=', 'pic_unit.bidang')
+
+                        ->where('level_pic.id', $bidang->id)
+                        ->whereBetween('daftar_lhp.tanggal_lhp', [$tgl_awal, $tgl_akhir])
+                        ->whereNull('data_rekomendasi.deleted_at');
+                        // ->where('daftar_lhp.status_lhp','Publish LHP');
+                        if(count($arrayLevelResiko)>0 && !in_array(0, $arrayLevelResiko)){
+                            $alldata = $alldata->whereIn('data_temuan.level_resiko_id', $arrayLevelResiko);
+                        }
+                        if(count($arrayStatusRekom)>0 && !in_array(0, $arrayStatusRekom)){
+                            $alldata = $alldata->whereIn('data_rekomendasi.status_rekomendasi_id', $arrayStatusRekom);
+                        }
+            }
+        }else{
+            $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom,status_rekomendasi.rekomendasi as st_rekom,data_rekomendasi.rekomendasi as rekom')
+                    ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                    ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                    
+                    ->leftjoin('pic_unit', 'pic_unit.id', '=','data_temuan.pic_temuan_id')
+                    ->leftjoin('pemeriksa','daftar_lhp.pemeriksa_id','=','pemeriksa.id')
+                    ->leftjoin('level_resiko','data_temuan.level_resiko_id','=','level_resiko.id')
+                    ->leftjoin('bidang', 'bidang.id', '=', 'pic_unit.bidang')
+
+                    ->whereBetween('daftar_lhp.tanggal_lhp', [$tgl_awal, $tgl_akhir])
+                    ->whereNull('data_rekomendasi.deleted_at');
+                    if($rekomstatus==''){
+                        $alldata = $alldata->join('status_rekomendasi','status_rekomendasi.id','=','data_rekomendasi.status_rekomendasi_id');
+                    }else{
+                        $alldata = $alldata->leftjoin('status_rekomendasi','status_rekomendasi.id','=','data_rekomendasi.status_rekomendasi_id');
+                    }
+                    if(count($arrayLevelResiko)>0 && !in_array(0, $arrayLevelResiko)){
+                        $alldata = $alldata->whereIn('data_temuan.level_resiko_id', $arrayLevelResiko);
+                    }
+                    if(count($arrayStatusRekom)>0 && !in_array(0, $arrayStatusRekom)){
+                        $alldata = $alldata->whereIn('data_rekomendasi.status_rekomendasi_id', $arrayStatusRekom);
+                    }
+        }
+        
+        if(count($arrayLHP)>0 && !in_array(0, $arrayLHP))
+        {
+            $alldata=$alldata->whereIn('daftar_lhp.id',$arrayLHP);
+            $no_lhp = implode(',',$arrayLHP);
+        }                   
+        $dbid='';
+        $arraybid=array();
+        if(count($arrayBidang)>0 && !in_array(0, $arrayBidang))
+        {
+            foreach($arrayBidang as $kb=>$vb)
+            {
+                if(isset($bidunit[$vb]))
+                {
+                    foreach($bidunit[$vb] as $kk=>$vv)
+                    {
+                        $arraybid[]=$vv;
+                        $dbid.=$vv.',';
+                    }
+                }
+            }
+            
+            if(count($arraybid)!=0)
+            {
+                $pics=PICUnit::whereIn('bidang',$arrayBidang)->get();
+                $pics_id = array();
+                foreach($pics as $pvc){
+                    $pics_id[] = $pvc->id;
+                }
+                // $alldata->whereIn('data_rekomendasi.pic_1_temuan_id',$arraybid)
+                //     ->orWhereIn('data_rekomendasi.pic_2_temuan_id',$arraybid);
+                $alldata->whereIn('data_rekomendasi.pic_1_temuan_id',$pics_id)
+                    ->orWhereIn('data_rekomendasi.pic_2_temuan_id',$pics_id);
+            }
+        }
+        $all=$alldata->get();
+        // return json_encode($all);
+        if(count($arrayPemeriksa)==0 || in_array(0, $arrayPemeriksa)){
+            $npemeriksa=Pemeriksa::all();
+        }else{
+            $npemeriksa=Pemeriksa::whereIn('id', $arrayPemeriksa)->get();
+        }
+        $now=date('Y-m-d');
+        $lhp=$temuan=$rekomendasi=$arrayrekomid=array();
+        foreach($all as $k=>$v)
+        {
+            if($overdue==2){
+                $lhp[$v->id_lhp]=$v;
+                $temuan[$v->id_lhp][$v->id_temuan]=$v;
+                $rekomendasi[$v->id_rekom]=$v;
+                $arrayrekomid[$v->id_rekom]=$v->id_rekom;
+            }elseif($overdue==0){
+                if($v->tanggal_penyelesaian <= $now){
+                    $lhp[$v->id_lhp]=$v;
+                    $temuan[$v->id_lhp][$v->id_temuan]=$v;
+                    $rekomendasi[$v->id_rekom]=$v;
+                    $arrayrekomid[$v->id_rekom]=$v->id_rekom;
+                }
+            }elseif($overdue==1){
+                if($v->tanggal_penyelesaian > $now){
+                    $lhp[$v->id_lhp]=$v;
+                    $temuan[$v->id_lhp][$v->id_temuan]=$v;
+                    $rekomendasi[$v->id_rekom]=$v;
+                    $arrayrekomid[$v->id_rekom]=$v->id_rekom;
+                }
+            }
+        }
+
+        $tl=TindakLanjutTemuan::whereIn('rekomendasi_id',$arrayrekomid)->get();
+        $tindaklanjut=$rekomsementara=array();
+        foreach($tl as $k=>$v)
+        {
+            $tindaklanjut[$v->rekomendasi_id][]=$v;
+        }
+        
+        if($rekomstatus!=''){
+            foreach($rekomendasi as $k=>$v){
+                if($rekomstatus=='Create oleh Unit Kerja' && !isset($tindaklanjut[$v->id_rekom])){
+                    array_push($rekomsementara,$v);
+                }elseif($rekomstatus=='Belum direview SPI' && isset($tindaklanjut[$v->id_rekom]) && $v->review_spi =='' && $v->published!=1){
+                    array_push($rekomsementara,$v);
+                }elseif($rekomstatus=='Sedang direview SPI' && isset($tindaklanjut[$v->id_rekom]) && $v->review_spi !='' && $v->published==0){
+                    array_push($rekomsementara,$v);
+                }elseif($rekomstatus=='Sudah direview SPI' && isset($tindaklanjut[$v->id_rekom]) && $v->review_spi =='' && $v->published==0){
+                    array_push($rekomsementara,$v);
+                }elseif($rekomstatus=='Sudah dipublish oleh SPI' && isset($tindaklanjut[$v->id_rekom]) && $v->review_spi !='' && $v->published==1){
+                    array_push($rekomsementara,$v);
+                }   
+            }
+            $rekomendasi = $rekomsementara;
+        }
+
+        if($overduestatus!=''){
+            foreach($rekomendasi as $k=>$v){
+                if($v->status_rekomendasi_id == 2){
+                    if($now > $v->tanggal_penyelesaian){
+                        if($overduestatus == 'Overdue 1 - Rendah' && $v->level_resiko_id == 2){
+                            array_push($rekomsementara,$v);
+                        }elseif($overduestatus == 'Overdue 2 - Menengah' && $v->level_resiko_id == 3){
+                            array_push($rekomsementara,$v);
+                        }elseif($overduestatus == 'Overdue 3 - Tinggi' && $v->level_resiko_id == 4){
+                            array_push($rekomsementara,$v);
+                        }
+                    }
+                }
+            }
+            $rekomendasi = $rekomsementara;
+        }
+
+        return view('backend.pages.laporan.pimpinan.tindak-lanjut-per-bidang.data')
+                    ->with('bidang',$dbid)
+                    ->with('pic_unit',$pic_unit)
+                    ->with('alldata',$alldata)
+                    ->with('tindaklanjut',$tindaklanjut)
+                    ->with('npemeriksa',$npemeriksa)
+                    ->with('request',$request)
+                    ->with('lhp',$lhp)
+                    ->with('tgl_awal',$tgl_awal)
+                    ->with('tgl_akhir',$tgl_akhir)
+                    ->with('pejabat',$pejabat)
+                    ->with('temuan',$temuan)
+                    ->with('no_lhp',$arrayLHP)
+                    ->with('rekomendasi',$rekomendasi)
+                    ->with('bidangTitle', $bidangTitle);
+    
+    }
+
     public function tindaklanjut_per_bidang_pdf(Request $request)
     {
         list($tg1,$bl1,$th1)=explode('/',$request->tanggal_awal);

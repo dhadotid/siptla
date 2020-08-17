@@ -108,7 +108,7 @@
 <script src="https://cdn.jsdelivr.net/gh/emn178/chartjs-plugin-labels/src/chartjs-plugin-labels.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/progressbar.js/1.0.1/progressbar.min.js"></script>
 <script>
-var ctx = document.getElementById("myChart").getContext("2d");
+var ctx = document.getElementById("myChart");
 var data = <?php echo json_encode($temuans);?>;
 // var data = {
 //   labels: ["PIC1", "PIC2", "PIC3", "PIC4", "PIC5", "Total"],
@@ -133,12 +133,7 @@ var myBarChart = new Chart(ctx, {
   options: {
     scales: {
   		xAxes: [{stacked: true}],
-    	yAxes: [{
-      	stacked: true,
-      	ticks: {
-        	beginAtZero: true 
-         }
-      }]
+    	yAxes: [{stacked: true}]
     },
     plugins: {
         labels: {
@@ -152,6 +147,21 @@ var myBarChart = new Chart(ctx, {
     }
   }
 });
+
+ctx.onclick = function(evt) {
+   var activePoint = myBarChart.getElementAtEvent(evt)[0];
+   var data = activePoint._chart.data;
+   var datasetIndex = activePoint._datasetIndex;
+   var label = data.datasets[datasetIndex].label;
+   var bidang = data.labels[activePoint._index];
+   var value = data.datasets[datasetIndex].data[activePoint._index];
+   var tahn = $('#tahun').val();
+
+  //  var url = '{{ route("laporan-pimpinan-perbidang", ["key"=>'bidang'] ) }}';
+  //  location.href = url;
+   location.href = flagsUrl+'/laporan/tindaklanjut-per-bidang-pimpinan?bidang='+
+   bidang+'&category='+label+'&tahun='+tahn+'&title=Temuan Per-Bidang';
+};
 </script>
 
 <script>
@@ -246,9 +256,9 @@ circleBar.animate(totalTemuan, {
   duration: 1500
 });
 
-var ctx = document.getElementById('chartOverdue').getContext('2d');
+var chartOverdue = document.getElementById('chartOverdue');
 var data = <?php echo json_encode($rekomJson);?>;
-var chart = new Chart(ctx, {
+var overdueChart = new Chart(chartOverdue, {
     type: 'doughnut',
     data: data,
     options: {
@@ -266,10 +276,24 @@ var chart = new Chart(ctx, {
         }
     }
 });
+chartOverdue.onclick = function(evt) {
+   var activePoint = overdueChart.getElementAtEvent(evt)[0];
+   var data = activePoint._chart.data;
+   var datasetIndex = activePoint._datasetIndex;
+   var label = data.datasets[datasetIndex].label;
+   var bidang = data.labels[activePoint._index];
+   var value = data.datasets[datasetIndex].data[activePoint._index];
+   var tahn = $('#tahun').val();
 
-var ctx = document.getElementById('chartTindakLanjut').getContext('2d');
+  //  var url = '{{ route("laporan-pimpinan-perbidang", ["key"=>'bidang'] ) }}';
+  //  location.href = url;
+  location.href = flagsUrl+'/laporan/tindaklanjut-per-bidang-pimpinan?overduestatus='+
+   bidang+'&category='+label+'&tahun='+tahn+'&title=Rekomendasi yang Overdue';
+};
+
+var chartTindakLanjut = document.getElementById('chartTindakLanjut');
 var data = <?php echo json_encode($jsonTemuan);?>;
-var chart = new Chart(ctx, {
+var tindaklanjutChart = new Chart(chartTindakLanjut, {
     type: 'doughnut',
     data: data,
     options: {
@@ -288,6 +312,20 @@ var chart = new Chart(ctx, {
         }
     }
 });
+chartTindakLanjut.onclick = function(evt) {
+   var activePoint = tindaklanjutChart.getElementAtEvent(evt)[0];
+   var data = activePoint._chart.data;
+   var datasetIndex = activePoint._datasetIndex;
+   var label = data.datasets[datasetIndex].label;
+   var bidang = data.labels[activePoint._index];
+   var value = data.datasets[datasetIndex].data[activePoint._index];
+   var tahn = $('#tahun').val();
+
+  //  var url = '{{ route("laporan-pimpinan-perbidang", ["key"=>'bidang'] ) }}';
+  //  location.href = url;
+  location.href = flagsUrl+'/laporan/tindaklanjut-per-bidang-pimpinan?rekomstatus='+
+   bidang+'&tahun='+tahn+'&title=Monitoring Tindak Lanjut';
+};
 </script>
 <style>
     .scroll-box {

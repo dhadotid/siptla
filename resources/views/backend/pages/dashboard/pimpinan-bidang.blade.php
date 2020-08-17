@@ -45,7 +45,7 @@
 						<small class="text-color">Temuan Per - Bidang</small>
                     </div>
                     <br><br>
-					<canvas id="myChart" height="265px"></canvas>
+					<canvas id="myChart" height="280%"></canvas>
 				</div>
             </div>
             <div class="col-md-5 col-sm-5">
@@ -54,22 +54,23 @@
 						<small class="text-color">Tingkat Penyelesaian Temuan</small>
                     </div>
                     <br><br>
-                    <div class="col-md-12" height="170px">
+                    <div class="col-md-12" height="92%">
                         <div class="row">
                             <div class="col-md-4 col-sm-4">
-                                <canvas id="totalTemuan" height="170px"></canvas>
+                                <!-- <canvas id="totalTemuan" height="170px"></canvas> -->
+                                <div id="totalTemuan" class="circle-container" height="93%" ></div>
                                 <div class="text-center">
                                     <small class="text-color">Total Temuan</small>
                                 </div>
                             </div>
                             <div class="col-md-4 col-sm-4">
-                                <canvas id="temuanAuditInternal" height="170px"></canvas>
+                                <div id="temuanAuditInternal" class="circle-container" height="93%" ></div>
                                 <div class="text-center">
                                     <small class="text-color">Temuan Audit Internal</small>
                                 </div>
                             </div>
                             <div class="col-md-4 col-sm-4">
-                                <canvas id="temuanAuditExternal" height="170px"></canvas>
+                                <div id="temuanAuditExternal" class="circle-container" height="93%" ></div>
                                 <div class="text-center">
                                     <small class="text-color">Temuan Audit External</small>
                                 </div>
@@ -84,7 +85,7 @@
 						<small class="text-color">Rekomendasi Yang Overdue</small>
                     </div>
                     <br><br>
-					<canvas id="chartOverdue" height="90px"></canvas>
+					<canvas id="chartOverdue" height="98%"></canvas>
 				</div>
             </div>
             <div class="col-md-5 col-sm-5">
@@ -93,7 +94,7 @@
 						<small class="text-color">Monitoring Tindak Lanjut</small>
                     </div>
                     <br><br>
-					<canvas id="chartTindakLanjut" height="90px"></canvas>
+					<canvas id="chartTindakLanjut" height="98%"></canvas>
 				</div>
             </div>
         </div>
@@ -105,8 +106,9 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato"/>
 <script src="{{asset('js/Chart.min.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/gh/emn178/chartjs-plugin-labels/src/chartjs-plugin-labels.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/progressbar.js/1.0.1/progressbar.min.js"></script>
 <script>
-var ctx = document.getElementById("myChart").getContext("2d");
+var ctx = document.getElementById("myChart");
 var data = <?php echo json_encode($temuans);?>;
 // var data = {
 //   labels: ["PIC1", "PIC2", "PIC3", "PIC4", "PIC5", "Total"],
@@ -131,12 +133,7 @@ var myBarChart = new Chart(ctx, {
   options: {
     scales: {
   		xAxes: [{stacked: true}],
-    	yAxes: [{
-      	stacked: true,
-      	ticks: {
-        	beginAtZero: true 
-         }
-      }]
+    	yAxes: [{stacked: true}]
     },
     plugins: {
         labels: {
@@ -146,82 +143,117 @@ var myBarChart = new Chart(ctx, {
                 return args.value;
             },
             arc: true
-            // position: 'outside',
-            // render: 'value',
-            // fontSize: 14,
-            //     fontStyle: 'bold',
-            //     fontColor: '#000',
             }
     }
   }
 });
+
+ctx.onclick = function(evt) {
+   var activePoint = myBarChart.getElementAtEvent(evt)[0];
+   var data = activePoint._chart.data;
+   var datasetIndex = activePoint._datasetIndex;
+   var label = data.datasets[datasetIndex].label;
+   var bidang = data.labels[activePoint._index];
+   var value = data.datasets[datasetIndex].data[activePoint._index];
+   var tahn = $('#tahun').val();
+
+  //  var url = '{{ route("laporan-pimpinan-perbidang", ["key"=>'bidang'] ) }}';
+  //  location.href = url;
+  location.href = flagsUrl+'/laporan/tindaklanjut-per-bidang-pimpinan?pemeriksa='+
+   bidang+'&category='+label+'&tahun='+tahn+'&title=Temuan Per-Bidang';
+};
 </script>
 
 <script>
-var ctx = document.getElementById('totalTemuan').getContext('2d');
-var totalTemuan = <?php echo json_encode($jsonTotalTemuan);?>;
-var myChart = new Chart(ctx, {
-    type: 'pie',
-    data: totalTemuan,
-    options: {
-        legend: {
-            display: false
-         },
-        plugins: {
-            labels: {
-                render: function (args) {
-                // console.log('hehe 'args);
-                if(args.value!=0)
-                    // console.log('hehe '+args);
-                },
-                arc: true
-                render: 'percentage',
-                fontSize: 14,
-                fontStyle: 'bold',
-                fontColor: '#ffff',
-            }
-        }
+var circleBar = new ProgressBar.Circle("#totalTemuan", {
+  color: "#a8d1f5",
+  strokeWidth: 1,
+  trailWidth: 25,
+  trailColor: "#5895f1",
+  easing: "easeInOut",
+  from: { color: "#5895f1", width: 1 },
+  to: { color: "#a8d1f5", width: 25 },
+  text: {
+    value: '30',
+    className: 'progress-text',
+    style: {
+      color: 'black',
+      position: 'absolute',
+      top: '35%',
+      left: '30%',
+      padding: 0,
+      margin: 0,
+      transform: null
     }
+  },
+  step: (state, shape) => {
+    shape.path.setAttribute("stroke-width", 25);
+    shape.setText(Math.round(shape.value() * 100) + ' %');
+  }
 });
-
-var ctx = document.getElementById('temuanAuditInternal').getContext('2d');
-var totalPemeriksaInternal = <?php echo json_encode($jsonPemeriksaInternal);?>;
-var myChart = new Chart(ctx, {
-    type: 'pie',
-    data: totalPemeriksaInternal,
-    options: {
-        legend: {
-            display: false
-         },
-         plugins: {
-            labels: {
-                render: 'percentage',
-                fontSize: 14,
-                fontStyle: 'bold',
-                fontColor: '#ffff',
-            }
-        }
+var circleInternalBar = new ProgressBar.Circle("#temuanAuditInternal", {
+  color: "#a8d1f5",
+  strokeWidth: 1,
+  trailWidth: 25,
+  trailColor: "#5895f1",
+  easing: "easeInOut",
+  from: { color: "#5895f1", width: 1 },
+  to: { color: "#a8d1f5", width: 25 },
+  text: {
+    value: '30',
+    className: 'progress-text',
+    style: {
+      color: 'black',
+      position: 'absolute',
+      top: '35%',
+      left: '30%',
+      padding: 0,
+      margin: 0,
+      transform: null
     }
+  },
+  step: (state, shape) => {
+    shape.path.setAttribute("stroke-width", 25);
+    shape.setText(Math.round(shape.value() * 100) + ' %');
+  }
 });
-
-var ctx = document.getElementById('temuanAuditExternal').getContext('2d');
-var totalPemeriksaExternal = <?php echo json_encode($jsonPemeriksaExternal);?>;
-var myChart = new Chart(ctx, {
-    type: 'pie',
-    data: totalPemeriksaExternal,
-    options: {
-        legend: {
-            display: false
-         },
-         plugins: {
-            labels: {
-                render: 'percentage',
-                fontSize: 14,
-                fontStyle: 'bold',
-                fontColor: '#ffff',
-            }
-        }
+var circleExternalBar = new ProgressBar.Circle("#temuanAuditExternal", {
+  color: "#a8d1f5",
+  strokeWidth: 1,
+  trailWidth: 25,
+  trailColor: "#5895f1",
+  easing: "easeInOut",
+  from: { color: "#5895f1", width: 1 },
+  to: { color: "#a8d1f5", width: 25 },
+  text: {
+    value: '30',
+    className: 'progress-text',
+    style: {
+      color: 'black',
+      position: 'absolute',
+      top: '35%',
+      left: '30%',
+      padding: 0,
+      margin: 0,
+      transform: null
     }
+  },
+  step: (state, shape) => {
+    shape.path.setAttribute("stroke-width", 25);
+    shape.setText(Math.round(shape.value() * 100) + ' %');
+  }
+});
+var internalSPI = <?php echo json_encode($finalInternalSPI);?>;
+var externalSPI = <?php echo json_encode($finalExternal);?>;
+var totalTemuan = '0.'+ (Number(internalSPI) + Number(externalSPI));
+circleExternalBar.animate('0.'+Number(externalSPI), {
+    duration: 1700
+});
+circleInternalBar.animate('0.'+Number(internalSPI), {
+    duration: 1600
+});
+circleBar.animate(totalTemuan, {
+  duration: 1500
 });
 
 var ctx = document.getElementById('chartOverdue').getContext('2d');
@@ -245,9 +277,9 @@ var chart = new Chart(ctx, {
     }
 });
 
-var ctx = document.getElementById('chartTindakLanjut').getContext('2d');
+var chartTindakLanjut = document.getElementById('chartTindakLanjut');
 var data = <?php echo json_encode($jsonTemuan);?>;
-var chart = new Chart(ctx, {
+var tindaklanjutChart = new Chart(chartTindakLanjut, {
     type: 'doughnut',
     data: data,
     options: {
@@ -266,6 +298,20 @@ var chart = new Chart(ctx, {
         }
     }
 });
+chartTindakLanjut.onclick = function(evt) {
+   var activePoint = tindaklanjutChart.getElementAtEvent(evt)[0];
+   var data = activePoint._chart.data;
+   var datasetIndex = activePoint._datasetIndex;
+   var label = data.datasets[datasetIndex].label;
+   var bidang = data.labels[activePoint._index];
+   var value = data.datasets[datasetIndex].data[activePoint._index];
+   var tahn = $('#tahun').val();
+
+  //  var url = '{{ route("laporan-pimpinan-perbidang", ["key"=>'bidang'] ) }}';
+  //  location.href = url;
+  location.href = flagsUrl+'/laporan/tindaklanjut-per-bidang-pimpinan?rekomstatus='+
+   bidang+'&tahun='+tahn+'&title=Monitoring Tindak Lanjut';
+};
 </script>
 <style>
     .scroll-box {
@@ -374,6 +420,18 @@ var chart = new Chart(ctx, {
 		text-decoration: none;
 		display: block;
 		}
+
+        .circle-container {
+            width: 80px;
+            height: 80px;
+            margin: auto;
+        }
+        /* .progress-text {
+            font-size: 1.25em;
+            color: white;
+            margin-bottom: 1em;
+            font-weight: 60;
+        } */
 
 		.dropdown-content a:hover {background-color: #ddd;}
 

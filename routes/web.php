@@ -194,6 +194,9 @@ Route::group(['prefix'=>'laporan','middleware'=>'auth'],function(){
     Route::post('tindaklanjut-per-bidang-data','LaporanController@tindaklanjut_per_bidang_data');
     Route::post('tindaklanjut-per-bidang-pdf','LaporanController@tindaklanjut_per_bidang_pdf');
 
+    Route::get('tindaklanjut-per-bidang-pimpinan','LaporanController@tindaklanjut_per_bidang_pimpinan')->name('laporan-pimpinan-perbidang');
+    Route::post('tindaklanjut-per-bidang-pimpinan-data','LaporanController@tindaklanjut_per_bidang_pimpinan_data');
+
     Route::get('tindaklanjut-per-unitkerja','LaporanController@tindaklanjut_per_unitkerja');
     Route::post('tindaklanjut-per-unitkerja-data','LaporanController@tindaklanjut_per_unitkerja_data');
     Route::post('tindaklanjut-per-unitkerja-pdf','LaporanController@tindaklanjut_per_unitkerja_pdf');

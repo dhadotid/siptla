@@ -1885,6 +1885,7 @@ class LaporanController extends Controller
         }                   
         $dbid='';
         $arraybid=array();
+
         if(count($arrayBidang)>0 && !in_array(0, $arrayBidang))
         {
             foreach($arrayBidang as $kb=>$vb)
@@ -1913,6 +1914,7 @@ class LaporanController extends Controller
             }
         }
         $all=$alldata->get();
+        
         // return json_encode($all);
         if(count($arrayPemeriksa)==0 || in_array(0, $arrayPemeriksa)){
             $npemeriksa=Pemeriksa::all();
@@ -1945,13 +1947,14 @@ class LaporanController extends Controller
             }
         }
 
+
         $tl=TindakLanjutTemuan::whereIn('rekomendasi_id',$arrayrekomid)->get();
         $tindaklanjut=$rekomsementara=array();
         foreach($tl as $k=>$v)
         {
             $tindaklanjut[$v->rekomendasi_id][]=$v;
         }
-        
+
         if($rekomstatus!=''){
             foreach($rekomendasi as $k=>$v){
                 if($rekomstatus=='Create oleh Unit Kerja' && !isset($tindaklanjut[$v->id_rekom])){

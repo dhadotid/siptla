@@ -35,61 +35,88 @@ class DashboardController extends Controller
             list($idbidang,$category,$namabidang)=explode('__',Auth::user()->bidang);
             if($category == 'Bidang'){
                 $bidang = Bidang::where('id',$idbidang)->first();
-                $temuanPerbidang = DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+                // $temuanPerbidang = DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+                //         ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                //         ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                //         ->join('pic_unit', 'pic_unit.id', '=','data_temuan.pic_temuan_id')
+                //         ->leftjoin('level_pic', 'level_pic.id', '=', 'pic_unit.fakultas')
+                //         ->join('pemeriksa', 'daftar_lhp.pemeriksa_id', '=', 'pemeriksa.id')
+                //         ->join('bidang', 'bidang.id', '=', 'pic_unit.bidang')
+                //         ->join('status_rekomendasi', 'status_rekomendasi.id', '=', 'data_rekomendasi.status_rekomendasi_id')
+                //         ->where('bidang.id', $bidang->id)
+                //         ->where('daftar_lhp.tahun_pemeriksa',$thn)
+                //         // ->whereIn('level_pic.keterangan', '!=', ['','UKK'])
+                //         ->whereNull('data_rekomendasi.deleted_at')
+                //         ->orderBy('data_rekomendasi.nomor_rekomendasi')
+                //         ->get();
+
+                $temuanPerbidang=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom,status_rekomendasi.rekomendasi as st_rekom,data_rekomendasi.rekomendasi as rekom')
                         ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
                         ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
-                        ->join('pic_unit', 'pic_unit.id', '=','data_temuan.pic_temuan_id')
-                        ->leftjoin('level_pic', 'level_pic.id', '=', 'pic_unit.fakultas')
-                        ->join('pemeriksa', 'daftar_lhp.pemeriksa_id', '=', 'pemeriksa.id')
-                        ->join('bidang', 'bidang.id', '=', 'pic_unit.bidang')
-                        ->join('status_rekomendasi', 'status_rekomendasi.id', '=', 'data_rekomendasi.status_rekomendasi_id')
+                        
+                        ->leftjoin('pic_unit', 'pic_unit.id', '=','data_temuan.pic_temuan_id')
+                        ->leftjoin('pemeriksa','daftar_lhp.pemeriksa_id','=','pemeriksa.id')
+                        ->leftjoin('level_resiko','data_temuan.level_resiko_id','=','level_resiko.id')
+                        ->leftjoin('bidang', 'bidang.id', '=', 'pic_unit.bidang')
+                        ->leftjoin('status_rekomendasi','status_rekomendasi.id','=','data_rekomendasi.status_rekomendasi_id')
                         ->where('bidang.id', $bidang->id)
                         ->where('daftar_lhp.tahun_pemeriksa',$thn)
-                        // ->whereIn('level_pic.keterangan', '!=', ['','UKK'])
-                        ->whereNull('data_rekomendasi.deleted_at')
                         ->orderBy('data_rekomendasi.nomor_rekomendasi')
-                        ->get();
+                        ->whereNull('data_rekomendasi.deleted_at')->get();
             }else{
                 $bidang = LevelPIC::where('id',$idbidang)->first();
-                $temuanPerbidang = DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+                // $temuanPerbidang = DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+                //         ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                //         ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                //         ->join('pic_unit', 'pic_unit.id', '=','data_temuan.pic_temuan_id')
+                //         ->leftjoin('level_pic', 'level_pic.id', '=', 'pic_unit.fakultas')
+                //         ->join('pemeriksa', 'daftar_lhp.pemeriksa_id', '=', 'pemeriksa.id')
+                //         ->join('bidang', 'bidang.id', '=', 'pic_unit.bidang')
+                //         ->join('status_rekomendasi', 'status_rekomendasi.id', '=', 'data_rekomendasi.status_rekomendasi_id')
+                //         ->where('level_pic.id', $bidang->id)
+                //         ->where('daftar_lhp.tahun_pemeriksa',$thn)
+                //         // ->whereIn('level_pic.keterangan', '!=', ['','UKK'])
+                //         ->whereNull('data_rekomendasi.deleted_at')
+                //         ->orderBy('data_rekomendasi.nomor_rekomendasi')
+                //         ->get();
+
+                    $temuanPerbidang=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom,status_rekomendasi.rekomendasi as st_rekom,data_rekomendasi.rekomendasi as rekom')
                         ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
                         ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
-                        ->join('pic_unit', 'pic_unit.id', '=','data_temuan.pic_temuan_id')
-                        ->leftjoin('level_pic', 'level_pic.id', '=', 'pic_unit.fakultas')
-                        ->join('pemeriksa', 'daftar_lhp.pemeriksa_id', '=', 'pemeriksa.id')
-                        ->join('bidang', 'bidang.id', '=', 'pic_unit.bidang')
-                        ->join('status_rekomendasi', 'status_rekomendasi.id', '=', 'data_rekomendasi.status_rekomendasi_id')
+                        
+                        ->leftjoin('pic_unit', 'pic_unit.id', '=','data_temuan.pic_temuan_id')
+                        ->leftjoin('pemeriksa','daftar_lhp.pemeriksa_id','=','pemeriksa.id')
+                        ->leftjoin('level_resiko','data_temuan.level_resiko_id','=','level_resiko.id')
+                        ->leftjoin('bidang', 'bidang.id', '=', 'pic_unit.bidang')
+                        ->leftjoin('status_rekomendasi','status_rekomendasi.id','=','data_rekomendasi.status_rekomendasi_id')
                         ->where('level_pic.id', $bidang->id)
                         ->where('daftar_lhp.tahun_pemeriksa',$thn)
-                        // ->whereIn('level_pic.keterangan', '!=', ['','UKK'])
-                        ->whereNull('data_rekomendasi.deleted_at')
                         ->orderBy('data_rekomendasi.nomor_rekomendasi')
-                        ->get();
+                        ->whereNull('data_rekomendasi.deleted_at')->get();
             }
         }else{
-            // $temuanPerbidang = DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
-            //             ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
-            //             ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
-            //             ->join('pic_unit', 'pic_unit.id', '=','data_temuan.pic_temuan_id')
-            //             ->leftjoin('level_pic', 'level_pic.id', '=', 'pic_unit.fakultas')
-            //             ->join('bidang', 'bidang.id', '=', 'pic_unit.bidang')
-            //             ->join('status_rekomendasi', 'status_rekomendasi.id', '=', 'data_rekomendasi.status_rekomendasi_id')
-            //             ->where('daftar_lhp.tahun_pemeriksa',$thn)
-            //             // ->whereIn('level_pic.keterangan', '!=', ['','UKK'])
-            //             ->whereNull('data_rekomendasi.deleted_at')
-            //             ->orderBy('data_rekomendasi.nomor_rekomendasi')
-            //             ->get();
+            // $temuanPerbidang=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+            //         ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+            //         ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+            //         ->join('status_rekomendasi','status_rekomendasi.id','=','data_rekomendasi.status_rekomendasi_id')
+            //         ->leftjoin('pic_unit', 'pic_unit.id', '=','data_temuan.pic_temuan_id')
+            //         ->leftjoin('pemeriksa','daftar_lhp.pemeriksa_id','=','pemeriksa.id')
+            //         ->leftjoin('level_resiko','data_temuan.level_resiko_id','=','level_resiko.id')
+            //         ->leftjoin('bidang', 'bidang.id', '=', 'pic_unit.bidang')
+            //         ->where('daftar_lhp.tahun_pemeriksa',$thn)
+            //         ->whereNull('data_rekomendasi.deleted_at')->get();;
 
-            $temuanPerbidang=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+            $temuanPerbidang=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom,status_rekomendasi.rekomendasi as st_rekom,data_rekomendasi.rekomendasi as rekom')
                     ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
                     ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
-                    ->join('status_rekomendasi','status_rekomendasi.id','=','data_rekomendasi.status_rekomendasi_id')
+                    
                     ->leftjoin('pic_unit', 'pic_unit.id', '=','data_temuan.pic_temuan_id')
                     ->leftjoin('pemeriksa','daftar_lhp.pemeriksa_id','=','pemeriksa.id')
                     ->leftjoin('level_resiko','data_temuan.level_resiko_id','=','level_resiko.id')
                     ->leftjoin('bidang', 'bidang.id', '=', 'pic_unit.bidang')
+                    ->leftjoin('status_rekomendasi','status_rekomendasi.id','=','data_rekomendasi.status_rekomendasi_id')
                     ->where('daftar_lhp.tahun_pemeriksa',$thn)
-                    ->whereNull('data_rekomendasi.deleted_at')->get();;
+                    ->whereNull('data_rekomendasi.deleted_at')->get();
         }
         $statusRekomendasi = StatusRekomendasi::all();
         $levelPIC = LevelPIC::where('keterangan', '!=', 'UKK')->get();
@@ -223,23 +250,16 @@ class DashboardController extends Controller
             $finalExternal = 0;
 
         //Rekomendasi Yang Overdue
-        $rekomendasiData = DataRekomendasi::with('statusrekomendasi')
-                            ->select('data_rekomendasi.*', 'level_resiko.level_resiko as level_resiko', 'level_resiko.id as id_resiko')
-                            ->join('data_temuan', 'data_temuan.id', '=', 'data_rekomendasi.id_temuan')
-                            ->join('daftar_lhp', 'daftar_lhp.id', '=', 'data_rekomendasi.id_temuan')
-                            ->where('daftar_lhp.tahun_pemeriksa',$thn)
-                            ->join('level_resiko', 'data_temuan.level_resiko_id', '=', 'level_resiko.id')->get();
-                            // return json_encode($rekomendasiData->count());
         $rekomJson=$totalResiko=array();
         $totallow=$totalmed=$totalhight=0;
-        foreach($rekomendasiData as $k=>$v){
-            if($v->statusrekomendasi['id'] == 2){
+        foreach($temuanPerbidang as $k=>$v){
+            if($v->status_rekomendasi_id == 2){
                 if($now > $v->tanggal_penyelesaian){
-                    if($v->id_resiko == 2){
+                    if($v->level_resiko_id == 2){
                         $totallow++;
-                    }elseif($v->id_resiko == 3){
+                    }elseif($v->level_resiko_id == 3){
                         $totalmed++;
-                    }elseif($v->id_resiko == 4){
+                    }elseif($v->level_resiko_id == 4){
                         $totalhight++;
                     }
                 }

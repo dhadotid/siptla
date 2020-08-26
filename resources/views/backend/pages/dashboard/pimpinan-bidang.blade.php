@@ -56,20 +56,20 @@
                     <br><br>
                     <div class="col-md-12" height="92%">
                         <div class="row">
-                            <div class="col-md-4 col-sm-4">
+                            <div class="col-md-4 col-sm-4" onclick="tingkatTemuan('all')">
                                 <!-- <canvas id="totalTemuan" height="170px"></canvas> -->
                                 <div id="totalTemuan" class="circle-container" height="93%" ></div>
                                 <div class="text-center">
                                     <small class="text-color">Total Temuan</small>
                                 </div>
                             </div>
-                            <div class="col-md-4 col-sm-4">
+                            <div class="col-md-4 col-sm-4" onclick="tingkatTemuan('spi')">
                                 <div id="temuanAuditInternal" class="circle-container" height="93%" ></div>
                                 <div class="text-center">
                                     <small class="text-color">Temuan Audit Internal</small>
                                 </div>
                             </div>
-                            <div class="col-md-4 col-sm-4">
+                            <div class="col-md-4 col-sm-4" onclick="tingkatTemuan('exspi')">
                                 <div id="temuanAuditExternal" class="circle-container" height="93%" ></div>
                                 <div class="text-center">
                                     <small class="text-color">Temuan Audit External</small>
@@ -256,9 +256,14 @@ circleBar.animate(totalTemuan, {
   duration: 1500
 });
 
-var ctx = document.getElementById('chartOverdue').getContext('2d');
+function tingkatTemuan(i) {
+  var tahn = $('#tahun').val();
+  location.href = flagsUrl+'/laporan/capaian-indikator-kinerja?showreport='+i+'&tahun='+tahn+'&title=Tingkat Penyelesaian Temuan';
+};
+
+var chartOverdue = document.getElementById('chartOverdue');
 var data = <?php echo json_encode($rekomJson);?>;
-var chart = new Chart(ctx, {
+var overdueChart = new Chart(chartOverdue, {
     type: 'doughnut',
     data: data,
     options: {
@@ -276,6 +281,21 @@ var chart = new Chart(ctx, {
         }
     }
 });
+chartOverdue.onclick = function(evt) {
+   var activePoint = overdueChart.getElementAtEvent(evt)[0];
+   var data = activePoint._chart.data;
+   var datasetIndex = activePoint._datasetIndex;
+   var label = data.datasets[datasetIndex].label;
+   var bidang = data.labels[activePoint._index];
+   var value = data.datasets[datasetIndex].data[activePoint._index];
+   var tahn = $('#tahun').val();
+
+  //  var url = '{{ route("laporan-pimpinan-perbidang", ["key"=>'bidang'] ) }}';
+  //  location.href = url;
+  location.href = flagsUrl+'/laporan/tindaklanjut-per-bidang-pimpinan?overduestatus='+
+   bidang+'&category='+label+'&tahun='+tahn+'&title=Rekomendasi yang Overdue';
+};
+
 
 var chartTindakLanjut = document.getElementById('chartTindakLanjut');
 var data = <?php echo json_encode($jsonTemuan);?>;

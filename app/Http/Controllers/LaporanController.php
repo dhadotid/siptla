@@ -19,6 +19,7 @@ use App\Models\DataRekomendasi;
 use Auth;
 use PDF;
 use Excel;
+use Carbon\Carbon;
 class LaporanController extends Controller
 {
     public function temuan_per_bidang()
@@ -1677,12 +1678,417 @@ class LaporanController extends Controller
     
     }
 
+    public function capaian_indikator_kinerja(Request $request){
+        $bidang_filter = 'Total';
+        $tahun = date('Y');
+        $showReport = 'all';
+        $title = 'Laporan Capaian Indikator Kinerja Universitas';
+        if($request->has('showreport')){
+            $showReport = $request->query('showreport');
+        }
+        if($request->has('tahun')){
+            $tahun = $request->query('tahun');
+        }
+        if($request->has('title')){
+            $title = $request->query('title');
+        }
+        if(Auth::user()->level=='pimpinan-kepala-bidang'){
+            list($idbidang,$category,$namabidang)=explode('__',Auth::user()->bidang);
+            $bidang_filter = $namabidang;
+        }
+
+        $triwulan = triwulan();
+        $pic = PICUnit::all();
+        $bidang = Bidang::all();
+        $levelresiko=LevelResiko::orderBy('level_resiko')->get();
+
+        return view('backend.pages.laporan.capaian-indikator-kinerja.index')
+                ->with('tahun',$tahun)
+                ->with('triwulan',$triwulan)
+                ->with('pic',$pic)
+                ->with('bidang',$bidang)
+                ->with('levelresiko',$levelresiko)
+                ->with('bidang_filter',$bidang_filter)
+                ->with('showreport',$showReport)
+                ->with('title', $title);
+    }
+
+    public function capaian_indikator_kinerja_data(Request $request){
+        
+        $tahun = $request->tahun;
+        $statusrekom = StatusRekomendasi::orderBy('id')->get();
+
+        $arrayLevelResiko = array();
+        if($request->level_resiko != '' && $request->level_resiko!=0){
+            $level_resiko = $request->level_resiko;
+            $level_resiko = implode(',', $level_resiko);
+            foreach (explode(',', $level_resiko) as $v ) {
+                $arrayLevelResiko[] = $v;
+            }
+        }
+        $arrayBidang = array();
+        if($request->bidang != '' && $request->bidang!=0){
+            $bidang = $request->bidang;
+            $bidang = implode(',', $bidang);
+            foreach (explode(',', $bidang) as $v ) {
+                $arrayBidang[] = $v;
+            }
+        }
+        $arrayUnitkerja = array();
+        if($request->unit_kerja != '' && $request->unit_kerja!=0){
+            $unit_kerja = $request->unit_kerja;
+            $unit_kerja = implode(',', $unit_kerja);
+            foreach (explode(',', $unit_kerja) as $v ) {
+                $arrayUnitkerja[] = $v;
+            }
+        }
+
+        $arrayPIC = array();
+        if($request->pic != '' && $request->pic!=0){
+            $pic = $request->pic;
+            $pic = implode(',', $pic);
+            foreach (explode(',', $pic) as $v ) {
+                $arrayPIC[] = $v;
+            }
+        }
+        $levelresiko = $bidang = $unitkerja = '';
+        $lvres = LevelResiko::select('level_resiko')->whereIn('id',$arrayLevelResiko)->get();
+        if(count($lvres)>0){
+            foreach($lvres as $k=>$v){
+                $levelresiko.=$v->level_resiko.', ';
+            }
+        }else{
+            $levelresiko .= 'Semua';
+        }
+        $bid = Bidang::whereIn('id',$arrayBidang)->get();
+        if(count($bid)>0){
+            foreach($bid as $k=>$v){
+                $bidang.=$v->nama_bidang.', ';
+            }
+        }else{
+            $bidang .= 'Semua';
+        }
+        $pics = PICUnit::select('nama_pic')->whereIn('id',$arrayUnitkerja)->get();
+        if(count($pics)>0){
+            foreach($pics as $k=>$v){
+                $unitkerja.=$v->nama_pic.', ';
+            }
+        }else{
+            $unitkerja .= 'Semua';
+        }
+
+        if(Auth::user()->level=='pimpinan-kepala-bidang'){
+            $getPIC = PICUnit::find(Auth::user()->pic_unit_id);
+            list($idbidang,$category,$namabidang)=explode('__',Auth::user()->bidang);
+            if($category == 'Bidang'){
+                $bidangs = Bidang::where('id',$idbidang)->first();
+                $temuanPerbidang = DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+                        ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                        ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                        ->join('pic_unit', 'pic_unit.id', '=','data_temuan.pic_temuan_id')
+                        ->leftjoin('level_pic', 'level_pic.id', '=', 'pic_unit.fakultas')
+                        ->join('pemeriksa', 'daftar_lhp.pemeriksa_id', '=', 'pemeriksa.id')
+                        ->join('bidang', 'bidang.id', '=', 'pic_unit.bidang')
+                        ->join('status_rekomendasi', 'status_rekomendasi.id', '=', 'data_rekomendasi.status_rekomendasi_id')
+                        ->where('bidang.id', $bidangs->id)
+                        // ->whereIn('level_pic.keterangan', '!=', ['','UKK'])
+                        ->orderBy('data_rekomendasi.nomor_rekomendasi');
+            }else{
+                $bidangs = LevelPIC::where('id',$idbidang)->first();
+                $temuanPerbidang = DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
+                        ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                        ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                        ->join('pic_unit', 'pic_unit.id', '=','data_temuan.pic_temuan_id')
+                        ->leftjoin('level_pic', 'level_pic.id', '=', 'pic_unit.fakultas')
+                        ->join('pemeriksa', 'daftar_lhp.pemeriksa_id', '=', 'pemeriksa.id')
+                        ->join('bidang', 'bidang.id', '=', 'pic_unit.bidang')
+                        ->join('status_rekomendasi', 'status_rekomendasi.id', '=', 'data_rekomendasi.status_rekomendasi_id')
+                        ->where('level_pic.id', $bidangs->id)
+                        // ->whereIn('level_pic.keterangan', '!=', ['','UKK'])
+                        ->orderBy('data_rekomendasi.nomor_rekomendasi');
+            }
+        }else{
+            $temuanPerbidang=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom,status_rekomendasi.rekomendasi as st_rekom,data_rekomendasi.rekomendasi as rekom,
+                                            data_rekomendasi.pic_1_temuan_id as pic_1_temuan_id, data_rekomendasi.pic_2_temuan_id as pic_2_temuan_id')
+                    ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                    ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                    ->leftjoin('pic_unit', 'pic_unit.id', '=','data_temuan.pic_temuan_id')
+                    ->leftjoin('pemeriksa','daftar_lhp.pemeriksa_id','=','pemeriksa.id')
+                    ->leftjoin('level_resiko','data_temuan.level_resiko_id','=','level_resiko.id')
+                    ->leftjoin('bidang', 'bidang.id', '=', 'pic_unit.bidang')
+                    ->leftjoin('status_rekomendasi','status_rekomendasi.id','=','data_rekomendasi.status_rekomendasi_id');
+        }
+        if(count($arrayLevelResiko)>0 && !in_array(0, $arrayLevelResiko)){
+            $temuanPerbidang = $temuanPerbidang->whereIn('data_temuan.level_resiko_id', $arrayLevelResiko);
+        }
+        if(count($arrayUnitkerja)>0&& !in_array(0, $arrayUnitkerja)){
+            $temuanPerbidang = $temuanPerbidang->whereIn('data_rekomendasi.pic_1_temuan_id', $arrayUnitkerja)
+            ->orWhereIn('data_rekomendasi.pic_2_temuan_id', 'like',"".$arrayUnitkerja.",%");
+        }
+        if(count($arrayPIC)>0 && !in_array(0, $arrayPIC)){
+            $temuanPerbidang = $temuanPerbidang->whereIn('data_rekomendasi.pic_1_temuan_id', $arrayPIC)
+            ->orWhereIn('data_rekomendasi.pic_2_temuan_id', 'like',"".$arrayPIC.",%");
+        }
+        
+        $temuanPerbidang = $temuanPerbidang->where('daftar_lhp.tahun_pemeriksa',$tahun)
+                            ->whereNull('data_rekomendasi.deleted_at')->get();
+
+        if(count($arrayBidang)>0 && !in_array(0, $arrayBidang))
+        {
+            $alls=array();
+            foreach($arrayBidang as $a=>$s){
+                foreach($temuanPerbidang as $k=>$v){
+                    if($s == $v->bidang){
+                        $alls[]=$v;
+                    }
+                }
+            }
+            $temuanPerbidang = $alls;
+        }
+        
+        // return json_encode($temuanPerbidang);
+        //GET TOTAL TEMUAN SPI ATAU BUKAN
+        $twSPI=$twNonSPI=array();
+        $tw1SPIss=$tw1SPItdd=$tw1SPIbs=$tw1SPIbtl=0;
+        $tw1Extss=$tw1Exttdd=$tw1Extbs=$tw1Extbtl=0;
+        $tw2SPIss=$tw2SPItdd=$tw2SPIbs=$tw2SPIbtl=0;
+        $tw2Extss=$tw2Exttdd=$tw2Extbs=$tw2Extbtl=0;
+        $tw3SPIss=$tw3SPItdd=$tw3SPIbs=$tw3SPIbtl=0;
+        $tw3Extss=$tw3Exttdd=$tw3Extbs=$tw3Extbtl=0;
+        $tw4SPIss=$tw4SPItdd=$tw4SPIbs=$tw4SPIbtl=0;
+        $tw4Extss=$tw4Exttdd=$tw4Extbs=$tw4Extbtl=0;
+        foreach($temuanPerbidang as $k=>$v){
+            //Carbon::parse($v->created_at)->format('m');
+            if(Carbon::parse($v->tanggal_lhp)->format('m') == '01' || 
+                Carbon::parse($v->tanggal_lhp)->format('m') == '02' || 
+                Carbon::parse($v->tanggal_lhp)->format('m') == '03'){
+                    if($v->pemeriksa_id == 3){
+                        if($v->status_rekomendasi_id==1){
+                            $tw1SPIss++;
+                        }elseif($v->status_rekomendasi_id==2){
+                            $tw1SPItdd++;
+                        }elseif($v->status_rekomendasi_id==3){
+                            $tw1SPIbs++;
+                        }elseif($v->status_rekomendasi_id==3){
+                            $tw1SPIbtl++;
+                        }
+                    }else if($v->pemeriksa_id != 3){
+                        if($v->status_rekomendasi_id==1){
+                            $tw1Extss++;
+                        }elseif($v->status_rekomendasi_id==2){
+                            $tw1Exttdd++;
+                        }elseif($v->status_rekomendasi_id==3){
+                            $tw1Extbs++;
+                        }elseif($v->status_rekomendasi_id==3){
+                            $tw1Extbtl++;
+                        }
+                    }
+            }else if(Carbon::parse($v->tanggal_lhp)->format('m') == '04' || 
+                Carbon::parse($v->tanggal_lhp)->format('m') == '05' || 
+                Carbon::parse($v->tanggal_lhp)->format('m') == '06'){
+                    if($v->pemeriksa_id == 3){
+                        if($v->status_rekomendasi_id==1){
+                            $tw2SPIss++;
+                        }elseif($v->status_rekomendasi_id==2){
+                            $tw2SPItdd++;
+                        }elseif($v->status_rekomendasi_id==3){
+                            $tw2SPIbs++;
+                        }elseif($v->status_rekomendasi_id==3){
+                            $tw2SPIbtl++;
+                        }
+                    }else if($v->pemeriksa_id != 3){
+                        if($v->status_rekomendasi_id==1){
+                            $tw2Extss++;
+                        }elseif($v->status_rekomendasi_id==2){
+                            $tw2Exttdd++;
+                        }elseif($v->status_rekomendasi_id==3){
+                            $tw2Extbs++;
+                        }elseif($v->status_rekomendasi_id==3){
+                            $tw2Extbtl++;
+                        }
+                    }
+            }else if(Carbon::parse($v->tanggal_lhp)->format('m') == '07' || 
+                Carbon::parse($v->tanggal_lhp)->format('m') == '08' || 
+                Carbon::parse($v->tanggal_lhp)->format('m') == '09'){
+                    if($v->pemeriksa_id == 3){
+                        if($v->status_rekomendasi_id==1){
+                            $tw3SPIss++;
+                        }elseif($v->status_rekomendasi_id==2){
+                            $tw3SPItdd++;
+                        }elseif($v->status_rekomendasi_id==3){
+                            $tw3SPIbs++;
+                        }elseif($v->status_rekomendasi_id==3){
+                            $tw3SPIbtl++;
+                        }
+                    }else if($v->pemeriksa_id != 3){
+                        if($v->status_rekomendasi_id==1){
+                            $tw3Extss++;
+                        }elseif($v->status_rekomendasi_id==2){
+                            $tw3Exttdd++;
+                        }elseif($v->status_rekomendasi_id==3){
+                            $tw3Extbs++;
+                        }elseif($v->status_rekomendasi_id==3){
+                            $tw3Extbtl++;
+                        }
+                    }
+            }else if(Carbon::parse($v->tanggal_lhp)->format('m') == '10' || 
+                Carbon::parse($v->tanggal_lhp)->format('m') == '11' || 
+                Carbon::parse($v->tanggal_lhp)->format('m') == '12'){
+                    if($v->pemeriksa_id == 3){
+                        if($v->status_rekomendasi_id==1){
+                            $tw4SPIss++;
+                        }elseif($v->status_rekomendasi_id==2){
+                            $tw4SPItdd++;
+                        }elseif($v->status_rekomendasi_id==3){
+                            $tw4SPIbs++;
+                        }elseif($v->status_rekomendasi_id==3){
+                            $tw4SPIbtl++;
+                        }
+                    }else if($v->pemeriksa_id != 3){
+                        if($v->status_rekomendasi_id==1){
+                            $tw4Extss++;
+                        }elseif($v->status_rekomendasi_id==2){
+                            $tw4Exttdd++;
+                        }elseif($v->status_rekomendasi_id==3){
+                            $tw4Extbs++;
+                        }elseif($v->status_rekomendasi_id==3){
+                            $tw4Extbtl++;
+                        }
+                    }
+            }
+        }
+        $tw1SPIprs=0;
+        if($tw1SPIss+$tw1SPItdd!=0 && $tw1SPIbs+$tw1SPIbtl!=0)
+            $tw1SPIprs=number_format((float)(($tw1SPIss+$tw1SPItdd)/($tw1SPIbs+$tw1SPIbtl))*100, 0, '.', '');//intval(preg_replace('/[^\d.]/', '', (($tw1SPIss+$tw1SPItdd)/($tw1SPIbs+$tw1SPIbtl)) * 100));
+        $twSPI[0] = [
+            'triwulan' => 'Triwulan I',
+            'ss' => $tw1SPIss,
+            'tdd' => $tw1SPItdd,
+            'bs' => $tw1SPIbs,
+            'btl' => $tw1SPIbtl,
+            'tot' => $tw1SPIss + $tw1SPItdd + $tw1SPIbs + $tw1SPIbtl,
+            'percentage' => $tw1SPIprs
+        ];
+        $tw1Extprs=0;
+        if($tw1Extss+$tw1Exttdd!=0 && $tw1Extbs+$tw1Extbtl!=0)
+            $tw1Extprs=number_format((float)(($tw1Extss+$tw1Exttdd)/($tw1Extbs+$tw1Extbtl))*100, 0, '.', '');
+        $twNonSPI[0] = [
+            'triwulan' => 'Triwulan I',
+            'ss' => $tw1Extss,
+            'tdd' => $tw1Exttdd,
+            'bs' => $tw1Extbs,
+            'btl' => $tw1Extbtl,
+            'tot' => $tw1Extss + $tw1Exttdd + $tw1Extbs + $tw1Extbtl,
+            'percentage' => $tw1Extprs
+        ];
+        
+        $tw2SPIprs=0;
+        if($tw2SPIss+$tw2SPItdd!=0 && $tw2SPIbs+$tw2SPIbtl!=0)
+            $tw2SPIprs=number_format((float)(($tw2SPIss+$tw2SPItdd)/($tw2SPIbs+$tw2SPIbtl))*100, 0, '.', '');//intval(preg_replace('/[^\d.]/', '', (($tw1SPIss+$tw1SPItdd)/($tw1SPIbs+$tw1SPIbtl)) * 100));
+        $twSPI[1] = [
+            'triwulan' => 'Triwulan II',
+            'ss' => $tw2SPIss,
+            'tdd' => $tw2SPItdd,
+            'bs' => $tw2SPIbs,
+            'btl' => $tw2SPIbtl,
+            'tot' => $tw2SPIss + $tw2SPItdd + $tw2SPIbs + $tw2SPIbtl,
+            'percentage' => $tw2SPIprs
+        ];
+        $tw2Extprs=0;
+        if($tw2Extss+$tw2Exttdd!=0 && $tw2Extbs+$tw2Extbtl!=0)
+            $tw2Extprs=number_format((float)(($tw2Extss+$tw2Exttdd)/($tw2Extbs+$tw2Extbtl))*100, 0, '.', '');
+        $twNonSPI[1] = [
+            'triwulan' => 'Triwulan II',
+            'ss' => $tw2Extss,
+            'tdd' => $tw2Exttdd,
+            'bs' => $tw2Extbs,
+            'btl' => $tw2Extbtl,
+            'tot' => $tw2Extss + $tw2Exttdd + $tw2Extbs + $tw2Extbtl,
+            'percentage' => $tw2Extprs
+        ];
+        
+        $tw3SPIprs=0;
+        if($tw3SPIss+$tw3SPItdd!=0)
+            $tw3SPIprs=number_format((float)(($tw3SPIss+$tw3SPItdd)/($tw3SPIbs+$tw3SPIbtl))*100, 0, '.', '');//intval(preg_replace('/[^\d.]/', '', (($tw1SPIss+$tw1SPItdd)/($tw1SPIbs+$tw1SPIbtl)) * 100));
+        $twSPI[2] = [
+            'triwulan' => 'Triwulan III',
+            'ss' => $tw3SPIss,
+            'tdd' => $tw3SPItdd,
+            'bs' => $tw3SPIbs,
+            'btl' => $tw3SPIbtl,
+            'tot' => $tw3SPIss + $tw3SPItdd + $tw3SPIbs + $tw3SPIbtl,
+            'percentage' => $tw3SPIprs
+        ];
+        $tw3Extprs=0;
+        if($tw3Extss+$tw3Exttdd!=0 && $tw3Extbs+$tw3Extbtl!=0)
+            $tw3Extprs=number_format((float)(($tw3Extss+$tw3Exttdd)/($tw3Extbs+$tw3Extbtl))*100, 0, '.', '');
+        $twNonSPI[2] = [
+            'triwulan' => 'Triwulan III',
+            'ss' => $tw3Extss,
+            'tdd' => $tw3Exttdd,
+            'bs' => $tw3Extbs,
+            'btl' => $tw3Extbtl,
+            'tot' => $tw3Extss + $tw3Exttdd + $tw3Extbs + $tw3Extbtl,
+            'percentage' => $tw3Extprs
+        ];
+        
+        $tw4SPIprs=0;
+        if($tw4SPIss+$tw4SPItdd!=0 && $tw4SPIbs+$tw4SPIbtl!=0)
+            $tw4SPIprs=number_format((float)(($tw4SPIss+$tw4SPItdd)/($tw4SPIbs+$tw4SPIbtl))*100, 0, '.', '');//intval(preg_replace('/[^\d.]/', '', (($tw1SPIss+$tw1SPItdd)/($tw1SPIbs+$tw1SPIbtl)) * 100));
+        $twSPI[3] = [
+            'triwulan' => 'Triwulan IV',
+            'ss' => $tw4SPIss,
+            'tdd' => $tw4SPItdd,
+            'bs' => $tw4SPIbs,
+            'btl' => $tw4SPIbtl,
+            'tot' => $tw4SPIss + $tw4SPItdd + $tw4SPIbs + $tw4SPIbtl,
+            'percentage' => $tw4SPIprs
+        ];
+        $tw4Extprs=0;
+        if($tw4Extss+$tw4Exttdd!=0 && $tw4Extbs+$tw4Extbtl!=0)
+            $tw4Extprs=number_format((float)(($tw4Extss+$tw4Exttdd)/($tw4Extbs+$tw4Extbtl))*100, 0, '.', '');
+        $twNonSPI[3] = [
+            'triwulan' => 'Triwulan IV',
+            'ss' => $tw4Extss,
+            'tdd' => $tw4Exttdd,
+            'bs' => $tw4Extbs,
+            'btl' => $tw4Extbtl,
+            'tot' => $tw4Extss + $tw4Exttdd + $tw4Extbs + $tw4Extbtl,
+            'percentage' => $tw4Extprs
+        ];
+        
+        if($request->triwulan != 'Semua'){
+            $filterTriwulanSPI=$filterTriwulan=array();
+            foreach($twSPI as $i=>$v){
+                if($v['triwulan']==$request->triwulan){
+                    $filterTriwulanSPI[$i] = $v;
+                }
+            }
+            foreach($twNonSPI as $i=>$v){
+                if($v['triwulan']==$request->triwulan){
+                    $filterTriwulan[$i] = $v;
+                }
+            }
+            $twSPI = $filterTriwulanSPI;
+            $twNonSPI = $filterTriwulan;
+        }
+        return view('backend.pages.laporan.capaian-indikator-kinerja.data')
+                ->with('tahun',$tahun)
+                ->with('levelresiko',$levelresiko)
+                ->with('bidang',$bidang)
+                ->with('unitkerja',$unitkerja)
+                ->with('statusrekom',$statusrekom)
+                ->with('twSPI', $twSPI)
+                ->with('twNonSPI', $twNonSPI)
+                ->with('showreport', $request->showreport);
+    }
+
     public function tindaklanjut_per_bidang_pimpinan(Request $request)
     {
         $title_form = '';
         $bidang_filter = $pemeriksa_filter = 'Total';
         $category_filter = 'Semua';
-        $tahun = '2020';
+        $tahun = date('Y');
         $statusoverdue = '';
         $rekomstatus = '';
         if($request->has('tahun')){
@@ -1886,6 +2292,8 @@ class LaporanController extends Controller
         $dbid='';
         $arraybid=array();
 
+        $all=$alldata->get();
+
         if(count($arrayBidang)>0 && !in_array(0, $arrayBidang))
         {
             foreach($arrayBidang as $kb=>$vb)
@@ -1902,24 +2310,38 @@ class LaporanController extends Controller
             
             if(count($arraybid)!=0)
             {
+                $alls=array();
                 $pics=PICUnit::whereIn('bidang',$arrayBidang)->get();
                 $pics_id = array();
                 foreach($pics as $pvc){
                     $pics_id[] = $pvc->id;
                 }
-                // $alldata->whereIn('data_rekomendasi.pic_1_temuan_id',$arraybid)
-                //     ->orWhereIn('data_rekomendasi.pic_2_temuan_id',$arraybid);
-                $alldata->whereIn('data_rekomendasi.pic_1_temuan_id',$pics_id)
-                    ->orWhereIn('data_rekomendasi.pic_2_temuan_id',$pics_id);
+                // $alldata->whereIn('data_rekomendasi.pic_1_temuan_id',$pics_id)
+                //     ->orWhereIn('data_rekomendasi.pic_2_temuan_id',$pics_id);
+                foreach($arrayBidang as $a=>$s){
+                    foreach($all as $k=>$v){
+                        if($s == $v->bidang){
+                            $alls[]=$v;
+                        }
+                    }
+                }
+                $all = $alls;
             }
         }
-        $all=$alldata->get();
         
-        // return json_encode($all);
         if(count($arrayPemeriksa)==0 || in_array(0, $arrayPemeriksa)){
             $npemeriksa=Pemeriksa::all();
         }else{
             $npemeriksa=Pemeriksa::whereIn('id', $arrayPemeriksa)->get();
+            $alls=array();
+            foreach($arrayPemeriksa as $a=>$s){
+                foreach($all as $k=>$v){
+                    if($s == $v->pemeriksa_id){
+                        $alls[]=$v;
+                    }
+                }
+            }
+            $all = $alls;
         }
         $now=date('Y-m-d');
         $lhp=$temuan=$rekomendasi=$arrayrekomid=array();
@@ -1967,7 +2389,7 @@ class LaporanController extends Controller
                     array_push($rekomsementara,$v);
                 }elseif($rekomstatus=='Sudah dipublish oleh SPI' && isset($tindaklanjut[$v->id_rekom]) && $v->review_spi !='' && $v->published==1){
                     array_push($rekomsementara,$v);
-                }   
+                }
             }
             $rekomendasi = $rekomsementara;
         }

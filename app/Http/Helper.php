@@ -157,6 +157,15 @@ function bataswaktu()
     ];
     return $bataswaktu;
 }
+function triwulan(){
+    $triwulan = [
+        '01,02,03'=>'Triwulan I',
+        '04,05,06'=>'Triwulan II',
+        '07,08,09'=>'Triwulan III',
+        '10,11,12'=>'Triwulan IV'
+    ];
+    return $triwulan;
+}
 function status_lhp()
 {
     $status=array('Create oleh Unit Kerja','Belum direview SPI','Sedang direview SPI','Sudah direview SPI','Sudah dipublish oleh SPI');

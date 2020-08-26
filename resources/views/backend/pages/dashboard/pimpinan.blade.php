@@ -56,20 +56,20 @@
                     <br><br>
                     <div class="col-md-12" height="92%">
                         <div class="row">
-                            <div class="col-md-4 col-sm-4">
+                            <div class="col-md-4 col-sm-4" onclick="tingkatTemuan('all')">
                                 <!-- <canvas id="totalTemuan" height="170px"></canvas> -->
                                 <div id="totalTemuan" class="circle-container" height="93%" ></div>
                                 <div class="text-center">
                                     <small class="text-color">Total Temuan</small>
                                 </div>
                             </div>
-                            <div class="col-md-4 col-sm-4">
+                            <div class="col-md-4 col-sm-4" onclick="tingkatTemuan('spi')">
                                 <div id="temuanAuditInternal" class="circle-container" height="93%" ></div>
                                 <div class="text-center">
                                     <small class="text-color">Temuan Audit Internal</small>
                                 </div>
                             </div>
-                            <div class="col-md-4 col-sm-4">
+                            <div class="col-md-4 col-sm-4" onclick="tingkatTemuan('exspi')">
                                 <div id="temuanAuditExternal" class="circle-container" height="93%" ></div>
                                 <div class="text-center">
                                     <small class="text-color">Temuan Audit External</small>
@@ -255,6 +255,11 @@ circleInternalBar.animate('0.'+Number(internalSPI), {
 circleBar.animate(totalTemuan, {
   duration: 1500
 });
+
+function tingkatTemuan(i) {
+  var tahn = $('#tahun').val();
+  location.href = flagsUrl+'/laporan/capaian-indikator-kinerja?showreport='+i+'&tahun='+tahn+'&title=Tingkat Penyelesaian Temuan';
+};
 
 var chartOverdue = document.getElementById('chartOverdue');
 var data = <?php echo json_encode($rekomJson);?>;

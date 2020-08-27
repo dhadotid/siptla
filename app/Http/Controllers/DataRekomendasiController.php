@@ -1205,9 +1205,13 @@ class DataRekomendasiController extends Controller
         elseif($jenis=='piutangkaryawan')
         {
             $rincian=RincianPiutangKaryawan::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->get();
-            $totalNilaiTitle = number_format($rincian->sum('pinjaman'),0,',','.');
+            $totalNilaiTitle = 0;//number_format((int)$rincian->sum('pinjaman'),0,',','.');
+            foreach($rincian as $k=>$v){
+                $totalNilaiTitle += (int)$v->pinjaman;
+            }
             if($totalNilaiTitle == 0)
                 $totalNilaiTitle = 'Rp 0,-';
+            else number_format($totalNilaiTitle,0,',','.');
             $table='<h3 class="text-center">Rincian Nilai – Rekomendasi Piutang Karyawan</h3>
             <h5 class="text-center">Total Rekomendasi: '.$totalNilaiTitle.'</h5>
             <table class="table table-bordered " id="table-tl-rincian-'.$idrekomendasi.'">';
@@ -1223,7 +1227,6 @@ class DataRekomendasiController extends Controller
                     }
                 $table.='</tr>';
             $table.='</thead><tbody>';
-
             $no=1;
             $totalnilai=0;
             $arrayPIC = array();
@@ -1233,7 +1236,7 @@ class DataRekomendasiController extends Controller
                     <td class="text-center">'.$no.'</td>
                     <td class="text-center">'.$v->unit_kerja.'</td>
                     <td class="text-center">'.$v->karyawan.'</td>
-                    <td class="text-center">'.number_format($v->pinjaman,0,',','.').'</td>';
+                    <td class="text-center">'.number_format((int)$v->pinjaman,0,',','.').'</td>';
                     if($rekom->senior_publish!=1){
                     $table.='
                     <td class="text-center">
@@ -1244,7 +1247,7 @@ class DataRekomendasiController extends Controller
                 $table.='</tr>';
                 $no++;
 
-                $totalnilai+=$v->pinjaman;
+                $totalnilai+=(int)$v->pinjaman;
                 $arrayPIC[] = $v->unit_kerja_id;
             }
             echo "<script> setCookie('total_nilai',$totalnilai,1); </script>";

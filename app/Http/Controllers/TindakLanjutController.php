@@ -27,6 +27,7 @@ use App\Models\RincianNonSetoran;
 use App\Models\RincianNonSetoranUmum;
 use App\Models\RincianNonSetoranPertanggungjawabanUangMuka;
 use App\Models\MappingRincianTindakLanjutDetail;
+use App\Models\MappingRekomendasiNotifikasi;
 use Auth;
 use App\Models\BankList;
 use Validator;

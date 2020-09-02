@@ -31,6 +31,7 @@ use App\Models\MappingRekomendasiNotifikasi;
 use Auth;
 use App\Models\BankList;
 use Validator;
+use App\User;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class TindakLanjutController extends Controller

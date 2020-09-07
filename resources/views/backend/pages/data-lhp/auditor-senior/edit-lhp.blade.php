@@ -20,7 +20,7 @@
         <div class="form-group">
             <label for="exampleTextInput1" class="col-sm-4 control-label text-right">Kode LHP:</label>
             <div class="col-sm-8">
-                <input type="text" class="form-control"  name="kode_lhp" placeholder="AAA/000/{{date('Y')}}" id="edit_kode_lhp">
+                <input type="text" class="form-control"  name="kode_lhp" placeholder="AAA/000/{{date('Y')}}" id="edit_kode_lhp" readonly>
             </div>
         </div>
         <div class="form-group">

@@ -3,7 +3,7 @@
         {{-- <div class="form-group">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nomor LHP:</label>
             <div class="col-sm-8">
-                <input type="text" class="form-control" name="nomor_lhp" placeholder="Nomor LHP" id="nomor_lhp">
+                <input type="text" class="form-control" name="nomor_lhp" placeholder="Nomor LHP" id="nomor_lhp" oninput="generatekodelhp2(this.value)" onchange="generatekodelhp2(this.value)">
             </div>
         </div> --}}
         <div class="form-group">
@@ -20,7 +20,7 @@
         <div class="form-group">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Kode LHP:</label>
             <div class="col-sm-8">
-                <input type="text" class="form-control"  name="kode_lhp" placeholder="AAA/000/{{date('Y')}}" id="kode_lhp">
+                <input type="text" class="form-control"  name="kode_lhp" placeholder="AAA/000/{{date('Y')}}" id="kode_lhp" readonly>
             </div>
         </div>
         <div class="form-group">

@@ -771,7 +771,6 @@ class DashboardController extends Controller
                 {
                     if($v->lhp->user_input_id==Auth::user()->id)
                     {
-                        // return $v->dtemuan->totemuan;
                         list($th,$bl,$tg)=explode('-',$v->lhp->tanggal_lhp);
                         if($th==$thn)
                         {
@@ -795,8 +794,8 @@ class DashboardController extends Controller
             //     $datatl[str_slug($k)][]=$v;
             // }
             $alldata=DaftarTemuan::selectRaw('*,data_rekomendasi.id as id_rekom')
-                                ->join('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
-                                ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
+                                ->leftjoin('data_temuan','data_temuan.id_lhp','=','daftar_lhp.id')
+                                ->leftjoin('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
                                 ->where('daftar_lhp.status_lhp','Publish LHP')
                                 ->where('daftar_lhp.tahun_pemeriksa',$thn)
                                 ->where('daftar_lhp.user_input_id',Auth::user()->id)
@@ -855,6 +854,7 @@ class DashboardController extends Controller
                         list($th,$bl,$tg)=explode('-',$v->dtemuan->totemuan->tanggal_lhp);
                         if($th==$thn)
                         {
+                            // return $arraylhp;
                             if(in_array($v->dtemuan->id_lhp,$arraylhp))
                                 $rekomendasi[$v->status_rekomendasi_id][]=$v;
 
@@ -968,7 +968,7 @@ class DashboardController extends Controller
         elseif(Auth::user()->level=='auditor-senior' || Auth::user()->level=='pic-unit')
         {
             $tindaklanjut=TindakLanjutTemuan::with('lhp')->get();
-            // return $lhp; 
+            // return $tindaklanjut; 
             $datatl=$dtl=$dlhp=$colorlhp=$arraylhp=array();
             foreach($tindaklanjut as $k=>$v)
             {
@@ -978,6 +978,7 @@ class DashboardController extends Controller
                     // {
                         // return $v->dtemuan->totemuan;
                         list($th,$bl,$tg)=explode('-',$v->lhp->tanggal_lhp);
+                        // return $th;
                         if($th==$thn)
                         {
                             if($v->status_review_pic_1=='')
@@ -999,11 +1000,13 @@ class DashboardController extends Controller
             //     $datatl[str_slug($k)][]=$v;
             // }
 
-            // return $dtl;
+            // return $arraylhp;
 
             //Status Rekomendasi
             $status=StatusRekomendasi::get();
-            $data_rekom=DataRekomendasi::with('dtemuan')->get();
+            $data_rekom=DataRekomendasi::with('dtemuan')
+            ->whereNull('data_rekomendasi.deleted_at')
+            ->where('data_rekomendasi.senior_user_id',Auth::user()->id)->get();
             $rekomendasi=$rekom=$colorrekom=$overdue=array();
             // return $data_rekom;
 
@@ -1011,12 +1014,11 @@ class DashboardController extends Controller
             {
                 if(isset($v->dtemuan->temuan))
                 {
-                    // return $v->dtemuan->totemuan->tanggal_lhp;
+                    // return $v->dtemuan->totemuan;
                     list($th,$bl,$tg)=explode('-',$v->dtemuan->totemuan->tanggal_lhp);
                     if($th==$thn)
                     {
-                        if(in_array($v->dtemuan->id_lhp,$arraylhp))
-                            $rekomendasi[$v->status_rekomendasi_id][]=$v;
+                        $rekomendasi[$v->status_rekomendasi_id][]=$v;
 
                         if($v->tanggal_penyelesaian!='')
                         {
@@ -1035,6 +1037,26 @@ class DashboardController extends Controller
                                 $overdue['belum-masuk-batas-waktu-penyelesaian'][]=$v;
                             }
                         }
+                        // if(in_array($v->dtemuan->id_lhp,$arraylhp))
+                        //     $rekomendasi[$v->status_rekomendasi_id][]=$v;
+
+                        // if($v->tanggal_penyelesaian!='')
+                        // {
+                        //     $tgl_penyelsaian=$v->tanggal_penyelesaian;
+                        //     $now=date('Y-m-d');
+                        //     if($now==$tgl_penyelsaian)
+                        //     {
+                        //         $overdue['sudah-masuk-batas-waktu-penyelesaian'][]=$v;
+                        //     }
+                        //     elseif($now>$tgl_penyelsaian)
+                        //     {
+                        //         $overdue['melewati-batas-waktu-penyelesaian'][]=$v;
+                        //     }
+                        //     elseif($now<$tgl_penyelsaian)
+                        //     {
+                        //         $overdue['belum-masuk-batas-waktu-penyelesaian'][]=$v;
+                        //     }
+                        // }
                     }
                 }
             }

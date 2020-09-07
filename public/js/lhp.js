@@ -118,6 +118,10 @@ function generatekodelhp(val) {
     })
 }
 
+function generatekodelhp2(val) {
+    $('#kode_lhp').val(val);
+}
+
 function getdata(tahun) {
     // loaddata(tahun);
     // loaddatasemua(tahun);

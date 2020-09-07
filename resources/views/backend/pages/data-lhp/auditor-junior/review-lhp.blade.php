@@ -52,6 +52,7 @@
                         <td class="text-left">{!!$item->reviewer->name!!}</td>
                         @if (Auth::user()->level=='auditor-senior')
                             <td class="text-center">
+                            {{-- TODO REVIEW FORM LHP HERE--}}
                                 @if ($data->status_lhp=='Review LHP')
                                     <a style="height:unset !important;" class="btn btn-xs btn-primary rounded" onclick="editformreviewlhp({{$idlhp}},{{$item->review_id}})">
                                         <div class="tooltipcss"><i class="glyphicon glyphicon-edit"></i>

@@ -178,6 +178,9 @@ Route::group(['prefix'=>'laporan','middleware'=>'auth'],function(){
     Route::post('temuan-per-bidang-data','LaporanController@temuan_per_bidang_data');
     Route::post('temuan-per-bidang-pdf','LaporanController@temuan_per_bidang_pdf');
 
+    Route::get('tindak-lanjut-rincian-rekomendasi', 'LaporanController@tindak_lanjut_rincian_rekomendasi');
+    Route::post('tindak-lanjut-rincian-rekomendasi-data', 'LaporanController@tindak_lanjut_rincian_rekomendasi_data');
+
     Route::get('capaian-indikator-kinerja','LaporanController@capaian_indikator_kinerja');
     Route::post('capaian-indikator-kinerja-data','LaporanController@capaian_indikator_kinerja_data');
 

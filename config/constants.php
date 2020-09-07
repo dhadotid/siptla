@@ -7,7 +7,7 @@ return [
         'listrik' => 'Rincian Nilai – Rekomendasi Biaya Listrik',
         'piutang' => 'Rincian Nilai – Rekomendasi Piutang',
         'piutangkaryawan' => 'Rincian Nilai – Rekomendasi Piutang Karyawan',
-        'hutangtitipan' => 'Rincian Nilai Hutang Titipan',
+        //'hutangtitipan' => 'Rincian Nilai Hutang Titipan',
         'penutupanrekening' => 'Rincian Nilai Non Setoran – Penutupan Rekening',
         'umum' => 'Rincian Nilai – Rekomendasi (Umum - Setoran)',
         'kontribusi' => 'Rincian Nilai – Rekomendasi Kontribusi',

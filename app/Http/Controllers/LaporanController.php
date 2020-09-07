@@ -20,6 +20,7 @@ use Auth;
 use PDF;
 use Excel;
 use Carbon\Carbon;
+use Config;
 class LaporanController extends Controller
 {
     public function temuan_per_bidang()
@@ -1676,6 +1677,25 @@ class LaporanController extends Controller
                     ->with('rekomendasi',$rekomendasi)
                     ->with('bidangTitle', $bidangTitle);
     
+    }
+
+    public function tindak_lanjut_rincian_rekomendasi(Request $request){
+        $pemeriksa=Pemeriksa::orderBy('pemeriksa')->get();
+        return view('backend.pages.laporan.tindak-lanjut-rincian-rekomendasi.index')
+                ->with('pemeriksa', $pemeriksa);
+    }
+
+    public function tindak_lanjut_rincian_rekomendasi_data(Request $request) {
+        $pemeriksa =$request->pemeriksa;
+        $no_lhp = $request->no_lhp;
+        $jenisrincian = $request->jenisrincian;
+
+        $statusrekom = StatusRekomendasi::orderBy('id')->get();
+        //TODO HANDLE HERE GET DATA FOR REKOMENDASI RINCIAN
+        
+        return view('backend.pages.laporan.tindak-lanjut-rincian-rekomendasi.data.'.$jenisrincian)
+            ->with('statusrekom',$statusrekom)
+            ->with('title', Config::get('constants.rincian.'.$jenisrincian));
     }
 
     public function capaian_indikator_kinerja(Request $request){

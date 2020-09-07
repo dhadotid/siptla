@@ -854,9 +854,7 @@ class DashboardController extends Controller
                         list($th,$bl,$tg)=explode('-',$v->dtemuan->totemuan->tanggal_lhp);
                         if($th==$thn)
                         {
-                            // return $arraylhp;
-                            if(in_array($v->dtemuan->id_lhp,$arraylhp))
-                                $rekomendasi[$v->status_rekomendasi_id][]=$v;
+                            $rekomendasi[$v->status_rekomendasi_id][]=$v;
 
                             if($v->tanggal_penyelesaian!='')
                             {
@@ -875,6 +873,26 @@ class DashboardController extends Controller
                                     $overdue['belum-masuk-batas-waktu-penyelesaian'][]=$v;
                                 }
                             }
+                            // if(in_array($v->dtemuan->id_lhp,$arraylhp))
+                            //     $rekomendasi[$v->status_rekomendasi_id][]=$v;
+
+                            // if($v->tanggal_penyelesaian!='')
+                            // {
+                            //     $tgl_penyelsaian=$v->tanggal_penyelesaian;
+                            //     $now=date('Y-m-d');
+                            //     if($now==$tgl_penyelsaian)
+                            //     {
+                            //         $overdue['sudah-masuk-batas-waktu-penyelesaian'][]=$v;
+                            //     }
+                            //     elseif($now>$tgl_penyelsaian)
+                            //     {
+                            //         $overdue['melewati-batas-waktu-penyelesaian'][]=$v;
+                            //     }
+                            //     elseif($now<$tgl_penyelsaian)
+                            //     {
+                            //         $overdue['belum-masuk-batas-waktu-penyelesaian'][]=$v;
+                            //     }
+                            // }
                         }
                     }
                 }

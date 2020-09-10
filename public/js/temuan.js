@@ -580,9 +580,12 @@ function getCookie(name) {
     }
     return null;
 }
-function isValidNilai(inputValue, idrekom = 2){
+function isValidNilai(inputValue, isupdate = -1, idrekom = 2){
     var totalNilai = parseFloat(getCookie('total_nilai').replace(/\./g, ""));
     var max_rekom = parseFloat(getCookie('max_rekomendasi').replace(/\./g, ""));
+    if(isupdate != -1){
+        totalNilai = totalNilai - inputValue;
+    }
     if(idrekom == 2){
         if((inputValue + totalNilai) > max_rekom)
             return false;
@@ -605,7 +608,8 @@ function addtindaklanjut(jenis,idtemuan,idrekom,id)
     var idform=$('#idform').val();
     var pic1 = $('select.pic1').val();
     var pic2 = $('select.pic2').val();
-    // alert(pic2)
+    // alert(idform)
+    console.log('hahaha '+ idform);
     // $("#unit_kerja").append('<option value="'+pic1+'">option5</option>');
     
     idrekom = idform;
@@ -859,7 +863,7 @@ function validasiformsewa()
     var tgl_pks = $('#tgl_pks');
     var nilai_perjanjian = $('#nilai_perjanjian');
     var masa_berlaku = $('#masa_berlaku');
-    
+    var idform = $('#id').val();
     // $('#nilai_perjanjian').on('blur',function(){
     // alert(totalnilai+'-'+nilairekom)
     // alert(nilai_perjanjian.val() + '..' + totalnilai + '--' + nilairekom);
@@ -884,10 +888,11 @@ function validasiformsewa()
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(nilai_perjanjian.val().replace(/\./g, ""));
-        if(!isValidNilai(nil))
+        if(!isValidNilai(nil, idform))
             return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalnilai != 0) {
-            // alert((totalnilai + nil) +'--'+nilairekom)
+            if(idform != -1)
+                totalnilai = totalnilai - nil;
             if ((totalnilai + nil) > nilairekom) {
                 notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
                 
@@ -953,6 +958,7 @@ function validasiformuangmuka() {
     var no_invoice = $('#no_invoice');
     var tgl_pum = $('#tgl_pum');
     var jumlah_um = $('#jumlah_um');
+    var idform = $('#id').val();
     // var totalnilai = parseFloat(($('#total_nilai').val()).replace(/./g,''));
     // var nilairekom = parseFloat(($('input.nilai_rekomendasi').val()).replace(/./g,''));
 
@@ -970,10 +976,11 @@ function validasiformuangmuka() {
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(jumlah_um.val().replace(/\./g, ""));
-        if(!isValidNilai(nil))
+        if(!isValidNilai(nil, idform))
             return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalnilai != 0) {
-            // alert((totalnilai + nil) +'--'+nilairekom)
+            if(idform != -1)
+                totalnilai = totalnilai - nil;
             if ((totalnilai + nil) > nilairekom) {
                 notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
 
@@ -1035,6 +1042,7 @@ function validasiformlistrik() {
     var lokasi = $('#lokasi');
     var tgl_invoice = $('#tgl_invoice');
     var tagihan = $('#tagihan');
+    var idform = $('#id').val();
     // var totalnilai = parseFloat(($('#total_nilai').val()).replace(/./g,''));
     // var nilairekom = parseFloat(($('input.nilai_rekomendasi').val()).replace(/./g,''));
 
@@ -1051,10 +1059,11 @@ function validasiformlistrik() {
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(tagihan.val().replace(/\./g, ""));
-        if(!isValidNilai(nil))
+        if(!isValidNilai(nil, idform))
             return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalnilai != 0) {
-            // alert((totalnilai + nil) +'--'+nilairekom)
+            if(idform != -1)
+                totalnilai = totalnilai - nil;
             if ((totalnilai + nil) > nilairekom) {
                 notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
 
@@ -1116,6 +1125,7 @@ function validasiformpiutang() {
     var unit_kerja = $('#unit_kerja');
     var pelanggan = $('#pelanggan');
     var tagihan = $('#tagihan');
+    var idform = $('#id').val();
     // var totalnilai = parseFloat(($('#total_nilai').val()).replace(/./g,''));
     // var nilairekom = parseFloat(($('input.nilai_rekomendasi').val()).replace(/./g,''));
 
@@ -1130,10 +1140,11 @@ function validasiformpiutang() {
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(tagihan.val().replace(/\./g, ""));
-        if(!isValidNilai(nil))
+        if(!isValidNilai(nil, idform))
             return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalnilai != 0) {
-            // alert((totalnilai + nil) +'--'+nilairekom)
+            if(idform != -1)
+                totalnilai = totalnilai - nil;
             if ((totalnilai + nil) > nilairekom) {
                 notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
 
@@ -1195,6 +1206,7 @@ function validasiformpiutangkaryawan() {
     var unit_kerja = $('#unit_kerja');
     var karyawan = $('#karyawan');
     var pinjaman = $('#pinjaman');
+    var idform = $('#id').val();
     // var totalnilai = parseFloat(($('#total_nilai').val()).replace(/./g,''));
     // var nilairekom = parseFloat(($('input.nilai_rekomendasi').val()).replace(/./g,''));
 
@@ -1210,10 +1222,11 @@ function validasiformpiutangkaryawan() {
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(pinjaman.val().replace(/\./g, ""));
-        if(!isValidNilai(nil))
+        if(!isValidNilai(nil, idform))
             return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalnilai != 0) {
-            // alert((totalnilai + nil) +'--'+nilairekom)
+            if(idform != -1)
+                totalnilai = totalnilai - nil;
             if ((totalnilai + nil) > nilairekom) {
                 notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
 
@@ -1275,6 +1288,7 @@ function validasihutangtitipan() {
     var tanggal = $('#tanggal');
     var sisa_hutang = $('#sisa_hutang');
     var sisa_setor = $('#sisa_setor');
+    var idform = $('#id').val();
     // var totalnilai = parseFloat(($('#total_nilai').val()).replace(/./g,''));
     // var nilairekom = parseFloat(($('input.nilai_rekomendasi').val()).replace(/./g,''));
 
@@ -1292,10 +1306,11 @@ function validasihutangtitipan() {
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(sisa_setor.val().replace(/\./g, ""));
-        if(!isValidNilai(nil))
+        if(!isValidNilai(nil, idform))
             return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalnilai != 0) {
-            // alert((totalnilai + nil) +'--'+nilairekom)
+            if(idform != -1)
+                totalnilai = totalnilai - nil;
             if ((totalnilai + nil) > nilairekom) {
                 notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
 
@@ -1439,6 +1454,7 @@ function validasiumum() {
     var unit_kerja = $('#unit_kerja');
     var keterangan = $('#keterangan');
     var jumlah_rekomendasi = $('#jumlah_rekomendasi');
+    var idform = $('#id').val();
     // var totalnilai = parseFloat(($('#total_nilai').val()).replace(/./g,''));
     // var nilairekom = parseFloat(($('input.nilai_rekomendasi').val()).replace(/./g,''));
 
@@ -1453,10 +1469,11 @@ function validasiumum() {
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(jumlah_rekomendasi.val().replace(/\./g, ""));
-        if(!isValidNilai(nil))
+        if(!isValidNilai(nil, idform))
             return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalnilai != 0) {
-            // alert((totalnilai + nil) +'--'+nilairekom)
+            if(idform != -1)
+                totalnilai = totalnilai - nil;
             if ((totalnilai + nil) > nilairekom) {
                 notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
 
@@ -1520,6 +1537,7 @@ function validasikontribusi() {
     var keterangan = $('#keterangan');
     var jumlah_rekomendasi = $('#jumlah_rekomendasi');
     var tahun = $('#tahun');
+    var idform = $('#id').val();
     // var totalnilai = parseFloat(($('#total_nilai').val()).replace(/./g,''));
     // var nilairekom = parseFloat(($('input.nilai_rekomendasi').val()).replace(/./g,''));
 
@@ -1536,10 +1554,11 @@ function validasikontribusi() {
         var nilairekom = $('input.nilai_rekomendasi').val()
         nilairekom = parseFloat(nilairekom.replace(/\./g, ""));
         var nil = parseFloat(jumlah_rekomendasi.val().replace(/\./g, ""));
-        if(!isValidNilai(nil))
+        if(!isValidNilai(nil, idform))
             return notif('error', 'Nilai melebihi total rekomendasi');
         if (totalnilai != 0) {
-            // alert((totalnilai + nil) +'--'+nilairekom)
+            if(idform != -1)
+                totalnilai = totalnilai - nil;
             if ((totalnilai + nil) > nilairekom) {
                 notif('error', 'Nilai Yang Diinput Sudah Melebihi Batas Maksimal yaitu : ' + $('input.nilai_rekomendasi').val());
 

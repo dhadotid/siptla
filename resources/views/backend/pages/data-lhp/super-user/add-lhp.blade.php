@@ -9,7 +9,7 @@
         <div class="form-group">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Pemeriksa:</label>
             <div class="col-sm-8">
-                <select name="pemeriksa" class="form-control" id="pemeriksa" data-plugin="select2" onchange="generatekodelhp(this.value)">
+                <select name="pemeriksa" class="form-control" id="pemeriksa" data-plugin="select2">{{-- onchange="generatekodelhp(this.value)" --}}
                     <option value="">-- Pilih --</option>
                     @foreach ($pemeriksa as $item)
                         <option value="{{$item->id}}-{{$item->code}}-{{$item->pemeriksa}}">{{$item->code}} - {{$item->pemeriksa}}</option>

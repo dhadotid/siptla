@@ -188,7 +188,6 @@ class RincianSewaController extends Controller
     }
     public function form_rincian2($jenis,$idtemuan,$idrekomendasi,$id=-1, $pic=[])
     {
-
         // $dpic=$array_pic=array();
         // $rekom=DataRekomendasi::find($idrekomendasi);
         // if($rekom->pic_1_temuan_id!=null)

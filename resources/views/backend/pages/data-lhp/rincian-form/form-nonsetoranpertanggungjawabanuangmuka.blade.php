@@ -16,7 +16,7 @@
         <input type="hidden" name="jenis" value="{{$jenis}}">
         <input type="hidden" name="idrekomendasi" value="{{$idrekomendasi}}">
         <input type="hidden" name="idform" value="{{$idform}}">
-        <input type="hidden" name="id" value="{{$id}}">
+        <input type="hidden" name="id" id="id" value="{{$id}}">
         <div class="form-group" style="margin-bottom:10px;">
             <label for="exampleTextInput1" class="col-sm-3 control-label text-right">Nomor Invoice:
             </label>

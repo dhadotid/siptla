@@ -18,7 +18,7 @@
                     <td class="text-center">{{$no}}</td>
                     <td class="text-center">{{$v->unit_kerja}}</td>
                     <td class="text-center">{{$v->keterangan}}</td>
-                    <td class="text-center">{{rupiah($v->nilai_rekomendasi)}}</td>
+                    <td class="text-center">{{rupiah((int)$v->nilai_rekomendasi)}}</td>
                     <td class="text-center">
                         @if (Auth::user()->level == 'pic-unit')
                         <a href="javascript:addtindaklanjutrincian({{$v->id}},'nonsetoranumum','{{Config::get('constants.rincian.nonsetoranumum')}}')" class="btn-delete btn btn-xs btn-info"><i  class="glyphicon glyphicon-plus"></i></a>&nbsp;
@@ -41,7 +41,7 @@
                                                     @endif
                                                     @if(count($rinciantindaklanjut) == 0)
                                                         @if($rekom->id == 3)
-                                                            <td class="text-center">{{rupiah($v->nilai_rekomendasi)}}</td>
+                                                            <td class="text-center">{{rupiah((int)$v->nilai_rekomendasi)}}</td>
                                                         @else
                                                             <td class="text-center">0</td>
                                                         @endif
@@ -49,7 +49,7 @@
                                                         @foreach($rinciantindaklanjut as $rtl)
                                                             @if($rtl->rekomendasi == $rekom->rekomendasi)
                                                                 <td class="text-center">{{rupiah($rtl->sum)}}</td>
-                                                                @php $totalbtl = $v->nilai_rekomendasi - $rtl->sum; @endphp
+                                                                @php $totalbtl = (int)$v->nilai_rekomendasi - $rtl->sum; @endphp
                                                             @elseif($rekom->id == 3)
                                                                 <td class="text-center">{{rupiah($totalbtl)}}</td>
                                                             @else
@@ -69,7 +69,7 @@
                 </tr>
                 @php
                     $no++;
-                    $totalnilai+=$v->jumlah_rekomendasi;
+                    $totalnilai+=(int)$v->jumlah_rekomendasi;
                 @endphp
             @endforeach
             @if (isset($idtl))
@@ -77,11 +77,12 @@
             @endif
   
             <input type="hidden" id="total_nilai" value="{{$totalnilai}}">
-            @if (Auth::user()->level != 'pic-unit')
-                    <tr >
-                        <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut('nonsetoranumum','{{$idtemuan}}','{{$idrekomendasi}}',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
-                    </tr>
-            @endif
                 
             </tbody>
             </table>
+
+            @if (Auth::user()->level != 'pic-unit')
+                    <div style="text-align: center">
+                    <a href="#" onclick="addtindaklanjut('nonsetoranumum','{{$idtemuan}}','{{$idrekomendasi}}',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                    </div>
+            @endif

@@ -22,7 +22,7 @@
                     <td class="text-center">{{$v->unit_kerja}}</td>
                     <td class="text-center">{{$v->lokasi}}</td>
                     <td class="text-center">{{date('d/m/Y',strtotime($v->tgl_invoice))}}</td>
-                    <td class="text-center">{{rupiah($v->tagihan)}}</td>
+                    <td class="text-center">{{rupiah((int)$v->tagihan)}}</td>
                     <td class="text-center">{{$v->keterangan}}</td>
                     <td class="text-center">
                         @if (Auth::user()->level == 'pic-unit')
@@ -46,7 +46,7 @@
                                                     @endif
                                                     @if(count($rinciantindaklanjut) == 0)
                                                         @if($rekom->id == 3)
-                                                            <td class="text-center">{{rupiah($v->tagihan)}}</td>
+                                                            <td class="text-center">{{rupiah((int)$v->tagihan)}}</td>
                                                         @else
                                                             <td class="text-center">0</td>
                                                         @endif
@@ -54,7 +54,7 @@
                                                         @foreach($rinciantindaklanjut as $rtl)
                                                             @if($rtl->rekomendasi == $rekom->rekomendasi)
                                                                 <td class="text-center">{{rupiah($rtl->sum)}}</td>
-                                                                @php $totalbtl = $v->tagihan - $rtl->sum; @endphp
+                                                                @php $totalbtl = (int)$v->tagihan - $rtl->sum; @endphp
                                                             @elseif($rekom->id == 3)
                                                                 <td class="text-center">{{rupiah($totalbtl)}}</td>
                                                             @else
@@ -74,18 +74,19 @@
                 </tr>
             @php
                 $no++;
-                $totalnilai+=$v->tagihan;
+                $totalnilai+=(int)$v->tagihan;
             @endphp
             @endforeach
             @if (isset($idtl))
                 <input type="hidden" id="idformtindaklanjut" name="idformtindaklanjut" value="{{$idtl}}">
             @endif
             <input type="hidden" id="total_nilai" value="{{$totalnilai}}">
-            {{--@if (Auth::user()->level != 'pic-unit')
-            <tr >
-                <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut('listrik','{{$idtemuan}}','{{$idrekomendasi}}',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
-            </tr>
-            @endif--}}
            
             </tbody>
             </table>
+
+            @if (Auth::user()->level != 'pic-unit')
+            <div style="text-align: center">
+            <a href="#" onclick="addtindaklanjut('listrik','{{$idtemuan}}','{{$idrekomendasi}}',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                    </div>
+            @endif

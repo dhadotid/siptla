@@ -18,7 +18,7 @@
                     <td class="text-center">{{$no}}</td>
                     <td class="text-center">{{$v->unit_kerja}}</td>
                     <td class="text-center">{{$v->pelanggan}}</td>
-                    <td class="text-center">{{rupiah($v->tagihan)}}</td>
+                    <td class="text-center">{{rupiah((int)$v->tagihan)}}</td>
                     <td class="text-center">
                         @if (Auth::user()->level == 'pic-unit')
                         <a href="javascript:addtindaklanjutrincian({{$v->id}},'piutang','{{$v->tagihan}}','{{Config::get('constants.rincian.piutang')}}')" class="btn-delete btn btn-xs btn-info"><i class="glyphicon glyphicon-plus"></i></a>&nbsp;
@@ -77,11 +77,11 @@
             @endif
             <input type="hidden" id="total_nilai" value="{{$totalnilai}}">
 
-            @if (Auth::user()->level != 'pic-unit')
-            <tr >
-                <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut('piutang','{{$idtemuan}}','{{$idrekomendasi}}',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
-            </tr>
-            @endif
-
             </tbody>
             </table>
+
+            @if (Auth::user()->level != 'pic-unit')
+            <div style="text-align: center">
+            <a href="#" onclick="addtindaklanjut('piutang','{{$idtemuan}}','{{$idrekomendasi}}',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                    </div>
+            @endif

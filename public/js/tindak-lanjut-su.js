@@ -994,3 +994,35 @@ function publishkesenior(idrekomendasi)
         }
     });
 }
+
+function updaterincian_unitkerja(rekom_id, idtemuan, jenis) {
+    gettablerincian_unitkerja_lain(jenis, idtemuan, rekom_id)
+    $('#modalrincian').modal('show');
+    // $('#close-btn').attr('style', 'display:inline');
+    // $('#left-div').removeClass('col-md-12');
+    // $('#left-div').addClass('col-md-6');
+    // $('#right-div').removeClass('col-md-0');
+    // $('#right-div').addClass('col-md-6');
+    // $('#modal-size').attr({ 'style': 'width:90% !important' });
+
+}
+function gettablerincian_unitkerja_lain(jenis, idtemuan, idrekom) {
+    $('#table-rincian').load(flagsUrl + '/load-table-rincian-unitkerja/' + jenis + '/' + idtemuan + '/' + idrekom, function(){
+        $('#table-rincian-'+jenis).DataTable({
+            responsive: true,
+            "bAutoWidth": false
+        });
+    });
+}
+
+function listtindaklanjutrincian(idrincian,jenis, totalNilai = -1){
+    var idtl = $('#idformtindaklanjut').val();
+    $('#list-tindaklanjut-rincian').load(flagsUrl + '/list-tindaklanjut-rincian/' + idrincian + '/' + jenis+'/'+idtl +'/'+totalNilai, function () {
+        $('#table-rincian-dokumen').DataTable({
+            responsive: true,
+            "bAutoWidth": false,
+            "bDestroy": true
+        });
+    });
+    $('#listtindaklanjutrincian').modal('show');
+}

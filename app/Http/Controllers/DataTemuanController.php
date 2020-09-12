@@ -856,7 +856,7 @@ class DataTemuanController extends Controller
         }else{
             if(Auth::user()->level=='auditor-senior'){
                 $temuanQuery=DataTemuan::selectRaw('*,data_temuan.id as temuan_id')
-                ->leftJoin('data_rekomendasi', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id')
+                ->leftjoin('data_rekomendasi', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id')
                 ->whereNull('data_rekomendasi.deleted_at')
                 ->select('data_temuan.*','data_temuan.id as temuan_id', 'data_rekomendasi.senior_user_id')
                 ->with('jenistemuan')->with('picunit')->with('levelresiko')->where('id_lhp',$idlhp)->get();
@@ -871,6 +871,10 @@ class DataTemuanController extends Controller
                             $sorted[$v->id] = array($v);
                         }
                     }
+                    // else if(DataRekomendasi::where('id_temuan',$v->temuan_id)->count() == 0){
+                    //     $sorted[$v->id][] = $v;
+                    //     array_push($temuan, $v);
+                    // }
                 }
             }else{
                 $temuan=DataTemuan::selectRaw('*,data_temuan.id as temuan_id')

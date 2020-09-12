@@ -18,6 +18,8 @@
                                 @include('backend.pages.data-lhp.auditor-junior.rekomendasi-form',$dt)
                             </div>
                             <div id="right-div" class="col-md-0"></div>
+                            <br>
+                            <div id="clear-div" style="text-align: center" class="col-md-0"></div>
                         </div>
                     </div>
                     <div class="modal-footer">

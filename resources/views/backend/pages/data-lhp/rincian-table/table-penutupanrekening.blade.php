@@ -23,7 +23,7 @@
                     <td class="text-center">{{$v->nomor_rekening}}</td>
                     <td class="text-center">{{$v->nama_rekening}}</td>
                     <td class="text-center">{{$v->jenis_rekening}}</td>
-                    <td class="text-center">{{rupiah($v->saldo_akhir)}}</td>
+                    <td class="text-center">{{rupiah((int)$v->saldo_akhir)}}</td>
                     <td class="text-center">
                         @if (Auth::user()->level == 'pic-unit')
                         <a href="javascript:addtindaklanjutrincian({{$v->id}},'penutupanrekening','{{Config::get('constants.rincian.penutupanrekening')}}')" class="btn-delete btn btn-xs btn-info"><i class="glyphicon glyphicon-plus"></i></a>&nbsp;
@@ -81,11 +81,12 @@
                 @endif
                 <input type="hidden" id="total_nilai" value="{{$totalnilai}}">
 
-                @if (Auth::user()->level != 'pic-unit')
-                    <tr >
-                        <td class="text-center" colspan="8"><a href="#" onclick="addtindaklanjut('penutupanrekening','{{$idtemuan}}','{{$idrekomendasi}}',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a></td>
-                    </tr>
-                @endif
             @endforeach
             </tbody>
         </table>
+
+        @if (Auth::user()->level != 'pic-unit')
+                    <div style="text-align: center">
+                    <a href="#" onclick="addtindaklanjut('penutupanrekening','{{$idtemuan}}','{{$idrekomendasi}}',-1)" class="label label-info" id="tombol-add-rincian" style="display:inline"><i class="fa fa-plus-circle"></i> Tambah Rincian</a>
+                    </div>
+                @endif

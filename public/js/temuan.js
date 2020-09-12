@@ -520,6 +520,8 @@ function pilihrincianold(val, action)
         $('#left-div').addClass('col-md-6');
         $('#right-div').removeClass('col-md-0');
         $('#right-div').addClass('col-md-6');
+        $('#clear-div').removeClass('col-md-0');
+        $('#clear-div').addClass('col-md-6');
         $('#modal-size').attr({'style':'width:95% !important'});
         
         gettablerincianold(val, idtemuan, idrekom, action)
@@ -530,6 +532,9 @@ function pilihrincianold(val, action)
         $('#left-div').addClass('col-md-12');
         $('#right-div').removeClass('col-md-6');
         $('#right-div').addClass('col-md-0');
+        $('#clear-div').removeClass('col-md-6');
+        $('#clear-div').addClass('col-md-0');
+        $('#button_hapus_rincian_old').remove();
         $('#modal-size').attr({ 'style': 'width:60% !important' });       
     }
 }
@@ -546,6 +551,7 @@ function gettablerincianold(jenis, idtemuan, idrekom, action)
         });
         $('#modal-update-rincian').modal('show')
     }else{
+        
         $('#right-div').load(flagsUrl+'/load-table-rincian/'+jenis+'/'+idtemuan+'/'+idrekom,function(){
             $('#table-tl-rincian-'+idrekom).DataTable( {
                 responsive: true
@@ -558,7 +564,40 @@ function gettablerincianold(jenis, idtemuan, idrekom, action)
                     return notif('error', 'Nilai rekomendasi melebihi total rincian');
             }
         });
+        $('#button_hapus_rincian_old').remove();
+        $('#clear-div').append('<a id="button_hapus_rincian_old" onclick="hapusrincianold(\''+jenis+'\',\''+idtemuan+'\',\''+idrekom+'\',\''+action+'\')" class="label label-danger" style="display:inline"><i class="fa fa-trash"></i> Hapus Semua Rincian</a>');
     }
+}
+
+function hapusrincianold(jenis, idtemuan, idrekom, action){
+    swal({
+        title: "Apakah Anda Yakin ?",
+        text: "Ingin Menghapus Semua Data Rincian ini",
+        icon: "warning",
+        buttons: [
+            'Tidak!',
+            'Ya, Hapus'
+        ],
+        dangerMode: true,
+    }).then(function (isConfirm) {
+        if (isConfirm) {
+            $.ajax({
+                url : flagsUrl+'/hapus-rincian-old/'+jenis+'/'+idtemuan+'/'+idrekom,
+                success : function(){
+                    swal({
+                        title: 'Berhasil!',
+                        text: 'Hapus Semua Data Rincian Berhasil',
+                        icon: 'success'
+                    }).then(function () {
+                        $('#right-div').trigger("reset");
+                        gettablerincianold(jenis, idtemuan, idrekom, action);
+                    });
+                }
+            });
+        } else {
+            
+        }
+    });
 }
 
 function setCookie(name,value,days) {

@@ -45,7 +45,7 @@
                                                     @endif
                                                     @if(count($rinciantindaklanjut) == 0)
                                                         @if($rekom->id == 3)
-                                                            <td class="text-center">{{rupiah($v->jumlah_rekomendasi)}}</td>
+                                                            <td class="text-center">{{rupiah((int)$v->jumlah_rekomendasi)}}</td>
                                                         @else
                                                             <td class="text-center">0</td>
                                                         @endif
@@ -53,7 +53,7 @@
                                                         @foreach($rinciantindaklanjut as $rtl)
                                                             @if($rtl->rekomendasi == $rekom->rekomendasi)
                                                                 <td class="text-center">{{rupiah($rtl->sum)}}</td>
-                                                                @php $totalbtl = $v->jumlah_rekomendasi - $rtl->sum; @endphp
+                                                                @php $totalbtl = (int)$v->jumlah_rekomendasi - $rtl->sum; @endphp
                                                             @elseif($rekom->id == 3)
                                                                 <td class="text-center">{{rupiah($totalbtl)}}</td>
                                                             @else
@@ -74,7 +74,7 @@
         </tr>
         @php
             $no++;
-            $totalnilai+=$v->nilai_pekerjaan;
+            $totalnilai+=(int)$v->nilai_pekerjaan;
         @endphp
     @endforeach   
         @if (isset($idtl))

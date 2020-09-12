@@ -30,7 +30,7 @@
             <td class="text-center">{{$v->mitra}}</td>
             <td class="text-center">{{$v->no_pks}}</td>
             <td class="text-center">{{($v->tgl_pks!='' ? date('d/m/Y',strtotime($v->tgl_pks)) : '')}}</td>
-            <td class="text-center">{{rupiah($v->nilai_pekerjaan)}}</td>
+            <td class="text-center">{{rupiah((int)$v->nilai_pekerjaan)}}</td>
             <td class="text-center">{{($v->masa_berlaku!='' ? date('d/m/Y',strtotime($v->masa_berlaku)) : '')}}</td>
             <td class="text-center" style="width:90px;">
                 @if (Auth::user()->level == 'pic-unit')
@@ -54,7 +54,7 @@
                                                     @endif
                                                     @if(count($rinciantindaklanjut) == 0)
                                                         @if($rekom->id == 3)
-                                                            <td class="text-center">{{rupiah($v->nilai_pekerjaan)}}</td>
+                                                            <td class="text-center">{{rupiah((int)$v->nilai_pekerjaan)}}</td>
                                                         @else
                                                             <td class="text-center">0</td>
                                                         @endif
@@ -62,7 +62,7 @@
                                                         @foreach($rinciantindaklanjut as $rtl)
                                                             @if($rtl->rekomendasi == $rekom->rekomendasi)
                                                                 <td class="text-center">{{rupiah($rtl->sum)}}</td>
-                                                                @php $totalbtl = $v->nilai_pekerjaan - $rtl->sum; @endphp
+                                                                @php $totalbtl = (int)$v->nilai_pekerjaan - $rtl->sum; @endphp
                                                             @elseif($rekom->id == 3)
                                                                 <td class="text-center">{{rupiah($totalbtl)}}</td>
                                                             @else
@@ -82,7 +82,7 @@
         </tr>
         @php
             $no++;
-            $totalnilai+=$v->nilai_pekerjaan;
+            $totalnilai+=(int)$v->nilai_pekerjaan;
         @endphp
     @endforeach   
         @if (isset($idtl))

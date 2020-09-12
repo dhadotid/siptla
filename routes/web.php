@@ -95,6 +95,7 @@ Route::group(['middleware'=>['auth','checkstatus']],function(){
     
     Route::post('update-rincian','RincianSewaController@update_rincian');
     Route::get('load-table-rincian/{jenis}/{idtemuan?}/{statusrekomendasi?}/{view?}','DataRekomendasiController@load_tabel_rincian');
+    Route::get('hapus-rincian-old/{jenis}/{idtemuan?}/{statusrekomendasi?}/{view?}','DataRekomendasiController@hapus_rincian_old');
     Route::get('load-table-rincian-unitkerja/{jenis}/{idtemuan?}/{statusrekomendasi?}/{view?}','DataRekomendasiController@load_tabel_rincian_unitkerja');
     Route::get('form-rincian/{jenis}/{idtemuan?}/{idrekomendasi?}/{id?}/{pic1?}/{pic2?}','RincianSewaController@form_rincian');
     Route::get('form-rincian2/{jenis}/{idtemuan?}/{idrekomendasi?}/{id?}/{pic1?}/{pic2?}','RincianSewaController@form_rincian2');

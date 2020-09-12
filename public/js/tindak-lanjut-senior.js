@@ -1030,8 +1030,16 @@ function updaterincian_unitkerja(rekom_id, idtemuan, jenis) {
     // $('#modal-size').attr({ 'style': 'width:90% !important' });
 
 }
+// function gettablerincian_unitkerja_lain(jenis, idtemuan, idrekom) {
+//     $('#table-rincian').load(flagsUrl + '/load-table-rincian-unitkerja/' + jenis + '/' + idtemuan + '/' + idrekom);
+// }
 function gettablerincian_unitkerja_lain(jenis, idtemuan, idrekom) {
-    $('#table-rincian').load(flagsUrl + '/load-table-rincian-unitkerja/' + jenis + '/' + idtemuan + '/' + idrekom);
+    $('#table-rincian').load(flagsUrl + '/load-table-rincian-unitkerja/' + jenis + '/' + idtemuan + '/' + idrekom, function(){
+        $('#table-rincian-'+jenis).DataTable({
+            responsive: true,
+            "bAutoWidth": false
+        });
+    });
 }
 //---------------
 function listtindaklanjutrincian(idrincian,jenis, totalNilai = -1){

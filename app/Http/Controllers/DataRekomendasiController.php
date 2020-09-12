@@ -376,11 +376,12 @@ class DataRekomendasiController extends Controller
         
 
         $tl=$this->tindaklanjut();
-        // return $tl[3]; $rekom->count()!=0 || 
+        // return json_encode($tl);
         if(count($rekom)!=0)
         {
             foreach($rekom as $k=>$v)
             {   
+                // return json_encode($rekom);
                 if($v->status_rekomendasi_id==1) 
                     $status='success';
                 elseif($v->status_rekomendasi_id==2)
@@ -414,7 +415,7 @@ class DataRekomendasiController extends Controller
                     <a href="#" class="btn btn-sm btn-'.($status).'">'.$v->statusrekomendasi->rekomendasi.'</a>
                     <br>
                     <div style="margin-top:10px;">
-                        <a class="label label-primary fz-sm" href="javascript:detailtljunior('.$v->rekom_id.')">'.(isset($tl[$v->rekom_id]) ? count($tl[$v->rekom_id]) : 0).'&nbsp;Tindak Lanjut</a> &nbsp;&nbsp;';
+                        <a class="label label-primary fz-sm" href="javascript:detailtljunior('.$v->id.')">'.(isset($tl[$v->id]) ? count($tl[$v->id]) : 0).'&nbsp;Tindak Lanjut</a> &nbsp;&nbsp;';
 
                         if($v->rincian!='')
                         {
@@ -925,6 +926,7 @@ class DataRekomendasiController extends Controller
         
         $rekom=DataRekomendasi::find($idrekomendasi);
         // return 'hehehe '.$rekom;
+        // return json_encode($rekom);
 
         if($jenis=='sewa')
         {
@@ -1847,6 +1849,65 @@ class DataRekomendasiController extends Controller
         }
 
         return $table;
+    }
+
+    public function hapus_rincian_old($jenis,$idtemuan=null,$statusrekomendasi=null,$view=null)
+    {
+        $idrekomendasi=$statusrekomendasi;
+        $table='';
+        
+        $rekom=DataRekomendasi::find($idrekomendasi);
+        // return 'hehehe '.$rekom;
+
+        if($jenis=='sewa')
+        {
+            $rincian=RincianSewa::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->delete();
+        }
+        elseif($jenis=='uangmuka')
+        {
+            $rincian=RincianUangMuka::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->delete();
+        }
+        elseif($jenis=='listrik')
+        {
+            $rincian=RincianListrik::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->delete();
+        }
+        elseif($jenis=='piutang')
+        {
+            $rincian=RincianPiutang::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->delete();
+        }
+        elseif($jenis=='piutangkaryawan')
+        {
+            $rincian=RincianPiutangKaryawan::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->delete();
+        }
+        elseif($jenis=='hutangtitipan')
+        {
+            $rincian=RincianHutangTitipan::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->delete();
+        }
+        elseif($jenis=='penutupanrekening')
+        {
+            $rincian=RincianPenutupanRekening::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->delete();
+        }
+        elseif($jenis=='umum')
+        {
+            $rincian=RincianUmum::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->delete();
+        }else if ($jenis=='kontribusi'){
+            $rincian=RincianKontribusi::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->delete();
+        }else if($jenis == 'nonsetoranperjanjiankerjasama'){
+            $rincian=RincianNonSetoranPerpanjanganPerjanjianKerjasama::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->delete();
+            
+        }elseif($jenis=='nonsetoran'){
+            $rincian=RincianNonSetoran::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->delete();
+            
+        }elseif($jenis=='nonsetoranumum'){
+            $rincian=RincianNonSetoranUmum::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->delete();
+        }elseif($jenis=='nonsetoranpertanggungjawabanuangmuka'){
+            $rincian=RincianNonSetoranPertanggungjawabanUangMuka::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)->delete();
+        }
+
+        if($rincian)
+            echo 1;
+        else
+            echo 2;
     }
 
     public function rekomendasi_by_temuan($idtemuan,$status=null)

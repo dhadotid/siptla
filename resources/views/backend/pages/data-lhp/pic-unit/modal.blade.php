@@ -15,6 +15,8 @@
                             <div id="right-div" class="col-md-0">
                                 <a href="javascript:closerightdiv()" class="btn btn-xs btn-danger pull-right" id="close-btn" style="display: none"><i class="fa fa-close"></i></a>
                             </div>
+                            <br>
+                            <div id="clear-div" style="text-align: center" class="col-md-0"></div>
                         </div>
                     </div>
                     <div class="modal-footer">

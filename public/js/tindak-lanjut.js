@@ -1081,6 +1081,7 @@ function hapusrinciantindaklanjut(id, idrincian, jenis){
     });
 }
 function addtindaklanjutrincian(idrincian,jenis, totalNilai, title, isUpdate = false, idtindaklanjut = -1){
+    // console.log('total nilai: '+totalNilai);
     var idform = $('#idformtindaklanjut').val();
     document.getElementById('modaltitleaddtindaklanjutrincian').textContent = title;
     $('#form-tindaklanjut-rincian').load(flagsUrl +'/form-tindaklanjut-rincian/'+idrincian+'/'+jenis,function(){

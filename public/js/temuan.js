@@ -532,9 +532,9 @@ function pilihrincianold(val, action)
         $('#left-div').addClass('col-md-12');
         $('#right-div').removeClass('col-md-6');
         $('#right-div').addClass('col-md-0');
+        $('#button_hapus_rincian_old').remove();
         $('#clear-div').removeClass('col-md-6');
         $('#clear-div').addClass('col-md-0');
-        $('#button_hapus_rincian_old').remove();
         $('#modal-size').attr({ 'style': 'width:60% !important' });       
     }
 }

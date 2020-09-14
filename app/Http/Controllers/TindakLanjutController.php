@@ -111,7 +111,8 @@ class TindakLanjutController extends Controller
             $filenameWithExt = $request->file('file')->getClientOriginalName();
             $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
             $extension = $request->file('file')->getClientOriginalExtension();
-            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            // $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $fileNameToStore = $filename.'.'.$extension;
             // $fileNameToStore = rand() . '.' . $file->getClientOriginalExtension(); 
             $path = $request->file('file')->storeAs('public/dokumen',$fileNameToStore);
 
@@ -599,7 +600,10 @@ class TindakLanjutController extends Controller
 
             if($v->id_user==Auth::user()->id)
                 $user_pic=$v;
+            // if($v->id==Auth::user()->pic_unit_id)
+            //     $user_pic=$v;
         }
+        // return $user_pic;
 
         $pemeriksa=Pemeriksa::orderBy('code')->get();
         // $datalhp=DaftarTemuan::where('user_input_id',Auth::user()->id)->where('status_lhp','Publish LHP')->orderBy('id','desc')->get();
@@ -609,18 +613,15 @@ class TindakLanjutController extends Controller
                                 ->join('data_rekomendasi','data_temuan.id','=','data_rekomendasi.id_temuan')
                                 ->where('daftar_lhp.status_lhp','Publish LHP')
                                 ->where('daftar_lhp.tahun_pemeriksa',$tahun)
-                                // ->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
                                 ->where(function($query) use ($user_pic){
                                     $query->where('data_rekomendasi.pic_1_temuan_id', $user_pic->id);
                                     $query->orWhere('data_rekomendasi.pic_2_temuan_id','like', "%$user_pic->id%,");
-                                    // $query->orWhere('data_rekomendasi.pic_2_temuan_id', $user_pic->id);
                                 })
                                 ->whereNull('data_rekomendasi.deleted_at')
                                 ->orderBy('data_rekomendasi.nomor_rekomendasi')
                                 ->get();
 
         
-
         $lhp=$temuan=$rekomendasi=$arrayrekomid=array();
         $idpic2=array();
         foreach($alldata as $k=>$v)
@@ -1204,8 +1205,8 @@ class TindakLanjutController extends Controller
                     $filenameWithExt = $request->file('dokumen_pendukung_'.$i)->getClientOriginalName();
                     $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
                     $extension = $request->file('dokumen_pendukung_'.$i)->getClientOriginalExtension();
-                    $fileNameToStore = $filename.'_'.time().'.'.$extension;
-                    $fileNameToStore = time().'.'.$extension;
+                    $fileNameToStore = $filename.'.'.$extension;
+                    // $fileNameToStore = time().'.'.$extension;
                     $path = $request->file('dokumen_pendukung_'.$i)->storeAs('public/dokumen',$fileNameToStore);
 
                     $dokumen=new DokumenTindakLanjut;
@@ -1970,7 +1971,7 @@ class TindakLanjutController extends Controller
         $dokumen=array();
         foreach($dok as $k=>$v)
         {
-            $dokumen[$v->id_tindak_lanjut_temuan]=$v;
+            $dokumen[$v->id_tindak_lanjut_temuan][]=$v;
         }
 
         if(Auth::user()->level=='auditor-senior')
@@ -2201,7 +2202,7 @@ class TindakLanjutController extends Controller
         $filenameWithExt = $request->file('file')->getClientOriginalName();
         $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
         $extension = $request->file('file')->getClientOriginalExtension();
-        $fileNameToStore = time().'.'.$extension;
+        $fileNameToStore = $nama.'.'.$extension;
         $path = $request->file('file')->storeAs('public/dokumen',$fileNameToStore);
 
         if($path)

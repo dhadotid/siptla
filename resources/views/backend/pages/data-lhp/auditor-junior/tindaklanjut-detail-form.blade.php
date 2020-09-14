@@ -213,11 +213,22 @@
                                         <td style="width:100px;">{{tgl_indo($item->tgl_tindaklanjut)}}</td>
                                         <td>{{($item->tindak_lanjut)}}</td>
                                         <td class="text-center" style="width:60px;">
-                                            @if (isset($dokumen[$item->id]))
-                                                <a data-toggle="tooltip" class="btn btn-xs btn-success" style="height:25px;" target="_blank" title="Lihat Dokumen Pendukung" href="{{url('read-file/'.$dokumen[$item->id]->path)}}"><i class="fa fa-search"></i></a>    
-                                            @else
-                                                -
-                                            @endif
+                                        @if (isset($dokumen[$item->id]))
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-file"></i></button>
+                                                <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    @foreach ($dokumen[$item->id] as $dk)
+                                                        <li><a href="{{url('read-pdf/'.$dk->path)}}" target="_blank"><i class="fa fa-chevron-right"></i> {{$dk->nama_dokumen}}</a> </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                            
+                                        @else
+                                            -
+                                        @endif
                                         </td>
                                     </tr>
                                 @php
@@ -237,8 +248,24 @@
                                         <td style="width:100px;">{{tgl_indo($item->tgl_tindaklanjut)}}</td>
                                         <td>{{($item->tindak_lanjut)}}</td>
                                         <td class="text-center" style="width:60px;">
-                                            @if (isset($dokumen[$item->id]))
+                                            {{--@if (isset($dokumen[$item->id]))
                                                 <a data-toggle="tooltip" class="btn btn-xs btn-success" style="height:25px;" target="_blank" title="Lihat Dokumen Pendukung" href="{{url('read-file/'.$dokumen[$item->id]->path)}}"><i class="fa fa-search"></i></a>    
+                                            @else
+                                                -
+                                            @endif --}}
+                                            @if (isset($dokumen[$item->id]))
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-file"></i></button>
+                                                    <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                        @foreach ($dokumen[$item->id] as $dk)
+                                                            <li><a href="{{url('read-pdf/'.$dk->path)}}" target="_blank"><i class="fa fa-chevron-right"></i> {{$dk->nama_dokumen}}</a> </li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                                
                                             @else
                                                 -
                                             @endif

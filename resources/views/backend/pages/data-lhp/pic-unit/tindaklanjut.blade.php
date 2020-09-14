@@ -293,7 +293,6 @@
                                                 else
                                                 {
                                                     $tindak_lanjut.='<div class="row" style="height:140px;border-bottom:1px dotted #ddd;padding:5px 0">';
-                                                    // $tindak_lanjut.='<div class="col-md-12 text-center"><span class="label label-danger">0</span></div>';
                                                     $tindak_lanjut.='<div class="col-md-12 text-center" id="jlh_tl_'.$item->id_temuan.'_'.$v->id.'"><span class="label label-danger fz-sm">0</span></div>';
                                                     $tindak_lanjut.='</div>';
                                                 }  

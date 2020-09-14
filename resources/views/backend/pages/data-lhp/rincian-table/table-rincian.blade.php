@@ -22,9 +22,11 @@
     <tbody>
         @foreach($rinciantindaklanjut as $k=>$v)
             <tr>
+            @php $totalNilai = 0 @endphp
                 <td class="text-center">{{$k+1}}</td>
                 @foreach (${$jenis} as $key=>$item)
                     @if ($key=='nilai')
+                        @php $totalNilai = ($v->{$key}) @endphp
                         <td class="text-right">{{ rupiah(($v->{$key})) }}</td>
                     @elseif ($key=='dokumen_pendukung')
                         <td class="text-center">
@@ -40,9 +42,9 @@
                             -
                         @endif
                         @if (Auth::user()->level == 'pic-unit')
-                            </div>
-                                <a href="javascript:addtindaklanjutrincian({{$rincian->id}},'{{$jenis}}',{{$totalnilai}},'Update Detail Tindak Lanjut', true, {{$v->id}})" class="btn btn-info btn-xs" style="height:28px;"><i class="fa fa-edit"></i></a>&nbsp;
-                                <a href="javascript:hapusrinciantindaklanjut({{$rincian->id}}, {{$v->id}}, '{{$jenis}}')" class="btn btn-danger btn-xs" style="height:28px;"><i class="fa fa-trash"></i></a>&nbsp;
+                        </div>
+                            <a href="javascript:addtindaklanjutrincian({{$v->id}},'{{$jenis}}','{{ $totalNilai }}','Update Detail Tindak Lanjut', true, {{$v->id}})" class="btn btn-info btn-xs" style="height:28px;"><i class="fa fa-edit"></i></a>&nbsp;
+                                <a href="javascript:hapusrinciantindaklanjut({{$v->id}}, {{$v->id}}, '{{$jenis}}')" class="btn btn-danger btn-xs" style="height:28px;"><i class="fa fa-trash"></i></a>&nbsp;
                             </td>
                         @else
                         <div class="btn-group">

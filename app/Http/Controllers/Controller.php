@@ -62,7 +62,8 @@ class Controller extends BaseController
 
         $dt=$thn.'-'.$bln;
 
-        $tl=TindakLanjutTemuan::where('tgl_tindaklanjut','like',"$dt%")->get();
+        // $tl=TindakLanjutTemuan::where('tgl_tindaklanjut','like',"$dt%")->get();
+        $tl=TindakLanjutTemuan::whereNull('deleted_at')->get();
         $tindaklanjut=array();
         foreach($tl as $k=>$v)
         {

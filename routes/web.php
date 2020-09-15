@@ -283,3 +283,5 @@ Route::get('/reminder_overdue', 'Controller@reminder_overdue');
 Route::get('/reminder_junior', 'Controller@reminder_junior');
 Route::get('/reminder_senior', 'Controller@reminder_senior');
 Route::get('/notifikasi_triwulan', 'Controller@notifikasi_triwulan');
+
+Route::get('/phpInfo12938012', 'Controller@phpInfo');

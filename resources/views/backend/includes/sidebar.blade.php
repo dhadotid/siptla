@@ -109,14 +109,14 @@
                 <i class="menu-icon fa fa-list"></i>
                 <span class="menu-text">Data Tindak Lanjut</span>
               </a>
-              <li class="{{$url=='data-repository' ? 'active' : ''}}">
+            @endif
+          </li>
+          <li class="{{$url=='data-repository' ? 'active' : ''}}">
               <a href="{{url('data-repository')}}">
                   <i class="menu-icon fa fa-list"></i>
                   <span class="menu-text">Repository</span>
                 </a>
             </li>
-            @endif
-          </li>
         @endif
         @if (Auth::user()->level=='auditor-senior')
          <li class="{{$url=='data-lhp' ? 'active' : ''}}">

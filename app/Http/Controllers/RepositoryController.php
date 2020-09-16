@@ -9,6 +9,7 @@ use App\Models\DataRekomendasi;
 use App\Models\TindakLanjutRincian;
 use App\Models\TindakLanjutTemuan;
 use App\Models\DokumenTindakLanjut;
+use App\Models\PICUnit;
 use Auth;
 use DB;
 class RepositoryController extends Controller
@@ -105,6 +106,22 @@ class RepositoryController extends Controller
             }
             return view('backend.pages.repository.super-user.data')
                 ->with('data',$data);
+        }elseif(Auth::user()->level=='pic-unit'){
+            $picUnit = PICUnit::where('id','=',Auth::user()->pic_unit_id)->pluck('id')->first();
+            $data=DaftarTemuan::selectRaw('*,daftar_lhp.id as lhp_id')
+                    ->select('daftar_lhp.*', 'daftar_lhp.id as lhp_id', 'data_rekomendasi.pic_1_temuan_id', 'data_rekomendasi.pic_2_temuan_id')
+                    ->leftJoin('data_temuan', 'data_temuan.id_lhp', '=', 'daftar_lhp.id')
+                    ->leftJoin('data_rekomendasi', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id');
+            $data = $data->where($wh)
+                    ->whereNull('daftar_lhp.deleted_at')
+                    ->where('data_rekomendasi.pic_1_temuan_id','=',$picUnit)
+                    ->orWhere('data_rekomendasi.pic_2_temuan_id','=','%'.$picUnit.'%')
+                    ->with('dpemeriksa')
+                    ->with('djenisaudit')
+                    ->groupBy('daftar_lhp.id')
+                    ->orderBy('tanggal_lhp','desc')->get();
+            return view('backend.pages.repository.auditor-senior.data')
+                ->with('data',$data);
         }
     }
 
@@ -120,9 +137,18 @@ class RepositoryController extends Controller
                         ->where('daftar_lhp.id',$idlhp)->with('dpemeriksa')->with('djenisaudit')->first();
         }elseif(Auth::user()->level=='super-user'){
             $data=DaftarTemuan::where('id',$idlhp)->with('dpemeriksa')->with('djenisaudit')->first();
+        }elseif(Auth::user()->level=='pic-unit'){
+            $data=DaftarTemuan::select('daftar_lhp.*')
+                        ->leftJoin('data_temuan', 'data_temuan.id_lhp', '=', 'daftar_lhp.id')
+                        ->leftJoin('data_rekomendasi', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id')
+                        ->where('data_rekomendasi.pic_1_temuan_id','=',Auth::user()->id)
+                        ->orWhere('data_rekomendasi.pic_2_temuan_id','=','%'.Auth::user()->id.'%')
+                        ->where('daftar_lhp.id',$idlhp)->with('dpemeriksa')->with('djenisaudit')->first();
         }
 
         $getTemuanId = DataTemuan::select('id')->where('id_lhp', $data->id)->pluck('id')->toArray();
+
+        // return $getTemuanId;
 
         if(Auth::user()->level=='auditor-senior'){
             $rekom = DataRekomendasi::whereIn('id_temuan', $getTemuanId)->where('senior_user_id','=',Auth::user()->id)->get();
@@ -152,7 +178,7 @@ class RepositoryController extends Controller
         $tindakLanjut = TindakLanjutTemuan::where('temuan_id', $idtemuan)->where('rekomendasi_id',$rekom_id)
                         ->with('pic1')->with('dokumen_tindak_lanjut')->get();
 
-        // return json_encode($tindakLanjut); 
+        return json_encode($tindakLanjut); 
         return view('backend.pages.repository.table-tindaklanjut')
                 ->with('data',$tindakLanjut)
                 ->with('rekom_id', $rekom_id)

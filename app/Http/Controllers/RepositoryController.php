@@ -174,8 +174,8 @@ class RepositoryController extends Controller
     }
 
     public function document_tindaklanjut(Request $request, $rekom_id, $idtemuan){
-        //TindakLanjutTemuan dulu habis itu baru di get si DokumenTindakLanjut
-        $tindakLanjut = TindakLanjutTemuan::where('temuan_id', $idtemuan)->where('rekomendasi_id',$rekom_id)
+        //TindakLanjutTemuan dulu habis itu baru di get si DokumenTindakLanjut where('temuan_id', $idtemuan)->
+        $tindakLanjut = TindakLanjutTemuan::where('rekomendasi_id',$rekom_id)
                         ->with('pic1')->with('dokumen_tindak_lanjut')->get();
 
         // return json_encode($tindakLanjut); 

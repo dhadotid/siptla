@@ -178,7 +178,7 @@ class RepositoryController extends Controller
         $tindakLanjut = TindakLanjutTemuan::where('temuan_id', $idtemuan)->where('rekomendasi_id',$rekom_id)
                         ->with('pic1')->with('dokumen_tindak_lanjut')->get();
 
-        return json_encode($tindakLanjut); 
+        // return json_encode($tindakLanjut); 
         return view('backend.pages.repository.table-tindaklanjut')
                 ->with('data',$tindakLanjut)
                 ->with('rekom_id', $rekom_id)

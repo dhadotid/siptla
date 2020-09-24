@@ -324,7 +324,7 @@ class DataTemuanController extends Controller
             $query=DaftarTemuan::selectRaw('*,daftar_lhp.id as lhp_id')
                     ->select('daftar_lhp.id', 'daftar_lhp.id as lhp_id', 'daftar_lhp.no_lhp',
                     'daftar_lhp.flag_tindaklanjut_id', 'daftar_lhp.kode_lhp', 'daftar_lhp.review',
-                    'daftar_lhp.user_input_id','daftar_lhp.judul_lhp','daftar_lhp.pemeriksa_id','daftar_lhp.tanggal_lhp',
+                    'daftar_lhp.user_input_id as user_input_id','daftar_lhp.judul_lhp','daftar_lhp.pemeriksa_id','daftar_lhp.tanggal_lhp',
                     'daftar_lhp.tahun_pemeriksa', 'daftar_lhp.jenis_audit_id', 'daftar_lhp.status_lhp','daftar_lhp.review_lhp',
                     'daftar_lhp.create_flag', 'daftar_lhp.review_flag', 'daftar_lhp.publish_flag','daftar_lhp.tanggal_publish',
                     'daftar_lhp.flag_senior', 'daftar_lhp.flag_unit_kerja', 'daftar_lhp.deliver_to',
@@ -343,6 +343,7 @@ class DataTemuanController extends Controller
                     }
             $query = $query->where('daftar_lhp.tahun_pemeriksa',$thn)
                     ->where('data_rekomendasi.senior_user_id',Auth::user()->id)
+                    ->orWhere('daftar_lhp.user_input_id',Auth::user()->id)
                     ->where($wh)
                     ->orWhere('data_rekomendasi.status_rekomendasi_id','!=','1')
                     ->whereNull('daftar_lhp.deleted_at')
@@ -354,8 +355,8 @@ class DataTemuanController extends Controller
                     // return $query;
             $data = $sorted = array();
             foreach($query as $key=>$v){
-                if($v->deliver_to != 0 || $v->publish_flag == 1)
-                    if($v->senior_user_id == Auth::user()->id){
+                if($v->deliver_to != 0 || $v->publish_flag == 1 || $v->user_input_id == Auth::user()->id)
+                    if($v->senior_user_id == Auth::user()->id || $v->user_input_id == Auth::user()->id){
                         if(!isset($sorted[$v->id])){
                             $sorted[$v->id][] = $v;
                             array_push($data, $v);
@@ -785,8 +786,11 @@ class DataTemuanController extends Controller
         $dt['statusrekomendasi']=$statusrekomendasi=StatusRekomendasi::orderBy('rekomendasi')->get();
         
         if(Auth::user()->level=='auditor-senior'){
-            $rekomQuery=DataRekomendasi::where('data_rekomendasi.senior_user_id', Auth::id())
-            ->join('data_temuan', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id')
+            $rekomQuery=DataRekomendasi::join('data_temuan', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id')
+            ->where(function ($query) {
+                $query->where('data_rekomendasi.senior_user_id', '=', Auth::id())
+                      ->orWhere('data_temuan.user_input_id', '=', Auth::id());
+            })
             ->where($wh);
             if($request->key == 'sudah-masuk-batas-waktu-penyelesaian'){
                 $rekomQuery = $rekomQuery->where('data_rekomendasi.tanggal_penyelesaian', '=', $now);
@@ -802,7 +806,7 @@ class DataTemuanController extends Controller
             ->with('jenistemuan')->with('picunit1')->with('picunit2')->with('jangkawaktu')->with('statusrekomendasi')->get();
             $rekom = $sorted = array();
             foreach($rekomQuery as $key=>$v){
-                if($v->senior_user_id == Auth::user()->id){
+                if($v->senior_user_id == Auth::user()->id || $v->user_input_id == Auth::id()){
                     array_push($rekom, $v);
                 }
             }
@@ -863,7 +867,7 @@ class DataTemuanController extends Controller
 
                 $temuan = $sorted = array();
                 foreach($temuanQuery as $key=>$v){
-                    if($v->senior_user_id == Auth::user()->id){
+                    if($v->senior_user_id == Auth::user()->id || $v->user_input_id == Auth::user()->id){
                         if(!isset($sorted[$v->id])){
                             $sorted[$v->id][] = $v;
                             array_push($temuan, $v);
@@ -1010,6 +1014,7 @@ class DataTemuanController extends Controller
             $insert->pic_temuan_id=$request->pic_temuan;
             $insert->level_resiko_id=$request->level_resiko;
             $insert->nominal=str_replace('.','',$request->nominal);
+            $insert->user_input_id = Auth::user()->id;
             $insert->save();
         }
         else
@@ -1024,6 +1029,7 @@ class DataTemuanController extends Controller
             $insert->pic_temuan_id=$request->pic_temuan;
             $insert->level_resiko_id=$request->level_resiko;
             $insert->nominal=str_replace('.','',$request->nominal);
+            $insert->user_input_id = Auth::user()->id;
             $insert->save();
         }
         // return $request->all();
@@ -1061,6 +1067,7 @@ class DataTemuanController extends Controller
         $update->pic_temuan_id=$request->pic_temuan;
         $update->level_resiko_id=$request->level_resiko;
         $update->nominal=str_replace('.','',$request->nominal);
+        $insert->user_input_id = Auth::user()->id;
         $update->save();
         // $idlhp=$update->id_lhp;
         // return $request->all();

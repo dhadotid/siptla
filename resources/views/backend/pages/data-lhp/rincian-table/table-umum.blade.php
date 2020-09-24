@@ -39,26 +39,25 @@
                                                     @if($rekom->flag==0)
                                                         <td class="text-center">{{$rekom->rekomendasi}}</td>
                                                     @endif
-                                                    @if(count($rinciantindaklanjut) == 0)
+                                                    @if(count($rinciantindaklanjut[$v->id]) == 0)
                                                         @if($rekom->id == 3)
                                                             <td class="text-center">{{rupiah((int)$v->jumlah_rekomendasi)}}</td>
                                                         @else
                                                             <td class="text-center">0</td>
                                                         @endif
                                                     @else
-                                                        @foreach($rinciantindaklanjut as $rtl)
-                                                            @if($rtl->rekomendasi == $rekom->rekomendasi)
-                                                                <td class="text-center">{{rupiah($rtl->sum)}}</td>
-                                                                @php $totalbtl = (int)$v->jumlah_rekomendasi - $rtl->sum; @endphp
+                                                    @if($rinciantindaklanjut[$v->id][0]->rekomendasi == $rekom->rekomendasi)
+                                                                <td class="text-center">{{rupiah($rinciantindaklanjut[$v->id][0]->sum)}}</td>
+                                                                @php $totalbtl = (int)$v->jumlah_rekomendasi - $rinciantindaklanjut[$v->id][0]->sum; @endphp
                                                             @elseif($rekom->id == 3)
                                                                 <td class="text-center">{{rupiah($totalbtl)}}</td>
                                                             @else
                                                                 <td class="text-center">0</td>
                                                             @endif
-                                                        @endforeach
                                                     @endif
                                             </tr>
                                             @endforeach
+
                                         </tbody>
                                     </table>
                                 </ul>

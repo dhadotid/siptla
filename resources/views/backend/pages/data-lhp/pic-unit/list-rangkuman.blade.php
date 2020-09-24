@@ -257,7 +257,7 @@
                 <div class="form-group" style="margin-top:-20px;">
                     <label for="exampleTextInput1" class="col-sm-12 control-label text-left">Dokumen Pendukung:</label>
                     <div class="col-sm-11">
-                        <input type="file" class="form-control"  id="file_pendukung"  name="file_pendukung"  placeholder="Dokumen Pendukung" accept=".doc,.docx,.pdf,.xls,.xlsx">
+                        <input type="file" class="form-control"  id="file_pendukung"  name="file_pendukung"  placeholder="Dokumen Pendukung">
                         <small><i>*Biarkan Kosong Jika Tidak Ingin Di Ganti</i></small>
                     </div>
                     <div class="col-sm-1">

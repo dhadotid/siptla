@@ -146,7 +146,7 @@
                     <input type="text" name="nama_file" id="nama-file-1" class="form-control" placeholder="Nama File">
                 </div>
                 <div class="col-sm-5">
-                    <input type="file" class="form-control" onchange="uploadfile(this,1)" id="add-dokumen-1"  name="dokumen_pendukung"  placeholder="Dokumen Pendukung" accept=".doc,.docx,.pdf,.xls,.xlsx">
+                    <input type="file" class="form-control" onchange="uploadfile(this,1)" id="add-dokumen-1"  name="dokumen_pendukung"  placeholder="Dokumen Pendukung">
                     <span style="text-style:italic;font-weight:bold;"></span>
                 </div>
                 <div class="col-sm-1">

@@ -86,7 +86,7 @@
 								<input type="hidden" id="csrf_token" name="csrf_token" value="{{csrf_token()}}">
 								<div class="form-group">
 									<label>Surat Tugas</label>
-									<input type="file" class="form-control" onchange="#" id="surat_tugas"  name="surat_tugas"  placeholder="Surat Tugas" accept=".doc,.docx,.pdf,.xls,.xlsx">
+									<input type="file" class="form-control" onchange="#" id="surat_tugas"  name="surat_tugas"  placeholder="Surat Tugas" >
 								</div>
                             </div>
                         </div>
@@ -190,7 +190,7 @@
 									<div class="field_wrapper_surat_tugas">
 										<label>Surat Tugas</label>
 									</div>
-									<input type="file" class="form-control" onchange="#" id="surat_tugas"  name="surat_tugas"  placeholder="Surat Tugas" accept=".doc,.docx,.pdf,.xls,.xlsx">
+									<input type="file" class="form-control" onchange="#" id="surat_tugas"  name="surat_tugas"  placeholder="Surat Tugas" >
 								</div>
                             </div>
                         </div>

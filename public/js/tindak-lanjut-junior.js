@@ -1329,7 +1329,7 @@ function addtindaklanjutrincian(idrincian,jenis, totalNilai, title, isUpdate = f
                                         <input type="text" class="form-control"  class="form-control" value="'+documentName.replace(/\.[^/.]+$/, "")+'" name="nama_file_'+i+'"  placeholder="Nama File" id="nama_file_'+i+'">\
                                     </div>\
                                     <div class="col-sm-5">\
-                                        <input type="file" class="form-control"  class="form-control" onchange="insertFile('+i+')" id="add_dokumen_'+i+'" name="add_dokumen_'+i+'"  placeholder="File Pendukung" accept=".doc,.docx,.pdf,.xls,.xlsx">\
+                                        <input type="file" class="form-control"  class="form-control" onchange="insertFile('+i+')" id="add_dokumen_'+i+'" name="add_dokumen_'+i+'"  placeholder="File Pendukung">\
                                     </div>\
                                 </div> ';
                             $(wrapper).append(fieldHTML);

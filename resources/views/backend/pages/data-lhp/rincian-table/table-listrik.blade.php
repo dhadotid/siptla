@@ -39,7 +39,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach($status_rekomendasi as $rekom)
+                                            @foreach($status_rekomendasi as $rekom)
                                             <tr>
                                                     @if($rekom->flag==0)
                                                         <td class="text-center">{{$rekom->rekomendasi}}</td>

@@ -649,12 +649,13 @@ class DataRekomendasiController extends Controller
         if($jenis != 'penutupanrekening'){
             $rinciantindaklanjut=TindakLanjutRincian::where('tindak_lanjut_rincian.id_temuan',$idtemuan)
                         ->where('tindak_lanjut_rincian.id_rekomendasi',$idrekomendasi)
-                        ->where('tindak_lanjut_rincian.jenis', $jenis)
+                        ->where('tindak_lanjut_rincian.jenis', $jenis)//->get();
                         ->join('status_rekomendasi', 'tindak_lanjut_rincian.status_rincian', '=', 'status_rekomendasi.id')
                         ->groupBy('status_rekomendasi.rekomendasi')
                         ->selectRaw('status_rekomendasi.rekomendasi, sum(tindak_lanjut_rincian.nilai) as sum')
                         ->get();
         }
+        // return json_encode($rinciantindaklanjut);
         if($jenis=='sewa')
         {
             // if(Auth::user()->level=='pic-unit')
@@ -666,12 +667,24 @@ class DataRekomendasiController extends Controller
             // }
             $rincian=RincianSewa::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)
                         ->get();
+            $arrayrinciantindaklanjut = array();
+            foreach($rincian as $k=>$v){
+                $arrayrinciantindaklanjut[$v->id] = TindakLanjutRincian::where('tindak_lanjut_rincian.id_temuan','=',$idtemuan)
+                    ->where('tindak_lanjut_rincian.id_rekomendasi','=',$idrekomendasi)
+                    ->where('jenis', $jenis)
+                    ->leftjoin('mapping_rincian_tindak_lanjut_detail', 'tindak_lanjut_rincian.id', '=', 'mapping_rincian_tindak_lanjut_detail.id_tindak_lanjut_rincian')
+                    ->join('status_rekomendasi', 'tindak_lanjut_rincian.status_rincian', '=', 'status_rekomendasi.id')
+                    ->where('mapping_rincian_tindak_lanjut_detail.id_rincian', $v->id)
+                    ->groupBy('status_rekomendasi.rekomendasi')
+                    ->selectRaw('status_rekomendasi.rekomendasi, sum(tindak_lanjut_rincian.nilai) as sum')
+                    ->get();
+            }
             return view('backend.pages.data-lhp.rincian-table.table-sewa')
                     ->with('rincian',$rincian)
                     ->with('idtemuan',$idtemuan)
                     ->with('jenis',$jenis)
                     ->with('status_rekomendasi',$status_rekom)
-                    ->with('rinciantindaklanjut',$rinciantindaklanjut)
+                    ->with('rinciantindaklanjut',$arrayrinciantindaklanjut)
                     ->with('idrekomendasi',$idrekomendasi);
         }
         elseif($jenis=='uangmuka')
@@ -685,12 +698,24 @@ class DataRekomendasiController extends Controller
             // }
             $rincian=RincianUangMuka::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)
                         ->get();
+            $arrayrinciantindaklanjut = array();
+            foreach($rincian as $k=>$v){
+                $arrayrinciantindaklanjut[$v->id] = TindakLanjutRincian::where('tindak_lanjut_rincian.id_temuan','=',$idtemuan)
+                    ->where('tindak_lanjut_rincian.id_rekomendasi','=',$idrekomendasi)
+                    ->where('jenis', $jenis)
+                    ->leftjoin('mapping_rincian_tindak_lanjut_detail', 'tindak_lanjut_rincian.id', '=', 'mapping_rincian_tindak_lanjut_detail.id_tindak_lanjut_rincian')
+                    ->join('status_rekomendasi', 'tindak_lanjut_rincian.status_rincian', '=', 'status_rekomendasi.id')
+                    ->where('mapping_rincian_tindak_lanjut_detail.id_rincian', $v->id)
+                    ->groupBy('status_rekomendasi.rekomendasi')
+                    ->selectRaw('status_rekomendasi.rekomendasi, sum(tindak_lanjut_rincian.nilai) as sum')
+                    ->get();
+            }
             return view('backend.pages.data-lhp.rincian-table.table-uangmuka')
                     ->with('rincian',$rincian)
                     ->with('idtemuan',$idtemuan)
                     ->with('jenis',$jenis)
                     ->with('status_rekomendasi',$status_rekom)
-                    ->with('rinciantindaklanjut',$rinciantindaklanjut)
+                    ->with('rinciantindaklanjut',$arrayrinciantindaklanjut)
                     ->with('idrekomendasi',$idrekomendasi);
 
            
@@ -706,13 +731,24 @@ class DataRekomendasiController extends Controller
             // }
             $rincian=RincianListrik::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)
                         ->get();
-            
+            $arrayrinciantindaklanjut = array();
+            foreach($rincian as $k=>$v){
+                $arrayrinciantindaklanjut[$v->id] = TindakLanjutRincian::where('tindak_lanjut_rincian.id_temuan','=',$idtemuan)
+                    ->where('tindak_lanjut_rincian.id_rekomendasi','=',$idrekomendasi)
+                    ->where('jenis', $jenis)
+                    ->leftjoin('mapping_rincian_tindak_lanjut_detail', 'tindak_lanjut_rincian.id', '=', 'mapping_rincian_tindak_lanjut_detail.id_tindak_lanjut_rincian')
+                    ->join('status_rekomendasi', 'tindak_lanjut_rincian.status_rincian', '=', 'status_rekomendasi.id')
+                    ->where('mapping_rincian_tindak_lanjut_detail.id_rincian', $v->id)
+                    ->groupBy('status_rekomendasi.rekomendasi')
+                    ->selectRaw('status_rekomendasi.rekomendasi, sum(tindak_lanjut_rincian.nilai) as sum')
+                    ->get();
+            }
             return view('backend.pages.data-lhp.rincian-table.table-listrik')
                     ->with('rincian',$rincian)
                     ->with('idtemuan',$idtemuan)
                     ->with('jenis',$jenis)
                     ->with('status_rekomendasi',$status_rekom)
-                    ->with('rinciantindaklanjut',$rinciantindaklanjut)
+                    ->with('rinciantindaklanjut',$arrayrinciantindaklanjut)
                     ->with('idrekomendasi',$idrekomendasi);
             
         }
@@ -727,12 +763,24 @@ class DataRekomendasiController extends Controller
             // }
             $rincian=RincianPiutang::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)
                         ->get();
+            $arrayrinciantindaklanjut = array();
+            foreach($rincian as $k=>$v){
+                $arrayrinciantindaklanjut[$v->id] = TindakLanjutRincian::where('tindak_lanjut_rincian.id_temuan','=',$idtemuan)
+                    ->where('tindak_lanjut_rincian.id_rekomendasi','=',$idrekomendasi)
+                    ->where('jenis', $jenis)
+                    ->leftjoin('mapping_rincian_tindak_lanjut_detail', 'tindak_lanjut_rincian.id', '=', 'mapping_rincian_tindak_lanjut_detail.id_tindak_lanjut_rincian')
+                    ->join('status_rekomendasi', 'tindak_lanjut_rincian.status_rincian', '=', 'status_rekomendasi.id')
+                    ->where('mapping_rincian_tindak_lanjut_detail.id_rincian', $v->id)
+                    ->groupBy('status_rekomendasi.rekomendasi')
+                    ->selectRaw('status_rekomendasi.rekomendasi, sum(tindak_lanjut_rincian.nilai) as sum')
+                    ->get();
+            }
             return view('backend.pages.data-lhp.rincian-table.table-piutang')
                     ->with('rincian',$rincian)
                     ->with('idtemuan',$idtemuan)
                     ->with('jenis',$jenis)
                     ->with('status_rekomendasi',$status_rekom)
-                    ->with('rinciantindaklanjut',$rinciantindaklanjut)
+                    ->with('rinciantindaklanjut',$arrayrinciantindaklanjut)
                     ->with('idrekomendasi',$idrekomendasi);
             
         }
@@ -747,12 +795,24 @@ class DataRekomendasiController extends Controller
             // }
             $rincian=RincianPiutangKaryawan::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)
                         ->get();
+            $arrayrinciantindaklanjut = array();
+            foreach($rincian as $k=>$v){
+                $arrayrinciantindaklanjut[$v->id] = TindakLanjutRincian::where('tindak_lanjut_rincian.id_temuan','=',$idtemuan)
+                    ->where('tindak_lanjut_rincian.id_rekomendasi','=',$idrekomendasi)
+                    ->where('jenis', $jenis)
+                    ->leftjoin('mapping_rincian_tindak_lanjut_detail', 'tindak_lanjut_rincian.id', '=', 'mapping_rincian_tindak_lanjut_detail.id_tindak_lanjut_rincian')
+                    ->join('status_rekomendasi', 'tindak_lanjut_rincian.status_rincian', '=', 'status_rekomendasi.id')
+                    ->where('mapping_rincian_tindak_lanjut_detail.id_rincian', $v->id)
+                    ->groupBy('status_rekomendasi.rekomendasi')
+                    ->selectRaw('status_rekomendasi.rekomendasi, sum(tindak_lanjut_rincian.nilai) as sum')
+                    ->get();
+            }
             return view('backend.pages.data-lhp.rincian-table.table-piutangkaryawan')
                     ->with('rincian',$rincian)
                     ->with('idtemuan',$idtemuan)
                     ->with('jenis',$jenis)
                     ->with('status_rekomendasi',$status_rekom)
-                    ->with('rinciantindaklanjut',$rinciantindaklanjut)
+                    ->with('rinciantindaklanjut',$arrayrinciantindaklanjut)
                     ->with('idrekomendasi',$idrekomendasi);
             
         }
@@ -769,12 +829,24 @@ class DataRekomendasiController extends Controller
             $rincian=RincianHutangTitipan::where('rincian_hutang_titipan.id_temuan',$idtemuan)->where('rincian_hutang_titipan.id_rekomendasi',$idrekomendasi)
                         ->join('data_rekomendasi', 'rincian_hutang_titipan.id_rekomendasi','=', 'data_rekomendasi.id')
                         ->get(['rincian_hutang_titipan.*', 'data_rekomendasi.status_rekomendasi_id as rekom_id']);
+            $arrayrinciantindaklanjut = array();
+            foreach($rincian as $k=>$v){
+                $arrayrinciantindaklanjut[$v->id] = TindakLanjutRincian::where('tindak_lanjut_rincian.id_temuan','=',$idtemuan)
+                    ->where('tindak_lanjut_rincian.id_rekomendasi','=',$idrekomendasi)
+                    ->where('jenis', $jenis)
+                    ->leftjoin('mapping_rincian_tindak_lanjut_detail', 'tindak_lanjut_rincian.id', '=', 'mapping_rincian_tindak_lanjut_detail.id_tindak_lanjut_rincian')
+                    ->join('status_rekomendasi', 'tindak_lanjut_rincian.status_rincian', '=', 'status_rekomendasi.id')
+                    ->where('mapping_rincian_tindak_lanjut_detail.id_rincian', $v->id)
+                    ->groupBy('status_rekomendasi.rekomendasi')
+                    ->selectRaw('status_rekomendasi.rekomendasi, sum(tindak_lanjut_rincian.nilai) as sum')
+                    ->get();
+            }
             return view('backend.pages.data-lhp.rincian-table.table-hutangtitipan')
                     ->with('rincian',$rincian)
                     ->with('idtemuan',$idtemuan)
                     ->with('jenis',$jenis)
                     ->with('status_rekomendasi',$status_rekom)
-                    ->with('rinciantindaklanjut',$rinciantindaklanjut)
+                    ->with('rinciantindaklanjut',$arrayrinciantindaklanjut)
                     ->with('idrekomendasi',$idrekomendasi);
             
         }
@@ -796,19 +868,24 @@ class DataRekomendasiController extends Controller
             // }
             $rincian=RincianPenutupanRekening::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)
                         ->get();
-            $rinciantindaklanjut=TindakLanjutRincian::where('tindak_lanjut_rincian.id_temuan',$idtemuan)
-                        ->where('tindak_lanjut_rincian.id_rekomendasi',$idrekomendasi)
-                        ->where('tindak_lanjut_rincian.jenis', $jenis)
-                        ->join('status_rekomendasi', 'tindak_lanjut_rincian.status_rincian', '=', 'status_rekomendasi.id')
-                        ->groupBy('status_rekomendasi.rekomendasi')
-                        ->selectRaw('status_rekomendasi.rekomendasi, sum(tindak_lanjut_rincian.saldo_akhir) as sum')
-                        ->get();
+                        $arrayrinciantindaklanjut = array();
+            foreach($rincian as $k=>$v){
+                $arrayrinciantindaklanjut[$v->id] = TindakLanjutRincian::where('tindak_lanjut_rincian.id_temuan','=',$idtemuan)
+                    ->where('tindak_lanjut_rincian.id_rekomendasi','=',$idrekomendasi)
+                    ->where('jenis', $jenis)
+                    ->leftjoin('mapping_rincian_tindak_lanjut_detail', 'tindak_lanjut_rincian.id', '=', 'mapping_rincian_tindak_lanjut_detail.id_tindak_lanjut_rincian')
+                    ->join('status_rekomendasi', 'tindak_lanjut_rincian.status_rincian', '=', 'status_rekomendasi.id')
+                    ->where('mapping_rincian_tindak_lanjut_detail.id_rincian', $v->id)
+                    ->groupBy('status_rekomendasi.rekomendasi')
+                    ->selectRaw('status_rekomendasi.rekomendasi, sum(tindak_lanjut_rincian.saldo_akhir) as sum')
+                    ->get();
+            }
             return view('backend.pages.data-lhp.rincian-table.table-penutupanrekening')
                     ->with('rincian',$rincian)
                     ->with('idtemuan',$idtemuan)
                     ->with('jenis',$jenis)
                     ->with('status_rekomendasi',$status_rekom)
-                    ->with('rinciantindaklanjut',$rinciantindaklanjut)
+                    ->with('rinciantindaklanjut',$arrayrinciantindaklanjut)
                     ->with('idrekomendasi',$idrekomendasi);
 
             
@@ -824,12 +901,25 @@ class DataRekomendasiController extends Controller
             // }
             $rincian=RincianUmum::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)
                         ->get();
+                        $arrayrinciantindaklanjut = array();
+            foreach($rincian as $k=>$v){
+                $arrayrinciantindaklanjut[$v->id] = TindakLanjutRincian::where('tindak_lanjut_rincian.id_temuan','=',$idtemuan)
+                    ->where('tindak_lanjut_rincian.id_rekomendasi','=',$idrekomendasi)
+                    ->where('jenis', $jenis)
+                    ->leftjoin('mapping_rincian_tindak_lanjut_detail', 'tindak_lanjut_rincian.id', '=', 'mapping_rincian_tindak_lanjut_detail.id_tindak_lanjut_rincian')
+                    ->join('status_rekomendasi', 'tindak_lanjut_rincian.status_rincian', '=', 'status_rekomendasi.id')
+                    ->where('mapping_rincian_tindak_lanjut_detail.id_rincian', $v->id)
+                    ->groupBy('status_rekomendasi.rekomendasi')
+                    ->selectRaw('status_rekomendasi.rekomendasi, sum(tindak_lanjut_rincian.nilai) as sum')
+                    ->get();
+            }
+
             return view('backend.pages.data-lhp.rincian-table.table-umum')
                     ->with('rincian',$rincian)
                     ->with('idtemuan',$idtemuan)
                     ->with('jenis',$jenis)
                     ->with('status_rekomendasi',$status_rekom)
-                    ->with('rinciantindaklanjut',$rinciantindaklanjut)
+                    ->with('rinciantindaklanjut',$arrayrinciantindaklanjut)
                     ->with('idrekomendasi',$idrekomendasi);
         }
         elseif($jenis=='kontribusi'){
@@ -842,12 +932,24 @@ class DataRekomendasiController extends Controller
             // }
             $rincian=RincianKontribusi::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)
                         ->get();
+                        $arrayrinciantindaklanjut = array();
+            foreach($rincian as $k=>$v){
+                $arrayrinciantindaklanjut[$v->id] = TindakLanjutRincian::where('tindak_lanjut_rincian.id_temuan','=',$idtemuan)
+                    ->where('tindak_lanjut_rincian.id_rekomendasi','=',$idrekomendasi)
+                    ->where('jenis', $jenis)
+                    ->leftjoin('mapping_rincian_tindak_lanjut_detail', 'tindak_lanjut_rincian.id', '=', 'mapping_rincian_tindak_lanjut_detail.id_tindak_lanjut_rincian')
+                    ->join('status_rekomendasi', 'tindak_lanjut_rincian.status_rincian', '=', 'status_rekomendasi.id')
+                    ->where('mapping_rincian_tindak_lanjut_detail.id_rincian', $v->id)
+                    ->groupBy('status_rekomendasi.rekomendasi')
+                    ->selectRaw('status_rekomendasi.rekomendasi, sum(tindak_lanjut_rincian.nilai) as sum')
+                    ->get();
+            }
             return view('backend.pages.data-lhp.rincian-table.table-kontribusi')
                     ->with('rincian',$rincian)
                     ->with('idtemuan',$idtemuan)
                     ->with('jenis',$jenis)
                     ->with('status_rekomendasi',$status_rekom)
-                    ->with('rinciantindaklanjut',$rinciantindaklanjut)
+                    ->with('rinciantindaklanjut',$arrayrinciantindaklanjut)
                     ->with('idrekomendasi',$idrekomendasi);
         }elseif($jenis=='nonsetoranperjanjiankerjasama'){
             // if(Auth::user()->level=='pic-unit')
@@ -859,12 +961,24 @@ class DataRekomendasiController extends Controller
             // }
             $rincian=RincianNonSetoranPerpanjanganPerjanjianKerjasama::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)
                         ->get();
+                        $arrayrinciantindaklanjut = array();
+            foreach($rincian as $k=>$v){
+                $arrayrinciantindaklanjut[$v->id] = TindakLanjutRincian::where('tindak_lanjut_rincian.id_temuan','=',$idtemuan)
+                    ->where('tindak_lanjut_rincian.id_rekomendasi','=',$idrekomendasi)
+                    ->where('jenis', $jenis)
+                    ->leftjoin('mapping_rincian_tindak_lanjut_detail', 'tindak_lanjut_rincian.id', '=', 'mapping_rincian_tindak_lanjut_detail.id_tindak_lanjut_rincian')
+                    ->join('status_rekomendasi', 'tindak_lanjut_rincian.status_rincian', '=', 'status_rekomendasi.id')
+                    ->where('mapping_rincian_tindak_lanjut_detail.id_rincian', $v->id)
+                    ->groupBy('status_rekomendasi.rekomendasi')
+                    ->selectRaw('status_rekomendasi.rekomendasi, sum(tindak_lanjut_rincian.nilai) as sum')
+                    ->get();
+            }
             return view('backend.pages.data-lhp.rincian-table.table-nonsetoranperjanjiankerjasama')
                     ->with('rincian',$rincian)
                     ->with('idtemuan',$idtemuan)
                     ->with('jenis',$jenis)
                     ->with('status_rekomendasi',$status_rekom)
-                    ->with('rinciantindaklanjut',$rinciantindaklanjut)
+                    ->with('rinciantindaklanjut',$arrayrinciantindaklanjut)
                     ->with('idrekomendasi',$idrekomendasi);
         }elseif($jenis=='nonsetoran'){
             // if(Auth::user()->level=='pic-unit')
@@ -876,12 +990,25 @@ class DataRekomendasiController extends Controller
             // }
             $rincian=RincianNonSetoran::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)
                         ->get();
+
+                        $arrayrinciantindaklanjut = array();
+            foreach($rincian as $k=>$v){
+                $arrayrinciantindaklanjut[$v->id] = TindakLanjutRincian::where('tindak_lanjut_rincian.id_temuan','=',$idtemuan)
+                    ->where('tindak_lanjut_rincian.id_rekomendasi','=',$idrekomendasi)
+                    ->where('jenis', $jenis)
+                    ->leftjoin('mapping_rincian_tindak_lanjut_detail', 'tindak_lanjut_rincian.id', '=', 'mapping_rincian_tindak_lanjut_detail.id_tindak_lanjut_rincian')
+                    ->join('status_rekomendasi', 'tindak_lanjut_rincian.status_rincian', '=', 'status_rekomendasi.id')
+                    ->where('mapping_rincian_tindak_lanjut_detail.id_rincian', $v->id)
+                    ->groupBy('status_rekomendasi.rekomendasi')
+                    ->selectRaw('status_rekomendasi.rekomendasi, sum(tindak_lanjut_rincian.nilai) as sum')
+                    ->get();
+            }
             return view('backend.pages.data-lhp.rincian-table.table-nonsetoran')
                     ->with('rincian',$rincian)
                     ->with('idtemuan',$idtemuan)
                     ->with('jenis',$jenis)
                     ->with('status_rekomendasi',$status_rekom)
-                    ->with('rinciantindaklanjut',$rinciantindaklanjut)
+                    ->with('rinciantindaklanjut',$arrayrinciantindaklanjut)
                     ->with('idrekomendasi',$idrekomendasi);
         }elseif($jenis=='nonsetoranumum'){
             // if(Auth::user()->level=='pic-unit')
@@ -893,12 +1020,24 @@ class DataRekomendasiController extends Controller
             // }
             $rincian=RincianNonSetoranUmum::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)
                         ->get();
+                        $arrayrinciantindaklanjut = array();
+            foreach($rincian as $k=>$v){
+                $arrayrinciantindaklanjut[$v->id] = TindakLanjutRincian::where('tindak_lanjut_rincian.id_temuan','=',$idtemuan)
+                    ->where('tindak_lanjut_rincian.id_rekomendasi','=',$idrekomendasi)
+                    ->where('jenis', $jenis)
+                    ->leftjoin('mapping_rincian_tindak_lanjut_detail', 'tindak_lanjut_rincian.id', '=', 'mapping_rincian_tindak_lanjut_detail.id_tindak_lanjut_rincian')
+                    ->join('status_rekomendasi', 'tindak_lanjut_rincian.status_rincian', '=', 'status_rekomendasi.id')
+                    ->where('mapping_rincian_tindak_lanjut_detail.id_rincian', $v->id)
+                    ->groupBy('status_rekomendasi.rekomendasi')
+                    ->selectRaw('status_rekomendasi.rekomendasi, sum(tindak_lanjut_rincian.nilai) as sum')
+                    ->get();
+            }
             return view('backend.pages.data-lhp.rincian-table.table-nonsetoranumum')
                     ->with('rincian',$rincian)
                     ->with('idtemuan',$idtemuan)
                     ->with('jenis',$jenis)
                     ->with('status_rekomendasi',$status_rekom)
-                    ->with('rinciantindaklanjut',$rinciantindaklanjut)
+                    ->with('rinciantindaklanjut',$arrayrinciantindaklanjut)
                     ->with('idrekomendasi',$idrekomendasi);
         }elseif($jenis=='nonsetoranpertanggungjawabanuangmuka'){
             // if(Auth::user()->level=='pic-unit')
@@ -910,12 +1049,25 @@ class DataRekomendasiController extends Controller
             // }
             $rincian=RincianNonSetoranPertanggungjawabanUangMuka::where('id_temuan',$idtemuan)->where('id_rekomendasi',$idrekomendasi)
                         ->get();
+
+                        $arrayrinciantindaklanjut = array();
+            foreach($rincian as $k=>$v){
+                $arrayrinciantindaklanjut[$v->id] = TindakLanjutRincian::where('tindak_lanjut_rincian.id_temuan','=',$idtemuan)
+                    ->where('tindak_lanjut_rincian.id_rekomendasi','=',$idrekomendasi)
+                    ->where('jenis', $jenis)
+                    ->leftjoin('mapping_rincian_tindak_lanjut_detail', 'tindak_lanjut_rincian.id', '=', 'mapping_rincian_tindak_lanjut_detail.id_tindak_lanjut_rincian')
+                    ->join('status_rekomendasi', 'tindak_lanjut_rincian.status_rincian', '=', 'status_rekomendasi.id')
+                    ->where('mapping_rincian_tindak_lanjut_detail.id_rincian', $v->id)
+                    ->groupBy('status_rekomendasi.rekomendasi')
+                    ->selectRaw('status_rekomendasi.rekomendasi, sum(tindak_lanjut_rincian.nilai) as sum')
+                    ->get();
+            }
             return view('backend.pages.data-lhp.rincian-table.table-nonsetoranpertanggungjawabanuangmuka')
                     ->with('rincian',$rincian)
                     ->with('idtemuan',$idtemuan)
                     ->with('jenis',$jenis)
                     ->with('status_rekomendasi',$status_rekom)
-                    ->with('rinciantindaklanjut',$rinciantindaklanjut)
+                    ->with('rinciantindaklanjut',$arrayrinciantindaklanjut)
                     ->with('idrekomendasi',$idrekomendasi);
         }
     }

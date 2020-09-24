@@ -19,7 +19,7 @@
         <div class="form-group">
             <label for="exampleTextInput1" class="col-sm-12 control-label text-left">Dokumen Pendukung:</label>
             <div class="col-sm-12">
-                <input type="file" class="form-control"  id="add-dokumen"  name="dokumen_pendukung"  placeholder="Dokumen Pendukung" accept=".doc,.docx,.pdf,.xls,.xlsx">
+                <input type="file" class="form-control"  id="add-dokumen"  name="dokumen_pendukung"  placeholder="Dokumen Pendukung" >
             </div>
         </div>    
         <input type="hidden" id="add_rekom_id">

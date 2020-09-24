@@ -87,7 +87,7 @@
         <div class="form-group" style="margin-top:-20px;">
             <label for="exampleTextInput1" class="col-sm-12 control-label text-left">Dokumen Pendukung:</label>
             <div class="col-sm-12">
-                <input type="file" class="form-control"  id="add-dokumen-1" onchange="insertFile(1)" name="dokumen_pendukung_1"  placeholder="Dokumen Pendukung" accept=".doc,.docx,.pdf,.xls,.xlsx">
+                <input type="file" class="form-control"  id="add-dokumen-1" onchange="insertFile(1)" name="dokumen_pendukung_1"  placeholder="Dokumen Pendukung">
 
                 <br><div class="field_wrapper"></div>
             

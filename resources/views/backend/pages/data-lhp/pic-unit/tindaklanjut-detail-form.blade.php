@@ -327,7 +327,7 @@
                             <label for="exampleTextInput1" class="col-sm-12 control-label text-left">Dokumen Pendukung:</label>
                             <div class="col-sm-11">
                                 @if ($rekom->publish_pic_1==0)
-                                    <input type="file" class="form-control"  id="file_pendukung"  name="file_pendukung"  placeholder="Dokumen Pendukung" accept=".doc,.docx,.pdf,.xls,.xlsx">
+                                    <input type="file" class="form-control"  id="file_pendukung"  name="file_pendukung"  placeholder="Dokumen Pendukung">
                                     <small><i>*Biarkan Kosong Jika Tidak Ingin Di Ganti</i></small>
                                 @else
                                     @if ($rekom->file_pendukung!='')

@@ -1160,7 +1160,7 @@ function addtindaklanjutrincian(idrincian,jenis, totalNilai, title, isUpdate = f
                                         <input type="text" class="form-control"  class="form-control" value="'+documentName.replace(/\.[^/.]+$/, "")+'" name="nama_file_'+i+'"  placeholder="Nama File" id="nama_file_'+i+'">\
                                     </div>\
                                     <div class="col-sm-5">\
-                                        <input type="file" class="form-control"  class="form-control" onchange="insertFile('+i+')" id="add_dokumen_'+i+'" name="add_dokumen_'+i+'"  placeholder="File Pendukung" accept=".doc,.docx,.pdf,.xls,.xlsx">\
+                                        <input type="file" class="form-control"  class="form-control" onchange="insertFile('+i+')" id="add_dokumen_'+i+'" name="add_dokumen_'+i+'"  placeholder="File Pendukung">\
                                     </div>\
                                 </div> ';
                             $(wrapper).append(fieldHTML);
@@ -1609,7 +1609,7 @@ function add_kolom()
                     <input type="text" name="nama_file_'+x+'" id="nama_file_'+x+'" class="form-control" placeholder="Nama File">\
                 </div>\
                 <div class="col-sm-5">\
-                    <input type="file" class="form-control" onchange="uploadfile(this,'+x+')" id="add_dokumen_'+ x + '" name="add_dokumen_'+ x + '" placeholder="Dokumen Pendukung" accept=".doc,.docx,.pdf,.xls,.xlsx">\
+                    <input type="file" class="form-control" onchange="uploadfile(this,'+x+')" id="add_dokumen_'+ x + '" name="add_dokumen_'+ x + '" placeholder="Dokumen Pendukung">\
                     <span style="text-style:italic;font-weight:bold;"></span>\
                 </div>\
                 <div class="col-sm-1">\
@@ -1629,7 +1629,7 @@ function rincianAddColumn(){
                 <input type="text" class="form-control"  class="form-control"  name="nama_file_'+rincianFileQty+'"  placeholder="Nama File" id="nama_file_'+rincianFileQty+'">\
             </div>\
             <div class="col-sm-5">\
-                <input type="file" class="form-control"  class="form-control" onchange="insertFile('+rincianFileQty+')" id="add_dokumen_'+rincianFileQty+'" name="add_dokumen_'+rincianFileQty+'"  placeholder="File Pendukung" accept=".doc,.docx,.pdf,.xls,.xlsx">\
+                <input type="file" class="form-control"  class="form-control" onchange="insertFile('+rincianFileQty+')" id="add_dokumen_'+rincianFileQty+'" name="add_dokumen_'+rincianFileQty+'"  placeholder="File Pendukung">\
             </div>\
         </div> ';
     $(wrapper).append(fieldHTML);
@@ -1638,7 +1638,7 @@ tindaklanjutFileQty=1;
 function tindaklanjutAddColumn(){
     tindaklanjutFileQty++;
     var wrapper = $('.field_wrapper');
-    var fieldHTML = '<input type="file" class="form-control"  id="add-dokumen-'+tindaklanjutFileQty+'" onchange="insertFile('+tindaklanjutFileQty+')" name="dokumen_pendukung_'+tindaklanjutFileQty+'"  placeholder="Dokumen Pendukung" accept=".doc,.docx,.pdf,.xls,.xlsx"><br>';
+    var fieldHTML = '<input type="file" class="form-control"  id="add-dokumen-'+tindaklanjutFileQty+'" onchange="insertFile('+tindaklanjutFileQty+')" name="dokumen_pendukung_'+tindaklanjutFileQty+'"  placeholder="Dokumen Pendukung"><br>';
     $(wrapper).append(fieldHTML);
 }
 function insertFile(val){

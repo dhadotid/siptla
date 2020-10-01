@@ -59,6 +59,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    @if($rekom)
                                         @foreach ($rekom as $key=>$item)
                                         <tr>
                                             <td class="text-center">{{ ($key + 1) }}</td>
@@ -87,7 +88,7 @@
                                         </tr>
                                             
                                         @endforeach
-                                        
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>

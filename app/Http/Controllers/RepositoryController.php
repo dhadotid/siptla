@@ -138,17 +138,21 @@ class RepositoryController extends Controller
         }elseif(Auth::user()->level=='super-user'){
             $data=DaftarTemuan::where('id',$idlhp)->with('dpemeriksa')->with('djenisaudit')->first();
         }elseif(Auth::user()->level=='pic-unit'){
+            $picUnit = PICUnit::where('id','=',Auth::user()->pic_unit_id)->pluck('id')->first();
             $data=DaftarTemuan::select('daftar_lhp.*')
                         ->leftJoin('data_temuan', 'data_temuan.id_lhp', '=', 'daftar_lhp.id')
                         ->leftJoin('data_rekomendasi', 'data_rekomendasi.id_temuan', '=', 'data_temuan.id')
-                        ->where('data_rekomendasi.pic_1_temuan_id','=',Auth::user()->id)
-                        ->orWhere('data_rekomendasi.pic_2_temuan_id','=','%'.Auth::user()->id.'%')
+                        ->where('data_rekomendasi.pic_1_temuan_id','=',$picUnit)
+                        ->orWhere('data_rekomendasi.pic_2_temuan_id','=','%'.$picUnit.'%')
                         ->where('daftar_lhp.id',$idlhp)->with('dpemeriksa')->with('djenisaudit')->first();
         }
 
-        $getTemuanId = DataTemuan::select('id')->where('id_lhp', $data->id)->pluck('id')->toArray();
-
-        // return $getTemuanId;
+        // return json_encode($data);
+        $idlhpaa = 0;
+        if($data){
+            $idlhpaa = $data->id;
+        }
+        $getTemuanId = DataTemuan::select('id')->where('id_lhp', $idlhpaa)->pluck('id')->toArray();
 
         if(Auth::user()->level=='auditor-senior'){
             $rekom = DataRekomendasi::whereIn('id_temuan', $getTemuanId)->where('senior_user_id','=',Auth::user()->id)->get();

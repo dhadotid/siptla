@@ -77,6 +77,7 @@
                                             </select>
                                         </div>
                                     </div>
+                                    @if (Auth::user()->level!='pic-unit')
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Unit Kerja 1</label>
                                         <div class="col-md-6">
@@ -99,6 +100,16 @@
                                             </select>
                                         </div>
                                     </div>
+                                    @elseif (Auth::user()->level=='pic-unit')
+                                    <span style="display: none;">
+                                    <select class="select2 form-control" name="unit_kerja1[]" id="unit_kerja1" multiple>
+                                                <option value="{{$unitkerja->id}}" selected>Semua</option>
+                                            </select>
+                                            <select class="select2 form-control" name="unit_kerja2[]" id="unit_kerja2" multiple>
+                                                <option value="{{$unitkerja->id}}" selected>Semua</option>
+                                            </select>
+                                    </span>
+                                    @endif
                                     <div class="form-group" style="margin-bottom:5px;">
                                         <label for="my-input" class="col-md-3">Tanggal Awal</label>
                                         <div class="col-md-3">

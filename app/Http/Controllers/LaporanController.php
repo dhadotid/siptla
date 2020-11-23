@@ -21,6 +21,8 @@ use PDF;
 use Excel;
 use Carbon\Carbon;
 use Config;
+use App\User;
+
 class LaporanController extends Controller
 {
     public function temuan_per_bidang()
@@ -443,7 +445,11 @@ class LaporanController extends Controller
         $levelresiko=LevelResiko::orderBy('level_resiko')->get();
         $bidang=Bidang::orderBy('nama_bidang')->get();
         $pejabat=PejabatTandaTangan::all();
-        $unitkerja=PICUnit::all();
+        if(Auth::user()->level=='pic-unit'){
+            $unitkerja=PICUnit::find(Auth::user()->pic_unit_id);
+        }else{
+            $unitkerja=PICUnit::all();
+        }
         return view('backend.pages.laporan.temuan-per-unitkerja.index')
                 ->with('pemeriksa',$pemeriksa)
                 ->with('bidang',$bidang)
@@ -489,9 +495,11 @@ class LaporanController extends Controller
                 $arrayBidang[] = $v;
             }
         }
+    
         $arrayUnitKerja1 = array();
         if($request->unitkerja1 != '' && $request->unitkerja1!=0){
             $unitkerja1 = $request->unitkerja1;
+            $unitkerja1 = implode(',', $unitkerja1);
             foreach (explode(',', $unitkerja1) as $v ) {
                 $arrayUnitKerja1[] = $v;
             }
@@ -499,6 +507,7 @@ class LaporanController extends Controller
         $arrayUnitKerja2 = array();
         if($request->unitkerja2 != '' && $request->unitkerja2!=0){
             $unitkerja2 = $request->unitkerja2;
+            $unitkerja2 = implode(',', $unitkerja2);
             foreach (explode(',', $unitkerja2) as $v ) {
                 $arrayUnitKerja2[] = $v;
             }
@@ -557,7 +566,8 @@ class LaporanController extends Controller
                                     
 
         if(count($arrayUnitKerja2)>0 && !in_array(0, $arrayUnitKerja2)){
-            $alldata = $alldata->whereIn('data_rekomendasi.pic_2_temuan_id', 'like',"".$arrayUnitKerja2.",%");
+            // $alldata = $alldata->whereIn('data_rekomendasi.pic_2_temuan_id', 'like',"".$arrayUnitKerja2.",%");
+            $alldata = $alldata->where('data_rekomendasi.pic_2_temuan_id', 'like',"%".implode(',', $arrayUnitKerja2).",%");
         }
 
         $all=$alldata->get();
@@ -687,6 +697,7 @@ class LaporanController extends Controller
                 $arrayBidang[] = $v;
             }
         }
+
         $arrayUnitKerja1 = array();
         if($request->unitkerja1 != '' && $request->unitkerja1!=0){
             $unitkerja1 = $request->unitkerja1;
@@ -754,10 +765,10 @@ class LaporanController extends Controller
                                         $alldata = $alldata->whereIn('data_rekomendasi.pic_1_temuan_id', $arrayUnitKerja1);
                                     }
                                     $alldata=$alldata->whereNull('data_rekomendasi.deleted_at');
+            
                                     
-
         if(count($arrayUnitKerja2)>0 && !in_array(0, $arrayUnitKerja2)){
-            $alldata = $alldata->whereIn('data_rekomendasi.pic_2_temuan_id', 'like',"".$arrayUnitKerja2.",%");
+            $alldata = $alldata->where('data_rekomendasi.pic_2_temuan_id', 'like',"%".implode(',', $arrayUnitKerja2).",%");
         }
 
         $all=$alldata->get();
@@ -785,9 +796,7 @@ class LaporanController extends Controller
                             ->get();
             }
             else
-            {
-                
-                    
+            {              
                     $alldatas=$alldata->orderBy('daftar_lhp.no_lhp')
                             ->orderBy('data_temuan.no_temuan')
                             ->orderBy('data_rekomendasi.nomor_rekomendasi')
@@ -846,7 +855,11 @@ class LaporanController extends Controller
         $levelresiko=LevelResiko::orderBy('level_resiko')->get();
         $bidang=Bidang::orderBy('nama_bidang')->get();
         $pejabat=PejabatTandaTangan::all();
-        $unitkerja=PICUnit::all();
+        if(Auth::user()->level=='pic-unit'){
+            $unitkerja=PICUnit::find(Auth::user()->pic_unit_id);
+        }else{
+            $unitkerja=PICUnit::all();
+        }
         return view('backend.pages.laporan.temuan-per-lhp.index')
                 ->with('pemeriksa',$pemeriksa)
                 ->with('bidang',$bidang)
@@ -904,6 +917,7 @@ class LaporanController extends Controller
                 $arrayUnitKerja1[] = $v;
             }
         }
+    
         $arrayUnitKerja2 = array();
         if($request->unitkerja2 != '' && $request->unitkerja2!=0){
             $unitkerja2 = $request->unitkerja2;
@@ -955,7 +969,8 @@ class LaporanController extends Controller
                                     $alldata=$alldata->whereNull('data_rekomendasi.deleted_at');
                                     
         if(count($arrayUnitKerja2)>0 && !in_array(0, $arrayUnitKerja2)){
-            $alldata = $alldata->whereIn('data_rekomendasi.pic_2_temuan_id', 'like',"".$arrayUnitKerja2.",%");
+            // $alldata = $alldata->whereIn('data_rekomendasi.pic_2_temuan_id', 'like',"".$arrayUnitKerja2.",%");
+            $alldata = $alldata->where('data_rekomendasi.pic_2_temuan_id', 'like',"%".implode(',', $arrayUnitKerja2).",%");
         }
 
         $all=$alldata->get();
@@ -1128,7 +1143,7 @@ class LaporanController extends Controller
                                     $alldata=$alldata->whereNull('data_rekomendasi.deleted_at');
                                     
         if(count($arrayUnitKerja2)>0 && !in_array(0, $arrayUnitKerja2)){
-            $alldata = $alldata->whereIn('data_rekomendasi.pic_2_temuan_id', 'like',"".$arrayUnitKerja2.",%");
+            $alldata = $alldata->where('data_rekomendasi.pic_2_temuan_id', 'like',"%".implode(',', $arrayUnitKerja2).",%");
         }
 
         $all=$alldata->get();
@@ -1294,6 +1309,11 @@ class LaporanController extends Controller
                                     if(count($arrayLHP)>0&& !in_array(0, $arrayLHP)){
                                         $alldata = $alldata->whereIn('daftar_lhp.id', $arrayLHP);
                                     }
+                                    if(Auth::user()->level=='pic-unit'){
+                                        $picUser = PICUnit::find(Auth::user()->pic_unit_id);
+                                        $alldata = $alldata->where('data_rekomendasi.pic_1_temuan_id', $picUser->id);
+                                        $alldata = $alldata->where('data_rekomendasi.pic_2_temuan_id', 'like',"".$picUser->id.",%");
+                                    }
                         $alldata = $alldata->whereNull('data_rekomendasi.deleted_at');
                                     
 
@@ -1419,6 +1439,11 @@ class LaporanController extends Controller
                                     }
                                     if(count($arrayLHP)>0&& !in_array(0, $arrayLHP)){
                                         $alldata = $alldata->whereIn('daftar_lhp.id', $arrayLHP);
+                                    }
+                                    if(Auth::user()->level=='pic-unit'){
+                                        $picUser = PICUnit::find(Auth::user()->pic_unit_id);
+                                        $alldata = $alldata->where('data_rekomendasi.pic_1_temuan_id', $picUser->id);
+                                        $alldata = $alldata->where('data_rekomendasi.pic_2_temuan_id', 'like',"".$picUser->id.",%");
                                     }
                         $alldata = $alldata->whereNull('data_rekomendasi.deleted_at');
                                     
@@ -2626,7 +2651,11 @@ class LaporanController extends Controller
         $statusrekomendasi=StatusRekomendasi::orderBy('rekomendasi')->get();
         $pejabat=PejabatTandaTangan::all();
         $bidang=Bidang::orderBy('nama_bidang')->get();
-        $picunit=PICUnit::all();
+        if(Auth::user()->level=='pic-unit'){
+            $picunit=PICUnit::find(Auth::user()->pic_unit_id);
+        }else{
+            $picunit=PICUnit::all();
+        }
         $levelresiko=LevelResiko::orderBy('level_resiko')->get();
         return view('backend.pages.laporan.tindak-lanjut-per-unitkerja.index')
                 ->with('pemeriksa',$pemeriksa)
@@ -3377,7 +3406,11 @@ class LaporanController extends Controller
         $levelresiko=LevelResiko::orderBy('level_resiko')->get();
         $bidang=Bidang::orderBy('nama_bidang')->get();
         $pejabat=PejabatTandaTangan::all();
-        $unitkerja=PICUnit::all();
+        if(Auth::user()->level=='pic-unit'){
+            $unitkerja=PICUnit::find(Auth::user()->pic_unit_id);
+        }else{
+            $unitkerja=PICUnit::all();
+        }
         return view('backend.pages.laporan.status-penyelesaian-rekomendasi.index')
                 ->with('pemeriksa',$pemeriksa)
                 ->with('bidang',$bidang)
@@ -3777,7 +3810,11 @@ class LaporanController extends Controller
         $levelresiko=LevelResiko::orderBy('level_resiko')->get();
         $bidang=Bidang::orderBy('nama_bidang')->get();
         $pejabat=PejabatTandaTangan::all();
-        $unitkerja=PICUnit::all();
+        if(Auth::user()->level=='pic-unit'){
+            $unitkerja=PICUnit::find(Auth::user()->pic_unit_id);
+        }else{
+            $unitkerja=PICUnit::all();
+        }
         return view('backend.pages.laporan.status-penyelesaian-rekomendasi-pemeriksa.index')
                 ->with('pemeriksa',$pemeriksa)
                 ->with('bidang',$bidang)
@@ -4625,7 +4662,11 @@ class LaporanController extends Controller
         $levelresiko=LevelResiko::orderBy('level_resiko')->get();
         $bidang=Bidang::orderBy('nama_bidang')->get();
         $pejabat=PejabatTandaTangan::all();
-        $unitkerja=PICUnit::all();
+        if(Auth::user()->level=='pic-unit'){
+            $unitkerja=PICUnit::find(Auth::user()->pic_unit_id);
+        }else{
+            $unitkerja=PICUnit::all();
+        }
         return view('backend.pages.laporan.status-penyelesaian-rekomendasi-tahun.index')
                 ->with('pemeriksa',$pemeriksa)
                 ->with('bidang',$bidang)
@@ -4712,8 +4753,8 @@ class LaporanController extends Controller
         $unitkerja=$arrayUnitKerja1;
         if(count($arrayUnitKerja1)>0 && !in_array(0, $arrayUnitKerja1))
         {
-            $alldata->where('data_rekomendasi.pic_1_temuan_id', $arrayUnitKerja1)
-            ->orWhere('data_rekomendasi.pic_2_temuan_id','like', "%$arrayUnitKerja1%,");
+            $alldata->whereIn('data_rekomendasi.pic_1_temuan_id', $arrayUnitKerja1)
+            ->orWhere('data_rekomendasi.pic_2_temuan_id','like', "%".implode(',', $arrayUnitKerja1).",%");
         }
        
         $all=$alldata->get();
@@ -4748,11 +4789,11 @@ class LaporanController extends Controller
             }
         }
         $unitTitle='';
-        if(count($arrayUnitKerja1)==0 || in_array(0, $arrayUnitKerja1)){
+        if(count($arrayUnitKerja1)==0 && !in_array(0, $arrayUnitKerja1)){
             $dunitkerja=PICUnit::all();
             $unitTitle.='Semua';
         }else{
-            $dunitkerja=PICUnit::whereIn($arrayUnitKerja1)->get();
+            $dunitkerja=PICUnit::whereIn('id',$arrayUnitKerja1)->get();
             foreach($dunitkerja as $k=>$v){
                 $unitTitle.=$v->nama_pic;
             }
@@ -4991,8 +5032,8 @@ class LaporanController extends Controller
         $unitkerja=$arrayUnitKerja1;
         if(count($arrayUnitKerja1)>0 && !in_array(0, $arrayUnitKerja1))
         {
-            $alldata->where('data_rekomendasi.pic_1_temuan_id', $arrayUnitKerja1)
-            ->orWhere('data_rekomendasi.pic_2_temuan_id','like', "%$arrayUnitKerja1%,");
+            $alldata->whereIn('data_rekomendasi.pic_1_temuan_id', $arrayUnitKerja1)
+            ->orWhere('data_rekomendasi.pic_2_temuan_id','like', "%".implode(',', $arrayUnitKerja1).",%");
         }
        
         $all=$alldata->get();
@@ -5031,7 +5072,7 @@ class LaporanController extends Controller
             $dunitkerja=PICUnit::all();
             $unitTitle.='Semua';
         }else{
-            $dunitkerja=PICUnit::whereIn($arrayUnitKerja1)->get();
+            $dunitkerja=PICUnit::whereIn('id',$arrayUnitKerja1)->get();
             foreach($dunitkerja as $k=>$v){
                 $unitTitle.=$v->nama_pic;
             }
@@ -5202,7 +5243,11 @@ class LaporanController extends Controller
         $levelresiko=LevelResiko::orderBy('level_resiko')->get();
         $bidang=Bidang::orderBy('nama_bidang')->get();
         $pejabat=PejabatTandaTangan::all();
-        $unitkerja=PICUnit::all();
+        if(Auth::user()->level=='pic-unit'){
+            $unitkerja=PICUnit::find(Auth::user()->pic_unit_id);
+        }else{
+            $unitkerja=PICUnit::all();
+        }
         return view('backend.pages.laporan.status-penyelesaian-rekomendasi-unitkerja.index')
                 ->with('pemeriksa',$pemeriksa)
                 ->with('bidang',$bidang)
@@ -5291,7 +5336,7 @@ class LaporanController extends Controller
         if(count($arrayUnitKerja1)>0 && !in_array(0, $arrayUnitKerja1))
         {
             $alldata->whereIn('data_rekomendasi.pic_1_temuan_id', $arrayUnitKerja1)
-            ->orWhereIn('data_rekomendasi.pic_2_temuan_id','like', "%$arrayUnitKerja1%,");
+            ->orWhere('data_rekomendasi.pic_2_temuan_id','like', "%".implode(',', $arrayUnitKerja1).",%");
         }
        
 
@@ -5489,7 +5534,7 @@ class LaporanController extends Controller
         if(count($arrayUnitKerja1)>0 && !in_array(0, $arrayUnitKerja1))
         {
             $alldata->whereIn('data_rekomendasi.pic_1_temuan_id', $arrayUnitKerja1)
-            ->orWhereIn('data_rekomendasi.pic_2_temuan_id','like', "%$arrayUnitKerja1%,");
+            ->orWhere('data_rekomendasi.pic_2_temuan_id','like', "%".implode(',', $arrayUnitKerja1).",%");
         }
        
 
@@ -5620,7 +5665,11 @@ class LaporanController extends Controller
         $levelresiko=LevelResiko::orderBy('level_resiko')->get();
         $bidang=Bidang::orderBy('nama_bidang')->get();
         $pejabat=PejabatTandaTangan::all();
-        $unitkerja=PICUnit::all();
+        if(Auth::user()->level=='pic-unit'){
+            $unitkerja=PICUnit::find(Auth::user()->pic_unit_id);
+        }else{
+            $unitkerja=PICUnit::all();
+        }
         return view('backend.pages.laporan.rekomendasi-overdue-unitkerja.index')
                 ->with('pemeriksa',$pemeriksa)
                 ->with('bidang',$bidang)
@@ -5702,7 +5751,7 @@ class LaporanController extends Controller
         if(count($arrayUnitKerja1)>0 && !in_array(0, $arrayUnitKerja1))
         {
             $alldata->where('data_rekomendasi.pic_1_temuan_id', $arrayUnitKerja1)
-            ->orWhere('data_rekomendasi.pic_2_temuan_id','like', "%$arrayUnitKerja1%,");
+            ->orWhere('data_rekomendasi.pic_2_temuan_id','like', "%".implode(',', $arrayUnitKerja1).",%");
 
         }
        
@@ -5866,7 +5915,7 @@ class LaporanController extends Controller
         if(count($arrayUnitKerja1)>0 && !in_array(0, $arrayUnitKerja1))
         {
             $alldata->where('data_rekomendasi.pic_1_temuan_id', $arrayUnitKerja1)
-            ->orWhere('data_rekomendasi.pic_2_temuan_id','like', "%$arrayUnitKerja1%,");
+            ->orWhere('data_rekomendasi.pic_2_temuan_id','like', "%".implode(',', $arrayUnitKerja1).",%");
 
         }
        
@@ -5971,7 +6020,11 @@ class LaporanController extends Controller
         $levelresiko=LevelResiko::orderBy('level_resiko')->get();
         $bidang=Bidang::orderBy('nama_bidang')->get();
         $pejabat=PejabatTandaTangan::all();
-        $unitkerja=PICUnit::all();
+        if(Auth::user()->level=='pic-unit'){
+            $unitkerja=PICUnit::find(Auth::user()->pic_unit_id);
+        }else{
+            $unitkerja=PICUnit::all();
+        }
         return view('backend.pages.laporan.laporan-rekomendasi-overdue.index')
                 ->with('pemeriksa',$pemeriksa)
                 ->with('bidang',$bidang)
@@ -6049,7 +6102,7 @@ class LaporanController extends Controller
         if(count($arrayUnitKerja1)>0 && !in_array(0, $arrayUnitKerja1))
         {
             $alldata->where('data_rekomendasi.pic_1_temuan_id', $arrayUnitKerja1)
-            ->orWhere('data_rekomendasi.pic_2_temuan_id','like', "%$arrayUnitKerja1%,");
+            ->orWhere('data_rekomendasi.pic_2_temuan_id','like', "%".implode(',', $arrayUnitKerja1).",%");
         }
        
 
@@ -6180,7 +6233,7 @@ class LaporanController extends Controller
         if(count($arrayUnitKerja1)>0 && !in_array(0, $arrayUnitKerja1))
         {
             $alldata->where('data_rekomendasi.pic_1_temuan_id', $arrayUnitKerja1)
-            ->orWhere('data_rekomendasi.pic_2_temuan_id','like', "%$arrayUnitKerja1%,");
+            ->orWhere('data_rekomendasi.pic_2_temuan_id','like', "%".implode(',', $arrayUnitKerja1).",%");
         }
        
 

@@ -282,6 +282,66 @@
 
           </ul>
         </li>
+        @elseif (Auth::user()->level=='pic-unit')
+        <li class="has-submenu {{strpos($url,'laporan')!==false ? 'active open' : ''}}">
+          <a href="javascript:void(0)" class="submenu-toggle">
+            <i class="menu-icon fa fa-archive"></i>
+            <span class="menu-text">Laporan</span>
+            <i class="menu-caret zmdi zmdi-hc-sm zmdi-chevron-right"></i>
+          </a>
+          @php
+              $menulaporan=[
+                'temuan-per-bidang',
+                'temuan-per-unitkerja',
+                'temuan-per-lhp',
+                'tindaklanjut-per-lhp',
+                'tindaklanjut-per-bidang',
+                'tindaklanjut-per-unitkerja',
+                'tindak-lanjut',
+                'status-penyelesaian-rekomendasi',
+                'status-penyelesaian-rekomendasi-pemeriksa',
+                'status-penyelesaian-rekomendasi-bidang',
+                'status-penyelesaian-rekomendasi-tahun',
+                'status-penyelesaian-rekomendasi-unitkerja',
+                'rekomendasi-overdue-unitkerja',
+                'laporan-rekomendasi-overdue',
+              ];
+          @endphp
+          <ul class="submenu" style="{{in_array(str_replace('laporan/','',$url),$menulaporan) ? 'display:block' : ''}}">
+            
+            <li class="{{strpos($url,'temuan-per-unitkerja')!==false ? 'active' : ''}}">
+              <a href="{{url('laporan/temuan-per-unitkerja')}}"><span class="menu-text">Rekapitulasi Pemeriksaan – Unit Kerja</span></a>
+            </li>
+            <li class="{{strpos($url,'temuan-per-lhp')!==false ? 'active' : ''}}">
+              <a href="{{url('laporan/temuan-per-lhp')}}"><span class="menu-text">Rekapitulasi Pemeriksaan – LHP</span></a>
+            </li>
+            <li class="{{strpos($url,'tindaklanjut-per-lhp')!==false ? 'active' : ''}}">
+              <a href="{{url('laporan/tindaklanjut-per-lhp')}}"><span class="menu-text">Tindak Lanjut Per-LHP</span></a>
+            </li>
+            <li class="{{strpos($url,'tindaklanjut-per-unitkerja')!==false ? 'active' : ''}}">
+              <a href="{{url('laporan/tindaklanjut-per-unitkerja')}}"><span class="menu-text">Tindak Lanjut Per-Unit Kerja</span></a>
+            </li>
+            <li class="{{$url=='laporan/status-penyelesaian-rekomendasi' ? 'active' : ''}}">
+              <a href="{{url('laporan/status-penyelesaian-rekomendasi')}}"><span class="menu-text">Status Penyelesaian Rekomendasi – LHP</span></a>
+            </li>
+            <li class="{{$url=='laporan/status-penyelesaian-rekomendasi-pemeriksa' ? 'active' : ''}}">
+              <a href="{{url('laporan/status-penyelesaian-rekomendasi-pemeriksa')}}"><span class="menu-text">Status Penyelesaian Rekomendasi – Pemeriksa</span></a>
+            </li>
+            <li class="{{$url=='laporan/status-penyelesaian-rekomendasi-tahun' ? 'active' : ''}}">
+              <a href="{{url('laporan/status-penyelesaian-rekomendasi-tahun')}}"><span class="menu-text">Status Penyelesaian Rekomendasi – Tahun</span></a>
+            </li>
+            <li class="{{$url=='laporan/status-penyelesaian-rekomendasi-unitkerja' ? 'active' : ''}}">
+              <a href="{{url('laporan/status-penyelesaian-rekomendasi-unitkerja')}}"><span class="menu-text">Status Penyelesaian Rekomendasi – Unit Kerja</span></a>
+            </li>
+            <li class="{{$url=='laporan/rekomendasi-overdue-unitkerja' ? 'active' : ''}}">
+              <a href="{{url('laporan/rekomendasi-overdue-unitkerja')}}"><span class="menu-text">Rekomendasi Overdue - Unit Kerja</span></a>
+            </li>
+              <li class="{{$url=='laporan/laporan-rekomendasi-overdue' ? 'active' : ''}}">
+                <a href="{{url('laporan/laporan-rekomendasi-overdue')}}"><span class="menu-text">Rekomendasi Overdue</span></a>
+              </li>
+
+          </ul>
+        </li>
         @endif
         {{-- <li class="menu-separator"><hr></li>
 
